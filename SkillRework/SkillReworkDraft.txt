@@ -1,0 +1,68 @@
+Skill Rework Draft
+
+ClassPresets
+  |
+  |-> Class ---- defines ----.
+  |     |                    |
+  |     |-> Specialization   |
+  |     |     |              |
+  |     |     |-> [1] -> Class.Proficiency
+  |     |     |-> [2] -> <Ability>
+  |     |     |-> [3] -> <Ability>
+  |     |     |-> [4] -> null   (<- second class selection)
+  |     |     |-> [5] -> <Ability>
+  |     |     |-> [6] -> <Ability>
+  |     |     |-> [7] -> <Ability>
+  |     |
+  |     |-> <Expertise>
+  |     |-> <Mastery>
+  |
+  |-> Class
+  ...
+
+FactionPresets
+  |
+  |-> FactionName
+  |      |
+  |      |-> <OriginBase>
+  |      |-> <OriginElite>
+  |
+  |-> FactionName
+  ...
+
+AdditionalProficiencyPresets
+  |
+  |-> AdditionalProficiency
+  |      |
+  |      |-> <Base>
+  |      |-> <Expertise>
+  |
+  |-> AdditionalProficiency
+  ...
+
+MainSpecialization - <Class>
+  1 -> ClassPresets.<Class>.Specialization[1]
+  2 -> ClassPresets.<Class>.Specialization[2]
+  3 -> ClassPresets.<Class>.Specialization[3]
+  4 -> ClassPresets.<Class>.Specialization[4]
+  5 -> ClassPresets.<Class>.Specialization[5]
+  6 -> ClassPresets.<Class>.Specialization[6]
+  7 -> ClassPresets.<Class>.Specialization[7]
+
+SecondarySpecialization - <Class> (set by selection of second class in the MainSpecialization
+  1 -> ClassPresets.<Class>.Specialization[1]
+  2 -> ClassPresets.<Class>.Specialization[2]
+  3 -> ClassPresets.<Class>.Specialization[3]
+  4 -> ClassPresets.<Class>.Specialization[4]
+  5 -> ClassPresets.<Class>.Specialization[5]
+  6 -> ClassPresets.<Class>.Specialization[6]
+  7 -> ClassPresets.<Class>.Specialization[7]
+
+PersonalSpecialization - Class and origin related skills
+  1 - Personality (random? fixed? class or faction related? combination?)
+  2 -> FactionPresets.<FactionName>.<OriginBase>
+  3 -> AdditionalProficiencyPresets.<AdditionalProficiency>.<Base>
+  4 -> AdditionalProficiencyPresets.<AdditionalProficiency>.<Expertise>
+  5 -> ClassPresets.<Class>.<Expertise>
+  6 -> ClassPresets.<Class>.<Mastery>
+  7 -> FactionPresets.<FactionName>.<OriginElite>

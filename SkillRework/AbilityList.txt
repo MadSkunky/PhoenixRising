@@ -1,0 +1,423 @@
+Abilities with CharacterProgressionData that can potentially be used for character skills:
+
+{"BASH", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Bash_WithWhateverYouCan_AbilityDef")) },
+{"BOOM BLAST", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("BigBooms_AbilityDef")) },
+{"BODY SLAM", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("BodySlam_AbilityDef")) },
+{"BRAWLER", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Brawler_AbilityDef")) },
+{"ASSAULT TRAINING", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Assault_ClassProficiency_AbilityDef")) },
+{"BERSERKER TRAINING", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Berserker_ClassProficiency_AbilityDef")) },
+{"HEAVY TRAINING", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Heavy_ClassProficiency_AbilityDef")) },
+{"INFILTRATOR TRAINING", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Infiltrator_ClassProficiency_AbilityDef")) },
+{"PRIEST TRAINING", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Priest_ClassProficiency_AbilityDef")) },
+{"SNIPER TRAINING", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Sniper_ClassProficiency_AbilityDef")) },
+{"TECHNICIAN TRAINING", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Technician_ClassProficiency_AbilityDef")) },
+{"DASH", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Dash_AbilityDef")) },
+{"DASH", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("ExtraMove_AbilityDef")) },
+{"DEPLOY DECOY", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Decoy_AbilityDef")) },
+{"DEMOLITION STATE", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("DemolitionMan_AbilityDef")) },
+{"ONSLAUGHT", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("DeterminedAdvance_AbilityDef")) },
+{"ELECTRIC REINFORCEMENT", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("ElectricReinforcement_AbilityDef")) },
+{"MIND CONTROL", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Facehugger_MindControl_AbilityDef")) },
+{"FAST USE", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("FastUse_AbilityDef")) },
+{"USE REPAIR KIT", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("FieldRepairKit_AbilityDef")) },
+{"GUNSLINGER", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Gunslinger_AbilityDef")) },
+{"JUMP", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Humanoid_HighJump_AbilityDef")) },
+{"INSPIRE", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Inspire_AbilityDef")) },
+{"JET JUMP", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("JetJump_AbilityDef")) },
+{"REMOTE CONTROL", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("ManualControl_AbilityDef")) },
+{"MARKED FOR DEATH", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("MarkedForDeath_AbilityDef")) },
+{"MASTER MARKSMAN", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("MasterMarksman_AbilityDef")) },
+{"REPELLING MIST", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("MistRepeller_AbilityDef")) },
+{"MOTION DETECTION", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("MotionDetection_AbilityDef")) },
+{"EAGLE EYE", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("EagleEye_AbilityDef")) },
+{"EAGLE EYED", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("EagleEyed_AbilityDef")) },
+{"NIGHT VISION", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("EnhancedVision_AbilityDef")) },
+{"EXTREME FOCUS", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("ExtremeFocus_AbilityDef")) },
+{"HEAVY LIFTER", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("HeavyLifter_AbilityDef")) },
+{"MELEE WEAPON PROFICIENCY", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("MeleeProficiency_AbilityDef")) },
+{"MELEE WEAPON PROFICIENCY", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("MeleeWeaponTalent_AbilityDef")) },
+{"OVERWATCH FOCUS", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("OverwatchFocus_AbilityDef")) },
+{"BIOCHEMIST", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("BioChemist_AbilityDef")) },
+{"FARSIGHTED", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Brainiac_AbilityDef")) },
+{"CAUTIOUS", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Cautious_AbilityDef")) },
+{"CLOSE QUARTERS SPECIALIST", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("CloseQuartersSpecialist_AbilityDef")) },
+{"BOMBARDIER", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Crafty_AbilityDef")) },
+{"SNIPERIST", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Focused_AbilityDef")) },
+{"SNIPERIST", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Madman_AbilityDef")) },
+{"SNIPERIST", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("MadmanTutorial_AbilityDef")) },
+{"TROOPER", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("GoodShot_AbilityDef")) },
+{"HEALER", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Helpful_AbilityDef")) },
+{"ASSAULT RIFLE PROFICIENCY", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("AssaultRiflesTalent_AbilityDef")) },
+{"DEVOTED", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Devoted_AbilityDef")) },
+{"EXPERT HEALER", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("ExpertHealer_AbilityDef")) },
+{"EXPERT HEAVY WEAPONS", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("ExpertHeavyWeapons_AbilityDef")) },
+{"EXPERT RIFLES AND HANDGUNS", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("ExpertLightWeapons_AbilityDef")) },
+{"EXPERT MELEE", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("ExpertMelee_AbilityDef")) },
+{"EXPERT MOUNTED WEAPONS", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("ExpertMountedWeapons_AbilityDef")) },
+{"EXPERT PACKER", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("ExpertPacker_AbilityDef")) },
+{"EXPERT RUNNER", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("ExpertRunner_AbilityDef")) },
+{"EXPERT SHOOTER", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("ExpertShooter_AbilityDef")) },
+{"EXPERT THROWER", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("ExpertThrower_AbilityDef")) },
+{"GRENADE PROFICIENCY", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("GrenadesTalent_AbilityDef")) },
+{"GYM RAT", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("GymRat_AbilityDef")) },
+{"HANDGUN PROFICIENCY", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("HandgunsTalent_AbilityDef")) },
+{"HEAVY WEAPON PROFICIENCY", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("HeavyWeaponsTalent_AbilityDef")) },
+{"MOUNTED WEAPON PROFICIENCY", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("MountedWeaponTalent_AbilityDef")) },
+{"PDW PROFICIENCY", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("PDWTalent_AbilityDef")) },
+{"SHOTGUN PROFICIENCY", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("ShotgunTalent_AbilityDef")) },
+{"SILENCED WEAPON PROFICIENCY", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("SilencedWeaponTalent_AbilityDef")) },
+{"SNIPER RIFLE PROFICIENCY", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("SniperTalent_AbilityDef")) },
+{"STEALTH SPECIALIST", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("StealthSpecialist_AbilityDef")) },
+{"QUARTERBACK", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Pitcher_AbilityDef")) },
+{"RECKLESS", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Reckless_AbilityDef")) },
+{"RESOURCEFUL", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Resourceful_AbilityDef")) },
+{"SELF DEFENSE SPECIALIST", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("SelfDefenseSpecialist_AbilityDef")) },
+{"STRONGMAN", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Strongman_AbilityDef")) },
+{"THIEF", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Thief_AbilityDef")) },
+{"READY FOR ACTION", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("ReadyForAction_AbilityDef")) },
+{"REMOTE DEPLOYMENT", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("RemoteDeployment_AbilityDef")) },
+{"SNEAK ATTACK", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("SneakAttack_AbilityDef")) },
+{"STEALTH", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Stealth_AbilityDef")) },
+{"SURPRISE ATTACK", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("SurpriseAttack_AbilityDef")) },
+{"JETPACK PROFICIENCY", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("UseAttachedEquipment_AbilityDef")) },
+{"QUICK AIM", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("QuickAim_AbilityDef")) },
+{"RADIANT HOPE", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("RadiantHope_AbilityDef")) },
+{"RALLY THE TROOPS", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Rally_AbilityDef")) },
+{"RAPID CLEARANCE", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("RapidClearance_AbilityDef")) },
+{"RAPID CLEARANCE", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("TotalClearance_ShootAbilityDef")) },
+{"RAPID CLEARANCE", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("TotalClearance_ShootAbilityFollowUpDef")) },
+{"RECOVER", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("RecoverWill_AbilityDef")) },
+{"REGENERATE", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Regeneration_Torso_Passive_AbilityDef")) },
+{"ACID IMMUNITY", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("AcidImmunity_DamageMultiplierAbilityDef")) },
+{"ACID RESISTANT", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("AcidResistant_DamageMultiplierAbilityDef")) },
+{"BIONIC AUGMENTATION", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("BionicDamageMultipliers_AbilityDef")) },
+{"Blast resistance", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("BlastResistant_DamageMultiplierAbilityDef")) },
+{"CORRUPTION IMMUNITY", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("CorruptionStatusImmunity_AbilityDef")) },
+{"EMP RESISTANT", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("EMPResistant_DamageMultiplierAbilityDef")) },
+{"IMMUNE TO FIRE", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("FireImmunity_DamageMultiplierAbilityDef")) },
+{"FIRE RESISTANT", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("FireResistant_DamageMultiplierAbilityDef")) },
+{"NEEDS TEXT", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("FireStatusImmunity_AbilityDef")) },
+{"VULNERABLE TO FIRE", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("FireVulnerability_DamageMultiplierAbilityDef")) },
+{"IMMUNE TO GOO", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("GooImmunity_AbilityDef")) },
+{"DAZE IMMUNITY", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("MutoidDazeImmunity_AbilityDef")) },
+{"NEEDS TEXT", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("ParalysedStatusImmunity_AbilityDef")) },
+{"NEEDS TEXT", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("ParalysisImmunity_DamageMultiplierAbilityDef")) },
+{"POISON IMMUNITY", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("PoisonImmunity_DamageMultiplierAbilityDef")) },
+{"POISON RESISTANT", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("PoisonResistant_DamageMultiplierAbilityDef")) },
+{"PSYCHIC IMMUNITY", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("PsychicImmunity_DamageMultiplierAbilityDef")) },
+{"PSYCHIC RESISTANCE", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("PsychicResistant_DamageMultiplierAbilityDef")) },
+{"DAZE IMMUNITY", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("SonicImmunity_DamageMultiplierAbilityDef")) },
+{"DAZE RESISTANCE", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("SonicResistance_DamageMultiplierAbilityDef")) },
+{"DAZE IMMUNITY", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("StunStatusImmunity_AbilityDef")) },
+{"IMMUNE TO VIRUS", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("VirusImmunity_DamageMultiplierAbilityDef")) },
+{"VIRUS RESISTANT", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("VirusResistant_DamageMultiplierAbilityDef")) },
+{"CANNOT CLIMB", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("RestrictedMovement_AbilityDef")) },
+{"STRIKE", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("BashStrike_AbilityDef")) },
+{"DEADLY DUO", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("DeadlyDuo_FollowUp_ShootAbilityDef")) },
+{"DEADLY DUO", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("DeadlyDuo_ShootAbilityDef")) },
+{"SPIDER DRONE PACK", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("DeployDronePack_ShootAbilityDef")) },
+{"GRENADE SPAM", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("GrenadeSpam_ShootAbilityDef")) },
+{"GRENADE SPAM", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("GrenadeSpam_ShootAbilityFollowUpDef")) },
+{"TENTACLE RETALIATION", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("MeleeReturnFire_WithBashAbility_AbilityDef")) },
+{"MELEE RIPOSTE", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("MeleeReturnFire_WithShootAbility_AbilityDef")) },
+{"RAGE BURST", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("RageBurst_RageBurstInConeAbilityDef")) },
+{"RAGE BURST", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("RageBurst_ShootAbilityDef")) },
+{"RETURN FIRE", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("ReturnFire_AbilityDef")) },
+{"RETURN FIRE", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("ReturnFire_WithInactiveWeapon_AbilityDef")) },
+{"ELECTRIC STRIKE", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("TechnicianBashStrike_AbilityDef")) },
+{"POWER SURGE", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("TechnicianPowerSurge_ShootAbilityDef")) },
+{"ELECTRIC STRIKE", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("TechnicianStrike_ShootAbilityDef")) },
+{"TURRET COMBO", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("TurretCombo_ShootAbilityDef")) },
+{"STABILITY STANCE", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("StomperLegs_EnterStabilityStance_AbilityDef")) },
+{"STANDARD STANCE", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("StomperLegs_ExitStabilityStance_AbilityDef")) },
+{"STOMP", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("StomperLegs_Stomp_AbilityDef")) },
+{"THROW TURRET", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("ThrowLaserTurret_AbilityDef")) },
+{"THROW TURRET", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("ThrowPRCRTurret_AbilityDef")) },
+{"THROW TURRET", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("ThrowTurret_AbilityDef")) },
+{"VANISH", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Vanish_AbilityDef")) },
+{"WAR CRY", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("WarCry_AbilityDef")) },
+{"WEAK SPOT", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("WeakSpot_AbilityDef")) },
+{"STOMP SHOCK ATTACK", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("AreaStun_AbilityDef")) },
+{"DOUBLE PERCEPTION", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("DoublePerception_AbilityDef")) },
+{"PAIN CHAMELEON", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("PainChameleon_AbilityDef")) },
+{"SENSE LOCATE", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("SenseLocate_AbilityDef")) },
+{"SILENT ECHO", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("SilentEcho_AbilityDef")) },
+{"MUTOG MASTER", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Mutog_ControlledByPriest_AbilityDef")) },
+{"DEVOUR", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Mutog_Devour_AbilityDef")) },
+{"HEADBUTT", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Mutog_HeadAttack_AbilityDef")) },
+{"HEADBUTT", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Mutog_HeadBash_AbilityDef")) },
+{"HEADBUTT", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Mutog_HeadBash_BashAbilityDef")) },
+{"LEAP", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Mutog_Leap_AbilityDef")) },
+{"PAW STRIKE", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Mutog_LeftPawBash_AbilityDef")) },
+{"PRIMAL INSTINCT", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Mutog_PrimalInstinct_AbilityDef")) },
+{"RAM", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Mutog_Ram_AbilityDef")) },
+{"REGENERATE", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Mutog_Regeneration_AbilityDef")) },
+{"PAW STRIKE", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Mutog_RightPawBash_AbilityDef")) },
+{"TAIL BASH", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Mutog_TailBash_AbilityDef")) },
+{"TAIL BASH", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Mutog_TailBash_BashAbilityDef")) },
+{"TAIL SLICE", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Mutog_TailSlice_AbilityDef")) },
+{"TAIL SLICE", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Mutog_TailSlice_BashAbilityDef")) },
+{"POISON TONGUE", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Mutog_TongueLash_AbilityDef")) },
+{"ADRENALINE RUSH", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("AdrenalineRush_AbilityDef")) },
+{"ARMOR BREAK", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("ArmourBreak_AbilityDef")) },
+{"BLOODLUST", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("BloodLust_AbilityDef")) },
+{"CLOSE QUARTERS EVADE", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("CloseQuarters_AbilityDef")) },
+{"IGNORE PAIN", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("IgnorePain_AbilityDef")) },
+{"ELECTRIC KICK", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("ElectricKick_AbilityDef")) },
+{"TENTACLE ATTACK", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("ElectricTentacleAttack_AbilityDef")) },
+{"INDUCE PANIC", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Exalted_InducePanic_AbilityDef")) },
+{"INDUCE PANIC", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("InducePanic_AbilityDef")) },
+{"MIND CONTROLLED", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Exalted_MindControl_AbilityDef")) },
+{"MIND CRUSH", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Exalted_MindCrush_AbilityDef")) },
+{"MIND CRUSH", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("MindCrush_AbilityDef")) },
+{"BREATHE MIST", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Exalted_MistBreather_AbilityDef")) },
+{"BREATHE MIST", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("MistBreather_AbilityDef")) },
+{"PSYCHIC SCREAM", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Exalted_PsychicScream_AbilityDef")) },
+{"PSYCHIC SCREAM", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Priest_PsychicScream_AbilityDef")) },
+{"RELEASE", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Exalted_ReleaseControl_AbilityDef")) },
+{"MIND SENSE", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("MindSense_AbilityDef")) },
+{"INSTIL FRENZY", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Priest_InstilFrenzy_AbilityDef")) },
+{"MIND CONTROL", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Priest_MindControl_AbilityDef")) },
+{"PSYCHIC WARD", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("PsychicWard_AbilityDef")) },
+{"ROCKET LEAP", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("Exo_Leap_AbilityDef")) },
+{"NEURAL DISRUPTION", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("NeuralDisruption_AbilityDef")) },
+{"MIND CONTROL IMMUNITY", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("MindControlImmunity_AbilityDef")) },
+{"LANDING SHOCK ABSORPTION", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("SafeLanding_AbilityDef")) },
+{"FIELD MEDIC", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("FieldMedic_AbilityDef")) },
+{"TECHNICIAN HEAL", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("TechnicianHeal_AbilityDef")) },
+{"REMOVE MINDFRAGGER", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("TechnicianRemoveFacehugger_AbilityDef")) },
+{"TECHNICIAN REPAIR", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("TechnicianRepair_AbilityDef")) },
+{"COMBAT MATRIX", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("MartialArtist_AbilityDef")) },
+{"SHADOWSTEP", Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains("ShadowStep_AbilityDef")) },
+
+
+"BigBooms_AbilityDef",
+"BodypartDamageMultiplier_AbilityDef",
+"BodySlam_AbilityDef",
+"Brawler_AbilityDef",
+"Assault_ClassProficiency_AbilityDef",
+"Berserker_ClassProficiency_AbilityDef",
+"Heavy_ClassProficiency_AbilityDef",
+"Infiltrator_ClassProficiency_AbilityDef",
+"Mutoid_ClassProficiency_AbilityDef",
+"Priest_ClassProficiency_AbilityDef",
+"Sniper_ClassProficiency_AbilityDef",
+"Technician_ClassProficiency_AbilityDef",
+"Dash_AbilityDef",
+"Decoy_AbilityDef",
+"DeterminedAdvance_AbilityDef",
+"ElectricReinforcement_AbilityDef",
+"ExtraMove_AbilityDef",
+"FastUse_AbilityDef",
+"Gunslinger_AbilityDef",
+"Humanoid_HighJump_AbilityDef",
+"Inspire_AbilityDef",
+"ManualControl_AbilityDef",
+"MarkedForDeath_AbilityDef",
+"MasterMarksman_AbilityDef",
+"EagleEye_AbilityDef",
+"ExtremeFocus_AbilityDef",
+"HeavyLifter_AbilityDef",
+"MeleeProficiency_AbilityDef",
+"OverwatchFocus_AbilityDef",
+"BioChemist_AbilityDef",
+"Brainiac_AbilityDef",
+"Cautious_AbilityDef",
+"CloseQuartersSpecialist_AbilityDef",
+"Crafty_AbilityDef",
+"Focused_AbilityDef",
+"GoodShot_AbilityDef",
+"Helpful_AbilityDef",
+"AssaultRiflesTalent_AbilityDef",
+"Devoted_AbilityDef",
+"EagleEyed_AbilityDef",
+"ExpertHealer_AbilityDef",
+"ExpertHeavyWeapons_AbilityDef",
+"ExpertLightWeapons_AbilityDef",
+"ExpertMelee_AbilityDef",
+"ExpertMountedWeapons_AbilityDef",
+"ExpertPacker_AbilityDef",
+"ExpertRunner_AbilityDef",
+"ExpertShooter_AbilityDef",
+"ExpertThrower_AbilityDef",
+"GrenadesTalent_AbilityDef",
+"GymRat_AbilityDef",
+"HandgunsTalent_AbilityDef",
+"HeavyWeaponsTalent_AbilityDef",
+"MeleeWeaponTalent_AbilityDef",
+"MountedWeaponTalent_AbilityDef",
+"PDWTalent_AbilityDef",
+"ShotgunTalent_AbilityDef",
+"SilencedWeaponTalent_AbilityDef",
+"SniperTalent_AbilityDef",
+"StealthSpecialist_AbilityDef",
+"Madman_AbilityDef",
+"MadmanTutorial_AbilityDef",
+"Pitcher_AbilityDef",
+"Reckless_AbilityDef",
+"Resourceful_AbilityDef",
+"SelfDefenseSpecialist_AbilityDef",
+"Strongman_AbilityDef",
+"Thief_AbilityDef",
+"ReadyForAction_AbilityDef",
+"RemoteDeployment_AbilityDef",
+"SneakAttack_AbilityDef",
+"SurpriseAttack_AbilityDef",
+"UseAttachedEquipment_AbilityDef",
+"QuickAim_AbilityDef",
+"Rally_AbilityDef",
+"RapidClearance_AbilityDef",
+"BionicDamageMultipliers_AbilityDef",
+"FireResistant_DamageMultiplierAbilityDef",
+"GooImmunity_AbilityDef",
+"MachineEntityDazeImmunity_AbilityDef",
+"MutoidDazeImmunity_AbilityDef",
+"PoisonResistant_DamageMultiplierAbilityDef",
+"VirusResistant_DamageMultiplierAbilityDef",
+"DeadlyDuo_ShootAbilityDef",
+"DeployDronePack_ShootAbilityDef",
+"GrenadeSpam_ShootAbilityDef",
+"RageBurst_RageBurstInConeAbilityDef",
+"RageBurst_ShootAbilityDef",
+"ReturnFire_AbilityDef",
+"TechnicianBashStrike_AbilityDef",
+"TechnicianPowerSurge_ShootAbilityDef",
+"TechnicianStrike_ShootAbilityDef",
+"TotalClearance_ShootAbilityDef",
+"TurretCombo_ShootAbilityDef",
+"StomperLegs_Stomp_AbilityDef",
+"Vanish_AbilityDef",
+"WarCry_AbilityDef",
+"WeakSpot_AbilityDef",
+"Mutoid_AcidExplosion_ApplyStatusAbilityDef",
+"Mutoid_Adapt_Arm_AcidWorm_AbilityDef",
+"Mutoid_Adapt_Arm_CureSpray_AbilityDef",
+"Mutoid_Adapt_Arm_FireWorm_AbilityDef",
+"Mutoid_Adapt_Arm_GooGrenade_AbilityDef",
+"Mutoid_Adapt_Arm_ParalyzeLimb_AbilityDef",
+"Mutoid_Adapt_Arm_PoisonWorm_AbilityDef",
+"Mutoid_Adapt_Head_AcidSpray_AbilityDef",
+"Mutoid_Adapt_Head_GooStream_AbilityDef",
+"Mutoid_Adapt_Head_Sonic_AbilityDef",
+"Mutoid_Adapt_Head_Spitter_AbilityDef",
+"Mutoid_Adapt_RightArm_Injecting_AbilityDef",
+"Mutoid_Adapt_RightArm_Slasher_AbilityDef",
+"Mutoid_Adapt_RightArm_Syphon_AbilityDef",
+"Mutoid_Die_Belcher_AbilityDef",
+"Mutoid_FireExplosion_ApplyStatusAbilityDef",
+"Mutoid_PainChameleon_AbilityDef",
+"Mutoid_ParalyticCloud_AbilityDef",
+"Mutoid_PepperCloud_ApplyStatusAbilityDef",
+"Mutoid_PoisonExplosion_ApplyStatusAbilityDef",
+"Mutoid_ResurrectAbilityDef",
+"Mutoid_ViralExplosion_ApplyStatusAbilityDef",
+"Acheron_CallReinforcements_AbilityDef_obsolete",
+"DoublePerception_AbilityDef",
+"Fishman_Regeneration_Passive_AbilityDef",
+"PainChameleon_AbilityDef",
+"SilentEcho_AbilityDef",
+"Yuggothian_InducePanic_AbilityDef",
+"AdrenalineRush_AbilityDef",
+"ArmourBreak_AbilityDef",
+"BloodLust_AbilityDef",
+"CloseQuarters_AbilityDef",
+"IgnorePain_AbilityDef",
+"Exalted_InducePanic_AbilityDef",
+"Exalted_MindControl_AbilityDef",
+"Exalted_MindCrush_AbilityDef",
+"InducePanic_AbilityDef",
+"MindCrush_AbilityDef",
+"MindSense_AbilityDef",
+"Priest_InstilFrenzy_AbilityDef",
+"Priest_MindControl_AbilityDef",
+"Priest_PsychicScream_AbilityDef",
+"PsychicWard_AbilityDef",
+"NeuralDisruption_AbilityDef",
+"MindControlImmunity_AbilityDef",
+"SafeLanding_AbilityDef",
+"FieldMedic_AbilityDef",
+"TechnicianHeal_AbilityDef",
+"TechnicianRepair_AbilityDef",
+"TechnicianRestoreBodyPart_AbilityDef",
+"MartialArtist_AbilityDef",
+"ShadowStep_AbilityDef",
+
+BigBooms_AbilityDef: BigBooms for 20SP or 20 mutagens
+BodypartDamageMultiplier_AbilityDef: BobyPartDamageMultiplierAbility for 20SP or -1 mutagens
+BodySlam_AbilityDef: BodySlam for 10SP or -1 mutagens
+Brawler_AbilityDef: Brawler for 10SP or 10 mutagens
+Assault_ClassProficiency_AbilityDef: AssaultProficiency for 0SP or 0 mutagens
+Berserker_ClassProficiency_AbilityDef: BerserkerProficiency for 0SP or 0 mutagens
+Heavy_ClassProficiency_AbilityDef: HeavyProficiency for 0SP or 0 mutagens
+Infiltrator_ClassProficiency_AbilityDef: InfiltratorProficiency for 0SP or 0 mutagens
+Mutoid_ClassProficiency_AbilityDef: MutoidClass for 0SP or -1 mutagens
+Priest_ClassProficiency_AbilityDef: PriestProficiency for 0SP or 0 mutagens
+Sniper_ClassProficiency_AbilityDef: SniperProficiency for 0SP or 0 mutagens
+Technician_ClassProficiency_AbilityDef: TechnicianProficiency for 0SP or 0 mutagens
+Dash_AbilityDef: Dash for 10SP or 10 mutagens
+Decoy_AbilityDef: Decoy for 15SP or 15 mutagens
+DeterminedAdvance_AbilityDef: Rally for 25SP or 25 mutagens
+ElectricReinforcement_AbilityDef: ElectricReinforcement for 30SP or 30 mutagens
+ExtraMove_AbilityDef: Exertion for 10SP or -1 mutagens
+FastUse_AbilityDef: FastUse for 10SP or 10 mutagens
+Gunslinger_AbilityDef: Gunslinger for 15SP or -1 mutagens
+Humanoid_HighJump_AbilityDef: HumanoidJumpNavigationAbility for 0SP or 10 mutagens
+Inspire_AbilityDef: Inspire for 25SP or 25 mutagens
+ManualControl_AbilityDef: ManualControl for 15SP or 15 mutagens
+MarkedForDeath_AbilityDef: MarkedForDeath for 30SP or 30 mutagens
+MasterMarksman_AbilityDef: MasterMarksman for 20SP or 20 mutagens
+EagleEye_AbilityDef: EagleEye for 20SP or -1 mutagens
+ExtremeFocus_AbilityDef: ExtremeFocus for 10SP or 10 mutagens
+HeavyLifter_AbilityDef: HeavyLifter for 10SP or -1 mutagens
+MeleeProficiency_AbilityDef: MeleeProficiency for 15SP or -1 mutagens
+OverwatchFocus_AbilityDef: OverwatchFocus for 10SP or -1 mutagens
+BioChemist_AbilityDef: BioChemist for 25SP or -1 mutagens
+Brainiac_AbilityDef: Brainiac for 25SP or -1 mutagens
+Cautious_AbilityDef: Cautious for 25SP or -1 mutagens
+CloseQuartersSpecialist_AbilityDef: CloseQuartersSpecialist for 25SP or -1 mutagens
+Crafty_AbilityDef: Crafty for 25SP or -1 mutagens
+Focused_AbilityDef: Focused for 25SP or -1 mutagens
+GoodShot_AbilityDef: GoodShot for 25SP or -1 mutagens
+Helpful_AbilityDef: Helpful for 25SP or -1 mutagens
+AssaultRiflesTalent_AbilityDef: AssaultRiflesTalent for 10SP or -1 mutagens
+Devoted_AbilityDef: Devoted for 20SP or -1 mutagens
+EagleEyed_AbilityDef: Eagle Eyed for 15SP or -1 mutagens
+ExpertHealer_AbilityDef: Expert Healer for 15SP or -1 mutagens
+ExpertHeavyWeapons_AbilityDef: Expert Light Weapons for 15SP or -1 mutagens
+ExpertLightWeapons_AbilityDef: Expert Light Weapons for 15SP or -1 mutagens
+ExpertMelee_AbilityDef: Expert Melee for 15SP or -1 mutagens
+ExpertMountedWeapons_AbilityDef: Expert Mounted Weapons for 15SP or -1 mutagens
+ExpertPacker_AbilityDef: Expert Packer for 15SP or -1 mutagens
+ExpertRunner_AbilityDef: Expert Runner for 20SP or -1 mutagens
+ExpertShooter_AbilityDef: Expert Shooter for 15SP or -1 mutagens
+ExpertThrower_AbilityDef: Expert Thrower for 15SP or -1 mutagens
+GrenadesTalent_AbilityDef: GrenadesTalent for 10SP or -1 mutagens
+GymRat_AbilityDef: Gym Rat for 20SP or -1 mutagens
+HandgunsTalent_AbilityDef: HandgunsTalent for 10SP or -1 mutagens
+HeavyWeaponsTalent_AbilityDef: HeavyWeaponsTalent for 10SP or -1 mutagens
+MeleeWeaponTalent_AbilityDef: MeleeWeaponTalent for 10SP or -1 mutagens
+MountedWeaponTalent_AbilityDef: MountedWeaponTalent for 10SP or -1 mutagens
+PDWTalent_AbilityDef: PDWTalent for 10SP or -1 mutagens
+ShotgunTalent_AbilityDef: ShotgunTalent for 10SP or -1 mutagens
+SilencedWeaponTalent_AbilityDef: SilencedWeaponTalent for 10SP or -1 mutagens
+SniperTalent_AbilityDef: SniperTalent for 10SP or -1 mutagens
+StealthSpecialist_AbilityDef: Stealth Specialist for 15SP or -1 mutagens
+Madman_AbilityDef: Focused for 25SP or -1 mutagens
+MadmanTutorial_AbilityDef: Focused for 25SP or -1 mutagens
+Pitcher_AbilityDef: Pitcher for 25SP or -1 mutagens
+Reckless_AbilityDef: Reckless for 25SP or -1 mutagens
+Resourceful_AbilityDef: Resourceful for 25SP or -1 mutagens
+SelfDefenseSpecialist_AbilityDef: SelfDefenseSpecialist for 25SP or -1 mutagens
+Strongman_AbilityDef: Strongman for 25SP or -1 mutagens
+Thief_AbilityDef: Thief for 25SP or -1 mutagens
+ReadyForAction_AbilityDef: ReadyForAction for 20SP or 20 mutagens
+RemoteDeployment_AbilityDef: Remote Deployment for 25SP or 25 mutagens
+SneakAttack_AbilityDef: SneakAttack for 30SP or 30 mutagens
+SurpriseAttack_AbilityDef: Suprise Attack for 10SP or 10 mutagens
+UseAttachedEquipment_AbilityDef: UseAttachedEquipment for 15SP or -1 mutagens
+QuickAim_AbilityDef: QuickAim for 15SP or 15 mutagens
+Rally_AbilityDef: Rally for 25SP or -1 mutagens
+RapidClearance_AbilityDef: Rapid Clearence for 30SP or 30 mutagens
+BionicDamageMultipliers_AbilityDef: Bionic Bodypart for 25SP or -1 mutagens
+FireResistant_DamageMultiplierAbilityDef: FireResistance for 0SP or 15 mutagens
+GooImmunity_AbilityDef: GooImmunity for 0SP or 10 mutagens
