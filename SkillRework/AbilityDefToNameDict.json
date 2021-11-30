@@ -1,5 +1,3 @@
-Abilities with CharacterProgressionData that can potentially be used for character skills:
-
 {
   "ACID EXPLOSION": "Mutoid_AcidExplosion_ApplyStatusAbilityDef",
   "ACID SPIT": "Mutoid_Adapt_Head_AcidSpray_AbilityDef",

@@ -62,6 +62,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helper.cs" />
     <Compile Include="HarmonyPatches.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Settings.cs" />
@@ -72,6 +73,9 @@
     <EmbeddedResource Include="mod_info.json" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="AbilityDefToNameDict.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
