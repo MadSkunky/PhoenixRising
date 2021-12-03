@@ -29,6 +29,9 @@ namespace PhoenixRising.SkillRework
             // Initialize Logger
             Logger.Initialize(LogPath, Config.Debug, ModDirectory, nameof(SkillReworkMain));
 
+            // Apply skill modifications
+            SkillModifications.ApplyChanges(Repo, Shared);
+
             // Generate the main specialization as configured
             if( MainSpecModification.GenerateMainSpec(Repo, Config) )
             {

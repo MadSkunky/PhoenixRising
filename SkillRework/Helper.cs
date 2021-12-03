@@ -49,7 +49,7 @@ namespace PhoenixRising.SkillRework
     internal struct Proficiency
     {
         public static string HG = "Handgun";
-        public static string PDW = "PDW";
+        public static string PD = "PDW";
         public static string ML = "Melee";
         public static string AR = "AssaultRifle";
         public static string SG = "Shotgun";
@@ -58,6 +58,7 @@ namespace PhoenixRising.SkillRework
         public static string MW = "MountedWeapon";
         public static string VW = "ViralWeapon";
         public static string SW = "SilencedWeapon";
+        public static string JP = "JetPack";
     }
     internal class Helper
     {

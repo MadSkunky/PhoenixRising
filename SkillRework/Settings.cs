@@ -125,7 +125,7 @@ namespace PhoenixRising.SkillRework
         public Dictionary<string, Dictionary<string,string>> ProficiencySkills = new Dictionary<string, Dictionary<string, string>>
         {
             { Proficiency.HG, new Dictionary<string, string> { { PersonalLevel.PS1, "HANDGUN PROFICIENCY" },{ PersonalLevel.PS2, "EXPERT RIFLES AND HANDGUNS" } } },
-            { Proficiency.PDW, new Dictionary<string, string> { { PersonalLevel.PS1, "PDW PROFICIENCY" },{ PersonalLevel.PS2, "SELF DEFENSE SPECIALIST" } } },
+            { Proficiency.PD, new Dictionary<string, string> { { PersonalLevel.PS1, "PDW PROFICIENCY" },{ PersonalLevel.PS2, "SELF DEFENSE SPECIALIST" } } },
             { Proficiency.ML, new Dictionary<string, string> { { PersonalLevel.PS1, "MELEE WEAPON PROFICIENCY+" },{ PersonalLevel.PS2, "EXPERT MELEE" } } },
             { Proficiency.AR, new Dictionary<string, string> { { PersonalLevel.PS1, "ASSAULT RIFLE PROFICIENCY" },{ PersonalLevel.PS2, "TROOPER" } } },
             { Proficiency.SG, new Dictionary<string, string> { { PersonalLevel.PS1, "SHOTGUN PROFICIENCY" },{ PersonalLevel.PS2, "CLOSE QUARTERS SPECIALIST" } } },
@@ -158,7 +158,7 @@ namespace PhoenixRising.SkillRework
         public Dictionary<string, List<string>> RadomSkillExclusionMap = new Dictionary<string, List<string>>
         {
             { Proficiency.HG, new List<string> { ClassKey.Sniper.Key, ClassKey.Berserker.Key } },
-            { Proficiency.PDW, new List<string> { ClassKey.Technician.Key } },
+            { Proficiency.PD, new List<string> { ClassKey.Technician.Key } },
             { Proficiency.ML, new List<string> { ClassKey.Berserker.Key } },
             { Proficiency.AR, new List<string> { ClassKey.Assault.Key } },
             { Proficiency.SG, new List<string> { ClassKey.Assault.Key } },

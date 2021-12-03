@@ -48,6 +48,8 @@ namespace PhoenixRising.SkillRework
                     // Probably not necessary, just to be safe ;-)
                     if (__result != null && ShouldGeneratePersonalAbilities && __result.UnitType.IsHuman && !__result.UnitType.IsMutoid && !__result.UnitType.TemplateDef.IsAlien)
                     {
+                        Random rnd = new Random((int)DateTime.Now.Ticks);
+                        string ability;
                         string faction = __result.Faction.GetPPName();
                         string className = __result.ClassTag.className;
                         BaseCharacterStats stats = __result.BonusStats;
@@ -56,12 +58,25 @@ namespace PhoenixRising.SkillRework
                         // Temporary dictionary to collect the configured perks
                         Dictionary<string, string> tempDict = new Dictionary<string, string>();
                         tempDict.AddRange(ConfigClassSpec[ClassKey.PersSpecs]);
-                        tempDict.AddRange(Config.FactionSkills[faction]);
+                        if (faction != Faction.IN)
+                        {
+                            tempDict.AddRange(Config.FactionSkills[faction]);
+                        }
+                        else
+                        {
+                            foreach (KeyValuePair<string,string> kvp in Config.FactionSkills[faction])
+                            {
+                                do
+                                {
+                                    ability = Config.FactionSkills.GetRandomElement(rnd).Value[kvp.Key];
+                                } while (ability.Equals(kvp.Value));
+                                tempDict.Add(kvp.Key, ability);
+                            }
+                        }
 
                         // Select random proficiency perk(s) that doesn't conflict with existing class or already existant perks
                         int safeguard = 0;
                         bool usedFound = true;
-                        Random rnd = new Random((int)DateTime.Now.Ticks);
                         KeyValuePair<string, Dictionary<string, string>> kvProfSkills;
                         do
                         {
@@ -87,7 +102,6 @@ namespace PhoenixRising.SkillRework
 
                         // Place the collected skills at the configured position in the 3rd line (e.g. personal ability line)
                         int index = -1;
-                        string ability;
                         TacticalAbilityDef tacticalAbilityDef;
                         foreach (KeyValuePair<string, string> kvp in tempDict)
                         {

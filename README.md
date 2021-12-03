@@ -4,16 +4,16 @@
 
 ### The Team behind this project
 
-- Belial: The master mind and heart of the team, main designer and the brain behind almost anythng.
-- Ikobot: Dataminer, master hacker, tester & coder, all what he founds in the game files is the base of this mod.
-- Voland: Story creator, balancing and testing, has always also the more casual player base in mind.
+- Belial: The master mind and heart of the team, main designer and the brain behind almost anything.
+- Ikobot: Dataminer, master hacker, tester & coder, a lot of things he found in the game files are the basis of this mod.
 
-- Mikey C, Yokes, conductiv, Torinus, Pantolomin, Dorante, mad2342, Valtakunnanvouti ...
+- Voland, Mikey C, Yokes, conductiv, Torinus, Pantolomin, Dorante, mad2342, Valtakunnanvouti ...
+Designing, balancing, testing, storytelling and always open to productive discussions.
 
-- Finally myself, MadSkunky: Coding, design, balancing, testing and author of this part of the mod.
+- Finally myself, MadSkunky: Coding, design, balancing and testing.
 
 ## Subparts
 
 ### Skill Rework
 
-- Rework of the skills for all classes, introducing faction related skills, using the full skilltree ...
+- Skill rework for all classes, introduction of faction-related skills, expansion of class-related skills to the 3rd row and use the full personal ability row ...
