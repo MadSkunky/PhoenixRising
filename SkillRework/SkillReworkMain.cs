@@ -7,7 +7,6 @@ using Base.Core;
 using Base.Defs;
 using PhoenixPoint.Common.Core;
 using PhoenixPoint.Tactical.Entities.Abilities;
-using PhoenixPoint.Common.Entities.Characters;
 using Harmony;
 
 namespace PhoenixRising.SkillRework
@@ -30,51 +29,15 @@ namespace PhoenixRising.SkillRework
             // Initialize Logger
             Logger.Initialize(LogPath, Config.Debug, ModDirectory, nameof(SkillReworkMain));
 
-            LevelProgressionDef levelProgressionDef = Repo.GetAllDefs<LevelProgressionDef>().First(lpd => lpd.name.Contains("LevelProgressionDef"));
-            int secondaryClassLevel = levelProgressionDef.SecondSpecializationLevel;
-            int secondaryClassCost = levelProgressionDef.SecondSpecializationSpCost;
-            List<AbilityTrackDef> ClassSpecDefs = new List<AbilityTrackDef>
+            // Generate the main specialization as configured
+            if( MainSpecModification.GenerateMainSpec(Repo, Config) )
             {
-                Repo.GetAllDefs<AbilityTrackDef>().First(atd => atd.name.Contains("AssaultSpecializationDef")),
-                Repo.GetAllDefs<AbilityTrackDef>().First(atd => atd.name.Contains("HeavySpecializationDef")),
-                Repo.GetAllDefs<AbilityTrackDef>().First(atd => atd.name.Contains("SniperSpecializationDef")),
-                Repo.GetAllDefs<AbilityTrackDef>().First(atd => atd.name.Contains("BerserkerSpecializationDef")),
-                Repo.GetAllDefs<AbilityTrackDef>().First(atd => atd.name.Contains("PriestSpecializationDef")),
-                Repo.GetAllDefs<AbilityTrackDef>().First(atd => atd.name.Contains("TechnicianSpecializationDef")),
-                Repo.GetAllDefs<AbilityTrackDef>().First(atd => atd.name.Contains("InfiltratorSpecializationDef"))
-            };
-            string className, ability;
-            string[] abilities;
-            foreach (AbilityTrackDef classSpecDef in ClassSpecDefs)
-            {
-                className = Helper.Classes.First(cn => classSpecDef.name.Contains(cn));
-                abilities = Config.ClassSkills[className][Helper.Row[0]];
-                if (classSpecDef.AbilitiesByLevel.Length != abilities.Length)
-                {
-                    Logger.Always("Not enough or too much level skills for 1st row are configured, some may not be set!");
-                    Logger.Always("Class preset: " + className);
-                    Logger.Always("Number of skills configured (should be 7): " + abilities.Length);
-                }
-                for (int i = 0; i < classSpecDef.AbilitiesByLevel.Length && i < abilities.Length; i++)
-                {
-                    if (i != 0 && i != 3) // 3 = secondary class selector and 0 = main class proficiency skipped, main class is in the config but also skipped here to prevent prevent bugs by misconfiguration
-                    {
-                        if (Helper.abilityNameToDefMap.ContainsKey(abilities[i]))
-                        {
-                            ability = Helper.abilityNameToDefMap[abilities[i]];
-                            classSpecDef.AbilitiesByLevel[i].Ability = Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains(ability));
-                            classSpecDef.AbilitiesByLevel[i].Ability.CharacterProgressionData.SkillPointCost = Helper.SPperLevel[i];
-                            classSpecDef.AbilitiesByLevel[i].Ability.CharacterProgressionData.MutagenCost = Helper.SPperLevel[i];
-                            Logger.Debug("Class '" + className + "' level " + i + 1 + " skill set to: " + classSpecDef.AbilitiesByLevel[i].Ability.ViewElementDef.DisplayName1.LocalizeEnglish());
-                        }
-                    }
-                }
+                // Patch all Harmony patches only if main spec was sucessful
+                HarmonyInstance.Create("SkillRework.PhoenixRising").PatchAll();
             }
 
-
-            // Patch all Harmony patches
-            HarmonyInstance.Create("SkillRework.PhoenixRising").PatchAll();
-
+            // If configured a new list of all usable abilities (with progression field) will be created.
+            // This list is used to map readable names from config to the definitions in the Repo
             if (Config.CreateNewJsonForAbilities)
             {
                 string key;
@@ -108,7 +71,7 @@ namespace PhoenixRising.SkillRework
                     }
                 }
                 Dictionary<string, string> outDict = sortedDict.ToDictionary(kv => kv.Key, kv => kv.Value);
-                _ = Helper.WriteJson(Helper.AbilityNameToDefJson, outDict, true);
+                _ = Helper.WriteJson(Helper.AbilitiesJsonFileName, outDict, true);
             }
 
             // Modnix logging
