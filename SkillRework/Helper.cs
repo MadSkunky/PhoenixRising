@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using Base.UI;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -30,7 +32,8 @@ namespace PhoenixRising.SkillRework
     }
     internal struct PersonalLevel
     {
-        public static string BGP = "BGP";
+        public static string BG1 = "BG1";
+        public static string BG2 = "BG2";
         public static string FS1 = "FS1";
         public static string FS2 = "FS2";
         public static string CS1 = "CS1";
@@ -60,6 +63,12 @@ namespace PhoenixRising.SkillRework
         public static string SW = "SilencedWeapon";
         public static string JP = "JetPack";
     }
+    internal struct ViewElement
+    {
+        public static string DisplayName1 = "DisplayName1";
+        public static string DisplayName2 = "DisplayName2";
+        public static string Description = "Description";
+    }
     internal class Helper
     {
         //public static readonly string[] Factions = new string[] { "Phoenix", "Anu", "NewJericho", "Synedrion", "Independent" };
@@ -71,6 +80,19 @@ namespace PhoenixRising.SkillRework
         // Desearialize dictionary from Json to map ability names to Defs
         public static readonly string AbilitiesJsonFileName = "AbilityDefToNameDict.json";
         public static readonly Dictionary<string, string> AbilityNameToDefMap = ReadJson<Dictionary<string, string>>(AbilitiesJsonFileName);
+
+        // Desearialize dictionary from Json to map non localized texts to ViewDefs
+        public static readonly string TextMapFileName = "NotLocalizedTextMap.json";
+        public static readonly Dictionary<string, Dictionary<string, string>> NotLocalizedTextMap = ReadJson<Dictionary<string, Dictionary<string, string>>>(TextMapFileName);
+
+        public static void ChangeUItext (ref LocalizedTextBind localizedTextBind, string localizationKey)
+        {
+            bool doNotLocalize = SkillReworkMain.Config.DoNotLocalizeChangedTexts;
+            if (doNotLocalize)
+            {
+                localizedTextBind = new LocalizedTextBind(localizationKey, doNotLocalize);
+            }
+        }
 
         // Read embedded or external json file
         public static T ReadJson<T>(string fileName)
@@ -102,31 +124,30 @@ namespace PhoenixRising.SkillRework
         }
 
         // Write embedded and external json file
-        public static bool WriteJson(string fileName, object obj, bool toFile = false)
+        public static void WriteJson(string fileName, object obj, bool toFile = false)
         {
             try
             {
                 string jsonString = JsonConvert.SerializeObject(obj, Formatting.Indented);
-                Assembly assembly = Assembly.GetExecutingAssembly();
-                string source = assembly.GetManifestResourceNames().Single(str => str.EndsWith(fileName));
-                if (source != null || source != "")
-                {
-                    using (Stream stream = assembly.GetManifestResourceStream(source))
-                    using (StreamWriter writer = new StreamWriter(stream))
-                    {
-                        writer.Write(jsonString);
-                    }
-                }
+                //Assembly assembly = Assembly.GetExecutingAssembly();
+                //string source = assembly.GetManifestResourceNames().Single(str => str.EndsWith(fileName));
+                //if (source != null || source != "")
+                //{
+                //    using (Stream stream = assembly.GetManifestResourceStream(source))
+                //    using (StreamWriter writer = new StreamWriter(stream))
+                //    {
+                //        writer.Write(jsonString);
+                //    }
+                //}
                 if (toFile)
                 {
                     string ModDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
                     File.WriteAllText(Path.Combine(ModDirectory, fileName), jsonString);
                 }
-                return true;
             }
-            catch
+            catch (Exception e)
             {
-                return false;
+                Logger.Error(e);
             }
         }
     }

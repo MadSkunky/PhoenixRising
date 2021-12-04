@@ -74,7 +74,7 @@ namespace PhoenixRising.SkillRework
                     }
                 }
                 Dictionary<string, string> outDict = sortedDict.ToDictionary(kv => kv.Key, kv => kv.Value);
-                _ = Helper.WriteJson(Helper.AbilitiesJsonFileName, outDict, true);
+                Helper.WriteJson(Helper.AbilitiesJsonFileName, outDict, true);
             }
 
             // Modnix logging

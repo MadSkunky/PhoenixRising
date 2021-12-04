@@ -114,28 +114,59 @@ namespace PhoenixRising.SkillRework
         // Faction related skills for 3rd row
         public Dictionary<string, Dictionary<string, string>> FactionSkills = new Dictionary<string, Dictionary<string, string>>
         {
-            { Faction.PX, new Dictionary<string, string> { { PersonalLevel.FS1, "GYM RAT" },{ PersonalLevel.FS2, "RAGE BURST+" } } },
-            { Faction.Anu, new Dictionary<string, string> { { PersonalLevel.FS1, "CLOSE QUARTERS SPECIALIST" }, { PersonalLevel.FS2, "RALLY THE TROOPS" } } },
-            { Faction.NJ, new Dictionary<string, string> { { PersonalLevel.FS1, "BOMBARDIER" },{ PersonalLevel.FS2, "TURRET COMBO" } } },
-            { Faction.Syn, new Dictionary<string, string> { { PersonalLevel.FS1, "PAIN CHAMELEON+" },{ PersonalLevel.FS2, "DEADLY DUO" } } },
-            { Faction.IN, new Dictionary<string, string> { { PersonalLevel.FS1, "Random" },{ PersonalLevel.FS2, "Random" } } }
+            { Faction.PX, new Dictionary<string, string> {
+                { PersonalLevel.FS1, "GYM RAT" },
+                { PersonalLevel.FS2, "RAGE BURST+" }
+            } },
+            { Faction.Anu, new Dictionary<string, string> {
+                { PersonalLevel.FS1, "CLOSE QUARTERS SPECIALIST" },
+                { PersonalLevel.FS2, "RALLY THE TROOPS" }
+            } },
+            { Faction.NJ, new Dictionary<string, string> {
+                { PersonalLevel.FS1, "BOMBARDIER" },
+                { PersonalLevel.FS2, "TURRET COMBO" }
+            } },
+            { Faction.Syn, new Dictionary<string, string> {
+                { PersonalLevel.FS1, "PAIN CHAMELEON+" },
+                { PersonalLevel.FS2, "DEADLY DUO" }
+            } },
+            { Faction.IN, new Dictionary<string, string> {
+                { PersonalLevel.FS1, "Random" },
+                { PersonalLevel.FS2, "Random" }
+            } }
         };
 
         // Additional prficiency skills
         public Dictionary<string, Dictionary<string,string>> ProficiencySkills = new Dictionary<string, Dictionary<string, string>>
         {
-            { Proficiency.HG, new Dictionary<string, string> { { PersonalLevel.PS1, "HANDGUN PROFICIENCY" },{ PersonalLevel.PS2, "EXPERT RIFLES AND HANDGUNS" } } },
-            { Proficiency.PD, new Dictionary<string, string> { { PersonalLevel.PS1, "PDW PROFICIENCY" },{ PersonalLevel.PS2, "SELF DEFENSE SPECIALIST" } } },
-            { Proficiency.ML, new Dictionary<string, string> { { PersonalLevel.PS1, "MELEE WEAPON PROFICIENCY+" },{ PersonalLevel.PS2, "EXPERT MELEE" } } },
-            { Proficiency.AR, new Dictionary<string, string> { { PersonalLevel.PS1, "ASSAULT RIFLE PROFICIENCY" },{ PersonalLevel.PS2, "TROOPER" } } },
-            { Proficiency.SG, new Dictionary<string, string> { { PersonalLevel.PS1, "SHOTGUN PROFICIENCY" },{ PersonalLevel.PS2, "CLOSE QUARTERS SPECIALIST" } } },
-            { Proficiency.SR, new Dictionary<string, string> { { PersonalLevel.PS1, "SNIPER RIFLE PROFICIENCY" },{ PersonalLevel.PS2, "SNIPERIST" } } },
-            { Proficiency.HW, new Dictionary<string, string> { { PersonalLevel.PS1, "HEAVY WEAPON PROFICIENCY" },{ PersonalLevel.PS2, "EXPERT HEAVY WEAPONS" } } },
-            { Proficiency.MW, new Dictionary<string, string> { { PersonalLevel.PS1, "MOUNTED WEAPON PROFICIENCY" },{ PersonalLevel.PS2, "EXPERT MOUNTED WEAPONS" } } }
+            { Proficiency.HG, new Dictionary<string, string> {
+                { PersonalLevel.PS1, "HANDGUN PROFICIENCY" }
+            } },
+            { Proficiency.PD, new Dictionary<string, string> {
+                { PersonalLevel.PS1, "PDW PROFICIENCY" }
+            } },
+            { Proficiency.ML, new Dictionary<string, string> {
+                { PersonalLevel.PS1, "MELEE WEAPON PROFICIENCY+" }
+            } },
+            { Proficiency.AR, new Dictionary<string, string> {
+                { PersonalLevel.PS1, "ASSAULT RIFLE PROFICIENCY" }
+            } },
+            { Proficiency.SG, new Dictionary<string, string> {
+                { PersonalLevel.PS1, "SHOTGUN PROFICIENCY" }
+            } },
+            { Proficiency.SR, new Dictionary<string, string> {
+                { PersonalLevel.PS1, "SNIPER RIFLE PROFICIENCY" }
+            } },
+            { Proficiency.HW, new Dictionary<string, string> {
+                { PersonalLevel.PS1, "HEAVY WEAPON PROFICIENCY" }
+            } },
+            { Proficiency.MW, new Dictionary<string, string> {
+                { PersonalLevel.PS1, "MOUNTED WEAPON PROFICIENCY" }
+            } }
         };
 
         // Background perks
-        public string[] BackgroundPerks = new string[]
+        public string[] BackgroundPerkPool = new string[]
         {
             "FIRE RESISTANT","POISON RESISTANT","VIRUS RESISTANT","RECKLESS",
             "DEVOTED","JETPACK PROFICIENCY","JUMP",
@@ -145,13 +176,13 @@ namespace PhoenixRising.SkillRework
         // Order of the 3rd row skills, BGP = BackgroundPerks
         public string[] OrderOfPersonalSkills = new string[]
         {
-            PersonalLevel.BGP,
-            PersonalLevel.FS1,
-            PersonalLevel.FS2,
             PersonalLevel.CS1,
-            PersonalLevel.CS2,
+            PersonalLevel.BG1,
+            PersonalLevel.FS1,
             PersonalLevel.PS1,
-            PersonalLevel.PS2
+            PersonalLevel.CS2,
+            PersonalLevel.BG2,
+            PersonalLevel.FS2
         };
 
         // Exclusion map for random distributed skills
@@ -171,6 +202,8 @@ namespace PhoenixRising.SkillRework
             { "STEALTH SPECIALIST", new List<string> { ClassKey.Infiltrator.Key} }
         };
 
+        // Flag if UI texts should be changed to default (Enlish) text or set by localization
+        public bool DoNotLocalizeChangedTexts = true;
         // Create new ability dictionary as json file in mod directory
         public bool CreateNewJsonForAbilities = false;
         // DebugLevel (0: nothing, 1: error, 2: debug, 3: info)

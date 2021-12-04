@@ -69,7 +69,7 @@ namespace PhoenixRising.SkillRework
                                 do
                                 {
                                     ability = Config.FactionSkills.GetRandomElement(rnd).Value[kvp.Key];
-                                } while (ability.Equals(kvp.Value));
+                                } while (ability.Equals(kvp.Value)); // if found its own ability, e.g. "random", try another random selection
                                 tempDict.Add(kvp.Key, ability);
                             }
                         }
@@ -93,12 +93,12 @@ namespace PhoenixRising.SkillRework
                         string bgSkill;
                         do
                         {
-                            bgSkill = Config.BackgroundPerks.GetRandomElement(rnd);
+                            bgSkill = Config.BackgroundPerkPool.GetRandomElement(rnd);
                             usedFound = tempDict.Values.Contains(bgSkill)
                                         || (Config.RadomSkillExclusionMap.ContainsKey(bgSkill) && Config.RadomSkillExclusionMap[bgSkill].Contains(className));
                             safeguard++;
-                        } while (usedFound && safeguard <= Config.BackgroundPerks.Length * 2);
-                        tempDict.Add(PersonalLevel.BGP, bgSkill);
+                        } while (usedFound && safeguard <= Config.BackgroundPerkPool.Length * 2);
+                        tempDict.Add(PersonalLevel.BG1, bgSkill);
 
                         // Place the collected skills at the configured position in the 3rd line (e.g. personal ability line)
                         int index = -1;
