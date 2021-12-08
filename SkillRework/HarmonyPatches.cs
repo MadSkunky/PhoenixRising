@@ -12,6 +12,7 @@ using Base;
 using PhoenixPoint.Common.Entities;
 using PhoenixPoint.Tactical.Entities.Abilities;
 using PhoenixPoint.Common.Entities.Characters;
+using System.Collections;
 
 namespace PhoenixRising.SkillRework
 {
@@ -48,72 +49,35 @@ namespace PhoenixRising.SkillRework
                     // Probably not necessary, just to be safe ;-)
                     if (__result != null && ShouldGeneratePersonalAbilities && __result.UnitType.IsHuman && !__result.UnitType.IsMutoid && !__result.UnitType.TemplateDef.IsAlien)
                     {
-                        Random rnd = new Random((int)DateTime.Now.Ticks);
-                        string ability;
                         string faction = __result.Faction.GetPPName();
                         string className = __result.ClassTag.className;
+                        string ability;
+                        int spCost = 0;
+                        TacticalAbilityDef tacticalAbilityDef;
                         BaseCharacterStats stats = __result.BonusStats;
-                        Dictionary<string, Dictionary<string, string>> ConfigClassSpec = Config.ClassSpecs.First(cs => className.Contains(cs.Key)).Value;
-
+                        string[] ppOrder = Config.OrderOfPersonalPerks;
                         // Temporary dictionary to collect the configured perks
                         Dictionary<string, string> tempDict = new Dictionary<string, string>();
-                        tempDict.AddRange(ConfigClassSpec[ClassKey.PersSpecs]);
-                        if (faction != Faction.IN)
+                        // Exclusion list for random selection, initialized with main spec skills
+                        List<string> exclusionList = new List<string>(Config.ClassSpecializations.FirstOrDefault(cs => cs.ClassName.Equals(className)).MainSpec);
+                        
+                        for (int i = 0; i < ppOrder.Length; i++)
                         {
-                            tempDict.AddRange(Config.FactionSkills[faction]);
-                        }
-                        else
-                        {
-                            foreach (KeyValuePair<string,string> kvp in Config.FactionSkills[faction])
+                            PersonalPerksDef personalPerksDef = Config.PersonalPerks.FirstOrDefault(pp => pp.PerkKey.Equals(ppOrder[i]));
+                            if (!personalPerksDef.IsDefaultValue())
                             {
-                                do
+                                (ability, spCost) = personalPerksDef.GetPerk(Config, className, faction, exclusionList);
+                                if (ability != null)
                                 {
-                                    ability = Config.FactionSkills.GetRandomElement(rnd).Value[kvp.Key];
-                                } while (ability.Equals(kvp.Value)); // if found its own ability, e.g. "random", try another random selection
-                                tempDict.Add(kvp.Key, ability);
-                            }
-                        }
-
-                        // Select random proficiency perk(s) that doesn't conflict with existing class or already existant perks
-                        int safeguard = 0;
-                        bool usedFound = true;
-                        KeyValuePair<string, Dictionary<string, string>> kvProfSkills;
-                        do
-                        {
-                            kvProfSkills = Config.ProficiencySkills.GetRandomElement(rnd);
-                            usedFound = kvProfSkills.Value.Values.Any(skill => tempDict.Values.Contains(skill))
-                                        || (Config.RadomSkillExclusionMap.ContainsKey(kvProfSkills.Key) && Config.RadomSkillExclusionMap[kvProfSkills.Key].Contains(className));
-                            safeguard++;
-                        } while (usedFound && safeguard <= Config.ProficiencySkills.Count * 2);
-                        tempDict.AddRange(kvProfSkills.Value);
-
-                        // Select random background perk that doesn't conflict with class (e.g. Jetpack proficiency with Heavy) or existant perks
-                        safeguard = 0;
-                        usedFound = true;
-                        string bgSkill;
-                        do
-                        {
-                            bgSkill = Config.BackgroundPerkPool.GetRandomElement(rnd);
-                            usedFound = tempDict.Values.Contains(bgSkill)
-                                        || (Config.RadomSkillExclusionMap.ContainsKey(bgSkill) && Config.RadomSkillExclusionMap[bgSkill].Contains(className));
-                            safeguard++;
-                        } while (usedFound && safeguard <= Config.BackgroundPerkPool.Length * 2);
-                        tempDict.Add(PersonalLevel.BG1, bgSkill);
-
-                        // Place the collected skills at the configured position in the 3rd line (e.g. personal ability line)
-                        int index = -1;
-                        TacticalAbilityDef tacticalAbilityDef;
-                        foreach (KeyValuePair<string, string> kvp in tempDict)
-                        {
-                            index = Array.IndexOf(Config.OrderOfPersonalSkills, kvp.Key);
-                            //Logger.Debug("Index: " + index + " Skill: " + kvp.Value);
-                            ability = Helper.AbilityNameToDefMap[kvp.Value];
-                            tacticalAbilityDef = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Contains(ability));
-                            if (index >= 0 && index < 7 && tacticalAbilityDef != null)
-                            {
-                                // only necessary to give special SP to personal abilities. Be careful, SP cost are global per ability, regardless where this ability is set!
-                                //tacticalAbilityDef.CharacterProgressionData.SkillPointCost = 10;
-                                __result.Progression.PersonalAbilities[index] = tacticalAbilityDef;
+                                    tacticalAbilityDef = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Contains(ability));
+                                    if (i >= 0 && i < 7 && tacticalAbilityDef != null)
+                                    {
+                                        // Set SP cost to personal ability. Be careful, SP cost are global per ability, regardless where this ability is set!
+                                        tacticalAbilityDef.CharacterProgressionData.SkillPointCost = spCost;
+                                        __result.Progression.PersonalAbilities[i] = tacticalAbilityDef;
+                                        //exclusionList.Add(ability);
+                                    }
+                                }
                             }
                         }
 
@@ -157,13 +121,16 @@ namespace PhoenixRising.SkillRework
             {
                 try
                 {
-                    // Personal ability 0 = first skill in the row
-                    TacticalAbilityDef persAbility0 = __result.PersonalAbilityTrack.AbilitiesByLevel[0].Ability;
-                    if (!__result.Abilities.Contains(persAbility0))
+                    if (Config.LearnFirstPersonalSkill)
                     {
-                        __result.AddAbility(persAbility0);
+                        // Personal ability 0 = first skill in the row
+                        TacticalAbilityDef persAbility0 = __result.PersonalAbilityTrack.AbilitiesByLevel[0].Ability;
+                        if (!__result.Abilities.Contains(persAbility0))
+                        {
+                            __result.AddAbility(persAbility0);
+                        }
+                        Logger.Debug("Ability added: " + persAbility0);
                     }
-                    Logger.Debug("Ability added: " + persAbility0);
                 }
                 catch (Exception e)
                 {
@@ -171,6 +138,5 @@ namespace PhoenixRising.SkillRework
                 }
             }
         }
-
     }
 }

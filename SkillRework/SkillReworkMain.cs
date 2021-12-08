@@ -30,7 +30,7 @@ namespace PhoenixRising.SkillRework
             Logger.Initialize(LogPath, Config.Debug, ModDirectory, nameof(SkillReworkMain));
 
             // Apply skill modifications
-            SkillModifications.ApplyChanges(Repo, Shared);
+            SkillModifications.ApplyChanges(Repo, Shared, Config);
 
             // Generate the main specialization as configured
             if( MainSpecModification.GenerateMainSpec(Repo, Config) )
@@ -41,7 +41,7 @@ namespace PhoenixRising.SkillRework
 
             // If configured a new list of all usable abilities (with progression field) will be created.
             // This list is used to map readable names from config to the definitions in the Repo
-            if (Config.CreateNewJsonForAbilities)
+            if (Config.CreateNewJsonFiles)
             {
                 string key;
                 SortedDictionary<string, string> sortedDict = new SortedDictionary<string, string>();

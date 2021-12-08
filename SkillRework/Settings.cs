@@ -1,213 +1,268 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace PhoenixRising.SkillRework
 {
     internal class Settings
     {
-        // Class skills for 1st and 3rd row
-        //public List<ClassSpec> ClassSpec = new List<ClassSpec>
-        //    {
-        //    new ClassSpec(ClassList.Assault,"QUICK AIM","OVERWATCH FOCUS","READY FOR ACTION","ONSLAUGHT","RAPID CLEARANCE","TROOPER","QUARTERBACK"),
-        //    new ClassSpec(ClassList.Heavy,"RETURN FIRE","WAR CRY","BOOM BLAST","HEAVY LIFTER","RAGE BURST","STRONGMAN","EXPERT HEAVY WEAPONS"),
-        //    new ClassSpec(ClassList.Sniper,"EXTREME FOCUS","ARMOR BREAK","MASTER MARKSMAN","INSPIRE","MARKED FOR DEATH","EXPERT RIFLES AND HANDGUNS","SNIPERIST"),
-        //    new ClassSpec(ClassList.Berserker,"DASH","CLOSE QUARTERS EVADE","BLOODLUST","IGNORE PAIN","ADRENALINE RUSH","BRAWLER","EXPERT MELEE"),
-        //    new ClassSpec(ClassList.Priest,"MIND CONTROL","INDUCE PANIC","MIND SENSE","PSYCHIC WARD","MIND CRUSH","FARSIGHTED","BIOCHEMIST"),
-        //    new ClassSpec(ClassList.Technician,"FAST USE","REMOTE CONTROL","FIELD MEDIC","REMOTE DEPLOYMENT","ELECTRIC REINFORCEMENT","SELF DEFENSE SPECIALIST","HEALER"),
-        //    new ClassSpec(ClassList.Infiltrator,"SURPRISE ATTACK","DEPLOY DECOY","WEAK SPOT","VANISH","SNEAK ATTACK","THIEF","CAUTIOUS")
-        //    };
-
-        public Dictionary<string, Dictionary<string, Dictionary<string, string>>> ClassSpecs = new Dictionary<string, Dictionary<string, Dictionary<string, string>>>
+        public Dictionary<string, float> BuffsForAdditionalProficiency = new Dictionary<string, float>
         {
-            { ClassKey.Assault.Key, new Dictionary<string, Dictionary<string,string>> {
-                { ClassKey.MainSpecs, new Dictionary<string,string> {
-                    { ClassKey.Level_1, ClassKey.Assault.Value },
-                    { ClassKey.Level_2, "QUICK AIM" },
-                    { ClassKey.Level_3, "OVERWATCH FOCUS" },
-                    { ClassKey.Level_4, "" },
-                    { ClassKey.Level_5, "READY FOR ACTION" },
-                    { ClassKey.Level_6, "ONSLAUGHT" },
-                    { ClassKey.Level_7, "RAPID CLEARANCE" } } },
-                { ClassKey.PersSpecs, new Dictionary<string,string> { 
-                    { ClassKey.PersSpec_1, "TROOPER" },
-                    { ClassKey.PersSpec_2, "QUARTERBACK" } } }
-            } },
-            { ClassKey.Heavy.Key, new Dictionary<string, Dictionary<string,string>> {
-                { ClassKey.MainSpecs, new Dictionary<string,string> {
-                    { ClassKey.Level_1, ClassKey.Heavy.Value },
-                    { ClassKey.Level_2, "RETURN FIRE" },
-                    { ClassKey.Level_3, "WAR CRY" },
-                    { ClassKey.Level_4, "" },
-                    { ClassKey.Level_5, "BOOM BLAST" },
-                    { ClassKey.Level_6, "HEAVY LIFTER" },
-                    { ClassKey.Level_7, "RAGE BURST" } } },
-                { ClassKey.PersSpecs, new Dictionary<string,string> {
-                    { ClassKey.PersSpec_1, "STRONGMAN" },
-                    { ClassKey.PersSpec_2, "EXPERT HEAVY WEAPONS" } } }
-            } },
-            { ClassKey.Sniper.Key, new Dictionary<string, Dictionary<string,string>> {
-                { ClassKey.MainSpecs, new Dictionary<string,string> {
-                    { ClassKey.Level_1, ClassKey.Sniper.Value },
-                    { ClassKey.Level_2, "EXTREME FOCUS" },
-                    { ClassKey.Level_3, "ARMOR BREAK" },
-                    { ClassKey.Level_4, "" },
-                    { ClassKey.Level_5, "MASTER MARKSMAN" },
-                    { ClassKey.Level_6, "INSPIRE" },
-                    { ClassKey.Level_7, "MARKED FOR DEATH" } } },
-                { ClassKey.PersSpecs, new Dictionary<string,string> {
-                    { ClassKey.PersSpec_1, "EXPERT RIFLES AND HANDGUNS" },
-                    { ClassKey.PersSpec_2, "SNIPERIST" } } }
-            } },
-            { ClassKey.Berserker.Key, new Dictionary<string, Dictionary<string,string>> {
-                { ClassKey.MainSpecs, new Dictionary<string,string> {
-                    { ClassKey.Level_1, ClassKey.Berserker.Value },
-                    { ClassKey.Level_2, "DASH" },
-                    { ClassKey.Level_3, "CLOSE QUARTERS EVADE" },
-                    { ClassKey.Level_4, "" },
-                    { ClassKey.Level_5, "BLOODLUST" },
-                    { ClassKey.Level_6, "IGNORE PAIN" },
-                    { ClassKey.Level_7, "ADRENALINE RUSH" } } },
-                { ClassKey.PersSpecs, new Dictionary<string,string> {
-                    { ClassKey.PersSpec_1, "BRAWLER" },
-                    { ClassKey.PersSpec_2, "EXPERT MELEE" } } }
-            } },
-            { ClassKey.Priest.Key, new Dictionary<string, Dictionary<string,string>> {
-                { ClassKey.MainSpecs, new Dictionary<string,string> {
-                    { ClassKey.Level_1, ClassKey.Priest.Value },
-                    { ClassKey.Level_2, "MIND CONTROL" },
-                    { ClassKey.Level_3, "INDUCE PANIC" },
-                    { ClassKey.Level_4, "" },
-                    { ClassKey.Level_5, "MIND SENSE" },
-                    { ClassKey.Level_6, "PSYCHIC WARD" },
-                    { ClassKey.Level_7, "MIND CRUSH" } } },
-                { ClassKey.PersSpecs, new Dictionary<string,string> {
-                    { ClassKey.PersSpec_1, "FARSIGHTED" },
-                    { ClassKey.PersSpec_2, "BIOCHEMIST" } } }
-            } },
-            { ClassKey.Technician.Key, new Dictionary<string, Dictionary<string,string>> {
-                { ClassKey.MainSpecs, new Dictionary<string,string> {
-                     { ClassKey.Level_1, ClassKey.Technician.Value },
-                   { ClassKey.Level_2, "FAST USE" },
-                    { ClassKey.Level_3, "REMOTE CONTROL" },
-                    { ClassKey.Level_4, "" },
-                    { ClassKey.Level_5, "FIELD MEDIC" },
-                    { ClassKey.Level_6, "REMOTE DEPLOYMENT" },
-                    { ClassKey.Level_7, "ELECTRIC REINFORCEMENT" } } },
-                { ClassKey.PersSpecs, new Dictionary<string,string> {
-                    { ClassKey.PersSpec_1, "SELF DEFENSE SPECIALIST" },
-                    { ClassKey.PersSpec_2, "HEALER" } } }
-            } },
-            { ClassKey.Infiltrator.Key, new Dictionary<string, Dictionary<string,string>> {
-                { ClassKey.MainSpecs, new Dictionary<string,string> {
-                    { ClassKey.Level_1, ClassKey.Infiltrator.Value },
-                    { ClassKey.Level_2, "SURPRISE ATTACK" },
-                    { ClassKey.Level_3, "DEPLOY DECOY" },
-                    { ClassKey.Level_4, "" },
-                    { ClassKey.Level_5, "WEAK SPOT" },
-                    { ClassKey.Level_6, "VANISH" },
-                    { ClassKey.Level_7, "SNEAK ATTACK" } } },
-                { ClassKey.PersSpecs, new Dictionary<string,string> {
-                    { ClassKey.PersSpec_1, "THIEF" },
-                    { ClassKey.PersSpec_2, "CAUTIOUS" } } }
-            } },
+            { Proficiency.Buff, 0.0f }
         };
-
-        // Faction related skills for 3rd row
-        public Dictionary<string, Dictionary<string, string>> FactionSkills = new Dictionary<string, Dictionary<string, string>>
-        {
-            { Faction.PX, new Dictionary<string, string> {
-                { PersonalLevel.FS1, "GYM RAT" },
-                { PersonalLevel.FS2, "RAGE BURST+" }
-            } },
-            { Faction.Anu, new Dictionary<string, string> {
-                { PersonalLevel.FS1, "CLOSE QUARTERS SPECIALIST" },
-                { PersonalLevel.FS2, "RALLY THE TROOPS" }
-            } },
-            { Faction.NJ, new Dictionary<string, string> {
-                { PersonalLevel.FS1, "BOMBARDIER" },
-                { PersonalLevel.FS2, "TURRET COMBO" }
-            } },
-            { Faction.Syn, new Dictionary<string, string> {
-                { PersonalLevel.FS1, "PAIN CHAMELEON+" },
-                { PersonalLevel.FS2, "DEADLY DUO" }
-            } },
-            { Faction.IN, new Dictionary<string, string> {
-                { PersonalLevel.FS1, "Random" },
-                { PersonalLevel.FS2, "Random" }
-            } }
+        public List<ClassSpecDef> ClassSpecializations = new List<ClassSpecDef>
+        { 
+            new ClassSpecDef(
+                classDef: ClassKeys.Assault,
+                mainSpec: new string[]
+                {
+                    "",
+                    "QUICK AIM",
+                    "OVERWATCH FOCUS",
+                    "",
+                    "READY FOR ACTION",
+                    "ONSLAUGHT",
+                    "RAPID CLEARANCE"
+                }),
+            new ClassSpecDef(
+                classDef: ClassKeys.Heavy,
+                mainSpec: new string[]
+                {
+                    "",
+                    "RETURN FIRE",
+                    "STOMP",
+                    "",
+                    "BOOM BLAST",
+                    "HEAVY LIFTER",
+                    "RAGE BURST"
+                }),
+            new ClassSpecDef(
+                classDef: ClassKeys.Sniper,
+                mainSpec: new string[]
+                {
+                    "",
+                    "EXTREME FOCUS",
+                    "ARMOR BREAK",
+                    "",
+                    "MASTER MARKSMAN",
+                    "INSPIRE",
+                    "MARKED FOR DEATH"
+                }),
+            new ClassSpecDef(
+                classDef: ClassKeys.Berserker,
+                mainSpec: new string[]
+                {
+                    "",
+                    "DASH",
+                    "CLOSE QUARTERS EVADE",
+                    "",
+                    "BLOODLUST",
+                    "IGNORE PAIN",
+                    "ADRENALINE RUSH"
+                }),
+            new ClassSpecDef(
+                classDef: ClassKeys.Priest,
+                mainSpec: new string[]
+                {
+                    "",
+                    "MIND CONTROL",
+                    "INDUCE PANIC",
+                    "",
+                    "MIND SENSE",
+                    "PSYCHIC WARD",
+                    "MIND CRUSH"
+                }),
+            new ClassSpecDef(
+                classDef: ClassKeys.Technician,
+                mainSpec: new string[]
+                {
+                    "",
+                    "FAST USE",
+                    "REMOTE CONTROL",
+                    "",
+                    "FIELD MEDIC",
+                    "REMOTE DEPLOYMENT",
+                    "ELECTRIC REINFORCEMENT"
+                }),
+            new ClassSpecDef(
+                classDef: ClassKeys.Infiltrator,
+                mainSpec: new string[]
+                {
+                    "",
+                    "SURPRISE ATTACK",
+                    "DEPLOY DECOY",
+                    "",
+                    "WEAK SPOT",
+                    "VANISH",
+                    "SNEAK ATTACK"
+                }),
         };
-
-        // Additional prficiency skills
-        public Dictionary<string, Dictionary<string,string>> ProficiencySkills = new Dictionary<string, Dictionary<string, string>>
-        {
-            { Proficiency.HG, new Dictionary<string, string> {
-                { PersonalLevel.PS1, "HANDGUN PROFICIENCY" }
-            } },
-            { Proficiency.PD, new Dictionary<string, string> {
-                { PersonalLevel.PS1, "PDW PROFICIENCY" }
-            } },
-            { Proficiency.ML, new Dictionary<string, string> {
-                { PersonalLevel.PS1, "MELEE WEAPON PROFICIENCY+" }
-            } },
-            { Proficiency.AR, new Dictionary<string, string> {
-                { PersonalLevel.PS1, "ASSAULT RIFLE PROFICIENCY" }
-            } },
-            { Proficiency.SG, new Dictionary<string, string> {
-                { PersonalLevel.PS1, "SHOTGUN PROFICIENCY" }
-            } },
-            { Proficiency.SR, new Dictionary<string, string> {
-                { PersonalLevel.PS1, "SNIPER RIFLE PROFICIENCY" }
-            } },
-            { Proficiency.HW, new Dictionary<string, string> {
-                { PersonalLevel.PS1, "HEAVY WEAPON PROFICIENCY" }
-            } },
-            { Proficiency.MW, new Dictionary<string, string> {
-                { PersonalLevel.PS1, "MOUNTED WEAPON PROFICIENCY" }
-            } }
-        };
-
-        // Background perks
-        public string[] BackgroundPerkPool = new string[]
-        {
-            "FIRE RESISTANT","POISON RESISTANT","VIRUS RESISTANT","RECKLESS",
-            "DEVOTED","JETPACK PROFICIENCY","JUMP",
-            "RESOURCEFUL","STEALTH SPECIALIST"
-        };
-
-        // Order of the 3rd row skills, BGP = BackgroundPerks
-        public string[] OrderOfPersonalSkills = new string[]
-        {
-            PersonalLevel.CS1,
-            PersonalLevel.BG1,
-            PersonalLevel.FS1,
-            PersonalLevel.PS1,
-            PersonalLevel.CS2,
-            PersonalLevel.BG2,
-            PersonalLevel.FS2
+        public string[] OrderOfPersonalPerks = new string[]
+            {
+                PerkType.Background,
+                PerkType.Faction_1,
+                PerkType.Class_1,
+                PerkType.Proficiency,
+                PerkType.Background,
+                PerkType.Class_2,
+                PerkType.Faction_2
+            };
+        public List<PersonalPerksDef> PersonalPerks = new List<PersonalPerksDef>()
+        {   new PersonalPerksDef(
+                key: PerkType.Background,
+                //isRandom: true,
+                spc: 10,
+                rngList: new List<string>
+                {
+                    "FIRE RESISTANT",
+                    "POISON RESISTANT",
+                    "VIRUS RESISTANT",
+                    "RECKLESS",
+                    "DEVOTED",
+                    "JETPACK PROFICIENCY",
+                    "JUMP",
+                    "RESOURCEFUL",
+                    "STEALTH SPECIALIST"
+                }),
+            new PersonalPerksDef(
+                key: PerkType.Proficiency,
+                //isRandom: true,
+                spc: 15,
+                rngList: new List<string>
+                {
+                    "HANDGUN PROFICIENCY",
+                    "PDW PROFICIENCY",
+                    "MELEE WEAPON PROFICIENCY+",
+                    "ASSAULT RIFLE PROFICIENCY",
+                    "SHOTGUN PROFICIENCY",
+                    "SNIPER RIFLE PROFICIENCY",
+                    "HEAVY WEAPON PROFICIENCY",
+                    "MOUNTED WEAPON PROFICIENCY"
+                }),
+            new PersonalPerksDef(
+                perkKey: PerkType.Class_1,
+                isRandom: false,
+                spCost: 20,
+                relList: new Dictionary<string, Dictionary<string, string>>
+                {{ FactionKeys.All, new Dictionary<string,string> {
+                    { ClassKeys.Assault.Name, "TROOPER" },
+                    { ClassKeys.Heavy.Name, "STRONGMAN" },
+                    { ClassKeys.Sniper.Name, "EXPERT RIFLES AND HANDGUNS" },
+                    { ClassKeys.Berserker.Name, "BRAWLER" },
+                    { ClassKeys.Priest.Name, "FARSIGHTED" },
+                    { ClassKeys.Technician.Name, "SELF DEFENSE SPECIALIST" },
+                    { ClassKeys.Infiltrator.Name, "THIEF" }
+                } } }),
+            new PersonalPerksDef(
+                perkKey: PerkType.Class_2,
+                isRandom: false,
+                spCost: 20,
+                relList: new Dictionary<string, Dictionary<string, string>>
+                {{ FactionKeys.All, new Dictionary<string,string> {
+                    { ClassKeys.Assault.Name, "QUARTERBACK" },
+                    { ClassKeys.Heavy.Name, "EXPERT HEAVY WEAPONS" },
+                    { ClassKeys.Sniper.Name, "SNIPERIST" },
+                    { ClassKeys.Berserker.Name, "EXPERT MELEE" },
+                    { ClassKeys.Priest.Name, "BIOCHEMIST" },
+                    { ClassKeys.Technician.Name, "HEALER" },
+                    { ClassKeys.Infiltrator.Name, "CAUTIOUS" }
+                } } }),
+            new PersonalPerksDef(
+                perkKey: PerkType.Faction_1,
+                isRandom: false,
+                spCost: 15,
+                relList: new Dictionary<string, Dictionary<string, string>>
+                {{ ClassKeys.AllClasses.Name, new Dictionary<string,string> {
+                    { FactionKeys.PX, "GYM RAT" },
+                    { FactionKeys.Anu, "CLOSE QUARTERS SPECIALIST" },
+                    { FactionKeys.NJ, "BOMBARDIER" },
+                    { FactionKeys.Syn, "SILENT ECHO" },
+                    { FactionKeys.IN, "GYM RAT" },
+                    { FactionKeys.PU, "BOMBARDIER" },
+                    { FactionKeys.FS, "CLOSE QUARTERS SPECIALIST" }
+                } } }),
+            new PersonalPerksDef(
+                perkKey: PerkType.Faction_2,
+                isRandom: false,
+                spCost: 20,
+                relList: new Dictionary<string, Dictionary<string, string>>
+                {
+                    { FactionKeys.PX, new Dictionary<string, string>
+                    {
+                        { ClassKeys.Assault.Name, "RALLY THE TROOPS" },
+                        { ClassKeys.Heavy.Name, "WAR CRY" },
+                        { ClassKeys.Sniper.Name, "RAGE BURST+" },
+                        { ClassKeys.Berserker.Name, "RALLY THE TROOPS" },
+                        { ClassKeys.Priest.Name, "RALLY THE TROOPS" },
+                        { ClassKeys.Technician.Name, "TURRET COMBO" },
+                        { ClassKeys.Infiltrator.Name, "DEADLY DUO" }
+                    } },
+                    { FactionKeys.Anu, new Dictionary<string, string>
+                    {
+                        { ClassKeys.Assault.Name, "RALLY THE TROOPS" },
+                        { ClassKeys.Berserker.Name, "RALLY THE TROOPS" },
+                        { ClassKeys.Priest.Name, "RESURRECT" },
+                    } },
+                    { FactionKeys.NJ, new Dictionary<string, string>
+                    {
+                        { ClassKeys.Assault.Name, "RAGE BURST+" },
+                        { ClassKeys.Heavy.Name, "RAGE BURST+" },
+                        { ClassKeys.Sniper.Name, "TURRET COMBO" },
+                        { ClassKeys.Technician.Name, "TURRET COMBO" },
+                    } },
+                    { FactionKeys.Syn, new Dictionary<string, string>
+                    {
+                        { ClassKeys.Assault.Name, "SHADOWSTEP" },
+                        { ClassKeys.Sniper.Name, "CURE SPRAY" },
+                        { ClassKeys.Infiltrator.Name, "PAIN CHAMELEON" }
+                    } },
+                    { FactionKeys.IN, new Dictionary<string, string>
+                    {
+                        { ClassKeys.Assault.Name, "RALLY THE TROOPS" },
+                        { ClassKeys.Heavy.Name, "WAR CRY" },
+                        { ClassKeys.Sniper.Name, "RAGE BURST+" },
+                    } },
+                    { FactionKeys.PU, new Dictionary<string, string>
+                    {
+                        { ClassKeys.Assault.Name, "RAGE BURST+" },
+                        { ClassKeys.Heavy.Name, "RAGE BURST+" },
+                        { ClassKeys.Sniper.Name, "TURRET COMBO" },
+                        { ClassKeys.Technician.Name, "TURRET COMBO" },
+                        { ClassKeys.Infiltrator.Name, "PAIN CHAMELEON" }
+                    } },
+                    { FactionKeys.FS, new Dictionary<string, string>
+                    {
+                        { ClassKeys.Assault.Name, "RALLY THE TROOPS" },
+                        { ClassKeys.Berserker.Name, "RALLY THE TROOPS" },
+                        { ClassKeys.Priest.Name, "RESURRECT" },
+                    } },
+                })
         };
 
         // Exclusion map for random distributed skills
         public Dictionary<string, List<string>> RadomSkillExclusionMap = new Dictionary<string, List<string>>
         {
-            { Proficiency.HG, new List<string> { ClassKey.Sniper.Key, ClassKey.Berserker.Key } },
-            { Proficiency.PD, new List<string> { ClassKey.Technician.Key } },
-            { Proficiency.ML, new List<string> { ClassKey.Berserker.Key } },
-            { Proficiency.AR, new List<string> { ClassKey.Assault.Key } },
-            { Proficiency.SG, new List<string> { ClassKey.Assault.Key } },
-            { Proficiency.SR, new List<string> { ClassKey.Sniper.Key } },
-            { Proficiency.HW, new List<string> { ClassKey.Heavy.Key } },
-            { Proficiency.MW, new List<string> { ClassKey.Heavy.Key } },
-            { Proficiency.VW, new List<string> { ClassKey.Priest.Key } },
-            { Proficiency.SW, new List<string> { ClassKey.Infiltrator.Key } },
-            { "JETPACK PROFICIENCY", new List<string> { ClassKey.Heavy.Key } },
-            { "STEALTH SPECIALIST", new List<string> { ClassKey.Infiltrator.Key} }
+            { "HANDGUN PROFICIENCY", new List<string> { ClassKeys.Sniper.Name, ClassKeys.Berserker.Name } },
+            { "PDW PROFICIENCY", new List<string> { ClassKeys.Technician.Name } },
+            { "MELEE WEAPON PROFICIENCY+", new List<string> { ClassKeys.Berserker.Name } },
+            { "ASSAULT RIFLE PROFICIENCY", new List<string> { ClassKeys.Assault.Name } },
+            { "SHOTGUN PROFICIENCY", new List<string> { ClassKeys.Assault.Name } },
+            { "SNIPER RIFLE PROFICIENCY", new List<string> { ClassKeys.Sniper.Name } },
+            { "HEAVY WEAPON PROFICIENCY", new List<string> { ClassKeys.Heavy.Name } },
+            { "MOUNTED WEAPON PROFICIENCY", new List<string> { ClassKeys.Heavy.Name } },
+            { Proficiency.VW, new List<string> { ClassKeys.Priest.Name } },
+            { Proficiency.SW, new List<string> { ClassKeys.Infiltrator.Name } },
+            { "JETPACK PROFICIENCY", new List<string> { ClassKeys.Heavy.Name } },
+            { "STEALTH SPECIALIST", new List<string> { ClassKeys.Infiltrator.Name } }
         };
+        //
+        public bool LearnFirstPersonalSkill = false;
 
         // Flag if UI texts should be changed to default (Enlish) text or set by localization
         public bool DoNotLocalizeChangedTexts = true;
         // Create new ability dictionary as json file in mod directory
-        public bool CreateNewJsonForAbilities = false;
+        public bool CreateNewJsonFiles = false;
         // DebugLevel (0: nothing, 1: error, 2: debug, 3: info)
         public int Debug = 1;
-
     }
 }

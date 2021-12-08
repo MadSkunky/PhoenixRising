@@ -15,7 +15,7 @@ namespace PhoenixRising.SkillRework
 {
     class SkillModifications
     {
-        public static void ApplyChanges(DefRepository Repo, SharedData Shared)
+        public static void ApplyChanges(DefRepository Repo, SharedData Shared, Settings Config)
         {
             Dictionary<string, Dictionary<string, string>> textDict = Helper.NotLocalizedTextMap;
             foreach (PassiveModifierAbilityDef pmad in Repo.GetAllDefs<PassiveModifierAbilityDef>())
@@ -32,22 +32,23 @@ namespace PhoenixRising.SkillRework
                     string newText = Helper.NotLocalizedTextMap[pmad.ViewElementDef.name][ViewElement.Description];
                     Helper.ChangeUItext(ref pmad.ViewElementDef.Description, newText);
 
-                    Logger.Debug("Proficiency def name: " + pmad.name);
-                    Logger.Debug("Viewelement name:     " + pmad.ViewElementDef.name);
-                    Logger.Debug("Display1 name:        " + pmad.ViewElementDef.DisplayName1.Localize());
-                    Logger.Debug("Description:          " + pmad.ViewElementDef.Description.Localize());
+                    Logger.Always("Proficiency def name: " + pmad.name);
+                    Logger.Always("Viewelement name:     " + pmad.ViewElementDef.name);
+                    Logger.Always("Display1 name:        " + pmad.ViewElementDef.DisplayName1.Localize());
+                    Logger.Always("Description:          " + pmad.ViewElementDef.Description.Localize());
+                    float configMod = -0.1f + Config.BuffsForAdditionalProficiency[Proficiency.Buff]; // first -0.1 to normalise to 0.0 (proficiency perks all have +0.1 buff)
                     if (pmad.ItemTagStatModifications.Length > 0)
                     {
                         for (int i=0; i < pmad.ItemTagStatModifications.Length; i++)
                         {
-                            pmad.ItemTagStatModifications[i].EquipmentStatModification.Value -= 0.1f;
-                            Logger.Debug("  Target item: " + pmad.ItemTagStatModifications[i].ItemTag.name, false);
-                            Logger.Debug("  Target stat: " + pmad.ItemTagStatModifications[i].EquipmentStatModification.TargetStat, false);
-                            Logger.Debug(" Modification: " + pmad.ItemTagStatModifications[i].EquipmentStatModification.Modification, false);
-                            Logger.Debug("        Value: " + pmad.ItemTagStatModifications[i].EquipmentStatModification.Value, false);
+                            pmad.ItemTagStatModifications[i].EquipmentStatModification.Value += configMod;
+                            Logger.Always("  Target item: " + pmad.ItemTagStatModifications[i].ItemTag.name, false);
+                            Logger.Always("  Target stat: " + pmad.ItemTagStatModifications[i].EquipmentStatModification.TargetStat, false);
+                            Logger.Always(" Modification: " + pmad.ItemTagStatModifications[i].EquipmentStatModification.Modification, false);
+                            Logger.Always("        Value: " + pmad.ItemTagStatModifications[i].EquipmentStatModification.Value, false);
                         }
                     }
-                    Logger.Debug("----------------------------------------------------", false);
+                    Logger.Always("----------------------------------------------------", false);
                 }
             }
         }

@@ -16,39 +16,32 @@ namespace PhoenixRising.SkillRework
                 LevelProgressionDef levelProgressionDef = Repo.GetAllDefs<LevelProgressionDef>().First(lpd => lpd.name.Contains("LevelProgressionDef"));
                 int secondaryClassLevel = levelProgressionDef.SecondSpecializationLevel;
                 int secondaryClassCost = levelProgressionDef.SecondSpecializationSpCost;
-                List<AbilityTrackDef> ClassSpecDefs = new List<AbilityTrackDef>
-                {
-                    Repo.GetAllDefs<AbilityTrackDef>().First(atd => atd.name.Contains("AssaultSpecializationDef")),
-                    Repo.GetAllDefs<AbilityTrackDef>().First(atd => atd.name.Contains("HeavySpecializationDef")),
-                    Repo.GetAllDefs<AbilityTrackDef>().First(atd => atd.name.Contains("SniperSpecializationDef")),
-                    Repo.GetAllDefs<AbilityTrackDef>().First(atd => atd.name.Contains("BerserkerSpecializationDef")),
-                    Repo.GetAllDefs<AbilityTrackDef>().First(atd => atd.name.Contains("PriestSpecializationDef")),
-                    Repo.GetAllDefs<AbilityTrackDef>().First(atd => atd.name.Contains("TechnicianSpecializationDef")),
-                    Repo.GetAllDefs<AbilityTrackDef>().First(atd => atd.name.Contains("InfiltratorSpecializationDef"))
-                };
                 string ability;
-                foreach (AbilityTrackDef classSpecDef in ClassSpecDefs)
+                foreach (AbilityTrackDef abilityTrackDef in Repo.GetAllDefs<AbilityTrackDef>())
                 {
-                    KeyValuePair<string, Dictionary<string, Dictionary<string, string>>> ConfigClassSpec = Config.ClassSpecs.First(cs => classSpecDef.name.Contains(cs.Key));
-                    string[] configMainSpec = ConfigClassSpec.Value[ClassKey.MainSpecs].Values.ToArray();
-                    if (classSpecDef.AbilitiesByLevel.Length != configMainSpec.Length)
+                    if (Config.ClassSpecializations.Any(c => abilityTrackDef.name.Contains(c.ClassName)))
                     {
-                        Logger.Always("Not enough or too much level skills for 1st row are configured, some may not be set!");
-                        Logger.Always("Class preset: " + ConfigClassSpec.Key);
-                        Logger.Always("Number of skills configured (should be 7): " + configMainSpec.Length);
-                    }
-                    for (int i = 0; i < classSpecDef.AbilitiesByLevel.Length && i < configMainSpec.Length; i++)
-                    {
-                        //Logger.Debug("Config MainSpec " + i + ": " + configMainSpec[i]);
-                        if (i != 0 && i != 3) // 3 = secondary class selector and 0 = main class proficiency skipped, main class is in the config but also skipped here to prevent bugs by misconfiguration
+                        ClassSpecDef classSpec = Config.ClassSpecializations.Find(c => abilityTrackDef.name.Contains(c.ClassName));
+                        string[] configMainSpec = classSpec.MainSpec;
+                        if (abilityTrackDef.AbilitiesByLevel.Length != configMainSpec.Length)
                         {
-                            if (Helper.AbilityNameToDefMap.ContainsKey(configMainSpec[i]))
+                            Logger.Always("Not enough or too much level skills for 1st row are configured, some may not be set!");
+                            Logger.Always("Class preset: " + classSpec.ClassName);
+                            Logger.Always("Number of skills configured (should be 7): " + configMainSpec.Length);
+                        }
+                        for (int i = 0; i < abilityTrackDef.AbilitiesByLevel.Length && i < configMainSpec.Length; i++)
+                        {
+                            //Logger.Debug("Config MainSpec " + i + ": " + configMainSpec[i]);
+                            if (i != 0 && i != 3) // 3 = secondary class selector and 0 = main class proficiency skipped, main class is in the config but also skipped here to prevent bugs by misconfiguration
                             {
-                                ability = Helper.AbilityNameToDefMap[configMainSpec[i]];
-                                classSpecDef.AbilitiesByLevel[i].Ability = Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains(ability));
-                                classSpecDef.AbilitiesByLevel[i].Ability.CharacterProgressionData.SkillPointCost = Helper.SPperLevel[i];
-                                classSpecDef.AbilitiesByLevel[i].Ability.CharacterProgressionData.MutagenCost = Helper.SPperLevel[i];
-                                Logger.Debug("Class '" + ConfigClassSpec.Key + "' level " + i + 1 + " skill set to: " + classSpecDef.AbilitiesByLevel[i].Ability.ViewElementDef.DisplayName1.LocalizeEnglish());
+                                if (Helper.AbilityNameToDefMap.ContainsKey(configMainSpec[i]))
+                                {
+                                    ability = Helper.AbilityNameToDefMap[configMainSpec[i]];
+                                    abilityTrackDef.AbilitiesByLevel[i].Ability = Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains(ability));
+                                    abilityTrackDef.AbilitiesByLevel[i].Ability.CharacterProgressionData.SkillPointCost = Helper.SPperLevel[i];
+                                    abilityTrackDef.AbilitiesByLevel[i].Ability.CharacterProgressionData.MutagenCost = Helper.SPperLevel[i];
+                                    Logger.Debug("Class '" + classSpec.ClassName + "' level " + i + 1 + " skill set to: " + abilityTrackDef.AbilitiesByLevel[i].Ability.ViewElementDef.DisplayName1.LocalizeEnglish());
+                                }
                             }
                         }
                     }
