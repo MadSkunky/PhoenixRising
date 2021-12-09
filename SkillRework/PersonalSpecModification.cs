@@ -12,7 +12,6 @@ using Base;
 using PhoenixPoint.Common.Entities;
 using PhoenixPoint.Tactical.Entities.Abilities;
 using PhoenixPoint.Common.Entities.Characters;
-using System.Collections;
 
 namespace PhoenixRising.SkillRework
 {
@@ -27,21 +26,31 @@ namespace PhoenixRising.SkillRework
         [HarmonyPatch(typeof(FactionCharacterGenerator), "GenerateUnit", new Type[] { typeof(GeoFaction), typeof(TacCharacterDef) })]
         internal static class GenerateUnit_Patches
         {
+            // Set by PREFIX call
             private static bool ShouldGeneratePersonalAbilities;
+            
             // Called before 'GenerateUnit' -> PREFIX.
             private static bool Prefix(TacCharacterDef template)
             {
-                // Save ShouldGeneratePersonalAbilities for postfix call, necessary? 
-                ShouldGeneratePersonalAbilities = template.Data.LevelProgression.ShouldGeneratePersonalAbilities;
-                Logger.Debug("-------------------------------------------------------------");
-                Logger.Debug("PREFIX GenerateUnit called:");
-                Logger.Debug("ShouldGeneragePersonalAbilities: " + ShouldGeneratePersonalAbilities);
-                Logger.Debug("-------------------------------------------------------------");
-
-                return true;
+                try
+                {
+                    // Save ShouldGeneratePersonalAbilities for postfix call, necessary? 
+                    ShouldGeneratePersonalAbilities = template.Data.LevelProgression.ShouldGeneratePersonalAbilities;
+                    Logger.Debug("-------------------------------------------------------------");
+                    Logger.Debug("PREFIX GenerateUnit called:");
+                    Logger.Debug("ShouldGeneragePersonalAbilities: " + ShouldGeneratePersonalAbilities);
+                    Logger.Debug("-------------------------------------------------------------");
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e);
+                    return true;
+                }
             }
 
             // Called after 'GenerateUnit' -> POSTFIX.
+            // Set the personal skill tree to configured setup
             private static void Postfix(ref GeoUnitDescriptor __result)
             {
                 try
@@ -129,7 +138,7 @@ namespace PhoenixRising.SkillRework
                         {
                             __result.AddAbility(persAbility0);
                         }
-                        Logger.Debug("Ability added: " + persAbility0);
+                        Logger.Debug("Ability added (learned, set): " + persAbility0);
                     }
                 }
                 catch (Exception e)

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Base.Defs;
 using PhoenixPoint.Common.Entities.Characters;
@@ -9,11 +8,11 @@ namespace PhoenixRising.SkillRework
 {
     class MainSpecModification
     {
-        public static bool GenerateMainSpec(DefRepository Repo, Settings Config)
+        public static void GenerateMainSpec(DefRepository Repo, Settings Config)
         {
             try
             {
-                LevelProgressionDef levelProgressionDef = Repo.GetAllDefs<LevelProgressionDef>().First(lpd => lpd.name.Contains("LevelProgressionDef"));
+                LevelProgressionDef levelProgressionDef = Repo.GetAllDefs<LevelProgressionDef>().FirstOrDefault(lpd => lpd.name.Contains("LevelProgressionDef"));
                 int secondaryClassLevel = levelProgressionDef.SecondSpecializationLevel;
                 int secondaryClassCost = levelProgressionDef.SecondSpecializationSpCost;
                 string ability;
@@ -31,13 +30,13 @@ namespace PhoenixRising.SkillRework
                         }
                         for (int i = 0; i < abilityTrackDef.AbilitiesByLevel.Length && i < configMainSpec.Length; i++)
                         {
-                            //Logger.Debug("Config MainSpec " + i + ": " + configMainSpec[i]);
-                            if (i != 0 && i != 3) // 3 = secondary class selector and 0 = main class proficiency skipped, main class is in the config but also skipped here to prevent bugs by misconfiguration
+                            // 0 = main class proficiency and 3 = secondary class selector skipped, main class is in the config but also skipped here to prevent bugs by misconfiguration
+                            if (i != 0 && i != 3)
                             {
                                 if (Helper.AbilityNameToDefMap.ContainsKey(configMainSpec[i]))
                                 {
                                     ability = Helper.AbilityNameToDefMap[configMainSpec[i]];
-                                    abilityTrackDef.AbilitiesByLevel[i].Ability = Repo.GetAllDefs<TacticalAbilityDef>().First(tad => tad.name.Contains(ability));
+                                    abilityTrackDef.AbilitiesByLevel[i].Ability = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Contains(ability));
                                     abilityTrackDef.AbilitiesByLevel[i].Ability.CharacterProgressionData.SkillPointCost = Helper.SPperLevel[i];
                                     abilityTrackDef.AbilitiesByLevel[i].Ability.CharacterProgressionData.MutagenCost = Helper.SPperLevel[i];
                                     Logger.Debug("Class '" + classSpec.ClassName + "' level " + i + 1 + " skill set to: " + abilityTrackDef.AbilitiesByLevel[i].Ability.ViewElementDef.DisplayName1.LocalizeEnglish());
@@ -46,12 +45,10 @@ namespace PhoenixRising.SkillRework
                         }
                     }
                 }
-                return true;
             }
             catch (Exception e)
             {
                 Logger.Error(e);
-                return false;
             }
         }
     }

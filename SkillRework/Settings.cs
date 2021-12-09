@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 
 namespace PhoenixRising.SkillRework
 {
@@ -255,8 +253,9 @@ namespace PhoenixRising.SkillRework
             { "JETPACK PROFICIENCY", new List<string> { ClassKeys.Heavy.Name } },
             { "STEALTH SPECIALIST", new List<string> { ClassKeys.Infiltrator.Name } }
         };
-        //
-        public bool LearnFirstPersonalSkill = false;
+
+        // Learn the first personal ability = is set rigth from the start
+        public bool LearnFirstPersonalSkill = true;
 
         // Flag if UI texts should be changed to default (Enlish) text or set by localization
         public bool DoNotLocalizeChangedTexts = true;

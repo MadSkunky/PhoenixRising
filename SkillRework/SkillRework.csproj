@@ -52,8 +52,20 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="Unity.Addressables">
+      <HintPath>..\..\..\..\..\Epic\PhoenixPoint\PhoenixPointWin64_Data\Managed\Unity.Addressables.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.ResourceManager">
+      <HintPath>..\..\..\..\..\Epic\PhoenixPoint\PhoenixPointWin64_Data\Managed\Unity.ResourceManager.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>..\..\..\..\..\Epic\PhoenixPoint\PhoenixPointWin64_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.ImageConversionModule">
+      <HintPath>..\..\..\..\..\Epic\PhoenixPoint\PhoenixPointWin64_Data\Managed\UnityEngine.ImageConversionModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.UI">
@@ -62,9 +74,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConfigHelpers.cs" />
     <Compile Include="MainSpecModification.cs" />
     <Compile Include="Helper.cs" />
-    <Compile Include="HarmonyPatches.cs" />
+    <Compile Include="PersonalSpecModification.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="SkillModifications.cs" />
@@ -75,13 +88,18 @@
     <EmbeddedResource Include="mod_info.json" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="AbilityDefToNameDict.json">
+    <EmbeddedResource Include="Assets\Presets\AbilityDefToNameDict.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="NotLocalizedTextMap.json">
+    <EmbeddedResource Include="Assets\Presets\NotLocalizedTextMap.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\Textures\Pepe.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

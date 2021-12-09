@@ -5,5 +5,5 @@
     Url  : "",
     Description : "Rework of Skills and Skilltrees",
     Requires : { Id: "Modnix", Min: "3.0" },
-    ConfigType: "PhoenixRising.SkillRework.Settings", // Fullname with namespace
+    ConfigType: "PhoenixRising.SkillRework.Settings" // Fullname with namespace
 }
