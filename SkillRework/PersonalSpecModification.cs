@@ -12,6 +12,10 @@ using Base;
 using PhoenixPoint.Common.Entities;
 using PhoenixPoint.Tactical.Entities.Abilities;
 using PhoenixPoint.Common.Entities.Characters;
+using PhoenixPoint.Geoscape.Levels.Factions;
+using PhoenixPoint.Common.Core;
+using PhoenixPoint.Geoscape.View.ViewControllers.BaseRecruits;
+using PhoenixPoint.Common.UI;
 
 namespace PhoenixRising.SkillRework
 {
@@ -28,8 +32,9 @@ namespace PhoenixRising.SkillRework
         {
             // Set by PREFIX call
             private static bool ShouldGeneratePersonalAbilities;
-            
+
             // Called before 'GenerateUnit' -> PREFIX.
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
             private static bool Prefix(TacCharacterDef template)
             {
                 try
@@ -51,6 +56,7 @@ namespace PhoenixRising.SkillRework
 
             // Called after 'GenerateUnit' -> POSTFIX.
             // Set the personal skill tree to configured setup
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
             private static void Postfix(ref GeoUnitDescriptor __result)
             {
                 try
@@ -126,6 +132,7 @@ namespace PhoenixRising.SkillRework
         [HarmonyPatch(typeof(GeoUnitDescriptor), "GenerateProgression")]
         internal static class GenerateProgression_Patches
         {
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
             private static void Postfix(ref CharacterProgression __result)
             {
                 try
@@ -145,6 +152,32 @@ namespace PhoenixRising.SkillRework
                 {
                     Logger.Error(e);
                 }
+            }
+        }
+
+        // Overwrite preview of new recruits for PX, original crashed with more than 3 abilities
+        // Current quick fix: Show only the first 3 abilities of the personal skill row
+        // TODO:
+        // Find a way to ...
+        // a) ... show all 7 skills
+        // b) ... show 3 specific skills, for instance the 3 random assigned skills e.g. background and proficiency
+        [HarmonyPatch(typeof(RecruitsListElementController), "SetAbilityIcons")]
+        internal static class SetAbilityIcons_Patches
+        {
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
+            private static bool Prefix(List<TacticalAbilityViewElementDef> abilities, ref List<RowIconTextController> ____abilityIcons)
+            {
+                foreach (RowIconTextController rowIconTextController in ____abilityIcons)
+                {
+                    rowIconTextController.gameObject.SetActive(false);
+                }
+                for (int i = 0; i < abilities.Count && i < ____abilityIcons.Count; i++)
+                {
+                    ____abilityIcons[i].gameObject.SetActive(true);
+                    TacticalAbilityViewElementDef tacticalAbilityViewElementDef = abilities[i];
+                    ____abilityIcons[i].SetController(tacticalAbilityViewElementDef.LargeIcon, tacticalAbilityViewElementDef.DisplayName1, tacticalAbilityViewElementDef.Description);
+                }
+                return false;
             }
         }
     }
