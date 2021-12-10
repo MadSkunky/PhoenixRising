@@ -16,6 +16,8 @@ using PhoenixPoint.Geoscape.Levels.Factions;
 using PhoenixPoint.Common.Core;
 using PhoenixPoint.Geoscape.View.ViewControllers.BaseRecruits;
 using PhoenixPoint.Common.UI;
+using PhoenixPoint.Geoscape.View.DataObjects;
+using UnityEngine;
 
 namespace PhoenixRising.SkillRework
 {
@@ -155,12 +157,52 @@ namespace PhoenixRising.SkillRework
             }
         }
 
+        // Expand ability icon list in PX base recruit screen (vanilly fixed 3, we need 7)
+        // Problem: The 7th skill overlappes with the recruit button.
+        // TODO: Rearrange this UI so it can show 7 skills without overlapping
+        [HarmonyPatch(typeof(RecruitsListElementController), "SetRecruitElement")]
+        public static class RecruitsListElementController_SetRecruitElement_Patch
+        {
+            public static void Prefix(RecruitsListElementController __instance, RecruitsListEntryData entryData, List<RowIconTextController> ____abilityIcons)
+            {
+                try
+                {
+                    // TODO: Configuarable vs settings?
+                    int newLength = 7;
+                    int vanillaLength = 3;
+                    RowIconTextController[] componentsInChildren = __instance.PersonalTrackRoot.transform.GetComponentsInChildren<RowIconTextController>(true);
+                    if (componentsInChildren.Length < newLength)
+                    {
+                        UnityEngine.Object x = componentsInChildren.FirstOrDefault<RowIconTextController>();
+                        if (x == null)
+                        {
+                            throw new NullReferenceException("Object to clone is null");
+                        }
+                        int num = newLength - vanillaLength;
+                        for (int i = 0; i < num; i++)
+                        {
+                            UnityEngine.Object.Instantiate<RowIconTextController>(componentsInChildren.FirstOrDefault<RowIconTextController>(), __instance.PersonalTrackRoot.transform, true);
+                        }
+                    }
+                    componentsInChildren = __instance.PersonalTrackRoot.transform.GetComponentsInChildren<RowIconTextController>(true);
+                    if (entryData.PersonalTrackAbilities.Count<TacticalAbilityViewElementDef>() > vanillaLength)
+                    {
+                        foreach (RowIconTextController rowIconTextController in componentsInChildren)
+                        {
+                            rowIconTextController.DisplayText.gameObject.SetActive(false);
+                            RectTransform component = rowIconTextController.GetComponent<RectTransform>();
+                            rowIconTextController.DisplayText.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 0f);
+                            component.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 100f);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error(ex);
+                }
+            }
+        }
         // Overwrite preview of new recruits for PX, original crashed with more than 3 abilities
-        // Current quick fix: Show only the first 3 abilities of the personal skill row
-        // TODO:
-        // Find a way to ...
-        // a) ... show all 7 skills
-        // b) ... show 3 specific skills, for instance the 3 random assigned skills e.g. background and proficiency
         [HarmonyPatch(typeof(RecruitsListElementController), "SetAbilityIcons")]
         internal static class SetAbilityIcons_Patches
         {
@@ -171,6 +213,7 @@ namespace PhoenixRising.SkillRework
                 {
                     rowIconTextController.gameObject.SetActive(false);
                 }
+                // inserted _abilityIcons.Count to prevent softlock if there are more abilities than icon slots
                 for (int i = 0; i < abilities.Count && i < ____abilityIcons.Count; i++)
                 {
                     ____abilityIcons[i].gameObject.SetActive(true);
