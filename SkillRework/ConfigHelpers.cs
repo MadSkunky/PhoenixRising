@@ -162,12 +162,12 @@ namespace PhoenixRising.SkillRework
                                 && factionDict.ContainsKey(faction))
                             {
                                 abilityName = factionDict[faction];
-                                return (perk: Helper.AbilityNameToDefMap[abilityName], spCost: SPcost);
                             }
                             else
                             {
-                                return (perk: default, spCost: default);
+                                abilityName = RelatedFixedPerks[ClassKeys.AllClasses.Name][FactionKeys.PX];
                             }
+                            return (perk: Helper.AbilityNameToDefMap[abilityName], spCost: SPcost);
                         case PerkType.Faction_2:
                             if (faction != null
                                 && className != null
@@ -178,9 +178,12 @@ namespace PhoenixRising.SkillRework
                                 && factionClassDict[faction].ContainsKey(className))
                             {
                                 abilityName = factionClassDict[faction][className];
-                                return (perk: Helper.AbilityNameToDefMap[abilityName], spCost: SPcost);
                             }
-                            break;
+                            else
+                            {
+                                abilityName = RelatedFixedPerks[FactionKeys.PX][className];
+                            }
+                            return (perk: Helper.AbilityNameToDefMap[abilityName], spCost: SPcost);
                         default:
                             return (perk: default, spCost: default);
                     }

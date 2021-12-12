@@ -86,8 +86,8 @@ namespace PhoenixRising.SkillRework
                 newSprite = Sprite.Create(texture, new Rect(0.0f, 0.0f, width, height), new Vector2(0.0f, 0.0f));
             }
 
-            Logger.Always("-----------------------------------------------------------------------");
-            Logger.Always("Repo PassiveModifierAbilityDef count before: " + Repo.GetAllDefs<PassiveModifierAbilityDef>().Count());
+            Logger.Debug("-----------------------------------------------------------------------");
+            Logger.Debug("Repo PassiveModifierAbilityDef count before: " + Repo.GetAllDefs<PassiveModifierAbilityDef>().Count());
             string abilityName = "FirstAdded_AbilityDef";
             PassiveModifierAbilityDef sourceAbility = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(p => p.name.Equals("Devoted_AbilityDef"));
             if (sourceAbility != null)
@@ -110,44 +110,44 @@ namespace PhoenixRising.SkillRework
                 addedAbility.ViewElementDef.LargeIcon = newSprite;
                 addedAbility.ViewElementDef.SmallIcon = newSprite;
                 addedAbility.CharacterProgressionData.name = "E_CharacterProgressionData [" + abilityName + "]";
-                Logger.Always("------------------------- Source ability ---------------------------");
-                Logger.Always("Guid: " + sourceAbility.Guid);
-                Logger.Always("Name: " + sourceAbility.name);
-                Logger.Always("Modification target: " + sourceAbility.StatModifications[0].TargetStat);
-                Logger.Always("Modification modtype: " + sourceAbility.StatModifications[0].Modification);
-                Logger.Always("Modification value: " + sourceAbility.StatModifications[0].Value);
-                Logger.Always("ViewElementDef: " + sourceAbility.ViewElementDef.name);
-                Logger.Always("Localized name: " + sourceAbility.ViewElementDef.DisplayName1.Localize());
-                Logger.Always("Localized description: " + sourceAbility.ViewElementDef.Description.Localize());
-                Logger.Always("CharacterProgressionData: " + sourceAbility.CharacterProgressionData.name);
-                Logger.Always("------------------------- New added ability ---------------------------");
-                Logger.Always("Guid: " + addedAbility.Guid);
-                Logger.Always("Name: " + addedAbility.name);
-                Logger.Always("Modification target: " + addedAbility.StatModifications[0].TargetStat);
-                Logger.Always("Modification modtype: " + addedAbility.StatModifications[0].Modification);
-                Logger.Always("Modification value: " + addedAbility.StatModifications[0].Value);
-                Logger.Always("ViewElementDef: " + addedAbility.ViewElementDef.name);
-                Logger.Always("Localized name: " + addedAbility.ViewElementDef.DisplayName1.Localize());
-                Logger.Always("Localized description: " + addedAbility.ViewElementDef.Description.Localize());
-                Logger.Always("CharacterProgressionData: " + addedAbility.CharacterProgressionData.name);
-                Logger.Always("-----------------------------------------------------------------------");
+                Logger.Debug("------------------------- Source ability ---------------------------");
+                Logger.Debug("Guid: " + sourceAbility.Guid);
+                Logger.Debug("Name: " + sourceAbility.name);
+                Logger.Debug("Modification target: " + sourceAbility.StatModifications[0].TargetStat);
+                Logger.Debug("Modification modtype: " + sourceAbility.StatModifications[0].Modification);
+                Logger.Debug("Modification value: " + sourceAbility.StatModifications[0].Value);
+                Logger.Debug("ViewElementDef: " + sourceAbility.ViewElementDef.name);
+                Logger.Debug("Localized name: " + sourceAbility.ViewElementDef.DisplayName1.Localize());
+                Logger.Debug("Localized description: " + sourceAbility.ViewElementDef.Description.Localize());
+                Logger.Debug("CharacterProgressionData: " + sourceAbility.CharacterProgressionData.name);
+                Logger.Debug("------------------------- New added ability ---------------------------");
+                Logger.Debug("Guid: " + addedAbility.Guid);
+                Logger.Debug("Name: " + addedAbility.name);
+                Logger.Debug("Modification target: " + addedAbility.StatModifications[0].TargetStat);
+                Logger.Debug("Modification modtype: " + addedAbility.StatModifications[0].Modification);
+                Logger.Debug("Modification value: " + addedAbility.StatModifications[0].Value);
+                Logger.Debug("ViewElementDef: " + addedAbility.ViewElementDef.name);
+                Logger.Debug("Localized name: " + addedAbility.ViewElementDef.DisplayName1.Localize());
+                Logger.Debug("Localized description: " + addedAbility.ViewElementDef.Description.Localize());
+                Logger.Debug("CharacterProgressionData: " + addedAbility.CharacterProgressionData.name);
+                Logger.Debug("-----------------------------------------------------------------------");
             }
-            Logger.Always("Repo PassiveModifierAbilityDef count after: " + Repo.GetAllDefs<PassiveModifierAbilityDef>().Count());
-            Logger.Always("-----------------------------------------------------------------------");
+            Logger.Debug("Repo PassiveModifierAbilityDef count after: " + Repo.GetAllDefs<PassiveModifierAbilityDef>().Count());
+            Logger.Debug("-----------------------------------------------------------------------");
             PassiveModifierAbilityDef testAbility = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(p => p.name.Equals("FirstAdded_AbilityDef"));
             if (testAbility != null)
             {
-                Logger.Always("---------------- New ability from Repo in new object ------------------");
-                Logger.Always("Guid: " + testAbility.Guid);
-                Logger.Always("Name: " + testAbility.name);
-                Logger.Always("Modification target: " + testAbility.StatModifications[0].TargetStat);
-                Logger.Always("Modification modtype: " + testAbility.StatModifications[0].Modification);
-                Logger.Always("Modification value: " + testAbility.StatModifications[0].Value);
-                Logger.Always("ViewElementDef: " + testAbility.ViewElementDef.name);
-                Logger.Always("Localized name: " + testAbility.ViewElementDef.DisplayName1.Localize());
-                Logger.Always("Localized description: " + testAbility.ViewElementDef.Description.Localize());
-                Logger.Always("CharacterProgressionData: " + testAbility.CharacterProgressionData.name);
-                Logger.Always("-----------------------------------------------------------------------");
+                Logger.Debug("---------------- New ability from Repo in new object ------------------");
+                Logger.Debug("Guid: " + testAbility.Guid);
+                Logger.Debug("Name: " + testAbility.name);
+                Logger.Debug("Modification target: " + testAbility.StatModifications[0].TargetStat);
+                Logger.Debug("Modification modtype: " + testAbility.StatModifications[0].Modification);
+                Logger.Debug("Modification value: " + testAbility.StatModifications[0].Value);
+                Logger.Debug("ViewElementDef: " + testAbility.ViewElementDef.name);
+                Logger.Debug("Localized name: " + testAbility.ViewElementDef.DisplayName1.Localize());
+                Logger.Debug("Localized description: " + testAbility.ViewElementDef.Description.Localize());
+                Logger.Debug("CharacterProgressionData: " + testAbility.CharacterProgressionData.name);
+                Logger.Debug("-----------------------------------------------------------------------");
             }
         }
     }
