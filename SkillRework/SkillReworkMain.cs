@@ -29,9 +29,9 @@ namespace PhoenixRising.SkillRework
             // Path for own logging
             ModDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             // Path to texture files
-            ManagedDirectory = Path.Combine(ModDirectory, "Managed");
+            ManagedDirectory = Path.Combine(ModDirectory, "Assets", "Presets");
             // Path to texture files
-            TexturesDirectory = Path.Combine(ModDirectory, "Textures");
+            TexturesDirectory = Path.Combine(ModDirectory, "Assets", "Textures");
 
             // Initialize Logger
             LogPath = Path.Combine(ModDirectory, "SkillRework.log");
@@ -41,7 +41,7 @@ namespace PhoenixRising.SkillRework
             Helper.Initialize();
 
             // Apply skill modifications
-            SkillModifications.ApplyChanges(Repo, Shared, Config);
+            SkillModifications.ApplyChanges(Repo, Config);
 
             // Generate the main specialization as configured
             MainSpecModification.GenerateMainSpec(Repo, Config);

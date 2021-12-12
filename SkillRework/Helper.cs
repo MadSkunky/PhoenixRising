@@ -20,11 +20,11 @@ namespace PhoenixRising.SkillRework
 
         // Desearialize dictionary from Json to map ability names to Defs
         public static readonly string AbilitiesJsonFileName = "AbilityDefToNameDict.json";
-        public static Dictionary<string, string> AbilityNameToDefMap; // = ReadJson<Dictionary<string, string>>(AbilitiesJsonFileName);
+        public static Dictionary<string, string> AbilityNameToDefMap;
 
         // Desearialize dictionary from Json to map non localized texts to ViewDefs
         public static readonly string TextMapFileName = "NotLocalizedTextMap.json";
-        public static Dictionary<string, Dictionary<string, string>> NotLocalizedTextMap; // = ReadJson<Dictionary<string, Dictionary<string, string>>>(TextMapFileName);
+        public static Dictionary<string, Dictionary<string, string>> NotLocalizedTextMap;
 
         public static void Initialize()
         {
@@ -35,21 +35,6 @@ namespace PhoenixRising.SkillRework
                 TexturesDirectory = SkillReworkMain.TexturesDirectory;
                 AbilityNameToDefMap = ReadJson<Dictionary<string, string>>(AbilitiesJsonFileName);
                 NotLocalizedTextMap = ReadJson<Dictionary<string, Dictionary<string, string>>>(TextMapFileName);
-            }
-            catch (Exception e)
-            {
-                Logger.Error(e);
-            }
-        }
-        public static void ChangeUItext (ref LocalizedTextBind localizedTextBind, string localizationKey)
-        {
-            try
-            {
-                bool doNotLocalize = SkillReworkMain.Config.DoNotLocalizeChangedTexts;
-                if (doNotLocalize)
-                {
-                    localizedTextBind = new LocalizedTextBind(localizationKey, doNotLocalize);
-                }
             }
             catch (Exception e)
             {

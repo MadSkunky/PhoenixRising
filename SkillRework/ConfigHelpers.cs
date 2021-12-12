@@ -197,20 +197,16 @@ namespace PhoenixRising.SkillRework
                         {
                             abilityName = UnrelatedRandomPerks.GetRandomElement(rnd);
                             usedFound = exclusionList.Contains(abilityName);
-                            if (PerkKey.Equals(PerkType.Proficiency))
-                            {
-                                proficienyAlreadySet = config.RadomSkillExclusionMap[abilityName].Contains(className);
-                            }
+                            proficienyAlreadySet = config.RadomSkillExclusionMap.ContainsKey(abilityName)
+                                                   && config.RadomSkillExclusionMap[abilityName].Contains(className);
                             safeguard++;
                         } while ((usedFound || proficienyAlreadySet) && safeguard <= UnrelatedRandomPerks.Count * 2);
                         exclusionList.Add(abilityName);
                     }
                 }
-                if (abilityName != null && Helper.AbilityNameToDefMap.ContainsKey(abilityName))
-                {
-                    return (perk: Helper.AbilityNameToDefMap[abilityName], spCost: SPcost);
-                }
-                else return (perk: default, spCost: default);
+                return abilityName != null && Helper.AbilityNameToDefMap.ContainsKey(abilityName)
+                    ? (perk: Helper.AbilityNameToDefMap[abilityName], spCost: SPcost)
+                    : (perk: default, spCost: default);
             }
             catch (Exception e)
             {

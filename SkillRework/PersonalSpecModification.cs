@@ -63,6 +63,7 @@ namespace PhoenixRising.SkillRework
             {
                 try
                 {
+                    PassiveModifierAbilityDef testAbility = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(p => p.name.Equals("FirstAdded_AbilityDef"));
                     // Probably not necessary, just to be safe ;-)
                     if (__result != null && ShouldGeneratePersonalAbilities && __result.UnitType.IsHuman && !__result.UnitType.IsMutoid && !__result.UnitType.TemplateDef.IsAlien)
                     {
@@ -77,7 +78,7 @@ namespace PhoenixRising.SkillRework
                         Dictionary<string, string> tempDict = new Dictionary<string, string>();
                         // Exclusion list for random selection, initialized with main spec skills
                         List<string> exclusionList = new List<string>(Config.ClassSpecializations.FirstOrDefault(cs => cs.ClassName.Equals(className)).MainSpec);
-                        
+
                         for (int i = 0; i < ppOrder.Length; i++)
                         {
                             PersonalPerksDef personalPerksDef = Config.PersonalPerks.FirstOrDefault(pp => pp.PerkKey.Equals(ppOrder[i]));
@@ -163,7 +164,7 @@ namespace PhoenixRising.SkillRework
         [HarmonyPatch(typeof(RecruitsListElementController), "SetRecruitElement")]
         public static class RecruitsListElementController_SetRecruitElement_Patch
         {
-            public static void Prefix(RecruitsListElementController __instance, RecruitsListEntryData entryData, List<RowIconTextController> ____abilityIcons)
+            public static void Prefix(RecruitsListElementController __instance, RecruitsListEntryData entryData) // , List<RowIconTextController> ____abilityIcons
             {
                 try
                 {
