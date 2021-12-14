@@ -12,8 +12,6 @@ using Base;
 using PhoenixPoint.Common.Entities;
 using PhoenixPoint.Tactical.Entities.Abilities;
 using PhoenixPoint.Common.Entities.Characters;
-using PhoenixPoint.Geoscape.Levels.Factions;
-using PhoenixPoint.Common.Core;
 using PhoenixPoint.Geoscape.View.ViewControllers.BaseRecruits;
 using PhoenixPoint.Common.UI;
 using PhoenixPoint.Geoscape.View.DataObjects;

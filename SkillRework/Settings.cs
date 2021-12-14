@@ -16,7 +16,7 @@ namespace PhoenixRising.SkillRework
                 {
                     "",
                     "QUICK AIM",
-                    "OVERWATCH FOCUS",
+                    "BATTLE FOCUS",
                     "",
                     "READY FOR ACTION",
                     "ONSLAUGHT",
@@ -28,10 +28,10 @@ namespace PhoenixRising.SkillRework
                 {
                     "",
                     "RETURN FIRE",
-                    "STOMP",
+                    "WAR CRY",
                     "",
                     "BOOM BLAST",
-                    "HEAVY LIFTER",
+                    "HEAVY LIFTER", // -> DynamicResistance
                     "RAGE BURST"
                 }),
             new ClassSpecDef(
@@ -115,11 +115,12 @@ namespace PhoenixRising.SkillRework
                     "FIRE RESISTANT",
                     "POISON RESISTANT",
                     "VIRUS RESISTANT",
-                    "RECKLESS",
                     "DEVOTED",
                     "JETPACK PROFICIENCY",
+                    "GYM RAT",
                     "JUMP",
                     "RESOURCEFUL",
+                    "HEAVY LIFTER",
                     "STEALTH SPECIALIST"
                 }),
             new PersonalPerksDef(
@@ -158,7 +159,7 @@ namespace PhoenixRising.SkillRework
                 relList: new Dictionary<string, Dictionary<string, string>>
                 {{ FactionKeys.All, new Dictionary<string,string> {
                     { ClassKeys.Assault.Name, "QUARTERBACK" },
-                    { ClassKeys.Heavy.Name, "EXPERT HEAVY WEAPONS" },
+                    { ClassKeys.Heavy.Name, "EXPERT HEAVY WEAPONS" }, // -> JetpackControl
                     { ClassKeys.Sniper.Name, "SNIPERIST" },
                     { ClassKeys.Berserker.Name, "EXPERT MELEE" },
                     { ClassKeys.Priest.Name, "BIOCHEMIST" },
@@ -171,13 +172,13 @@ namespace PhoenixRising.SkillRework
                 spCost: 15,
                 relList: new Dictionary<string, Dictionary<string, string>>
                 {{ ClassKeys.AllClasses.Name, new Dictionary<string,string> {
-                    { FactionKeys.PX, "GYM RAT" },
-                    { FactionKeys.Anu, "CLOSE QUARTERS SPECIALIST" },
-                    { FactionKeys.NJ, "BOMBARDIER" },
-                    { FactionKeys.Syn, "SILENT ECHO" },
-                    { FactionKeys.IN, "GYM RAT" },
-                    { FactionKeys.PU, "BOMBARDIER" },
-                    { FactionKeys.FS, "CLOSE QUARTERS SPECIALIST" }
+                    { FactionKeys.PX, "OVERWATCH FOCUS" },
+                    { FactionKeys.Anu, "CLOSE QUARTERS SPECIALIST" }, // -> MistBreather
+                    { FactionKeys.NJ, "RECKLESS" },
+                    { FactionKeys.Syn, "SHADOWSTEP" },
+                    { FactionKeys.IN, "OVERWATCH FOCUS" },
+                    { FactionKeys.PU, "RECKLESS" },
+                    { FactionKeys.FS, "CLOSE QUARTERS SPECIALIST" } // -> MistBreather
                 } } }),
             new PersonalPerksDef(
                 perkKey: PerkType.Faction_2,
@@ -188,50 +189,50 @@ namespace PhoenixRising.SkillRework
                     { FactionKeys.PX, new Dictionary<string, string>
                     {
                         { ClassKeys.Assault.Name, "RALLY THE TROOPS" },
-                        { ClassKeys.Heavy.Name, "WAR CRY" },
-                        { ClassKeys.Sniper.Name, "RAGE BURST+" },
-                        { ClassKeys.Berserker.Name, "RALLY THE TROOPS" },
-                        { ClassKeys.Priest.Name, "RALLY THE TROOPS" },
-                        { ClassKeys.Technician.Name, "TURRET COMBO" },
-                        { ClassKeys.Infiltrator.Name, "DEADLY DUO" }
+                        { ClassKeys.Heavy.Name, "RALLY THE TROOPS" },
+                        { ClassKeys.Sniper.Name, "RALLY THE TROOPS" },
+                        { ClassKeys.Berserker.Name, "SONIC BLAST" },
+                        { ClassKeys.Priest.Name, "RESURRECT" },
+                        { ClassKeys.Technician.Name, "PARALYZE LIMB" },
+                        { ClassKeys.Infiltrator.Name, "PAIN CHAMELEON" }
                     } },
                     { FactionKeys.Anu, new Dictionary<string, string>
                     {
-                        { ClassKeys.Assault.Name, "RALLY THE TROOPS" },
-                        { ClassKeys.Berserker.Name, "RALLY THE TROOPS" },
+                        { ClassKeys.Assault.Name, "SONIC BLAST" },
+                        { ClassKeys.Berserker.Name, "SONIC BLAST" },
                         { ClassKeys.Priest.Name, "RESURRECT" },
                     } },
                     { FactionKeys.NJ, new Dictionary<string, string>
                     {
-                        { ClassKeys.Assault.Name, "RAGE BURST+" },
-                        { ClassKeys.Heavy.Name, "RAGE BURST+" },
-                        { ClassKeys.Sniper.Name, "TURRET COMBO" },
-                        { ClassKeys.Technician.Name, "TURRET COMBO" },
+                        { ClassKeys.Assault.Name, "PEPPER CLOUD" },
+                        { ClassKeys.Heavy.Name, "PEPPER CLOUD" },
+                        { ClassKeys.Sniper.Name, "PEPPER CLOUD" },
+                        { ClassKeys.Technician.Name, "PARALYZE LIMB" },
                     } },
                     { FactionKeys.Syn, new Dictionary<string, string>
                     {
-                        { ClassKeys.Assault.Name, "SHADOWSTEP" },
+                        { ClassKeys.Assault.Name, "CURE SPRAY" },
                         { ClassKeys.Sniper.Name, "CURE SPRAY" },
                         { ClassKeys.Infiltrator.Name, "PAIN CHAMELEON" }
                     } },
                     { FactionKeys.IN, new Dictionary<string, string>
                     {
                         { ClassKeys.Assault.Name, "RALLY THE TROOPS" },
-                        { ClassKeys.Heavy.Name, "WAR CRY" },
-                        { ClassKeys.Sniper.Name, "RAGE BURST+" },
+                        { ClassKeys.Heavy.Name, "RALLY THE TROOPS" },
+                        { ClassKeys.Sniper.Name, "RALLY THE TROOPS" },
                     } },
                     { FactionKeys.PU, new Dictionary<string, string>
                     {
-                        { ClassKeys.Assault.Name, "RAGE BURST+" },
-                        { ClassKeys.Heavy.Name, "RAGE BURST+" },
-                        { ClassKeys.Sniper.Name, "TURRET COMBO" },
-                        { ClassKeys.Technician.Name, "TURRET COMBO" },
+                        { ClassKeys.Assault.Name, "PEPPER CLOUD" },
+                        { ClassKeys.Heavy.Name, "PEPPER CLOUD" },
+                        { ClassKeys.Sniper.Name, "PEPPER CLOUD" },
+                        { ClassKeys.Technician.Name, "PARALYZE LIMB" },
                         { ClassKeys.Infiltrator.Name, "PAIN CHAMELEON" }
                     } },
                     { FactionKeys.FS, new Dictionary<string, string>
                     {
-                        { ClassKeys.Assault.Name, "RALLY THE TROOPS" },
-                        { ClassKeys.Berserker.Name, "RALLY THE TROOPS" },
+                        { ClassKeys.Assault.Name, "SONIC BLAST" },
+                        { ClassKeys.Berserker.Name, "SONIC BLAST" },
                         { ClassKeys.Priest.Name, "RESURRECT" },
                     } },
                 })

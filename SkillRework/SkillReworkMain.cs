@@ -40,11 +40,17 @@ namespace PhoenixRising.SkillRework
             // Initialize Helper
             Helper.Initialize();
 
+            // Generate some GUIDs
+            //for (int i = 0; i < 100; i++)
+            //{
+            //    Logger.Always(Guid.NewGuid().ToString(), false);
+            //}
+
             // Apply skill modifications
-            SkillModifications.ApplyChanges(Repo, Config);
+            SkillModifications.ApplyChanges();
 
             // Generate the main specialization as configured
-            MainSpecModification.GenerateMainSpec(Repo, Config);
+            MainSpecModification.GenerateMainSpec();
 
             // Patch all Harmony patches
             HarmonyInstance.Create("SkillRework.PhoenixRising").PatchAll();
