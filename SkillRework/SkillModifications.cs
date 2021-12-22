@@ -1,20 +1,40 @@
-﻿using Base.Core;
+﻿using Base.Assets;
+using Base.Assets.StreamableSystem;
+using Base.Cameras.ExecutionNodes;
+using Base.Cameras.Filters;
+using Base.Core;
 using Base.Defs;
 using Base.Entities.Abilities;
+using Base.Entities.Effects;
 using Base.Entities.Effects.ApplicationConditions;
 using Base.Entities.Statuses;
+using Base.Serialization;
+using Base.Serialization.General;
+using Base.Serialization.Streams;
 using Base.UI;
+using Base.Utils;
+using Newtonsoft.Json;
+using PhoenixPoint.Common.Core;
 using PhoenixPoint.Common.Entities;
 using PhoenixPoint.Common.Entities.GameTags;
+using PhoenixPoint.Common.Entities.GameTagsTypes;
 using PhoenixPoint.Common.UI;
+using PhoenixPoint.Tactical.Cameras.Filters;
 using PhoenixPoint.Tactical.Entities.Abilities;
+using PhoenixPoint.Tactical.Entities.Animations;
+using PhoenixPoint.Tactical.Entities.Effects;
 using PhoenixPoint.Tactical.Entities.Effects.ApplicationConditions;
 using PhoenixPoint.Tactical.Entities.Equipments;
 using PhoenixPoint.Tactical.Entities.Statuses;
+using PhoenixPoint.Tactical.Entities.Weapons;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Xml.Serialization;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace PhoenixRising.SkillRework
 {
@@ -23,15 +43,192 @@ namespace PhoenixRising.SkillRework
         // Get config, definition repository (and shared data, not neccesary currently)
         private static readonly Settings Config = SkillReworkMain.Config;
         private static readonly DefRepository Repo = GameUtl.GameComponent<DefRepository>();
+        private static readonly AssetsManager assetsManager = GameUtl.GameComponent<AssetsManager>();
         //private static readonly SharedData Shared = GameUtl.GameComponent<SharedData>();
+
         public static void ApplyChanges()
         {
-            
             try
             {
                 // Get config setting for localized texts.
                 bool doNotLocalize = Config.DoNotLocalizeChangedTexts;
 
+                // New skill BattleFocus, cloned from MasterMarksman
+                string skillName = "BattleFocus_AbilityDef";
+                ApplyStatusAbilityDef masterMarksman = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(p => p.name.Equals("MasterMarksman_AbilityDef"));
+                // Create clones for all neccessary defs with new GUIDs and names
+                ApplyStatusAbilityDef battleFocus = CreateDefFromClone(
+                    masterMarksman,
+                    "64fc75aa-93be-4d79-b5ac-191c5c7820da",
+                    skillName);
+                AbilityCharacterProgressionDef bfProgressionDef = CreateDefFromClone(
+                    masterMarksman.CharacterProgressionData,
+                    "7ffae720-a656-454e-a95b-b861a673718a",
+                    skillName);
+                bfProgressionDef.RequiredStrength = 0;
+                bfProgressionDef.RequiredWill = 0;
+                bfProgressionDef.RequiredSpeed = 0;
+                battleFocus.CharacterProgressionData = bfProgressionDef;
+                TacticalTargetingDataDef bfTargetingDataDef = CreateDefFromClone(
+                    masterMarksman.TargetingDataDef,
+                    "fed0600a-14b3-4ef5-ac0c-31b3bf6f1e6c",
+                    skillName);
+                bfTargetingDataDef.Origin.Range = 10.0f;
+                battleFocus.TargetingDataDef = bfTargetingDataDef;
+                TacticalAbilityViewElementDef battleFocusVisuals = CreateDefFromClone(
+                    masterMarksman.ViewElementDef,
+                    "b498b9de-f10b-464c-a9f9-29a293568b04",
+                    skillName);
+                battleFocusVisuals.DisplayName1 = new LocalizedTextBind("BATTLE FOCUS", doNotLocalize);
+                battleFocusVisuals.Description = new LocalizedTextBind("If there are enemies within 10 tiles your attacks gain +10% damage", doNotLocalize);
+                // TODO: Change the icon
+                battleFocus.ViewElementDef = battleFocusVisuals;
+                // Get base for status effect from Sneak Attack, Master Marksmans type does not support damage manipulation
+                StanceStatusDef sneakAttackStatusDef = Repo.GetAllDefs<StanceStatusDef>().FirstOrDefault(p => p.name.Equals("E_SneakAttackStatus [SneakAttack_AbilityDef]"));
+                StanceStatusDef bfStatusDef = CreateDefFromClone(
+                    sneakAttackStatusDef,
+                    "05929419-7d20-47aa-b700-fa6bc6602716",
+                    skillName);
+                bfStatusDef.name = $"E_Status [{skillName}]";
+                bfStatusDef.EffectName = skillName;
+                bfStatusDef.ShowNotification = true;
+                bfStatusDef.Visuals = battleFocus.ViewElementDef;
+                bfStatusDef.StatModifications[0].Value = 1.1f;
+                battleFocus.StatusDef = bfStatusDef;
+                VisibleActorsInRangeEffectConditionDef sourceConditionDef = (VisibleActorsInRangeEffectConditionDef)masterMarksman.TargetApplicationConditions[0];
+                VisibleActorsInRangeEffectConditionDef bfConditionDef = CreateDefFromClone(
+                    sourceConditionDef,
+                    "63a34054-28de-488e-ae4a-af451434f0d4",
+                    skillName);
+                bfConditionDef.TargetingData = battleFocus.TargetingDataDef;
+                bfConditionDef.ActorsInRange = true;
+                battleFocus.TargetApplicationConditions = new EffectConditionDef[] { bfConditionDef };
+
+                // Create JSON string from new skill, attention, it's HUGE (+2k lines for Battle Focus)
+                //JsonSerializerSettings settings = new JsonSerializerSettings
+                //{
+                //    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                //    PreserveReferencesHandling = PreserveReferencesHandling.Objects
+                //};
+                //string bfJSON = JsonConvert.SerializeObject(battleFocus, Formatting.Indented, settings);
+                //Logger.Always(bfJSON, false);
+
+                // Snap Shot - skill creation delayed, using Battle Focus instead
+                //AbilityCharacterProgressionDef sProgressionDef = CreateDefFromClone(
+                //    sourceAbility.CharacterProgressionData,
+                //    "0115e297-87f8-47c3-9a23-fc302f275153",
+                //    skillName);
+                //sProgressionDef.RequiredStrength = 0;
+                //sProgressionDef.RequiredWill = 0;
+                //sProgressionDef.RequiredSpeed = 0;
+                //snapShot.CharacterProgressionData = sProgressionDef;
+
+                // Gun'n'Run
+                skillName = "KillAndRun_AbilityDef";
+                ApplyStatusAbilityDef inspire = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(a => a.name.Equals("Inspire_AbilityDef"));
+                ApplyStatusAbilityDef KillAndRun = CreateDefFromClone(
+                    inspire,
+                    "3e0e991e-e0bf-4630-b2ca-110e68790fb7",
+                    skillName);
+                KillAndRun.SkillTags = new SkillTagDef[0];
+                AbilityCharacterProgressionDef KnRProgressionDef = CreateDefFromClone(
+                    inspire.CharacterProgressionData,
+                    "e3f25d2a-7668-4223-bb82-73a3f2f926aa",
+                    skillName);
+                KillAndRun.CharacterProgressionData = KnRProgressionDef;
+                TacticalAbilityViewElementDef KnRVisuals = CreateDefFromClone(
+                    inspire.ViewElementDef,
+                    "8a740c8d-43b6-4ef1-9b93-b2c329566f27",
+                    skillName);
+                KnRVisuals.DisplayName1 = new LocalizedTextBind("KILL'N'RUN", doNotLocalize);
+                KnRVisuals.Description = new LocalizedTextBind("Once per turn, take a free move after killing an enemy.", doNotLocalize);
+                // Borrow icon from electric kick (shadow legs ability)
+                // TODO: Find a way to access unused Sprite from assets
+                Sprite gnrIcon = Repo.GetAllDefs<TacticalAbilityViewElementDef>().FirstOrDefault(t => t.name.Equals("E_View [ElectricKick_AbilityDef]")).LargeIcon;
+                KnRVisuals.LargeIcon = gnrIcon;
+                KnRVisuals.SmallIcon = gnrIcon;
+                KillAndRun.ViewElementDef = KnRVisuals;
+                KillAndRun.ViewElementDef.HideFromPassives = true;
+
+                RepositionAbilityDef KnRReposition = CreateDefFromClone(
+                    Repo.GetAllDefs<RepositionAbilityDef>().FirstOrDefault(r => r.name.Equals("Dash_AbilityDef")),
+                    "de8cd8a9-f2eb-4b8a-a408-a2a1913930c4",
+                    "KillAndRun_Move_AbilityDef");
+                KnRReposition.CharacterProgressionData = KnRProgressionDef;
+                KnRReposition.TargetingDataDef = CreateDefFromClone(
+                    Repo.GetAllDefs<TacticalTargetingDataDef>().FirstOrDefault(t => t.name.Equals("E_TargetingData [Dash_AbilityDef]")),
+                    "18e86a2b-6031-4c84-a2a0-cb6ad2423b56",
+                    "E_TargetingData [KillAndRun_Move_AbilityDef]");
+                KnRReposition.TargetingDataDef.Origin.Range = 10.0f;
+                KnRReposition.ViewElementDef = KnRVisuals;
+                KnRReposition.ViewElementDef.DisplayWithEquipmentMismatch = false;
+                KnRReposition.ViewElementDef.DisplayWithRequiredAbilitiesMissing = false;
+                KnRReposition.ViewElementDef.DisplayWithTraitMismatch = false;
+                KnRReposition.IgnoreForEndOfCharTurn = true;
+                KnRReposition.SuppressAutoStandBy = true;
+                KnRReposition.UsesPerTurn = 1;
+                KnRReposition.ActionPointCost = 0.0f;
+                KnRReposition.WillPointCost = 0.0f;
+                KnRReposition.PreparationActorEffectDef = CreateDefFromClone(
+                    Repo.GetAllDefs<StatusEffectDef>().FirstOrDefault(s => s.name.Equals("E_ApplyVanishStatusEffect [Vanish_AbilityDef]")),
+                    "8ea85920-588b-4e1d-a8e6-31ffbe9d3a02",
+                    "E_ReApplyOnActorDeathStatusEffect [" + skillName + "]");
+                KnRReposition.SamePositionIsValidTarget = true;
+                KnRReposition.AmountOfMovementToUseAsRange = -1.0f;
+                // Add new KnR move ability to animation action handler for dash (same animation?)
+                foreach (TacActorSimpleAbilityAnimActionDef def in Repo.GetAllDefs<TacActorSimpleAbilityAnimActionDef>().Where(b => b.name.Contains("Dash")))
+                {
+                    def.AbilityDefs = def.AbilityDefs.Append(KnRReposition).ToArray();
+                }
+                TacCameraAbilityFilterDef KnRRepositionCameraFilterDef = CreateDefFromClone(
+                    Repo.GetAllDefs<TacCameraAbilityFilterDef>().FirstOrDefault(c => c.name.Equals("E_DashAbilityFilter [NoDieCamerasTacticalCameraDirectorDef]")),
+                    "bf422b08-5b84-4b6a-a0cd-74ce1bfbc2fc",
+                    "E_KillnRunMoveAbilityFilter [NoDieCamerasTacticalCameraDirectorDef]");
+                KnRRepositionCameraFilterDef.TacticalAbilityDef = KnRReposition;
+                FirstMatchExecutionDef KnRFmeDef = CreateDefFromClone(
+                    Repo.GetAllDefs<FirstMatchExecutionDef>().FirstOrDefault(bd => bd.name.Equals("E_DashCameraAbility [NoDieCamerasTacticalCameraDirectorDef]")),
+                    "75d8137e-06f7-4840-8156-23366c4daea7",
+                    "E_KillnRunMoveCameraAbility [NoDieCamerasTacticalCameraDirectorDef]");
+                KnRFmeDef.FilterDef = KnRRepositionCameraFilterDef;
+
+                StatusRemoverEffectDef KnRStatusRemoverEffect = CreateDefFromClone(
+                    Repo.GetAllDefs<StatusRemoverEffectDef>().FirstOrDefault(a => a.name.Equals("E_RemoveStandBy [ManualControlStatus]")),
+                    "77b65001-7b75-4fbc-a89e-cf3e3e8ca69f",
+                    "E_RemoveDeathEffectStatus [" + skillName + "]");
+                KnRStatusRemoverEffect.StatusToRemove = "KnR_DeathEffectStatus";
+
+                OnActorDeathEffectStatusDef KnRDeathEffectStatus = CreateDefFromClone(
+                    (OnActorDeathEffectStatusDef)inspire.StatusDef,
+                    "7cfcb266-6730-4642-88d5-8a212104b9cc",
+                    skillName);
+                KnRDeathEffectStatus.EffectName = "KnR_DeathEffectStatus";
+                KnRDeathEffectStatus.VisibleOnPassiveBar = true;
+                KnRDeathEffectStatus.Visuals = KillAndRun.ViewElementDef;
+                KnRDeathEffectStatus.EffectDef = KnRStatusRemoverEffect;
+                KnRReposition.DisablingStatuses = new StatusDef[] { KnRDeathEffectStatus };
+                ((StatusEffectDef)KnRReposition.PreparationActorEffectDef).StatusDef = KnRDeathEffectStatus;
+
+                AddAbilityStatusDef KnRAddAbilityStatus = CreateDefFromClone(
+                    Repo.GetAllDefs<AddAbilityStatusDef>().FirstOrDefault(a => a.name.Equals("E_AddAbilityStatus [DeployBeacon_StatusDef]")),
+                    "ac18e0d8-530d-4077-b372-71c9f82e2b88",
+                    skillName);
+                KnRAddAbilityStatus.Duration = -1;
+                KnRAddAbilityStatus.AbilityDef = KnRReposition; //Repo.GetAllDefs<RepositionAbilityDef>().FirstOrDefault(r => r.name.Equals("Dash_AbilityDef"));
+
+                MultiStatusDef KnRMultiStatus = CreateDefFromClone(
+                    Repo.GetAllDefs<MultiStatusDef>().FirstOrDefault(m => m.name.Equals("E_MultiStatus [RapidClearance_AbilityDef]")),
+                    "be7115e5-ce6b-47da-bead-311f3978f242",
+                    skillName);
+                KnRMultiStatus.Statuses = new StatusDef[] { KnRDeathEffectStatus, KnRAddAbilityStatus };
+
+                KillAndRun.StatusDef = KnRMultiStatus;
+
+                //StatusEffectDef KnRStatusEffect = CreateDefFromClone(
+                //    Repo.GetAllDefs<StatusEffectDef>().FirstOrDefault(s => s.name.Equals("E_ApplyVanishStatusEffect [Vanish_AbilityDef]")),
+                //    "",
+                //    "E_ApplyMoveStatusEffect [" + skillName + "]");
+                //KnRStatusEffect.StatusDef = KnRAddAbilityStatus;
+                
                 // Fix for Return Fire to work on all classes
                 TacticalAbilityDef returnFire = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Contains("ReturnFire_AbilityDef"));
                 returnFire.ActorTags = new GameTagDef[0]; // Deletes all given tags => no restriction for any class
@@ -40,44 +237,38 @@ namespace PhoenixRising.SkillRework
                 ChangeAbilitiesCostStatusDef extremeFocusAPcostMod = Repo.GetAllDefs<ChangeAbilitiesCostStatusDef>().FirstOrDefault(c => c.name.Contains("ExtremeFocus_AbilityDef"));
                 extremeFocusAPcostMod.AbilityCostModification.ActionPointModType = TacticalAbilityModificationType.Set;
                 extremeFocusAPcostMod.AbilityCostModification.ActionPointMod = 0.25f;
-                extremeFocusAPcostMod.Visuals.Description = new LocalizedTextBind("Overwatch cost is set to 1 Action Point", true);
+                extremeFocusAPcostMod.Visuals.Description = new LocalizedTextBind("Overwatch cost is set to 1 Action Point cost for all weapons", true);
 
-                // Half-burst AR skill for Assaults with accuracy buff, backgroud image like Trooper
-
-                // Create new skill BattleFocus, cloned from MasterMarksman
-                string skillName = "BattleFocus_AbilityDef";
-                ApplyStatusAbilityDef sourceAbility = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(p => p.name.Equals("MasterMarksman_AbilityDef"));
-                if (sourceAbility != null)
+                // Quick aim changes
+                ApplyStatusAbilityDef quickAim = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(a => a.name.Equals("QuickAim_AbilityDef"));
+                quickAim.UsesPerTurn = 2;
+                BonusStatHolderStatusDef qaAccMod = Repo.GetAllDefs<BonusStatHolderStatusDef>().FirstOrDefault(b => b.name.Equals("E_AccuracyModifier [QuickAim_AbilityDef]"));
+                qaAccMod.Value = -0.3f; // Acc bonus/malus to add, default 0.25f = +25%, new -0.3 = -30%
+                TacStatusDef[] qaStatusDefs = new TacStatusDef[]
                 {
-                    // Create clones for all neccessary defs with new GUIDs and names
-                    ApplyStatusAbilityDef battleFocus = CreateDefFromClone(sourceAbility, "64fc75aa-93be-4d79-b5ac-191c5c7820da", skillName);
-                    battleFocus.CharacterProgressionData = CreateDefFromClone(sourceAbility.CharacterProgressionData, "7ffae720-a656-454e-a95b-b861a673718a", skillName);
-                    battleFocus.TargetingDataDef = CreateDefFromClone(sourceAbility.TargetingDataDef, "fed0600a-14b3-4ef5-ac0c-31b3bf6f1e6c", skillName);
+                    ((AddAttackBoostStatusDef)quickAim.StatusDef).AdditionalStatusesToApply[0],
+                    qaAccMod
+                };
+                ((AddAttackBoostStatusDef)quickAim.StatusDef).AdditionalStatusesToApply = qaStatusDefs;
+                quickAim.ViewElementDef.Description = new LocalizedTextBind(
+                    "The Action Point cost of the next shot with a proficient weapon is reduced by 1 with -30% accuracy. Limited to 2 uses per turn.",
+                    doNotLocalize);
 
-                    TacticalAbilityViewElementDef battleFocusVisuals = CreateDefFromClone(sourceAbility.ViewElementDef, "b498b9de-f10b-464c-a9f9-29a293568b04", skillName);
-                    battleFocusVisuals.DisplayName1 = new LocalizedTextBind("BATTLE FOCUS", doNotLocalize);
-                    battleFocusVisuals.Description = new LocalizedTextBind("If there are enemies within 10 tiles your attacks gain +10% damage", doNotLocalize);
-                    // TODO: Change the icon
-                    battleFocus.ViewElementDef = battleFocusVisuals;
+                // Mist Breather adding progression def
+                ApplyEffectAbilityDef mistBreather = Repo.GetAllDefs<ApplyEffectAbilityDef>().FirstOrDefault(a => a.name.Equals("Exalted_MistBreather_AbilityDef"));
+                AbilityCharacterProgressionDef mbProgressionDef = CreateDefFromClone(
+                    masterMarksman.CharacterProgressionData,
+                    "9eaf8809-01d9-4582-89e0-78c8596f5e7d",
+                    "MistBreather_AbilityDef");
+                mbProgressionDef.RequiredStrength = 0;
+                mbProgressionDef.RequiredWill = 0;
+                mbProgressionDef.RequiredSpeed = 0;
+                mistBreather.CharacterProgressionData = mbProgressionDef;
 
-                    // Get base for status effect from Sneak Attack, Master Marksmans type does not support damage manipulation
-                    StanceStatusDef sourceStatusDef = Repo.GetAllDefs<StanceStatusDef>().FirstOrDefault(p => p.name.Equals("E_SneakAttackStatus [SneakAttack_AbilityDef]"));
-                    StanceStatusDef battleFocusStatusDef = CreateDefFromClone(sourceStatusDef, "05929419-7d20-47aa-b700-fa6bc6602716", skillName);
-                    battleFocusStatusDef.name = "E_Status [" + skillName + "]";
-                    battleFocusStatusDef.EffectName = skillName;
-                    battleFocusStatusDef.ShowNotification = true;
-                    battleFocusStatusDef.Visuals = battleFocus.ViewElementDef;
-                    battleFocusStatusDef.StatModifications[0].Value = 1.1f;
-                    battleFocus.StatusDef = battleFocusStatusDef;
+                // Dash changes
+                //RepositionAbilityDef dash = Repo.GetAllDefs<RepositionAbilityDef>().FirstOrDefault(r => r.name.Equals("Dash_AbilityDef"));
 
-                    VisibleActorsInRangeEffectConditionDef sourceConditionDef = (VisibleActorsInRangeEffectConditionDef)sourceAbility.TargetApplicationConditions[0];
-                    VisibleActorsInRangeEffectConditionDef battleFocusConditionDef = CreateDefFromClone(sourceConditionDef, "63a34054-28de-488e-ae4a-af451434f0d4", skillName);
-                    battleFocusConditionDef.TargetingData = battleFocus.TargetingDataDef;
-                    battleFocusConditionDef.ActorsInRange = true;
-                    battleFocus.TargetApplicationConditions = new EffectConditionDef[] { battleFocusConditionDef };
-                }
-
-                // Tweaking of the proficiency perks incl. descriptions
+                // Tweaking the weapon proficiency perks incl. descriptions
                 foreach (PassiveModifierAbilityDef pmad in Repo.GetAllDefs<PassiveModifierAbilityDef>())
                 {
                     if (pmad.CharacterProgressionData != null && pmad.name.Contains("Talent"))
@@ -107,10 +298,10 @@ namespace PhoenixRising.SkillRework
                             {
                                 pmad.ItemTagStatModifications[i].EquipmentStatModification.Value += newStatModification;
 
-                                Logger.Debug("  Target item: " + pmad.ItemTagStatModifications[i].ItemTag.name, false);
-                                Logger.Debug("  Target stat: " + pmad.ItemTagStatModifications[i].EquipmentStatModification.TargetStat, false);
-                                Logger.Debug(" Modification: " + pmad.ItemTagStatModifications[i].EquipmentStatModification.Modification, false);
-                                Logger.Debug("        Value: " + pmad.ItemTagStatModifications[i].EquipmentStatModification.Value, false);
+                                Logger.Debug("  Target item: " + pmad.ItemTagStatModifications[i].ItemTag.name);
+                                Logger.Debug("  Target stat: " + pmad.ItemTagStatModifications[i].EquipmentStatModification.TargetStat);
+                                Logger.Debug(" Modification: " + pmad.ItemTagStatModifications[i].EquipmentStatModification.Modification);
+                                Logger.Debug("        Value: " + pmad.ItemTagStatModifications[i].EquipmentStatModification.Value);
                             }
                         }
 
@@ -125,30 +316,35 @@ namespace PhoenixRising.SkillRework
         }
 
         // Creating new runtime def by cloning from existing def
-        public static T CreateDefFromClone<T>(T source, string guid, string name, Type type = null) where T : BaseDef
+        public static T CreateDefFromClone<T>(T source, string guid, string name) where T : BaseDef
         {
             try
             {
-                Logger.Debug(source.GetType().Name);
-                Logger.Debug(source.name);
+                Type type;
+                string resultName = "";
+                if (source != null)
+                {
+                    Logger.Debug("CreateDefFromClone with source type: " + source.GetType().Name);
+                    Logger.Debug("CreateDefFromClone with source name: " + source.name);
+                    type = null;
+                    int start = source.name.IndexOf('[') + 1;
+                    int end = source.name.IndexOf(']');
+                    resultName = start > 0 && end > start ? source.name.Substring(start, end - start) : source.name;
+                    resultName = source.name.Replace(resultName, name);
+                }
+                else
+                {
+                    Logger.Debug("CreateDefFromClone only with type: " + typeof(T).Name);
+                    type = typeof(T);
+                    resultName = name;
+                }
                 T result = (T)Repo.CreateRuntimeDef(
                     source,
                     type,
                     guid);
-                int start = source.name.IndexOf('[') + 1;
-                int end = source.name.IndexOf(']');
-                string replace;
-                if (start > 0 && end > 0)
-                {
-                    replace = source.name.Substring(start, end - start);
-                }
-                else
-                {
-                    replace = source.name;
-                }
-                result.name = source.name.Replace(replace, name);
-                Logger.Debug(result.GetType().Name);
-                Logger.Debug(result.name);
+                result.name = resultName;
+                Logger.Debug("CreateDefFromClone result type: " + result.GetType().Name);
+                Logger.Debug("CreateDefFromClone result name: " + result.name);
                 return result;
             }
             catch (Exception e)

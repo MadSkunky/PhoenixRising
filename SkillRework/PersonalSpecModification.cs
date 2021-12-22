@@ -43,7 +43,7 @@ namespace PhoenixRising.SkillRework
                     ShouldGeneratePersonalAbilities = template.Data.LevelProgression.ShouldGeneratePersonalAbilities;
                     Logger.Debug("-------------------------------------------------------------");
                     Logger.Debug("PREFIX GenerateUnit called:");
-                    Logger.Debug("ShouldGeneragePersonalAbilities: " + ShouldGeneratePersonalAbilities);
+                    Logger.Debug("ShouldGeneratePersonalAbilities: " + ShouldGeneratePersonalAbilities);
                     Logger.Debug("-------------------------------------------------------------");
                     return true;
                 }
@@ -61,16 +61,23 @@ namespace PhoenixRising.SkillRework
             {
                 try
                 {
-                    PassiveModifierAbilityDef testAbility = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(p => p.name.Equals("FirstAdded_AbilityDef"));
+                    Logger.Debug("POSTFIX GenerateUnit called:");
                     // Probably not necessary, just to be safe ;-)
                     if (__result != null && ShouldGeneratePersonalAbilities && __result.UnitType.IsHuman && !__result.UnitType.IsMutoid && !__result.UnitType.TemplateDef.IsAlien)
                     {
                         string faction = __result.Faction.GetPPName();
                         string className = __result.ClassTag.className;
+                        BaseCharacterStats stats = __result.BonusStats;
+                        Logger.Debug("      Faction: " + faction);
+                        Logger.Debug("        Class: " + className);
+                        Logger.Debug("    Endurance: " + stats.Endurance);
+                        Logger.Debug("     Strength: " + stats.Strength);
+                        Logger.Debug("    Willpower: " + stats.Willpower);
+                        Logger.Debug("        Speed: " + stats.Speed);
+                        Logger.Debug("-------------------------------------------------------------");
                         string ability;
                         int spCost = 0;
                         TacticalAbilityDef tacticalAbilityDef;
-                        BaseCharacterStats stats = __result.BonusStats;
                         string[] ppOrder = Config.OrderOfPersonalPerks;
                         // Temporary dictionary to collect the configured perks
                         Dictionary<string, string> tempDict = new Dictionary<string, string>();
@@ -100,23 +107,15 @@ namespace PhoenixRising.SkillRework
                         // Soome debug outputs in logging file
                         if (Config.Debug >= 2)
                         {
-                            Logger.Debug("POSTFIX GenerateUnit called:");
-                            Logger.Debug("      Faction: " + faction);
-                            Logger.Debug("        Class: " + className);
-                            Logger.Debug("    Endurance: " + stats.Endurance);
-                            Logger.Debug("     Strength: " + stats.Strength);
-                            Logger.Debug("    Willpower: " + stats.Willpower);
-                            Logger.Debug("        Speed: " + stats.Speed);
-                            Logger.Debug("-------------------------------------------------------------");
                             AbilityTrackSlot[] ats = __result.Progression.MainSpecDef.AbilityTrack.AbilitiesByLevel;
                             for (int i = 0; i < ats.Length; i++)
                             {
-                                Logger.Debug("    MainSpec 1: " + ats[i]?.Ability?.ViewElementDef.DisplayName1.LocalizeEnglish());
+                                Logger.Debug($"    MainSpec {i}: " + ats[i]?.Ability?.ViewElementDef.DisplayName1.LocalizeEnglish());
                             }
                             Dictionary<int, TacticalAbilityDef> tad = __result.Progression.PersonalAbilities;
                             for (int i = 0; i < ats.Length; i++)
                             {
-                                Logger.Debug("PersonalSpec 1: " + (tad.ContainsKey(i) ? tad[i].ViewElementDef.DisplayName1.LocalizeEnglish() : "none"));
+                                Logger.Debug($"PersonalSpec {i}: " + (tad.ContainsKey(i) ? tad[i].ViewElementDef.DisplayName1.LocalizeEnglish() : "none"));
                             }
                             Logger.Debug("-------------------------------------------------------------");
                         }

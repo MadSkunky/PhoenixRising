@@ -16,7 +16,7 @@ namespace PhoenixRising.SkillRework
                 {
                     "",
                     "QUICK AIM",
-                    "BATTLE FOCUS",
+                    "KILL'N'RUN",
                     "",
                     "READY FOR ACTION",
                     "ONSLAUGHT",
@@ -144,7 +144,7 @@ namespace PhoenixRising.SkillRework
                 spCost: 20,
                 relList: new Dictionary<string, Dictionary<string, string>>
                 {{ FactionKeys.All, new Dictionary<string,string> {
-                    { ClassKeys.Assault.Name, "TROOPER" },
+                    { ClassKeys.Assault.Name, "BATTLE FOCUS" },
                     { ClassKeys.Heavy.Name, "STRONGMAN" },
                     { ClassKeys.Sniper.Name, "EXPERT RIFLES AND HANDGUNS" },
                     { ClassKeys.Berserker.Name, "BRAWLER" },
@@ -173,12 +173,12 @@ namespace PhoenixRising.SkillRework
                 relList: new Dictionary<string, Dictionary<string, string>>
                 {{ ClassKeys.AllClasses.Name, new Dictionary<string,string> {
                     { FactionKeys.PX, "OVERWATCH FOCUS" },
-                    { FactionKeys.Anu, "CLOSE QUARTERS SPECIALIST" }, // -> MistBreather
+                    { FactionKeys.Anu, "BREATHE MIST" },
                     { FactionKeys.NJ, "RECKLESS" },
                     { FactionKeys.Syn, "SHADOWSTEP" },
                     { FactionKeys.IN, "OVERWATCH FOCUS" },
                     { FactionKeys.PU, "RECKLESS" },
-                    { FactionKeys.FS, "CLOSE QUARTERS SPECIALIST" } // -> MistBreather
+                    { FactionKeys.FS, "BREATHE MIST" }
                 } } }),
             new PersonalPerksDef(
                 perkKey: PerkType.Faction_2,

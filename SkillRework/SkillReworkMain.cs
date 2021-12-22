@@ -28,7 +28,7 @@ namespace PhoenixRising.SkillRework
             Config = api("config", null) as Settings ?? new Settings();
             // Path for own logging
             ModDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            // Path to texture files
+            // Path to preset files
             ManagedDirectory = Path.Combine(ModDirectory, "Assets", "Presets");
             // Path to texture files
             TexturesDirectory = Path.Combine(ModDirectory, "Assets", "Textures");
