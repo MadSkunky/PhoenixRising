@@ -53,47 +53,75 @@ namespace PhoenixRising.SkillRework
                 // Get config setting for localized texts.
                 bool doNotLocalize = Config.DoNotLocalizeChangedTexts;
 
-                // BattleFocus
+                // BattleFocus, currently used as placeholder, will go to Vengeance Torso
                 Create_BattleFocus(Repo, Config);
 
-                // Gun'n'Run
-                Create_KillAndRun(Repo, Config);
-
-                // Barrage
-                Create_Barrage(Repo, Config);
-
-                // Onslaught (DeterminedAdvance_AbilityDef) change: Receiver can get only 1 onslaught per turn.
-                // ...
-
-                // Rapid Clearance: When killed an enemy the next attack will cost -2 AP
-                // Borrow AP reduction status from QA
-
-                // Fix for Return Fire to work on all classes
-                TacticalAbilityDef returnFire = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Contains("ReturnFire_AbilityDef"));
-                returnFire.ActorTags = new GameTagDef[0]; // Deletes all given tags => no restriction for any class
-
-                // Change Extreme Focus, set to 1 AP regardless of weapon type
-                ChangeAbilitiesCostStatusDef extremeFocusAPcostMod = Repo.GetAllDefs<ChangeAbilitiesCostStatusDef>().FirstOrDefault(c => c.name.Contains("ExtremeFocus_AbilityDef"));
-                extremeFocusAPcostMod.AbilityCostModification.ActionPointModType = TacticalAbilityModificationType.Set;
-                extremeFocusAPcostMod.AbilityCostModification.ActionPointMod = 0.25f;
-                extremeFocusAPcostMod.Visuals.Description = new LocalizedTextBind("Overwatch cost is set to 1 Action Point cost for all weapons", true);
+                // Assault skills start -------------------------------------------------------
 
                 // Quick aim changes, adding aim modification
                 ApplyStatusAbilityDef quickAim = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(a => a.name.Equals("QuickAim_AbilityDef"));
                 quickAim.UsesPerTurn = 2;
                 BonusStatHolderStatusDef qaAccMod = Repo.GetAllDefs<BonusStatHolderStatusDef>().FirstOrDefault(b => b.name.Equals("E_AccuracyModifier [QuickAim_AbilityDef]"));
                 qaAccMod.Value = -0.3f; // Acc bonus/malus to add, default 0.25f = +25%, new -0.3 = -30%
-                //TacStatusDef[] qaStatusDefs = new TacStatusDef[]
-                //{
-                //    ((AddAttackBoostStatusDef)quickAim.StatusDef).AdditionalStatusesToApply[0],
-                //    qaAccMod
-                //};
                 ((AddAttackBoostStatusDef)quickAim.StatusDef).AdditionalStatusesToApply =
                     ((AddAttackBoostStatusDef)quickAim.StatusDef).AdditionalStatusesToApply.Append(qaAccMod).ToArray();
                 quickAim.ViewElementDef.Description = new LocalizedTextBind(
                     "The Action Point cost of the next shot with a proficient weapon is reduced by 1 with -30% accuracy. Limited to 2 uses per turn.",
                     doNotLocalize);
+                // Gun'n'Run
+                Create_KillAndRun(Repo, Config);
+                
+                // Barrage
+                Create_Barrage(Repo, Config);
 
+                // Onslaught (DeterminedAdvance_AbilityDef) change: Receiver can get only 1 onslaught per turn.
+                // This below works on the target but he can be targeted again from another Assault without any response => the Assault loses 2 AP and the target gets nothing
+                // Looking for a solution, maybe MC fuctionality could be a solution (thx to Iko)
+                //TacEffectStatusDef onslaughtStatus = Repo.GetAllDefs<TacEffectStatusDef>().FirstOrDefault(c => c.name.Contains("E_Status [DeterminedAdvance_AbilityDef]"));
+                //onslaughtStatus.SingleInstance = true;
+                // .... delayed ....
+
+                // Rapid Clearance: Until end of turn, after killing an enemy next attack cost -2AP
+                // Get Rapid Clearance ability def
+                ApplyStatusAbilityDef rapidClearance = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(a => a.name.Equals("RapidClearance_AbilityDef"));
+                // Clone status apply effect from Vanish
+                StatusEffectDef applyStatusEffect = CreateDefFromClone(
+                    Repo.GetAllDefs<StatusEffectDef>().FirstOrDefault(s => s.name.Equals("E_ApplyVanishStatusEffect [Vanish_AbilityDef]")),
+                    "8ea85920-588b-4e1d-a8e6-31ffbe9d3a02",
+                    "E_ApplyStatusEffect [RapidClearance_AbilityDef]");
+                // Clone AP reduction status from QA
+                ChangeAbilitiesCostStatusDef apReductionStatusEffect = CreateDefFromClone(
+                    Repo.GetAllDefs<ChangeAbilitiesCostStatusDef>().FirstOrDefault(s => s.name.Equals("E_AbilityCostModifier [QuickAim_AbilityDef]")),
+                    "e3062779-8f2f-4407-bc4f-a20f5c2d267b",
+                    "E_AbilityCostModifier [RapidClearance_AbilityDef]");
+                // change properties and references
+                rapidClearance.ViewElementDef.Description = new LocalizedTextBind("Until end of turn, after killing an enemy next attack cost -2AP", doNotLocalize);
+                apReductionStatusEffect.AbilityCostModification.RequiresProficientEquipment = false; // original QA true
+                apReductionStatusEffect.AbilityCostModification.SkillTagCullFilter = new SkillTagDef[0]; // No restrictions, original QA melee and throwing grenades are disabled
+                apReductionStatusEffect.AbilityCostModification.ActionPointMod = -0.5f; // -2 AP, original QA -1 AP
+                applyStatusEffect.StatusDef = apReductionStatusEffect;
+                (rapidClearance.StatusDef as OnActorDeathEffectStatusDef).EffectDef = applyStatusEffect;
+
+                // Assault skills end -------------------------------------------------------
+
+
+                // Sniper skills
+                // Change Extreme Focus, set to 1 AP regardless of weapon type
+                ChangeAbilitiesCostStatusDef extremeFocusAPcostMod = Repo.GetAllDefs<ChangeAbilitiesCostStatusDef>().FirstOrDefault(c => c.name.Contains("ExtremeFocus_AbilityDef"));
+                extremeFocusAPcostMod.AbilityCostModification.ActionPointModType = TacticalAbilityModificationType.Set;
+                extremeFocusAPcostMod.AbilityCostModification.ActionPointMod = 0.25f;
+                extremeFocusAPcostMod.Visuals.Description = new LocalizedTextBind("Overwatch cost is set to 1 Action Point cost for all weapons", doNotLocalize);
+
+                //Heavy skills
+                // Fix for Return Fire to work on all classes
+                TacticalAbilityDef returnFire = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Contains("ReturnFire_AbilityDef"));
+                returnFire.ActorTags = new GameTagDef[0]; // Deletes all given tags => no restriction for any class
+
+                // Berserker skills
+                // Dash changes
+                //RepositionAbilityDef dash = Repo.GetAllDefs<RepositionAbilityDef>().FirstOrDefault(r => r.name.Equals("Dash_AbilityDef"));
+
+                // Faction perks
                 // Mist Breather adding progression def
                 ApplyEffectAbilityDef mistBreather = Repo.GetAllDefs<ApplyEffectAbilityDef>().FirstOrDefault(a => a.name.Equals("Exalted_MistBreather_AbilityDef"));
                 AbilityCharacterProgressionDef mbProgressionDef = CreateDefFromClone(
@@ -104,9 +132,6 @@ namespace PhoenixRising.SkillRework
                 mbProgressionDef.RequiredWill = 0;
                 mbProgressionDef.RequiredSpeed = 0;
                 mistBreather.CharacterProgressionData = mbProgressionDef;
-
-                // Dash changes
-                //RepositionAbilityDef dash = Repo.GetAllDefs<RepositionAbilityDef>().FirstOrDefault(r => r.name.Equals("Dash_AbilityDef"));
 
                 // Tweaking the weapon proficiency perks incl. descriptions
                 foreach (PassiveModifierAbilityDef pmad in Repo.GetAllDefs<PassiveModifierAbilityDef>())
@@ -162,23 +187,23 @@ namespace PhoenixRising.SkillRework
             bool doNotLocalize = Config.DoNotLocalizeChangedTexts;
 
             // Source to clone from
-            ApplyStatusAbilityDef rageBurst = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(p => p.name.Equals("MasterMarksman_AbilityDef"));
+            ApplyStatusAbilityDef masterMarksman = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(p => p.name.Equals("MasterMarksman_AbilityDef"));
 
             // Create Neccessary RuntimeDefs
             ApplyStatusAbilityDef battleFocusAbility = CreateDefFromClone(
-                rageBurst,
+                masterMarksman,
                 "64fc75aa-93be-4d79-b5ac-191c5c7820da",
                 skillName);
             AbilityCharacterProgressionDef progression = CreateDefFromClone(
-                rageBurst.CharacterProgressionData,
+                masterMarksman.CharacterProgressionData,
                 "7ffae720-a656-454e-a95b-b861a673718a",
                 skillName);
             TacticalTargetingDataDef targetingData = CreateDefFromClone(
-                rageBurst.TargetingDataDef,
+                masterMarksman.TargetingDataDef,
                 "fed0600a-14b3-4ef5-ac0c-31b3bf6f1e6c",
                 skillName);
             TacticalAbilityViewElementDef vieElement = CreateDefFromClone(
-                rageBurst.ViewElementDef,
+                masterMarksman.ViewElementDef,
                 "b498b9de-f10b-464c-a9f9-29a293568b04",
                 skillName);
             StanceStatusDef stanceStatus = CreateDefFromClone( // Borrow status from Sneak Attack, Master Marksman status does not fit
@@ -186,7 +211,7 @@ namespace PhoenixRising.SkillRework
                 "05929419-7d20-47aa-b700-fa6bc6602716",
                 "E_Status [" + skillName + "]");
             VisibleActorsInRangeEffectConditionDef visibleActorsInRangeEffectCondition = CreateDefFromClone(
-                (VisibleActorsInRangeEffectConditionDef)rageBurst.TargetApplicationConditions[0],
+                (VisibleActorsInRangeEffectConditionDef)masterMarksman.TargetApplicationConditions[0],
                 "63a34054-28de-488e-ae4a-af451434f0d4",
                 skillName);
 
@@ -257,10 +282,6 @@ namespace PhoenixRising.SkillRework
                 Repo.GetAllDefs<MultiStatusDef>().FirstOrDefault(m => m.name.Equals("E_MultiStatus [RapidClearance_AbilityDef]")),
                 "be7115e5-ce6b-47da-bead-311f3978f242",
                 skillName);
-            //StatusEffectDef statusEffect = CreateDefFromClone( // Borrow status from Vanish
-            //    Repo.GetAllDefs<StatusEffectDef>().FirstOrDefault(s => s.name.Equals("E_ApplyVanishStatusEffect [Vanish_AbilityDef]")),
-            //    "8ea85920-588b-4e1d-a8e6-31ffbe9d3a02",
-            //    "E_ApplyStatusEffect [" + skillName + "]");
             FirstMatchExecutionDef cameraAbility = CreateDefFromClone(
                 Repo.GetAllDefs<FirstMatchExecutionDef>().FirstOrDefault(bd => bd.name.Equals("E_DashCameraAbility [NoDieCamerasTacticalCameraDirectorDef]")),
                 "75d8137e-06f7-4840-8156-23366c4daea7",
@@ -422,240 +443,5 @@ namespace PhoenixRising.SkillRework
                 return null;
             }
         }
-
-        public static void CreateSkill(DefRepository Repo, Settings Config)
-        {
-            // Get config setting for localized texts.
-            bool doNotLocalize = Config.DoNotLocalizeChangedTexts;
-
-            // Loading texture from file and create a usable Sprite
-            string filePath = Path.Combine(SkillReworkMain.TexturesDirectory, "Pepe.png");
-            int width = 128;
-            int height = 128;
-            Sprite newSprite = null;
-            Texture2D texture = null;
-            if (File.Exists(filePath) && Helper.LoadTexture2DfromFile(ref texture, filePath, width, height))
-            {
-                newSprite = Sprite.Create(texture, new Rect(0.0f, 0.0f, width, height), new Vector2(0.0f, 0.0f));
-            }
-
-            Logger.Debug("-----------------------------------------------------------------------");
-            Logger.Debug("Repo PassiveModifierAbilityDef count before: " + Repo.GetAllDefs<PassiveModifierAbilityDef>().Count());
-            string abilityName = "FirstAdded_AbilityDef";
-            PassiveModifierAbilityDef sourceAbility = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(p => p.name.Equals("Devoted_AbilityDef"));
-            if (sourceAbility != null)
-            {
-                // TODO: Don't use automatically created GUIDs, these will crash the game when loading a saved after restarting the game
-                // Should use Repo.CreateRuntimeDef(sourceAbility, GUID); with fixed GUID per skill and subparts, saved on file or in code.
-                PassiveModifierAbilityDef addedAbility = Repo.CreateRuntimeDef<PassiveModifierAbilityDef>(sourceAbility);
-                addedAbility.ViewElementDef = Repo.CreateRuntimeDef<TacticalAbilityViewElementDef>(sourceAbility.ViewElementDef);
-                addedAbility.CharacterProgressionData = Repo.CreateRuntimeDef<AbilityCharacterProgressionDef>(sourceAbility.CharacterProgressionData);
-                addedAbility.name = abilityName;
-                addedAbility.StatModifications = new ItemStatModification[] {
-                        new ItemStatModification {
-                            TargetStat = StatModificationTarget.Speed,
-                            Modification = StatModificationType.Add,
-                            Value = 1
-                        } };
-                addedAbility.ViewElementDef.name = "E_ViewElement [" + abilityName + "]";
-                addedAbility.ViewElementDef.DisplayName1 = new LocalizedTextBind("MadSkunky GottaGoFast", doNotLocalize);
-                addedAbility.ViewElementDef.Description = new LocalizedTextBind("Additional +1 to Speed", doNotLocalize);
-                addedAbility.ViewElementDef.LargeIcon = newSprite;
-                addedAbility.ViewElementDef.SmallIcon = newSprite;
-                addedAbility.CharacterProgressionData.name = "E_CharacterProgressionData [" + abilityName + "]";
-                Logger.Debug("------------------------- Source ability ---------------------------");
-                Logger.Debug("Guid: " + sourceAbility.Guid);
-                Logger.Debug("Name: " + sourceAbility.name);
-                Logger.Debug("Modification target: " + sourceAbility.StatModifications[0].TargetStat);
-                Logger.Debug("Modification modtype: " + sourceAbility.StatModifications[0].Modification);
-                Logger.Debug("Modification value: " + sourceAbility.StatModifications[0].Value);
-                Logger.Debug("ViewElementDef: " + sourceAbility.ViewElementDef.name);
-                Logger.Debug("Localized name: " + sourceAbility.ViewElementDef.DisplayName1.Localize());
-                Logger.Debug("Localized description: " + sourceAbility.ViewElementDef.Description.Localize());
-                Logger.Debug("CharacterProgressionData: " + sourceAbility.CharacterProgressionData.name);
-                Logger.Debug("------------------------- New added ability ---------------------------");
-                Logger.Debug("Guid: " + addedAbility.Guid);
-                Logger.Debug("Name: " + addedAbility.name);
-                Logger.Debug("Modification target: " + addedAbility.StatModifications[0].TargetStat);
-                Logger.Debug("Modification modtype: " + addedAbility.StatModifications[0].Modification);
-                Logger.Debug("Modification value: " + addedAbility.StatModifications[0].Value);
-                Logger.Debug("ViewElementDef: " + addedAbility.ViewElementDef.name);
-                Logger.Debug("Localized name: " + addedAbility.ViewElementDef.DisplayName1.Localize());
-                Logger.Debug("Localized description: " + addedAbility.ViewElementDef.Description.Localize());
-                Logger.Debug("CharacterProgressionData: " + addedAbility.CharacterProgressionData.name);
-                Logger.Debug("-----------------------------------------------------------------------");
-            }
-            Logger.Debug("Repo PassiveModifierAbilityDef count after: " + Repo.GetAllDefs<PassiveModifierAbilityDef>().Count());
-            Logger.Debug("-----------------------------------------------------------------------");
-            PassiveModifierAbilityDef testAbility = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(p => p.name.Equals("FirstAdded_AbilityDef"));
-            if (testAbility != null)
-            {
-                Logger.Debug("---------------- New ability from Repo in new object ------------------");
-                Logger.Debug("Guid: " + testAbility.Guid);
-                Logger.Debug("Name: " + testAbility.name);
-                Logger.Debug("Modification target: " + testAbility.StatModifications[0].TargetStat);
-                Logger.Debug("Modification modtype: " + testAbility.StatModifications[0].Modification);
-                Logger.Debug("Modification value: " + testAbility.StatModifications[0].Value);
-                Logger.Debug("ViewElementDef: " + testAbility.ViewElementDef.name);
-                Logger.Debug("Localized name: " + testAbility.ViewElementDef.DisplayName1.Localize());
-                Logger.Debug("Localized description: " + testAbility.ViewElementDef.Description.Localize());
-                Logger.Debug("CharacterProgressionData: " + testAbility.CharacterProgressionData.name);
-                Logger.Debug("-----------------------------------------------------------------------");
-            }
-
-            // Create JSON string from new skill, attention, it's HUGE (+2k lines for Battle Focus)
-            //JsonSerializerSettings settings = new JsonSerializerSettings
-            //{
-            //    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-            //    PreserveReferencesHandling = PreserveReferencesHandling.Objects
-            //};
-            //string bfJSON = JsonConvert.SerializeObject(testAbility, Formatting.Indented, settings);
-            //Logger.Always(bfJSON, false);
-
-        }
-        /*
-        // Patch the return fire selection function
-        [HarmonyPatch(typeof(TacticalLevelController), "GetReturnFireAbilities")]
-        internal static class GetReturnFireAbilities_Patches
-        {
-            [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
-            private static bool Prefix(ref List<ReturnFireAbility> __result,
-                                        TacticalLevelController __instance,
-                                        TacticalActor shooter,
-                                        Weapon weapon,
-                                        TacticalAbilityTarget target,
-                                        ShootAbility shootAbility,
-                                        bool getOnlyPossibleTargets = false,
-                                        List<TacticalActor> casualties = null)
-            {
-                try
-                {
-                    Logger.Debug("------------ Enter GetReturnFireAbilities --------------");
-                    Weapon weapon2 = weapon;
-                    WeaponDef weaponDef = (weapon2 != null) ? weapon2.WeaponDef : null;
-                    if (target.AttackType == AttackType.ReturnFire
-                        || target.AttackType == AttackType.Overwatch
-                        || target.AttackType == AttackType.Synced
-                        || target.AttackType == AttackType.ZoneControl
-                        || (weaponDef != null && weaponDef.NoReturnFireFromTargets))
-                    {
-                        Logger.Debug("AttackType check negative -> leaving GetReturnFireAbilities with NULL result!");
-                        Logger.Debug("------- Exit GetReturnFireAbilities sucessful ----------");
-                        __result = null;
-                        return false;
-                    }
-                    Logger.Debug("AttackType check successful passed.");
-                    List<ReturnFireAbility> result;
-                    using (new MultiForceDummyTargetableLock(__instance.Map.GetActors<TacticalActor>(null)))
-                    {
-                        foreach (TacticalActor tmpActor in __instance.Map.GetActors<TacticalActor>(null))
-                        {
-                            Logger.Debug("------------------------- Begin Actor data ----------------------------");
-                            Logger.Debug("Actor name: " + tmpActor.GetDisplayName());
-                            if (tmpActor.GetAbilities<ReturnFireAbility>() != null)
-                            {
-                                Logger.Debug("                     Actor return fire abilities: " + string.Join(", ", tmpActor.GetAbilities<ReturnFireAbility>()));
-                                Logger.Debug("RF ability IgnoreNoValidTargetsFilter is enabled: " + tmpActor.GetAbilities<ReturnFireAbility>().FirstOrDefault().IsEnabled(IgnoredAbilityDisabledStatesFilter.IgnoreNoValidTargetsFilter));
-                                Logger.Debug("                       RF ability disabled state: " + tmpActor.GetAbilities<ReturnFireAbility>().FirstOrDefault().GetDisabledState().Key);
-                            }
-                            else
-                            {
-                                Logger.Debug("No return fire abilities fourn on actor. ");
-                            }
-                            Logger.Debug("------------------------- End Actor data ------------------------------");
-                        }
-                        List<ReturnFireAbility> list = (from actor in __instance.Map.GetActors<TacticalActor>(null)
-                                                        where actor.IsAlive && actor.RelationTo(shooter) == FactionRelation.Enemy
-                                                        from ability in
-                                                            from a in actor.GetAbilities<ReturnFireAbility>()
-                                                            orderby a.ReturnFireDef.ReturnFirePriority
-                                                            select a
-                                                        where ability.IsEnabled(IgnoredAbilityDisabledStatesFilter.IgnoreNoValidTargetsFilter)
-                                                        group ability by actor into actorReturns
-                                                        let actorAbility = actorReturns.First<ReturnFireAbility>()
-                                                        orderby actorAbility.TacticalActor == target.GetTargetActor() descending
-                                                        select actorAbility).Where(delegate (ReturnFireAbility returnFireAbility)
-                                                        {
-                                                            Logger.Debug("Return fire ablity on actor " + returnFireAbility.TacticalActorBase.DisplayName + "found: " + returnFireAbility.AbilityDef.name);
-                                                            TacticalActor actor = returnFireAbility.TacticalActor;
-                                                            if (weapon != null)
-                                                            {
-                                                                Logger.Debug("Weapon != null: " + weapon.DisplayName + " -> place target for shooting.");
-                                                                shooter.TargetDummy.PlaceForShooting(weapon, target.ShootFromPos, target, false);
-                                                            }
-                                                            if (!returnFireAbility.IsValidTarget(shooter))
-                                                            {
-                                                                Logger.Debug("Return fire has no valid target!");
-                                                                return false;
-                                                            }
-                                                            if (returnFireAbility.ReturnFireDef.RiposteWithBashAbility)
-                                                            {
-                                                                Logger.Debug("Return fire has riposte with bash set, returns true.");
-                                                                return true;
-                                                            }
-                                                            if (getOnlyPossibleTargets
-                                                                && target.Actor != actor
-                                                                && (target.MultiAbilityTargets == null || !target.MultiAbilityTargets.Any((TacticalAbilityTarget mat) => mat.Actor == actor))
-                                                                && (casualties == null || !casualties.Contains(actor)))
-                                                            {
-                                                                Logger.Debug("Multiple check (getOnlyPossibleTargets & target.Actor != actor ... is true, returns false!");
-                                                                return false;
-                                                            }
-                                                            ShootAbility defaultShootAbility = returnFireAbility.GetDefaultShootAbility();
-                                                            TacticalAbilityTarget attackActorTarget = defaultShootAbility.GetAttackActorTarget(shooter, AttackType.ReturnFire);
-                                                            if (attackActorTarget == null || !Utl.Equals(attackActorTarget.ShootFromPos, defaultShootAbility.Actor.Pos, 1E-05f))
-                                                            {
-                                                                Logger.Debug("attackTarget is NULL or (attackActorTarget.ShootFromPos, defaultShootAbility.Actor.Pos) is NOT equal, returns false!");
-                                                                return false;
-                                                            }
-                                                            TacticalActor tacticalActor = null;
-                                                            if (returnFireAbility.TacticalActor.TacticalPerception.CheckFriendlyFire(returnFireAbility.Weapon,
-                                                                                                                                        attackActorTarget.ShootFromPos,
-                                                                                                                                        attackActorTarget,
-                                                                                                                                        out tacticalActor,
-                                                                                                                                        FactionRelation.Neutral | FactionRelation.Friend))
-                                                            {
-                                                                Logger.Debug("Check friendly fire triggered, return false!");
-                                                                return false;
-                                                            }
-                                                            if (!returnFireAbility.TacticalActor.TacticalPerception.HasFloorSupportAt(returnFireAbility.TacticalActor.Pos))
-                                                            {
-                                                                Logger.Debug("Check perception triggered, return false!");
-                                                                return false;
-                                                            }
-                                                            TacticalActorBase tacticalActor2 = returnFireAbility.TacticalActor;
-                                                            Vector3 pos = returnFireAbility.TacticalActor.Pos;
-                                                            TacticalActorBase shooter2 = shooter;
-                                                            bool checkAllPoints = false;
-                                                            TacticalAbilityTarget target2 = target;
-                                                            return TacticalFactionVision.CheckVisibleLineBetweenActors(tacticalActor2,
-                                                                                                                        pos,
-                                                                                                                        shooter2,
-                                                                                                                        checkAllPoints,
-                                                                                                                        new Vector3?((target2 != null) ? target2.ShootFromPos : shooter.Pos),
-                                                                                                                        0.5f,
-                                                                                                                        null);
-                                                        }).ToList<ReturnFireAbility>();
-                        if (weapon != null)
-                        {
-                            Logger.Debug("Weapon check successful passed. Call 'PlaceForShooting' on shooter: " + shooter.DisplayName);
-                            shooter.TargetDummy.PlaceForShooting(weapon, shooter.Pos, target, false);
-                        }
-                        result = list;
-                    }
-                    Logger.Debug("Return Fire List count: " + result.Count);
-                    __result = result;
-                    Logger.Debug("------- Exit GetReturnFireAbilities sucessful ----------");
-                    return false;
-                }
-                catch (Exception e)
-                {
-                    Logger.Error(e);
-                    Logger.Debug("------- Exit GetReturnFireAbilities with error! --------");
-                    return true;
-                }
-            }
-        }
-        */
     }
 }
