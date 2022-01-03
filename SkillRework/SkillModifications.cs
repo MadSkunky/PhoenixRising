@@ -53,13 +53,14 @@ namespace PhoenixRising.SkillRework
                 // Get config setting for localized texts.
                 bool doNotLocalize = Config.DoNotLocalizeChangedTexts;
 
-                // New skill BattleFocus
+                // BattleFocus
                 Create_BattleFocus(Repo, Config);
-
-                // Snap Shot - skill creation delayed, using Battle Focus instead
 
                 // Gun'n'Run
                 Create_KillAndRun(Repo, Config);
+
+                // Barrage
+                Create_Barrage(Repo, Config);
 
                 // Onslaught (DeterminedAdvance_AbilityDef) change: Receiver can get only 1 onslaught per turn.
                 // ...
@@ -77,17 +78,18 @@ namespace PhoenixRising.SkillRework
                 extremeFocusAPcostMod.AbilityCostModification.ActionPointMod = 0.25f;
                 extremeFocusAPcostMod.Visuals.Description = new LocalizedTextBind("Overwatch cost is set to 1 Action Point cost for all weapons", true);
 
-                // Quick aim changes
+                // Quick aim changes, adding aim modification
                 ApplyStatusAbilityDef quickAim = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(a => a.name.Equals("QuickAim_AbilityDef"));
                 quickAim.UsesPerTurn = 2;
                 BonusStatHolderStatusDef qaAccMod = Repo.GetAllDefs<BonusStatHolderStatusDef>().FirstOrDefault(b => b.name.Equals("E_AccuracyModifier [QuickAim_AbilityDef]"));
                 qaAccMod.Value = -0.3f; // Acc bonus/malus to add, default 0.25f = +25%, new -0.3 = -30%
-                TacStatusDef[] qaStatusDefs = new TacStatusDef[]
-                {
-                    ((AddAttackBoostStatusDef)quickAim.StatusDef).AdditionalStatusesToApply[0],
-                    qaAccMod
-                };
-                ((AddAttackBoostStatusDef)quickAim.StatusDef).AdditionalStatusesToApply = qaStatusDefs;
+                //TacStatusDef[] qaStatusDefs = new TacStatusDef[]
+                //{
+                //    ((AddAttackBoostStatusDef)quickAim.StatusDef).AdditionalStatusesToApply[0],
+                //    qaAccMod
+                //};
+                ((AddAttackBoostStatusDef)quickAim.StatusDef).AdditionalStatusesToApply =
+                    ((AddAttackBoostStatusDef)quickAim.StatusDef).AdditionalStatusesToApply.Append(qaAccMod).ToArray();
                 quickAim.ViewElementDef.Description = new LocalizedTextBind(
                     "The Action Point cost of the next shot with a proficient weapon is reduced by 1 with -30% accuracy. Limited to 2 uses per turn.",
                     doNotLocalize);
@@ -160,53 +162,53 @@ namespace PhoenixRising.SkillRework
             bool doNotLocalize = Config.DoNotLocalizeChangedTexts;
 
             // Source to clone from
-            ApplyStatusAbilityDef masterMarksman = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(p => p.name.Equals("MasterMarksman_AbilityDef"));
+            ApplyStatusAbilityDef rageBurst = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(p => p.name.Equals("MasterMarksman_AbilityDef"));
 
             // Create Neccessary RuntimeDefs
-            ApplyStatusAbilityDef battleFocus = CreateDefFromClone(
-                masterMarksman,
+            ApplyStatusAbilityDef battleFocusAbility = CreateDefFromClone(
+                rageBurst,
                 "64fc75aa-93be-4d79-b5ac-191c5c7820da",
                 skillName);
-            AbilityCharacterProgressionDef bfProgressionDef = CreateDefFromClone(
-                masterMarksman.CharacterProgressionData,
+            AbilityCharacterProgressionDef progression = CreateDefFromClone(
+                rageBurst.CharacterProgressionData,
                 "7ffae720-a656-454e-a95b-b861a673718a",
                 skillName);
-            TacticalTargetingDataDef bfTargetingDataDef = CreateDefFromClone(
-                masterMarksman.TargetingDataDef,
+            TacticalTargetingDataDef targetingData = CreateDefFromClone(
+                rageBurst.TargetingDataDef,
                 "fed0600a-14b3-4ef5-ac0c-31b3bf6f1e6c",
                 skillName);
-            TacticalAbilityViewElementDef battleFocusVisuals = CreateDefFromClone(
-                masterMarksman.ViewElementDef,
+            TacticalAbilityViewElementDef vieElement = CreateDefFromClone(
+                rageBurst.ViewElementDef,
                 "b498b9de-f10b-464c-a9f9-29a293568b04",
                 skillName);
-            StanceStatusDef bfStatusDef = CreateDefFromClone(
+            StanceStatusDef stanceStatus = CreateDefFromClone( // Borrow status from Sneak Attack, Master Marksman status does not fit
                 Repo.GetAllDefs<StanceStatusDef>().FirstOrDefault(p => p.name.Equals("E_SneakAttackStatus [SneakAttack_AbilityDef]")),
                 "05929419-7d20-47aa-b700-fa6bc6602716",
                 "E_Status [" + skillName + "]");
-            VisibleActorsInRangeEffectConditionDef bfConditionDef = CreateDefFromClone(
-                (VisibleActorsInRangeEffectConditionDef)masterMarksman.TargetApplicationConditions[0],
+            VisibleActorsInRangeEffectConditionDef visibleActorsInRangeEffectCondition = CreateDefFromClone(
+                (VisibleActorsInRangeEffectConditionDef)rageBurst.TargetApplicationConditions[0],
                 "63a34054-28de-488e-ae4a-af451434f0d4",
                 skillName);
 
             // Set fields
-            battleFocus.CharacterProgressionData = bfProgressionDef;
-            battleFocus.TargetingDataDef = bfTargetingDataDef;
-            battleFocus.ViewElementDef = battleFocusVisuals;
-            battleFocus.StatusDef = bfStatusDef;
-            battleFocus.TargetApplicationConditions = new EffectConditionDef[] { bfConditionDef };
-            bfProgressionDef.RequiredStrength = 0;
-            bfProgressionDef.RequiredWill = 0;
-            bfProgressionDef.RequiredSpeed = 0;
-            bfTargetingDataDef.Origin.Range = 10.0f;
-            battleFocusVisuals.DisplayName1 = new LocalizedTextBind("BATTLE FOCUS", doNotLocalize);
-            battleFocusVisuals.Description = new LocalizedTextBind("If there are enemies within 10 tiles your attacks gain +10% damage", doNotLocalize);
-            // TODO: Change the icon
-            bfStatusDef.EffectName = skillName;
-            bfStatusDef.ShowNotification = true;
-            bfStatusDef.Visuals = battleFocus.ViewElementDef;
-            bfStatusDef.StatModifications[0].Value = 1.1f;
-            bfConditionDef.TargetingData = battleFocus.TargetingDataDef;
-            bfConditionDef.ActorsInRange = true;
+            battleFocusAbility.CharacterProgressionData = progression;
+            battleFocusAbility.TargetingDataDef = targetingData;
+            battleFocusAbility.ViewElementDef = vieElement;
+            battleFocusAbility.StatusDef = stanceStatus;
+            battleFocusAbility.TargetApplicationConditions = new EffectConditionDef[] { visibleActorsInRangeEffectCondition };
+            progression.RequiredStrength = 0;
+            progression.RequiredWill = 0;
+            progression.RequiredSpeed = 0;
+            targetingData.Origin.Range = 10.0f;
+            vieElement.DisplayName1 = new LocalizedTextBind("BATTLE FOCUS", doNotLocalize);
+            vieElement.Description = new LocalizedTextBind("If there are enemies within 10 tiles your attacks gain +10% damage", doNotLocalize);
+            // TODO: Change to own Icon
+            stanceStatus.EffectName = skillName;
+            stanceStatus.ShowNotification = true;
+            stanceStatus.Visuals = battleFocusAbility.ViewElementDef;
+            stanceStatus.StatModifications[0].Value = 1.1f;
+            visibleActorsInRangeEffectCondition.TargetingData = battleFocusAbility.TargetingDataDef;
+            visibleActorsInRangeEffectCondition.ActorsInRange = true;
         }
 
         // New Kill'n'Run ability
@@ -215,7 +217,7 @@ namespace PhoenixRising.SkillRework
             string skillName = "KillAndRun_AbilityDef";
             bool doNotLocalize = Config.DoNotLocalizeChangedTexts;
 
-            // Source to clone from for main ability
+            // Source to clone from for main ability: Inspire
             ApplyStatusAbilityDef inspireAbility = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(a => a.name.Equals("Inspire_AbilityDef"));
 
             // Create Neccessary RuntimeDefs
@@ -231,31 +233,31 @@ namespace PhoenixRising.SkillRework
                 inspireAbility.ViewElementDef,
                 "8a740c8d-43b6-4ef1-9b93-b2c329566f27",
                 skillName);
-            RepositionAbilityDef dashAbility = CreateDefFromClone(
-                Repo.GetAllDefs<RepositionAbilityDef>().FirstOrDefault(r => r.name.Equals("Dash_AbilityDef")),
-                "de8cd8a9-f2eb-4b8a-a408-a2a1913930c4",
-                "KillAndRun_Dash_AbilityDef");
-            TacticalTargetingDataDef dashTargetingData = CreateDefFromClone(
-                Repo.GetAllDefs<TacticalTargetingDataDef>().FirstOrDefault(t => t.name.Equals("E_TargetingData [Dash_AbilityDef]")),
-                "18e86a2b-6031-4c84-a2a0-cb6ad2423b56",
-                "KillAndRun_Dash_AbilityDef");
-            StatusRemoverEffectDef statusRemoverEffect = CreateDefFromClone(
-                Repo.GetAllDefs<StatusRemoverEffectDef>().FirstOrDefault(a => a.name.Equals("E_RemoveStandBy [ManualControlStatus]")),
-                "77b65001-7b75-4fbc-a89e-cf3e3e8ca69f",
-                "E_StatusRemoverEffect [" + skillName + "]");
             OnActorDeathEffectStatusDef onActorDeathEffectStatus = CreateDefFromClone(
                 inspireAbility.StatusDef as OnActorDeathEffectStatusDef,
                 "7cfcb266-6730-4642-88d5-8a212104b9cc",
                 "E_KillListenerStatus [" + skillName + "]");
-            AddAbilityStatusDef addAbiltyStatus = CreateDefFromClone(
+            RepositionAbilityDef dashAbility = CreateDefFromClone( // Create an own Dash ability from standard Dash
+                Repo.GetAllDefs<RepositionAbilityDef>().FirstOrDefault(r => r.name.Equals("Dash_AbilityDef")),
+                "de8cd8a9-f2eb-4b8a-a408-a2a1913930c4",
+                "KillAndRun_Dash_AbilityDef");
+            TacticalTargetingDataDef dashTargetingData = CreateDefFromClone( // ... and clone its targeting data
+                Repo.GetAllDefs<TacticalTargetingDataDef>().FirstOrDefault(t => t.name.Equals("E_TargetingData [Dash_AbilityDef]")),
+                "18e86a2b-6031-4c84-a2a0-cb6ad2423b56",
+                "KillAndRun_Dash_AbilityDef");
+            StatusRemoverEffectDef statusRemoverEffect = CreateDefFromClone( // Borrow effect from Manual Control
+                Repo.GetAllDefs<StatusRemoverEffectDef>().FirstOrDefault(a => a.name.Equals("E_RemoveStandBy [ManualControlStatus]")),
+                "77b65001-7b75-4fbc-a89e-cf3e3e8ca69f",
+                "E_StatusRemoverEffect [" + skillName + "]");
+            AddAbilityStatusDef addAbiltyStatus = CreateDefFromClone( // Borrow status from Deplay Beacon (final mission)
                 Repo.GetAllDefs<AddAbilityStatusDef>().FirstOrDefault(a => a.name.Equals("E_AddAbilityStatus [DeployBeacon_StatusDef]")),
                 "ac18e0d8-530d-4077-b372-71c9f82e2b88",
                 skillName);
-            MultiStatusDef multiStatus = CreateDefFromClone(
+            MultiStatusDef multiStatus = CreateDefFromClone( // Borrow multi status from Rapid Clearance
                 Repo.GetAllDefs<MultiStatusDef>().FirstOrDefault(m => m.name.Equals("E_MultiStatus [RapidClearance_AbilityDef]")),
                 "be7115e5-ce6b-47da-bead-311f3978f242",
                 skillName);
-            //StatusEffectDef statusEffect = CreateDefFromClone(
+            //StatusEffectDef statusEffect = CreateDefFromClone( // Borrow status from Vanish
             //    Repo.GetAllDefs<StatusEffectDef>().FirstOrDefault(s => s.name.Equals("E_ApplyVanishStatusEffect [Vanish_AbilityDef]")),
             //    "8ea85920-588b-4e1d-a8e6-31ffbe9d3a02",
             //    "E_ApplyStatusEffect [" + skillName + "]");
@@ -299,7 +301,7 @@ namespace PhoenixRising.SkillRework
             viewElement.DisplayName1 = new LocalizedTextBind("KILL'N'RUN", doNotLocalize);
             viewElement.Description = new LocalizedTextBind("Once per turn, take a free move after killing an enemy.", doNotLocalize);
             // Borrow icon from electric kick (shadow legs ability)
-            // TODO: Find a way to access unused Sprite from assets
+            // TODO: Change to own Icon
             Sprite knR_IconSprite = Repo.GetAllDefs<TacticalAbilityViewElementDef>().FirstOrDefault(t => t.name.Equals("E_View [ElectricKick_AbilityDef]")).LargeIcon;
             viewElement.LargeIcon = knR_IconSprite;
             viewElement.SmallIcon = knR_IconSprite;
@@ -328,6 +330,59 @@ namespace PhoenixRising.SkillRework
             addAbiltyStatus.SingleInstance = true;
             addAbiltyStatus.AbilityDef = dashAbility;
             //addAbiltyStatus.UnapplyIfAbilityExists = true;
+        }
+
+        // New Barrage ability
+        public static void Create_Barrage(DefRepository Repo, Settings Config)
+        {
+            string skillName = "Barrage_AbilityDef";
+            bool doNotLocalize = Config.DoNotLocalizeChangedTexts;
+
+            // Source to clone from
+            ShootAbilityDef rageBurst = Repo.GetAllDefs<ShootAbilityDef>().FirstOrDefault(p => p.name.Equals("RageBurst_ShootAbilityDef"));
+
+            // Create Neccessary RuntimeDefs
+            ShootAbilityDef barrageAbility = CreateDefFromClone(
+                rageBurst,
+                "fc5f5cf1-1349-42ff-adc4-515d7ceddde4",
+                skillName);
+            AbilityCharacterProgressionDef progression = CreateDefFromClone(
+                rageBurst.CharacterProgressionData,
+                "fa68ad15-a29b-4c66-b34a-fde332fc9d49",
+                skillName);
+            TacticalAbilityViewElementDef viewElement = CreateDefFromClone(
+                rageBurst.ViewElementDef,
+                "13005fbc-2613-4a01-9355-0701ae350ca5",
+                skillName);
+            SceneViewElementDef sceneView = CreateDefFromClone(
+                rageBurst.SceneViewElementDef,
+                "b1eefbc3-fb40-4733-a0cf-4efeecfc3af3",
+                skillName);
+
+            // Set fields
+            barrageAbility.CharacterProgressionData = progression;
+            barrageAbility.ViewElementDef = viewElement;
+            barrageAbility.SceneViewElementDef = sceneView;
+            barrageAbility.SkillTags = new SkillTagDef[] { rageBurst.SkillTags[0] };
+            barrageAbility.ActionPointCost = 0.75f;
+            barrageAbility.WillPointCost = 4.0f;
+            barrageAbility.ActorTags = new GameTagDef[] { Repo.GetAllDefs<GameTagDef>().FirstOrDefault(t => t.name.Equals("Assault_ClassTagDef")) };
+            barrageAbility.EquipmentTags = new GameTagDef[] { Repo.GetAllDefs<GameTagDef>().FirstOrDefault(t => t.name.Equals("AssaultRifleItem_TagDef")) };
+            barrageAbility.AttackType = AttackType.RageBurst;
+            barrageAbility.TargetsCount = 1;
+            barrageAbility.ExecutionsCount = 2;
+            barrageAbility.ForceFirstPersonCam = false;
+            barrageAbility.ProjectileSpreadMultiplier = 0.7f;
+            progression.RequiredStrength = 0;
+            progression.RequiredWill = 0;
+            progression.RequiredSpeed = 0;
+            viewElement.DisplayName1 = new LocalizedTextBind("BARRAGE", doNotLocalize);
+            viewElement.Description = new LocalizedTextBind("Next shot with Assault Rifle uses double burst and gains +30% acc", doNotLocalize);
+            // TODO: Change to own Icon, current borrowed from Deadly Dou
+            Sprite barrage_IconSprite = Repo.GetAllDefs<TacticalAbilityViewElementDef>().FirstOrDefault(t => t.name.Equals("E_View [DeadlyDuo_ShootAbilityDef]")).LargeIcon;
+            viewElement.LargeIcon = barrage_IconSprite;
+            viewElement.SmallIcon = barrage_IconSprite;
+            viewElement.MultiTargetSelectionButtonTexts = new string[0];
         }
 
         // Creating new runtime def by cloning from existing def

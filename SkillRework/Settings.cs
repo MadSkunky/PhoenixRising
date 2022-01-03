@@ -144,8 +144,8 @@ namespace PhoenixRising.SkillRework
                 spCost: 20,
                 relList: new Dictionary<string, Dictionary<string, string>>
                 {{ FactionKeys.All, new Dictionary<string,string> {
-                    { ClassKeys.Assault.Name, "BATTLE FOCUS" },
-                    { ClassKeys.Heavy.Name, "STRONGMAN" },
+                    { ClassKeys.Assault.Name, "BARRAGE" },
+                    { ClassKeys.Heavy.Name, "BATTLE FOCUS" }, // -> JetpackControl
                     { ClassKeys.Sniper.Name, "EXPERT RIFLES AND HANDGUNS" },
                     { ClassKeys.Berserker.Name, "BRAWLER" },
                     { ClassKeys.Priest.Name, "FARSIGHTED" },
@@ -159,7 +159,7 @@ namespace PhoenixRising.SkillRework
                 relList: new Dictionary<string, Dictionary<string, string>>
                 {{ FactionKeys.All, new Dictionary<string,string> {
                     { ClassKeys.Assault.Name, "QUARTERBACK" },
-                    { ClassKeys.Heavy.Name, "EXPERT HEAVY WEAPONS" }, // -> JetpackControl
+                    { ClassKeys.Heavy.Name, "EXPERT HEAVY WEAPONS" },
                     { ClassKeys.Sniper.Name, "SNIPERIST" },
                     { ClassKeys.Berserker.Name, "EXPERT MELEE" },
                     { ClassKeys.Priest.Name, "BIOCHEMIST" },

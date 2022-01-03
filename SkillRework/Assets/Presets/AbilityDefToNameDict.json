@@ -5,6 +5,7 @@
   "ARMOR BREAK": "ArmourBreak_AbilityDef",
   "ASSAULT RIFLE PROFICIENCY": "AssaultRiflesTalent_AbilityDef",
   "ASSAULT TRAINING": "Assault_ClassProficiency_AbilityDef",
+  "BARRAGE": "Barrage_AbilityDef",
   "BATTLE FOCUS": "BattleFocus_AbilityDef",
   "BERSERKER TRAINING": "Berserker_ClassProficiency_AbilityDef",
   "BIOCHEMIST": "BioChemist_AbilityDef",
