@@ -16,6 +16,6 @@ Designing, balancing, testing, storytelling and always open to productive discus
 
 ## Subparts
 
-### Skill Rework
+### Better Classes
 
-Phoenix Rising: Better Classes reworks and rebalances a lot of vanilla skills as well as gets rid of “Personal Perks” replacing them with seven 3rd row skills that depend on soldier origin, background and class.
+Reworks and rebalances a lot of vanilla skills as well as gets rid of “Personal Perks” replacing them with seven 3rd row skills that depend on soldier origin, background and class.
