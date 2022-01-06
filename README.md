@@ -1,6 +1,17 @@
 # Phoenix Rising Mod
 
-- ToDo: Main description
+Phoenix Rising: Better Classes reworks and rebalances a lot of vanilla skills as well as gets rid of “Personal Perks” replacing them with seven 3rd row skills that depend on soldier origin, background and class.
+
+Specialization: Skills are replaced or moved around to better fit intended class roles
+Original class matters: 3rd row gets skills unique to each class, your Assault/Sniper will play differently than Sniper/Assault
+Better for Multiclassing: Replaced “narrow” skills that require specific items to function
+Better Balance (toggleable): Toned down many strong/overpowered skills and few items
+Background matters: Add “Origin” perks. Soldiers coming from different factions will play differently.
+Not created equally: Each soldier gets “Background” perks that represent his persona 
+
+Phoenix Rising is an ambitious project, founded by members of Community Coucil - dedicated group of expert players and beta-testers. Eventually Phoenix Rising is aiming at significant improvement of core game. We are releasing these improvements as separate mods that one day we hope will come together into a bigger overhaul.
+
+We are currently a small group looking to expand. If you like our mods and have coding skills contact us and become a part of the team!
 
 ### The Team behind this project
 
