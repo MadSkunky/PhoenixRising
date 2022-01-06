@@ -8,6 +8,7 @@ using Base.Defs;
 using PhoenixPoint.Common.Core;
 using PhoenixPoint.Tactical.Entities.Abilities;
 using Harmony;
+using PhoenixRising.SkillRework.SkillModifications;
 
 namespace PhoenixRising.SkillRework
 {
@@ -47,7 +48,7 @@ namespace PhoenixRising.SkillRework
             //}
 
             // Apply skill modifications
-            SkillModifications.ApplyChanges();
+            SkillModsMain.ApplyChanges();
 
             // Generate the main specialization as configured
             MainSpecModification.GenerateMainSpec();

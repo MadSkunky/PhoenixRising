@@ -79,14 +79,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConfigHelpers.cs" />
-    <Compile Include="MainSpecModification.cs" />
     <Compile Include="Helper.cs" />
-    <Compile Include="PersonalSpecModification.cs" />
+    <Compile Include="MainSpecModification.cs" />
     <Compile Include="Logger.cs" />
+    <Compile Include="PersonalSpecModification.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="SkillModifications.cs" />
-    <Compile Include="SkillReworkMain.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SkillModifications\AssaultSkills.cs" />
+    <Compile Include="SkillModifications\SkillModsMain.cs" />
+    <Compile Include="SkillReworkMain.cs" />
     <Compile Include="WeaponModifications.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -102,9 +103,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Assets\Textures\Pepe.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <Content Include="Assets\Textures\UI_Ability_GunAndRun.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

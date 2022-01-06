@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using Base.Core;
+using Base.Defs;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,6 +12,11 @@ namespace PhoenixRising.SkillRework
 {
     internal class Helper
     {
+        // Get config, definition repository (and shared data, not neccesary currently)
+        private static readonly Settings Config = SkillReworkMain.Config;
+        private static readonly DefRepository Repo = GameUtl.GameComponent<DefRepository>();
+        //private static readonly SharedData Shared = GameUtl.GameComponent<SharedData>();
+
         internal static string ModDirectory;
         internal static string ManagedDirectory;
         internal static string TexturesDirectory;
@@ -38,6 +45,44 @@ namespace PhoenixRising.SkillRework
             catch (Exception e)
             {
                 Logger.Error(e);
+            }
+        }
+
+        // Creating new runtime def by cloning from existing def
+        public static T CreateDefFromClone<T>(T source, string guid, string name) where T : BaseDef
+        {
+            try
+            {
+                Type type = null;
+                string resultName = "";
+                if (source != null)
+                {
+                    Logger.Debug("CreateDefFromClone with source type: " + source.GetType().Name);
+                    Logger.Debug("CreateDefFromClone with source name: " + source.name);
+                    int start = source.name.IndexOf('[') + 1;
+                    int end = source.name.IndexOf(']');
+                    string toReplace = !name.Contains("[") && start > 0 && end > start ? source.name.Substring(start, end - start) : source.name;
+                    resultName = source.name.Replace(toReplace, name);
+                }
+                else
+                {
+                    Logger.Debug("CreateDefFromClone only with type: " + typeof(T).Name);
+                    type = typeof(T);
+                    resultName = name;
+                }
+                T result = (T)Repo.CreateRuntimeDef(
+                    source,
+                    type,
+                    guid);
+                result.name = resultName;
+                Logger.Debug("CreateDefFromClone result type: " + result.GetType().Name);
+                Logger.Debug("CreateDefFromClone result name: " + result.name);
+                return result;
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e);
+                return null;
             }
         }
 

@@ -1,92 +1,95 @@
 ﻿using System;
 using System.IO;
 
-public class Logger
+namespace PhoenixRising
 {
-    private static string _logPath;
-    private static int _debugLevel;
-    private static string _modName;
-    private static bool _awake;
-
-    public static void Initialize(string logPath, int debugLevel, string modDirectory, string modName)
+    public class Logger
     {
-        _logPath = logPath;
-        _debugLevel = debugLevel;
-        _modName = modName;
-        _awake = true;
+        private static string _logPath;
+        private static int _debugLevel;
+        private static string _modName;
+        private static bool _awake;
 
-        Cleanup();
-        Always("----------------------------------------------------------------------------------------------------", false);
-        Always($"Logger.Initialize({logPath}, {debugLevel}, {modDirectory}, {modName})");
-        Always("----------------------------------------------------------------------------------------------------", false);
-    }
-
-
-    public static void Sleep()
-    {
-        _awake = false;
-    }
-
-    public static void Wake()
-    {
-        _awake = true;
-    }
-
-
-    public static void Cleanup()
-    {
-        using (StreamWriter writer = new StreamWriter(_logPath, false))
+        public static void Initialize(string logPath, int debugLevel, string modDirectory, string modName)
         {
-            writer.WriteLine("----------------------------------------------------------------------------------------------------", false);
-            writer.WriteLine($"[{_modName} @ {DateTime.Now}] CLEANED UP");
-            writer.WriteLine("----------------------------------------------------------------------------------------------------", false);
+            _logPath = logPath;
+            _debugLevel = debugLevel;
+            _modName = modName;
+            _awake = true;
+
+            Cleanup();
+            Always("----------------------------------------------------------------------------------------------------", false);
+            Always($"Logger.Initialize({logPath}, {debugLevel}, {modDirectory}, {modName})");
+            Always("----------------------------------------------------------------------------------------------------", false);
         }
-    }
 
 
-    public static void Error(Exception ex)
-    {
-        if (_awake && _debugLevel >= 1)
+        public static void Sleep()
         {
-            using (StreamWriter writer = new StreamWriter(_logPath, true))
+            _awake = false;
+        }
+
+        public static void Wake()
+        {
+            _awake = true;
+        }
+
+
+        public static void Cleanup()
+        {
+            using (StreamWriter writer = new StreamWriter(_logPath, false))
             {
                 writer.WriteLine("----------------------------------------------------------------------------------------------------", false);
-                writer.WriteLine($"[{_modName} @ {DateTime.Now}] EXCEPTION:");
-                writer.WriteLine("Message: " + ex.Message + "<br/>" + Environment.NewLine + "StackTrace: " + ex.StackTrace);
+                writer.WriteLine($"[{_modName} @ {DateTime.Now}] CLEANED UP");
                 writer.WriteLine("----------------------------------------------------------------------------------------------------", false);
             }
         }
-    }
 
 
-    public static void Debug(String line, bool showPrefix = true)
-    {
-        if (_awake && _debugLevel >= 2)
+        public static void Error(Exception ex)
+        {
+            if (_awake && _debugLevel >= 1)
+            {
+                using (StreamWriter writer = new StreamWriter(_logPath, true))
+                {
+                    writer.WriteLine("----------------------------------------------------------------------------------------------------", false);
+                    writer.WriteLine($"[{_modName} @ {DateTime.Now}] EXCEPTION:");
+                    writer.WriteLine("Message: " + ex.Message + "<br/>" + Environment.NewLine + "StackTrace: " + ex.StackTrace);
+                    writer.WriteLine("----------------------------------------------------------------------------------------------------", false);
+                }
+            }
+        }
+
+
+        public static void Debug(string line, bool showPrefix = true)
+        {
+            if (_awake && _debugLevel >= 2)
+            {
+                using (StreamWriter writer = new StreamWriter(_logPath, true))
+                {
+                    string prefix = showPrefix ? $"[{_modName} @ {DateTime.Now}] " : "";
+                    writer.WriteLine(prefix + line);
+                }
+            }
+        }
+
+
+        public static void Info(string line, bool showPrefix = true)
+        {
+            if (_awake && _debugLevel >= 3)
+            {
+                Debug(line, showPrefix);
+            }
+        }
+
+
+        public static void Always(string line, bool showPrefix = true)
         {
             using (StreamWriter writer = new StreamWriter(_logPath, true))
             {
                 string prefix = showPrefix ? $"[{_modName} @ {DateTime.Now}] " : "";
                 writer.WriteLine(prefix + line);
             }
-        }
-    }
-
-
-    public static void Info(String line, bool showPrefix = true)
-    {
-        if (_awake && _debugLevel >= 3)
-        {
-            Logger.Debug(line, showPrefix);
-        }
-    }
-
-
-    public static void Always(String line, bool showPrefix = true)
-    {
-        using (StreamWriter writer = new StreamWriter(_logPath, true))
-        {
-            string prefix = showPrefix ? $"[{_modName} @ {DateTime.Now}] " : "";
-            writer.WriteLine(prefix + line);
         }
     }
 }
