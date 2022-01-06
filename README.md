@@ -21,7 +21,6 @@ Designing, balancing, testing, storytelling and always open to productive discus
 Phoenix Rising: Better Classes reworks and rebalances a lot of vanilla skills as well as gets rid of “Personal Perks” replacing them with seven 3rd row skills that depend on soldier origin, background and class.
 
 Specialization: Skills are replaced or moved around to better fit intended class roles.
-
 Original class matters: 3rd row gets skills unique to each class, your Assault/Sniper will play differently than Sniper/Assault.
 
 Better for Multiclassing: Replaced “narrow” skills that require specific items to function.
