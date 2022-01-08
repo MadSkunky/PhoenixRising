@@ -6,12 +6,12 @@ using PhoenixPoint.Tactical.Entities.Abilities;
 using System;
 using System.Linq;
 
-namespace PhoenixRising.SkillRework
+namespace PhoenixRising.BetterClasses
 {
     class WeaponModifications
     {
         // Get config, definition repository (and shared data, not neccesary currently)
-        private static readonly Settings Config = SkillReworkMain.Config;
+        private static readonly Settings Config = BetterClassesMain.Config;
         private static readonly DefRepository Repo = GameUtl.GameComponent<DefRepository>();
         //private static readonly SharedData Shared = GameUtl.GameComponent<SharedData>();
         public static void ApplyChanges()

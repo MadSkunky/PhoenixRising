@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace PhoenixRising.SkillRework
+namespace PhoenixRising.BetterClasses
 {
     internal class Settings
     {

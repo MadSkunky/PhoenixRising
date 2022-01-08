@@ -3,14 +3,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31911.196
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkillRework", "SkillRework\SkillRework.csproj", "{CB34FBCF-9B4A-4375-AB3B-4EFBCAA77AE4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BetterClasses", "BetterClasses\BetterClasses.csproj", "{CB34FBCF-9B4A-4375-AB3B-4EFBCAA77AE4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D4D10810-0C40-4C1E-950A-58B03FD4329A}"
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SkillRework", "SkillRework", "{17F508AF-4588-4D93-B5EE-CABAD0CA696D}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BetterClasses", "BetterClasses", "{17F508AF-4588-4D93-B5EE-CABAD0CA696D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

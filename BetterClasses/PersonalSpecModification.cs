@@ -17,12 +17,12 @@ using PhoenixPoint.Common.UI;
 using PhoenixPoint.Geoscape.View.DataObjects;
 using UnityEngine;
 
-namespace PhoenixRising.SkillRework
+namespace PhoenixRising.BetterClasses
 {
     class HarmonyPatches
     {
         // Get config, definition repository (and shared data, not neccesary currently)
-        private static readonly Settings Config = SkillReworkMain.Config;
+        private static readonly Settings Config = BetterClassesMain.Config;
         private static readonly DefRepository Repo = GameUtl.GameComponent<DefRepository>();
         //private static readonly SharedData Shared = GameUtl.GameComponent<SharedData>();
 

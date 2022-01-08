@@ -1,0 +1,9 @@
+﻿{
+    Id: "PhoenixRising.BetterClasses", // Must be unique. Same Id = one survives
+    Lang : "en",
+    Name : "Better Classes",
+    Url  : "",
+    Description : "Rework of Classes, Skills and Skilltrees",
+    Requires : { Id: "Modnix", Min: "3.0" },
+    ConfigType: "PhoenixRising.BetterClasses.Settings" // Fullname with namespace
+}

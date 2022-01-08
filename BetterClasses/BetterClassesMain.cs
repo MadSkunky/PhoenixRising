@@ -8,11 +8,11 @@ using Base.Defs;
 using PhoenixPoint.Common.Core;
 using PhoenixPoint.Tactical.Entities.Abilities;
 using Harmony;
-using PhoenixRising.SkillRework.SkillModifications;
+using PhoenixRising.BetterClasses.SkillModifications;
 
-namespace PhoenixRising.SkillRework
+namespace PhoenixRising.BetterClasses
 {
-    public class SkillReworkMain
+    public class BetterClassesMain
     {
         // New config field.
         internal static Settings Config;
@@ -35,8 +35,8 @@ namespace PhoenixRising.SkillRework
             TexturesDirectory = Path.Combine(ModDirectory, "Assets", "Textures");
 
             // Initialize Logger
-            LogPath = Path.Combine(ModDirectory, "SkillRework.log");
-            Logger.Initialize(LogPath, Config.Debug, ModDirectory, nameof(SkillReworkMain));
+            LogPath = Path.Combine(ModDirectory, "BetterClasses.log");
+            Logger.Initialize(LogPath, Config.Debug, ModDirectory, nameof(BetterClassesMain));
 
             // Initialize Helper
             Helper.Initialize();
@@ -54,7 +54,7 @@ namespace PhoenixRising.SkillRework
             MainSpecModification.GenerateMainSpec();
 
             // Patch all Harmony patches
-            HarmonyInstance.Create("SkillRework.PhoenixRising").PatchAll();
+            HarmonyInstance.Create("BetterClasses.PhoenixRising").PatchAll();
 
             try
             {

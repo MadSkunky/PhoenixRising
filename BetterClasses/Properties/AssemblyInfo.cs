@@ -5,8 +5,8 @@ using System.Runtime.InteropServices;
 // Allgemeine Informationen über eine Assembly werden über die folgenden
 // Attribute gesteuert. Ändern Sie diese Attributwerte, um die Informationen zu ändern,
 // die einer Assembly zugeordnet sind.
-[assembly: AssemblyTitle("SkillRework")]
-[assembly: AssemblyDescription("Rework of Skills and Skilltrees")]
+[assembly: AssemblyTitle("BetterClasses")]
+[assembly: AssemblyDescription("Rework of Classes, Skills and Skilltrees")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("PhoenixRisingTeam")]
 [assembly: AssemblyProduct("PhoenixRising")]

@@ -11,12 +11,12 @@ using PhoenixPoint.Tactical.Entities.Statuses;
 using System;
 using System.Linq;
 
-namespace PhoenixRising.SkillRework.SkillModifications
+namespace PhoenixRising.BetterClasses.SkillModifications
 {
     class SkillModsMain
     {
         // Get config, definition repository (and shared data, not neccesary currently)
-        private static readonly Settings Config = SkillReworkMain.Config;
+        private static readonly Settings Config = BetterClassesMain.Config;
         private static readonly DefRepository Repo = GameUtl.GameComponent<DefRepository>();
         //private static readonly AssetsManager assetsManager = GameUtl.GameComponent<AssetsManager>();
         //private static readonly SharedData Shared = GameUtl.GameComponent<SharedData>();
@@ -136,7 +136,7 @@ namespace PhoenixRising.SkillRework.SkillModifications
                         }
 
                         // Change descrition text, not localized (currently), old one mentions fixed buffs that are taken away or set differently by this mod
-                        string newText = SkillRework.Helper.NotLocalizedTextMap[pmad.ViewElementDef.name][ViewElement.Description];
+                        string newText = BetterClasses.Helper.NotLocalizedTextMap[pmad.ViewElementDef.name][ViewElement.Description];
                         pmad.ViewElementDef.Description = new LocalizedTextBind(newText, doNotLocalize);
 
                         Logger.Debug("Proficiency def name: " + pmad.name);

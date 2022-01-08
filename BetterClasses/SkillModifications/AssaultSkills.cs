@@ -15,12 +15,12 @@ using PhoenixPoint.Tactical.Entities.Statuses;
 using System.Linq;
 using UnityEngine;
 
-namespace PhoenixRising.SkillRework.SkillModifications
+namespace PhoenixRising.BetterClasses.SkillModifications
 {
     class AssaultSkills
     {
         // Get config, definition repository (and shared data, not neccesary currently)
-        private static readonly Settings Config = SkillReworkMain.Config;
+        private static readonly Settings Config = BetterClassesMain.Config;
         private static readonly DefRepository Repo = GameUtl.GameComponent<DefRepository>();
         //private static readonly SharedData Shared = GameUtl.GameComponent<SharedData>();
         public static void ApplyChanges(bool doNotLocalize = true)

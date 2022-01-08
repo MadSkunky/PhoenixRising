@@ -8,12 +8,12 @@ using System.Linq;
 using System.Reflection;
 using UnityEngine;
 
-namespace PhoenixRising.SkillRework
+namespace PhoenixRising.BetterClasses
 {
     internal class Helper
     {
         // Get config, definition repository (and shared data, not neccesary currently)
-        private static readonly Settings Config = SkillReworkMain.Config;
+        private static readonly Settings Config = BetterClassesMain.Config;
         private static readonly DefRepository Repo = GameUtl.GameComponent<DefRepository>();
         //private static readonly SharedData Shared = GameUtl.GameComponent<SharedData>();
 
@@ -36,9 +36,9 @@ namespace PhoenixRising.SkillRework
         {
             try
             {
-                ModDirectory = SkillReworkMain.ModDirectory;
-                ManagedDirectory = SkillReworkMain.ManagedDirectory;
-                TexturesDirectory = SkillReworkMain.TexturesDirectory;
+                ModDirectory = BetterClassesMain.ModDirectory;
+                ManagedDirectory = BetterClassesMain.ManagedDirectory;
+                TexturesDirectory = BetterClassesMain.TexturesDirectory;
                 AbilityNameToDefMap = ReadJson<Dictionary<string, string>>(AbilitiesJsonFileName);
                 NotLocalizedTextMap = ReadJson<Dictionary<string, Dictionary<string, string>>>(TextMapFileName);
             }
@@ -88,7 +88,7 @@ namespace PhoenixRising.SkillRework
 
         public static Sprite CreateSprite(string textureFileName, int width = 128, int height = 128)
         {
-            string filePath = Path.Combine(SkillReworkMain.TexturesDirectory, textureFileName);
+            string filePath = Path.Combine(BetterClassesMain.TexturesDirectory, textureFileName);
             Sprite newSprite = null;
             Texture2D texture = null;
             if (File.Exists(filePath) && LoadTexture2DfromFile(ref texture, filePath, width, height))
