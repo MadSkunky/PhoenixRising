@@ -35,81 +35,22 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                 AssaultSkills.ApplyChanges(doNotLocalize);
 
                 // Sniper skills start ------------------------------------------------------
-
-                // Extreme Focus: Set to 1 AP regardless of weapon type
-                ChangeAbilitiesCostStatusDef extremeFocusAPcostMod = Repo.GetAllDefs<ChangeAbilitiesCostStatusDef>().FirstOrDefault(c => c.name.Contains("ExtremeFocus_AbilityDef"));
-                extremeFocusAPcostMod.AbilityCostModification.ActionPointModType = TacticalAbilityModificationType.Set;
-                extremeFocusAPcostMod.AbilityCostModification.ActionPointMod = 0.25f;
-                extremeFocusAPcostMod.Visuals.Description = new LocalizedTextBind("Overwatch cost is set to 1 Action Point cost for all weapons", doNotLocalize);
-
-                // Armor Break: Set to 15 shred and -25% damage
-
-                // Gunslinger: 3 pistol shots in one action (Rage Burst)
-
-                // Kill Zone: An additional overwatch shot
-
-                // Sniper skills end ---------------------------------------------------------
+                SniperSkills.ApplyChanges(doNotLocalize);
 
                 // Heavy skills start --------------------------------------------------------
-
-                // Return Fire: Fix to work on all classes
-                TacticalAbilityDef returnFire = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Contains("ReturnFire_AbilityDef"));
-                returnFire.ActorTags = new GameTagDef[0]; // Deletes all given tags => no restriction for any class
-
-                // War Cry: -1 AP and -10% damage, doubled if WP of target < WP of caster
-
-                // Rage Burst: Increase accuracy and cone angle
-
-                // Dynamic Resistance: Copy from Acheron
-
-                // Hunker Down: -25% incoming damage for 2 AP and 2 WP
-
-                // Jetpack Control: 2 AP jump, 12 tiles range
-
-                // Boom Blast: -30% range instead of +50%
-
-                // Heavy skills end ----------------------------------------------------------
+                HeavySkills.ApplyChanges(doNotLocalize);
 
                 // Berserker skills start ----------------------------------------------------
-
-                // Dash changes -- cancelled, delayed
-                //RepositionAbilityDef dash = Repo.GetAllDefs<RepositionAbilityDef>().FirstOrDefault(r => r.name.Equals("Dash_AbilityDef"));
-
-                // Adrenaline Rush: 1 AP for one handed weapons and skills, no WP restriction
-
-                // Melee Specialist: +10% damage instead of +25%
-
-                // Personal Space: Until next turn, attack first enemy entering melee range
-
-                // Berserker skills end ------------------------------------------------------
+                BerserkerSkills.ApplyChanges(doNotLocalize);
 
                 // Infiltrator skills start --------------------------------------------------
-
-                // Sneak Attack: Direct fire and melee +60 damage while not potted
-
-                // Master Archer: Shoot your Crossbow 3 times at one target, reveal your position
-
-                // Cautious: +10% stealth
-
-                // Infiltrator skills end ----------------------------------------------------
+                InfiltratorSkills.ApplyChanges(doNotLocalize);
 
                 // Technician skills start ---------------------------------------------------
-
-                // Electric Reinforcements: 10 tiles range, +10 armor, 1 AP and 3 WP
-
-                // Stability: Gain 5% extra accuracy per remaining AP up to 20%
-
-                // Amplify Pain: If your next attack deals special damage, double that damage (Bleeding, Paralysis, Viral, Poison, Fire, EMP, Sonic, Shock, Virophage)
-
-                // Technician skills end -----------------------------------------------------
+                TechnicianSkills.ApplyChanges(doNotLocalize);
 
                 // Priest skills start -------------------------------------------------------
-
-                // Biochemist: Paralysis, Poison and Viral damage increased 25%
-
-                // Enrage (Mutog): Target Mutog becomes "Enraged"
-
-                // Priest skills end ---------------------------------------------------------
+                PriestSkills.ApplyChanges(doNotLocalize);
 
                 // Faction perks
                 // Mist Breather adding progression def

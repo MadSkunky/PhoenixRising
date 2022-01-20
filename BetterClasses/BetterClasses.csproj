@@ -86,8 +86,14 @@
     <Compile Include="Settings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SkillModifications\AssaultSkills.cs" />
+    <Compile Include="SkillModifications\BerserkerSkills.cs" />
+    <Compile Include="SkillModifications\HeavySkills.cs" />
+    <Compile Include="SkillModifications\InfiltratorSkills.cs" />
+    <Compile Include="SkillModifications\PriestSkills.cs" />
     <Compile Include="SkillModifications\SkillModsMain.cs" />
     <Compile Include="BetterClassesMain.cs" />
+    <Compile Include="SkillModifications\SniperSkills.cs" />
+    <Compile Include="SkillModifications\TechnicianSkills.cs" />
     <Compile Include="WeaponModifications.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -103,7 +109,79 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Textures\UI_AbilitiesIcon_CharacterAbility_AmplifyPain01.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Textures\UI_AbilitiesIcon_CharacterAbility_AmplifyPain02.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Textures\UI_AbilitiesIcon_CharacterAbility_Gunslinger-2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Textures\UI_AbilitiesIcon_CharacterAbility_Gunslinger-3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Textures\UI_AbilitiesIcon_CharacterAbility_JetpackProficiency-2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Textures\UI_AbilitiesIcon_CharacterAbility_LaunchMissile-2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Textures\UI_AbilitiesIcon_CharacterAbility_TargetLocation-2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Textures\UI_AbilitiesIcon_EquipmentAbility_OverwatchFocus-2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Textures\UI_AbilitiesIcon_Fishman_SenseLocate-2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Textures\UI_AbilitiesIcon_KillNRun.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Textures\UI_AbilitiesIcon_PersonalTrack_ExpertHealer-2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Textures\UI_AbilitiesIcon_PersonalTrack_Guerilla.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Textures\UI_AbilitiesIcon_PersonalTrack_GymRat-2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Textures\UI_AbilitiesIcon_PersonalTrack_NightOwl.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Textures\UI_AbilitiesIcon_PersonalTrack_Pacifist.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Textures\UI_AbilitiesIcon_PersonalTrack_Plumber.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Textures\UI_AbilitiesIcon_PersonalTrack_SpecOp-1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Textures\UI_AbilitiesIcon_PersonalTrack_SpecOp-2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Textures\UI_AbilitiesIcon_PersonalTrack_SpecOp-3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Textures\UI_AbilitiesIcon_PersonalTrack_Stimpack-2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Textures\UI_AbilitiesIcon_PersonalTrack_Thief.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Textures\UI_AbilitiesIcon_PersonalTrack_Vampire.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Textures\UI_AbilitiesIcon_TentacularBody_MeleeAttackRetaliation-2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\Textures\UI_Ability_GunAndRun.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Textures\UI_StatusesIcons_CanBeRecruitedIntoPhoenix-2.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

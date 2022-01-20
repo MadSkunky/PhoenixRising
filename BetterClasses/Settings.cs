@@ -146,7 +146,7 @@ namespace PhoenixRising.BetterClasses
                 {{ FactionKeys.All, new Dictionary<string,string> {
                     { ClassKeys.Assault.Name, "BARRAGE" },
                     { ClassKeys.Heavy.Name, "BATTLE FOCUS" }, // -> JetpackControl
-                    { ClassKeys.Sniper.Name, "EXPERT RIFLES AND HANDGUNS" },
+                    { ClassKeys.Sniper.Name, "GUNSLINGER" },
                     { ClassKeys.Berserker.Name, "BRAWLER" },
                     { ClassKeys.Priest.Name, "FARSIGHTED" },
                     { ClassKeys.Technician.Name, "SELF DEFENSE SPECIALIST" },
@@ -160,7 +160,7 @@ namespace PhoenixRising.BetterClasses
                 {{ FactionKeys.All, new Dictionary<string,string> {
                     { ClassKeys.Assault.Name, "QUARTERBACK" },
                     { ClassKeys.Heavy.Name, "EXPERT HEAVY WEAPONS" },
-                    { ClassKeys.Sniper.Name, "SNIPERIST" },
+                    { ClassKeys.Sniper.Name, "KILL ZONE" },
                     { ClassKeys.Berserker.Name, "EXPERT MELEE" },
                     { ClassKeys.Priest.Name, "BIOCHEMIST" },
                     { ClassKeys.Technician.Name, "HEALER" },

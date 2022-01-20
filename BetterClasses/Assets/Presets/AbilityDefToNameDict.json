@@ -73,6 +73,7 @@
   "JETPACK PROFICIENCY": "UseAttachedEquipment_AbilityDef",
   "JUMP": "Humanoid_HighJump_AbilityDef",
   "KILL'N'RUN": "KillAndRun_AbilityDef",
+  "KILL ZONE": "KillZone_AbilityDef",
   "LANDING SHOCK ABSORPTION": "SafeLanding_AbilityDef",
   "LAUNCH ACIDWORM": "Mutoid_Adapt_Arm_AcidWorm_AbilityDef",
   "LAUNCH FIREWORM": "Mutoid_Adapt_Arm_FireWorm_AbilityDef",

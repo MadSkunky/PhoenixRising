@@ -1,0 +1,133 @@
+﻿using Base.Core;
+using Base.Defs;
+using Base.UI;
+using Harmony;
+using PhoenixPoint.Common.Core;
+using PhoenixPoint.Common.Entities;
+using PhoenixPoint.Common.Entities.GameTags;
+using PhoenixPoint.Tactical.Entities;
+using PhoenixPoint.Tactical.Entities.Abilities;
+using PhoenixPoint.Tactical.Entities.DamageKeywords;
+using PhoenixPoint.Tactical.Entities.Equipments;
+using PhoenixPoint.Tactical.Entities.Statuses;
+using PhoenixPoint.Tactical.Entities.Weapons;
+using System.Linq;
+using UnityEngine;
+
+namespace PhoenixRising.BetterClasses.SkillModifications
+{
+    class SniperSkills
+    {
+        // Get config, definition repository (and shared data, not neccesary currently)
+        private static readonly Settings Config = BetterClassesMain.Config;
+        private static readonly DefRepository Repo = GameUtl.GameComponent<DefRepository>();
+        private static readonly SharedData Shared = GameUtl.GameComponent<SharedData>();
+        public static void ApplyChanges(bool doNotLocalize = true)
+        {
+            // Extreme Focus: Set to 1 AP regardless of weapon type
+            ChangeAbilitiesCostStatusDef extremeFocusAPcostMod = Repo.GetAllDefs<ChangeAbilitiesCostStatusDef>().FirstOrDefault(c => c.name.Contains("ExtremeFocus_AbilityDef"));
+            extremeFocusAPcostMod.AbilityCostModification.ActionPointModType = TacticalAbilityModificationType.Set;
+            extremeFocusAPcostMod.AbilityCostModification.ActionPointMod = 0.25f;
+            extremeFocusAPcostMod.Visuals.Description = new LocalizedTextBind("Overwatch cost is set to 1 Action Point cost for all weapons", doNotLocalize);
+
+            // Armor Break: Set to 15 shred and -25% damage
+            ApplyStatusAbilityDef armourBreak = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(ad => ad.name.Contains("ArmourBreak_AbilityDef"));
+            armourBreak.WillPointCost = 2.0f;
+            armourBreak.ViewElementDef.Description = new LocalizedTextBind("Next shot has 15 shred but -25% damage", doNotLocalize);
+            AddAttackBoostStatusDef armourBreakShredMod = armourBreak.StatusDef as AddAttackBoostStatusDef;
+            armourBreakShredMod.DamageKeywordPairs[0].Value = 15.0f;
+            StanceStatusDef armourBreakDamageReduction = Helper.CreateDefFromClone( // Borrow status from Sneak Attack for damage reduction
+                Repo.GetAllDefs<StanceStatusDef>().FirstOrDefault(p => p.name.Equals("E_SneakAttackStatus [SneakAttack_AbilityDef]")),
+                "e0dcd2aa-0262-41ff-9be0-c7671a6a11e0",
+                "E_DamageReductionStatus [ArmourBreak_AbilityDef]");
+            armourBreakDamageReduction.EffectName = "ArmourBreak";
+            armourBreakDamageReduction.DurationTurns = 0;
+            armourBreakDamageReduction.SingleInstance = true;
+            armourBreakDamageReduction.VisibleOnHealthbar = TacStatusDef.HealthBarVisibility.Hidden;
+            // Don't show the status on the info screen (it is not tied to a body part), unfortunately there is no "Hidden" for this "StatusScreenVisibility" enum :-/
+            armourBreakDamageReduction.VisibleOnStatusScreen = TacStatusDef.StatusScreenVisibility.VisibleOnBodyPartStatusList;
+            armourBreakDamageReduction.Visuals = armourBreak.ViewElementDef;
+            armourBreakDamageReduction.StatModifications[0].Value = 0.75f;
+            armourBreakShredMod.AdditionalStatusesToApply = new TacStatusDef[] { armourBreakDamageReduction };
+
+            // Gunslinger: 3 pistol shots in one action (like Rage Burst)
+            ShootAbilityDef gunslinger = Repo.GetAllDefs<ShootAbilityDef>().FirstOrDefault(s => s.name.Equals("Gunslinger_AbilityDef"));
+            gunslinger.CharacterProgressionData.RequiredSpeed = 0;
+            gunslinger.CharacterProgressionData.RequiredStrength = 0;
+            gunslinger.CharacterProgressionData.RequiredWill = 0;
+            gunslinger.ViewElementDef.Description = new LocalizedTextBind("Shoot handgun 3 times at -50% accuracy", doNotLocalize);
+            Sprite gunslingerIcon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_CharacterAbility_Gunslinger-3.png");
+            gunslinger.ViewElementDef.LargeIcon = gunslingerIcon;
+            gunslinger.ViewElementDef.SmallIcon = gunslingerIcon;
+            gunslinger.ActionPointCost = -1.0f;
+            gunslinger.WillPointCost = 4.0f;
+            gunslinger.EquipmentTags = new GameTagDef[] { 
+                Repo.GetAllDefs<GameTagDef>().FirstOrDefault(g => g.name.Equals("HandgunItem_TagDef"))
+            };
+            gunslinger.ExecutionsCount = 3;
+            gunslinger.ProjectileSpreadMultiplier = 2.0f;
+
+            // Kill Zone: An additional overwatch shot
+            // Harmony patch PhoenixPoint.Tactical.Entities.Weapons.Weapon.GetNumberOfShots
+            // Adding an ability that get checked in the patched method (see below)
+            string skillName = "KillZone_AbilityDef";
+            PassiveModifierAbilityDef source = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(p => p.name.Contains("Talent"));
+            PassiveModifierAbilityDef killZone = Helper.CreateDefFromClone(
+                source,
+                "a5f9cf13-595b-4f54-8737-063e9219b4b0",
+                skillName);
+            killZone.CharacterProgressionData = Helper.CreateDefFromClone(
+                source.CharacterProgressionData,
+                "83d299c4-a35e-4636-b8e8-e95be463b708",
+                skillName);
+            killZone.ViewElementDef = Helper.CreateDefFromClone(
+                source.ViewElementDef,
+                "4f719533-908e-456e-8972-1df45df37740",
+                skillName);
+            // reset all possible passive modifications, we need none, this ability is only to have something to chose and as flag for the Kill Zone Harmony patch
+            killZone.StatModifications = new ItemStatModification[0];
+            killZone.ItemTagStatModifications = new EquipmentItemTagStatModification[0];
+            killZone.DamageKeywordPairs = new DamageKeywordPair[0];
+            // Set necessary fields
+            killZone.CharacterProgressionData.RequiredSpeed = 0;
+            killZone.CharacterProgressionData.RequiredStrength = 0;
+            killZone.CharacterProgressionData.RequiredWill = 0;
+            killZone.ViewElementDef.DisplayName1 = new LocalizedTextBind("KILL ZONE", doNotLocalize);
+            killZone.ViewElementDef.Description = new LocalizedTextBind("When you take an Overwatch shot you fire twice at the target", doNotLocalize);
+            Sprite killZoneIcon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_Fishman_SenseLocate-2.png");
+            killZone.ViewElementDef.LargeIcon = killZoneIcon;
+            killZone.ViewElementDef.SmallIcon = killZoneIcon;
+        }
+
+        [HarmonyPatch(typeof(Weapon), "GetNumberOfShots")]
+        internal static class GetNumberOfShots_patch
+        {
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
+            private static void Postfix(Weapon __instance, ref int __result, AttackType attackType)
+            {
+                if (attackType == AttackType.Overwatch)
+                {
+                    TacticalActor ___TacticalActor = (TacticalActor)AccessTools.Property(typeof(TacticalItem), "TacticalActor").GetValue(__instance, null);
+                    TacticalAbility killzoneAbility = ___TacticalActor.GetAbilities<TacticalAbility>().FirstOrDefault(s => s.AbilityDef.name.Equals("KillZone_AbilityDef"));
+                    if (killzoneAbility != null)
+                    {
+                        bool ___InfiniteCharges = (bool)AccessTools.Property(typeof(TacticalItem), "InfiniteCharges").GetValue(__instance, null);
+                        CommonItemData ___CommonItemData = (CommonItemData)AccessTools.Property(typeof(TacticalItem), "CommonItemData").GetValue(__instance, null);
+                        if (___InfiniteCharges || ___CommonItemData.CurrentCharges >= __result * 2)
+                        {
+                            __result *= 2;
+                            Logger.Debug("Overwatch called GetNumberOfShots by ...");
+                            Logger.Debug("  Actor           : " + ___TacticalActor.DisplayName);
+                            Logger.Debug("  Ability checked : " + killzoneAbility.AbilityDef.name);
+                            Logger.Debug("  Weapon          : " + __instance.DisplayName);
+                            Logger.Debug("  Infinite charges: " + ___InfiniteCharges);
+                            Logger.Debug("  Current charges : " + ___CommonItemData.CurrentCharges);
+                            Logger.Debug("  Result shots    : " + __result);
+                            Logger.Debug("------------------------------------------------------------------");
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

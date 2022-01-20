@@ -148,33 +148,23 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             killAndRunAbility.StatusDef = multiStatus;
             killAndRunAbility.StatusApplicationTrigger = StatusApplicationTrigger.StartTurn;
 
-            //dashAbility.CharacterProgressionData = progression;
             dashAbility.TargetingDataDef = dashTargetingData;
             dashAbility.TargetingDataDef.Origin.Range = 10.0f;
             dashAbility.ViewElementDef = viewElement;
-            //dashAbility.IgnoreForEndOfCharTurn = true;
             dashAbility.SuppressAutoStandBy = true;
             dashAbility.DisablingStatuses = new StatusDef[] { onActorDeathEffectStatus };
             dashAbility.UsesPerTurn = 1;
             dashAbility.ActionPointCost = 0.0f;
             dashAbility.WillPointCost = 0.0f;
-            //dashAbility.PreparationActorEffectDef = statusEffect;
             dashAbility.SamePositionIsValidTarget = true;
             dashAbility.AmountOfMovementToUseAsRange = -1.0f;
 
             viewElement.DisplayName1 = new LocalizedTextBind("KILL'N'RUN", doNotLocalize);
             viewElement.Description = new LocalizedTextBind("Once per turn, take a free move after killing an enemy.", doNotLocalize);
-            // Borrow icon from electric kick (shadow legs ability)
-            // TODO: Change to own Icon
-            Sprite knR_IconSprite = Repo.GetAllDefs<TacticalAbilityViewElementDef>().FirstOrDefault(t => t.name.Equals("E_View [ElectricKick_AbilityDef]")).LargeIcon;
+            Sprite knR_IconSprite = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_KillNRun.png");
             viewElement.LargeIcon = knR_IconSprite;
             viewElement.SmallIcon = knR_IconSprite;
-            //viewElement.DisplayWithEquipmentMismatch = false;
-            //viewElement.DisplayWithRequiredAbilitiesMissing = false;
-            //viewElement.DisplayWithTraitMismatch = false;
             viewElement.HideFromPassives = true;
-            //viewElement.ShowInStatusScreen = false;
-            //viewElement.ShouldFlash = true;
 
             multiStatus.Statuses = new StatusDef[] { onActorDeathEffectStatus, addAbiltyStatus };
 
@@ -183,17 +173,12 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             onActorDeathEffectStatus.VisibleOnPassiveBar = true;
             onActorDeathEffectStatus.DurationTurns = 0;
             onActorDeathEffectStatus.EffectDef = statusRemoverEffect;
-            //onActorDeathEffectStatus.EffectDef = statusEffect;
 
             statusRemoverEffect.StatusToRemove = "KnR_KillTriggerListener";
-
-            //statusEffect.StatusDef = addAbiltyStatus;
-            //statusEffect.StatusDef = onActorDeathEffectStatus;
 
             addAbiltyStatus.DurationTurns = 0;
             addAbiltyStatus.SingleInstance = true;
             addAbiltyStatus.AbilityDef = dashAbility;
-            //addAbiltyStatus.UnapplyIfAbilityExists = true;
         }
 
         // New Barrage ability
@@ -232,8 +217,6 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             barrageAbility.WillPointCost = 4.0f;
             barrageAbility.ActorTags = new GameTagDef[] { Repo.GetAllDefs<GameTagDef>().FirstOrDefault(t => t.name.Equals("Assault_ClassTagDef")) };
             barrageAbility.EquipmentTags = new GameTagDef[] { Repo.GetAllDefs<GameTagDef>().FirstOrDefault(t => t.name.Equals("AssaultRifleItem_TagDef")) };
-            barrageAbility.AttackType = AttackType.RageBurst;
-            barrageAbility.TargetsCount = 1;
             barrageAbility.ExecutionsCount = 2;
             barrageAbility.ForceFirstPersonCam = false;
             barrageAbility.ProjectileSpreadMultiplier = 0.7f;
@@ -242,7 +225,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             progression.RequiredSpeed = 0;
             viewElement.DisplayName1 = new LocalizedTextBind("BARRAGE", doNotLocalize);
             viewElement.Description = new LocalizedTextBind("Next shot with Assault Rifle uses double burst and gains +30% acc", doNotLocalize);
-            // TODO: Change to own Icon, current borrowed from Deadly Dou
+            // TODO: Maybe change to own Icon, current borrowed from Deadly Dou, for now we stick with it
             Sprite barrage_IconSprite = Repo.GetAllDefs<TacticalAbilityViewElementDef>().FirstOrDefault(t => t.name.Equals("E_View [DeadlyDuo_ShootAbilityDef]")).LargeIcon;
             viewElement.LargeIcon = barrage_IconSprite;
             viewElement.SmallIcon = barrage_IconSprite;

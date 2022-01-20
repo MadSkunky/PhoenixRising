@@ -86,33 +86,21 @@ namespace PhoenixRising.BetterClasses
             }
         }
 
-        public static Sprite CreateSprite(string textureFileName, int width = 128, int height = 128)
-        {
-            string filePath = Path.Combine(BetterClassesMain.TexturesDirectory, textureFileName);
-            Sprite newSprite = null;
-            Texture2D texture = null;
-            if (File.Exists(filePath) && LoadTexture2DfromFile(ref texture, filePath, width, height))
-            {
-                newSprite = Sprite.Create(texture, new Rect(0.0f, 0.0f, width, height), new Vector2(0.0f, 0.0f));
-            }
-            return newSprite;
-        }
-
-        public static bool LoadTexture2DfromFile(ref Texture2D texture2D, string filePath, int width, int height, TextureFormat textureFormat = TextureFormat.ARGB32, bool mipChain = false)
+        public static Sprite CreateSpriteFromImageFile(string imageFileName, int width = 128, int height = 128, TextureFormat textureFormat = TextureFormat.RGBA32, bool mipChain = true)
         {
             try
             {
-                byte[] data = File.Exists(filePath) ? File.ReadAllBytes(filePath) : throw new FileNotFoundException(filePath);
-                Logger.Debug("----------------------------------------------------------------------------------------------------", false);
-                Logger.Debug("Create texture from file: " + filePath);
-                Logger.Debug("----------------------------------------------------------------------------------------------------", false);
-                texture2D = new Texture2D(width, height, textureFormat, mipChain);
-                return ImageConversion.LoadImage(texture2D, data);
+                string filePath = Path.Combine(TexturesDirectory, imageFileName);
+                byte[] data = File.Exists(filePath) ? File.ReadAllBytes(filePath) : throw new FileNotFoundException("File not found: " + filePath);
+                Texture2D texture = new Texture2D(width, height, textureFormat, mipChain);
+                return ImageConversion.LoadImage(texture, data)
+                    ? Sprite.Create(texture, new Rect(0.0f, 0.0f, texture.width, texture.height), new Vector2(0.0f, 0.0f))
+                    : null;
             }
             catch (Exception e)
             {
                 Logger.Error(e);
-                return false;
+                return null;
             }
         }
 
