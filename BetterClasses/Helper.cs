@@ -77,6 +77,7 @@ namespace PhoenixRising.BetterClasses
                 result.name = resultName;
                 Logger.Debug("CreateDefFromClone result type: " + result.GetType().Name);
                 Logger.Debug("CreateDefFromClone result name: " + result.name);
+                Logger.Debug("----------------------------------------------------", false);
                 return result;
             }
             catch (Exception e)

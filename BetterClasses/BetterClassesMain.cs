@@ -9,6 +9,7 @@ using PhoenixPoint.Common.Core;
 using PhoenixPoint.Tactical.Entities.Abilities;
 using Harmony;
 using PhoenixRising.BetterClasses.SkillModifications;
+using PhoenixPoint.Geoscape.Events.Eventus;
 
 namespace PhoenixRising.BetterClasses
 {
@@ -40,6 +41,18 @@ namespace PhoenixRising.BetterClasses
 
             // Initialize Helper
             Helper.Initialize();
+
+            // Print out ODI titles and texts
+            //foreach (GeoscapeEventDef ged in Repo.GetAllDefs<GeoscapeEventDef>().Where(g => g.name.Contains("SDI_")))
+            //{
+            //    Logger.Always("----------------------------------------------------------------------------", false);
+            //    Logger.Always("Event name: " + ged.name, false);
+            //    Logger.Always("", false);
+            //    Logger.Always("Title: " + ged.GeoscapeEventData.Title.Localize(), false);
+            //    Logger.Always("Text:", false);
+            //    Logger.Always(ged.GeoscapeEventData.Description.FirstOrDefault().General.Localize(), false);
+            //    Logger.Always("", false);
+            //}
 
             // Generate some GUIDs
             //for (int i = 0; i < 100; i++)

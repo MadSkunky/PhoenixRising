@@ -11,6 +11,7 @@ using PhoenixPoint.Tactical.Entities.DamageKeywords;
 using PhoenixPoint.Tactical.Entities.Equipments;
 using PhoenixPoint.Tactical.Entities.Statuses;
 using PhoenixPoint.Tactical.Entities.Weapons;
+using System;
 using System.Linq;
 using UnityEngine;
 
@@ -94,38 +95,48 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             killZone.CharacterProgressionData.RequiredWill = 0;
             killZone.ViewElementDef.DisplayName1 = new LocalizedTextBind("KILL ZONE", doNotLocalize);
             killZone.ViewElementDef.Description = new LocalizedTextBind("When you take an Overwatch shot you fire twice at the target", doNotLocalize);
-            Sprite killZoneIcon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_Fishman_SenseLocate-2.png");
+            Sprite killZoneIcon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_CharacterAbility_KillZone-2a.png");
             killZone.ViewElementDef.LargeIcon = killZoneIcon;
             killZone.ViewElementDef.SmallIcon = killZoneIcon;
         }
 
+        // Kill Zone: Patching GetNumberOfShots from active weapon to check if Kill Zone ability is active and double the amount of shots if enough ammo
         [HarmonyPatch(typeof(Weapon), "GetNumberOfShots")]
-        internal static class GetNumberOfShots_patch
+        internal static class KZ_GetNumberOfShots_patch
         {
             [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
             private static void Postfix(Weapon __instance, ref int __result, AttackType attackType)
             {
-                if (attackType == AttackType.Overwatch)
+                try
                 {
-                    TacticalActor ___TacticalActor = (TacticalActor)AccessTools.Property(typeof(TacticalItem), "TacticalActor").GetValue(__instance, null);
-                    TacticalAbility killzoneAbility = ___TacticalActor.GetAbilities<TacticalAbility>().FirstOrDefault(s => s.AbilityDef.name.Equals("KillZone_AbilityDef"));
-                    if (killzoneAbility != null)
+                    if (attackType == AttackType.Overwatch)
                     {
-                        bool ___InfiniteCharges = (bool)AccessTools.Property(typeof(TacticalItem), "InfiniteCharges").GetValue(__instance, null);
-                        CommonItemData ___CommonItemData = (CommonItemData)AccessTools.Property(typeof(TacticalItem), "CommonItemData").GetValue(__instance, null);
-                        if (___InfiniteCharges || ___CommonItemData.CurrentCharges >= __result * 2)
+                        TacticalActor ___TacticalActor = (TacticalActor)AccessTools.Property(typeof(TacticalItem), "TacticalActor").GetValue(__instance, null);
+                        TacticalAbility killzoneAbility = ___TacticalActor.GetAbilities<TacticalAbility>().FirstOrDefault(s => s.AbilityDef.name.Equals("KillZone_AbilityDef"));
+                        if (killzoneAbility != null)
                         {
-                            __result *= 2;
+                            bool ___InfiniteCharges = (bool)AccessTools.Property(typeof(TacticalItem), "InfiniteCharges").GetValue(__instance, null);
+                            CommonItemData ___CommonItemData = (CommonItemData)AccessTools.Property(typeof(TacticalItem), "CommonItemData").GetValue(__instance, null);
+                            if (___TacticalActor.IsProficientWithEquipment(__instance)
+                                && (___InfiniteCharges || ___CommonItemData.CurrentCharges >= __result * 2))
+                            {
+                                __result *= 2;
+                            }
                             Logger.Debug("Overwatch called GetNumberOfShots by ...");
                             Logger.Debug("  Actor           : " + ___TacticalActor.DisplayName);
                             Logger.Debug("  Ability checked : " + killzoneAbility.AbilityDef.name);
                             Logger.Debug("  Weapon          : " + __instance.DisplayName);
+                            Logger.Debug("  Actor is prof.  : " + ___TacticalActor.IsProficientWithEquipment(__instance));
                             Logger.Debug("  Infinite charges: " + ___InfiniteCharges);
                             Logger.Debug("  Current charges : " + ___CommonItemData.CurrentCharges);
                             Logger.Debug("  Result shots    : " + __result);
-                            Logger.Debug("------------------------------------------------------------------");
+                            Logger.Debug("----------------------------------------------------", false);
                         }
                     }
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e);
                 }
             }
         }

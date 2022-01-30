@@ -48,6 +48,7 @@ namespace PhoenixRising.BetterClasses
                                 }
                             }
                         }
+                        Logger.Debug("----------------------------------------------------", false);
                     }
                 }
             }

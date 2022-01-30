@@ -112,15 +112,17 @@ namespace PhoenixRising.BetterClasses
                 spc: 10,
                 rngList: new List<string>
                 {
-                    "FIRE RESISTANT",
+                    "PACIFIST",
+                    "FIREFIGHTER",
+                    "STRONGMAN",
+                    "GYM RAT",
+                    "NIGHT OWL",
+                    "ATHLETE",
+                    "GUERILLA",
                     "POISON RESISTANT",
                     "VIRUS RESISTANT",
                     "DEVOTED",
                     "JETPACK PROFICIENCY",
-                    "GYM RAT",
-                    "JUMP",
-                    "RESOURCEFUL",
-                    "HEAVY LIFTER",
                     "STEALTH SPECIALIST"
                 }),
             new PersonalPerksDef(

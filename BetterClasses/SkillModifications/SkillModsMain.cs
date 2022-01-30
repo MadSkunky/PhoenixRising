@@ -54,7 +54,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
 
                 // Faction perks
                 // Mist Breather adding progression def
-                ApplyEffectAbilityDef mistBreather = Repo.GetAllDefs<ApplyEffectAbilityDef>().FirstOrDefault(a => a.name.Equals("Exalted_MistBreather_AbilityDef"));
+                ApplyEffectAbilityDef mistBreather = Repo.GetAllDefs<ApplyEffectAbilityDef>().FirstOrDefault(a => a.name.Equals("MistBreather_AbilityDef"));
                 AbilityCharacterProgressionDef mbProgressionDef = Helper.CreateDefFromClone(
                     Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(p => p.name.Equals("MasterMarksman_AbilityDef")).CharacterProgressionData,
                     "9eaf8809-01d9-4582-89e0-78c8596f5e7d",
@@ -77,7 +77,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                         }
 
                         // Change descrition text, not localized (currently), old one mentions fixed buffs that are taken away or set differently by this mod
-                        string newText = BetterClasses.Helper.NotLocalizedTextMap[pmad.ViewElementDef.name][ViewElement.Description];
+                        string newText = Helper.NotLocalizedTextMap[pmad.ViewElementDef.name][ViewElement.Description];
                         pmad.ViewElementDef.Description = new LocalizedTextBind(newText, doNotLocalize);
 
                         Logger.Debug("Proficiency def name: " + pmad.name);
@@ -100,10 +100,12 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                                 Logger.Debug("        Value: " + pmad.ItemTagStatModifications[i].EquipmentStatModification.Value);
                             }
                         }
-
                         Logger.Debug("----------------------------------------------------", false);
                     }
                 }
+
+                // Call Background perk changes -------------------------------------------------------
+                BackgroundPerks.ApplyChanges(doNotLocalize);
             }
             catch (Exception e)
             {

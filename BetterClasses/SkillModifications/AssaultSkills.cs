@@ -28,10 +28,19 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             // Quick Aim: Adding aim modification
             ApplyStatusAbilityDef quickAim = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(a => a.name.Equals("QuickAim_AbilityDef"));
             quickAim.UsesPerTurn = 2;
-            BonusStatHolderStatusDef qaAccMod = Repo.GetAllDefs<BonusStatHolderStatusDef>().FirstOrDefault(b => b.name.Equals("E_AccuracyModifier [QuickAim_AbilityDef]"));
-            qaAccMod.Value = -0.3f; // Acc bonus/malus to add, default 0.25f = +25%, new -0.3 = -30%
-            ((AddAttackBoostStatusDef)quickAim.StatusDef).AdditionalStatusesToApply =
-                ((AddAttackBoostStatusDef)quickAim.StatusDef).AdditionalStatusesToApply.Append(qaAccMod).ToArray();
+            StatMultiplierStatusDef qaAccMod = Helper.CreateDefFromClone(
+                Repo.GetAllDefs<StatMultiplierStatusDef>().FirstOrDefault(sms => sms.name.Equals("Trembling_StatusDef")),
+                "4a6f7cc4-1bd6-45a5-b572-053963966b07",
+                "E AccuracyMultiplier [QuickAim_AbilityDef]");
+            qaAccMod.ShowNotification = true;
+            qaAccMod.VisibleOnHealthbar = TacStatusDef.HealthBarVisibility.VisibleWhenSelected;
+            qaAccMod.VisibleOnStatusScreen = TacStatusDef.StatusScreenVisibility.VisibleOnBodyPartStatusList;
+            qaAccMod.Visuals = quickAim.ViewElementDef;
+            qaAccMod.StatsMultipliers[0].StatName = "Accuracy";
+            qaAccMod.StatsMultipliers[0].Multiplier = 0.7f;
+            AddAttackBoostStatusDef qaAttackBoost = (AddAttackBoostStatusDef)quickAim.StatusDef;
+            qaAttackBoost.DurationTurns = -1; // same as Master Marksman, not sure if neccessary, it worked this way ;-)
+            qaAttackBoost.AdditionalStatusesToApply =  qaAttackBoost.AdditionalStatusesToApply.Append(qaAccMod).ToArray();
             quickAim.ViewElementDef.Description = new LocalizedTextBind(
                 "The Action Point cost of the next shot with a proficient weapon is reduced by 1 with -30% accuracy. Limited to 2 uses per turn.",
                 doNotLocalize);
@@ -149,7 +158,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             killAndRunAbility.StatusApplicationTrigger = StatusApplicationTrigger.StartTurn;
 
             dashAbility.TargetingDataDef = dashTargetingData;
-            dashAbility.TargetingDataDef.Origin.Range = 10.0f;
+            dashAbility.TargetingDataDef.Origin.Range = 7.0f;
             dashAbility.ViewElementDef = viewElement;
             dashAbility.SuppressAutoStandBy = true;
             dashAbility.DisablingStatuses = new StatusDef[] { onActorDeathEffectStatus };

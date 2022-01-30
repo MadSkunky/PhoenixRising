@@ -19,7 +19,7 @@ using UnityEngine;
 
 namespace PhoenixRising.BetterClasses
 {
-    class HarmonyPatches
+    class PersonalSpecModification
     {
         // Get config, definition repository (and shared data, not neccesary currently)
         private static readonly Settings Config = BetterClassesMain.Config;
@@ -41,10 +41,10 @@ namespace PhoenixRising.BetterClasses
                 {
                     // Save ShouldGeneratePersonalAbilities for postfix call, necessary? 
                     ShouldGeneratePersonalAbilities = template.Data.LevelProgression.ShouldGeneratePersonalAbilities;
-                    Logger.Debug("-------------------------------------------------------------");
+                    Logger.Debug("----------------------------------------------------", false);
                     Logger.Debug("PREFIX GenerateUnit called:");
                     Logger.Debug("ShouldGeneratePersonalAbilities: " + ShouldGeneratePersonalAbilities);
-                    Logger.Debug("-------------------------------------------------------------");
+                    Logger.Debug("----------------------------------------------------", false);
                     return true;
                 }
                 catch (Exception e)
@@ -74,7 +74,7 @@ namespace PhoenixRising.BetterClasses
                         Logger.Debug("     Strength: " + stats.Strength);
                         Logger.Debug("    Willpower: " + stats.Willpower);
                         Logger.Debug("        Speed: " + stats.Speed);
-                        Logger.Debug("-------------------------------------------------------------");
+                        Logger.Debug("----------------------------------------------------", false);
                         string ability;
                         int spCost = 0;
                         TacticalAbilityDef tacticalAbilityDef;
@@ -86,15 +86,19 @@ namespace PhoenixRising.BetterClasses
 
                         for (int i = 0; i < ppOrder.Length; i++)
                         {
+                            Logger.Debug("Set personal perk index: " + i);
                             PersonalPerksDef personalPerksDef = Config.PersonalPerks.FirstOrDefault(pp => pp.PerkKey.Equals(ppOrder[i]));
                             if (!personalPerksDef.IsDefaultValue())
                             {
+                                Logger.Debug("           Key: " + personalPerksDef.PerkKey);
                                 (ability, spCost) = personalPerksDef.GetPerk(Config, className, faction, exclusionList);
                                 if (ability != null)
                                 {
-                                    tacticalAbilityDef = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Contains(ability));
+                                    Logger.Debug("       Ability: " + ability);
+                                    tacticalAbilityDef = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals(ability));
                                     if (i >= 0 && i < 7 && tacticalAbilityDef != null)
                                     {
+                                        Logger.Debug(" Ability name: " + tacticalAbilityDef.name);
                                         // Set SP cost to personal ability. Be careful, SP cost are global per ability, regardless where this ability is set!
                                         tacticalAbilityDef.CharacterProgressionData.SkillPointCost = spCost;
                                         __result.Progression.PersonalAbilities[i] = tacticalAbilityDef;
@@ -102,6 +106,7 @@ namespace PhoenixRising.BetterClasses
                                     }
                                 }
                             }
+                            Logger.Debug("----------------------------------------------------", false);
                         }
 
                         // Soome debug outputs in logging file
@@ -117,7 +122,7 @@ namespace PhoenixRising.BetterClasses
                             {
                                 Logger.Debug($"PersonalSpec {i}: " + (tad.ContainsKey(i) ? tad[i].ViewElementDef.DisplayName1.LocalizeEnglish() : "none"));
                             }
-                            Logger.Debug("-------------------------------------------------------------");
+                            Logger.Debug("----------------------------------------------------", false);
                         }
                     }
                 }
@@ -194,9 +199,9 @@ namespace PhoenixRising.BetterClasses
                         }
                     }
                 }
-                catch (Exception ex)
+                catch (Exception e)
                 {
-                    Logger.Error(ex);
+                    Logger.Error(e);
                 }
             }
         }
@@ -207,18 +212,26 @@ namespace PhoenixRising.BetterClasses
             [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
             private static bool Prefix(List<TacticalAbilityViewElementDef> abilities, ref List<RowIconTextController> ____abilityIcons)
             {
-                foreach (RowIconTextController rowIconTextController in ____abilityIcons)
+                try
                 {
-                    rowIconTextController.gameObject.SetActive(false);
+                    foreach (RowIconTextController rowIconTextController in ____abilityIcons)
+                    {
+                        rowIconTextController.gameObject.SetActive(false);
+                    }
+                    // inserted _abilityIcons.Count to prevent softlock if there are more abilities than icon slots
+                    for (int i = 0; i < abilities.Count && i < ____abilityIcons.Count; i++)
+                    {
+                        ____abilityIcons[i].gameObject.SetActive(true);
+                        TacticalAbilityViewElementDef tacticalAbilityViewElementDef = abilities[i];
+                        ____abilityIcons[i].SetController(tacticalAbilityViewElementDef.LargeIcon, tacticalAbilityViewElementDef.DisplayName1, tacticalAbilityViewElementDef.Description);
+                    }
+                    return false;
                 }
-                // inserted _abilityIcons.Count to prevent softlock if there are more abilities than icon slots
-                for (int i = 0; i < abilities.Count && i < ____abilityIcons.Count; i++)
+                catch (Exception e)
                 {
-                    ____abilityIcons[i].gameObject.SetActive(true);
-                    TacticalAbilityViewElementDef tacticalAbilityViewElementDef = abilities[i];
-                    ____abilityIcons[i].SetController(tacticalAbilityViewElementDef.LargeIcon, tacticalAbilityViewElementDef.DisplayName1, tacticalAbilityViewElementDef.Description);
+                    Logger.Error(e);
+                    return true;
                 }
-                return false;
             }
         }
     }

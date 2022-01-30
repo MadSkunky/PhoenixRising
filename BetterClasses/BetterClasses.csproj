@@ -86,6 +86,7 @@
     <Compile Include="Settings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SkillModifications\AssaultSkills.cs" />
+    <Compile Include="SkillModifications\BackgroundPerks.cs" />
     <Compile Include="SkillModifications\BerserkerSkills.cs" />
     <Compile Include="SkillModifications\HeavySkills.cs" />
     <Compile Include="SkillModifications\InfiltratorSkills.cs" />
@@ -122,6 +123,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Textures\UI_AbilitiesIcon_CharacterAbility_JetpackProficiency-2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Textures\UI_AbilitiesIcon_CharacterAbility_KillZone-2a.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Textures\UI_AbilitiesIcon_CharacterAbility_LaunchMissile-2.png">
