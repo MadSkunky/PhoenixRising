@@ -30,8 +30,8 @@ namespace PhoenixRising.BetterClasses
                     "RETURN FIRE",
                     "WAR CRY",
                     "",
-                    "BOOM BLAST",
-                    "HEAVY LIFTER", // -> DynamicResistance
+                    "BOOM BLAST", // -> Hunker Down
+                    "DYNAMIC RESISTANCE",
                     "RAGE BURST"
                 }),
             new ClassSpecDef(
@@ -113,17 +113,24 @@ namespace PhoenixRising.BetterClasses
                 rngList: new List<string>
                 {
                     "PACIFIST",
-                    "FIREFIGHTER",
+                    "HEALER",
+                    "FARSIGHTED",
                     "STRONGMAN",
                     "GYM RAT",
+                    "FIREFIGHTER",
                     "NIGHT OWL",
                     "ATHLETE",
+                    "THIEF",
+                    "SPECIAL FORCES",
                     "GUERILLA",
-                    "POISON RESISTANT",
-                    "VIRUS RESISTANT",
-                    "DEVOTED",
-                    "JETPACK PROFICIENCY",
-                    "STEALTH SPECIALIST"
+                    "ATTENTIVE",
+                    "HITMAN",
+                    "THUG",
+                    "PSYCHIC",
+                    "PLUMBER",
+                    "JUNKIE",
+                    "ASTRONAUT",
+                    "MARTIAL ARTIST"
                 }),
             new PersonalPerksDef(
                 key: PerkType.Proficiency,
@@ -150,9 +157,9 @@ namespace PhoenixRising.BetterClasses
                     { ClassKeys.Heavy.Name, "BATTLE FOCUS" }, // -> JetpackControl
                     { ClassKeys.Sniper.Name, "GUNSLINGER" },
                     { ClassKeys.Berserker.Name, "BRAWLER" },
-                    { ClassKeys.Priest.Name, "FARSIGHTED" },
+                    { ClassKeys.Priest.Name, "DEVOTED" },
                     { ClassKeys.Technician.Name, "SELF DEFENSE SPECIALIST" },
-                    { ClassKeys.Infiltrator.Name, "THIEF" }
+                    { ClassKeys.Infiltrator.Name, "STEALTH SPECIALIST" }
                 } } }),
             new PersonalPerksDef(
                 perkKey: PerkType.Class_2,
@@ -165,7 +172,7 @@ namespace PhoenixRising.BetterClasses
                     { ClassKeys.Sniper.Name, "KILL ZONE" },
                     { ClassKeys.Berserker.Name, "EXPERT MELEE" },
                     { ClassKeys.Priest.Name, "BIOCHEMIST" },
-                    { ClassKeys.Technician.Name, "HEALER" },
+                    { ClassKeys.Technician.Name, "POISON RESISTANT" },
                     { ClassKeys.Infiltrator.Name, "CAUTIOUS" }
                 } } }),
             new PersonalPerksDef(

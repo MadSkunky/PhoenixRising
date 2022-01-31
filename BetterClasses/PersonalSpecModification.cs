@@ -98,11 +98,16 @@ namespace PhoenixRising.BetterClasses
                                     tacticalAbilityDef = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals(ability));
                                     if (i >= 0 && i < 7 && tacticalAbilityDef != null)
                                     {
-                                        Logger.Debug(" Ability name: " + tacticalAbilityDef.name);
+                                        Logger.Debug("  Ability name: " + tacticalAbilityDef.name);
                                         // Set SP cost to personal ability. Be careful, SP cost are global per ability, regardless where this ability is set!
                                         tacticalAbilityDef.CharacterProgressionData.SkillPointCost = spCost;
                                         __result.Progression.PersonalAbilities[i] = tacticalAbilityDef;
                                         //exclusionList.Add(ability);
+                                    }
+                                    else
+                                    {
+                                        Logger.Always("Ability '" + ability + "' was not configured for level 1-7 or was not received from Repo and so not applied!");
+                                        Logger.Always("----------------------------------------------------------------------------------------------------", false);
                                     }
                                 }
                             }
@@ -138,7 +143,7 @@ namespace PhoenixRising.BetterClasses
         internal static class GenerateProgression_Patches
         {
             [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
-            private static void Postfix(ref CharacterProgression __result)
+            private static void Postfix(ref CharacterProgression __result, GeoUnitDescriptor __instance)
             {
                 try
                 {
@@ -146,11 +151,24 @@ namespace PhoenixRising.BetterClasses
                     {
                         // Personal ability 0 = first skill in the row
                         TacticalAbilityDef persAbility0 = __result.PersonalAbilityTrack.AbilitiesByLevel[0].Ability;
-                        if (!__result.Abilities.Contains(persAbility0))
+                        if (persAbility0 != null)
                         {
-                            __result.AddAbility(persAbility0);
+                            if (!__result.Abilities.Contains(persAbility0))
+                            {
+                                __result.AddAbility(persAbility0);
+                                Logger.Debug("Ability added (learned, set): " + persAbility0);
+                            }
+                            else
+                            {
+                                Logger.Always("Character '" + __instance.GetName() + "' of class '" + __instance.ClassTag.className + "' has personal ability on level 0 '" + persAbility0 + "' already learned!");
+                                Logger.Always("----------------------------------------------------------------------------------------------------", false);
+                            }
                         }
-                        Logger.Debug("Ability added (learned, set): " + persAbility0);
+                        else
+                        {
+                            Logger.Always("Character '" + __instance.GetName() + "' of class '" + __instance.ClassTag.className + "' has no personal ability on level 0!");
+                            Logger.Always("----------------------------------------------------------------------------------------------------", false);
+                        }
                     }
                 }
                 catch (Exception e)

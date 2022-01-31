@@ -22,7 +22,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
     class HeavySkills
     {
         // Get config, definition repository (and shared data, not neccesary currently)
-        private static readonly Settings Config = BetterClassesMain.Config;
+        //private static readonly Settings Config = BetterClassesMain.Config;
         private static readonly DefRepository Repo = GameUtl.GameComponent<DefRepository>();
         //private static readonly SharedData Shared = GameUtl.GameComponent<SharedData>();
         public static void ApplyChanges(bool doNotLocalize = true)
@@ -50,15 +50,40 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             };
             ((warCry.StatusDef as DelayedEffectStatusDef).EffectDef as StatsModifyEffectDef).StatModifications = new List<StatModification> { warCryApMultipier, warCryDamageMultiplier };
 
-            // Rage Burst: Increase accuracy and cone angle
+            // Hunker Down: -25% incoming damage for 2 AP and 2 WP
 
             // Dynamic Resistance: Copy from Acheron
+            Create_DynamicResistance(doNotLocalize);
 
-            // Hunker Down: -25% incoming damage for 2 AP and 2 WP
+            // Rage Burst: Increase accuracy and cone angle
+            RageBurstInConeAbilityDef rageBurst = Repo.GetAllDefs<RageBurstInConeAbilityDef>().FirstOrDefault(p => p.name.Equals("RageBurst_RageBurstInConeAbilityDef"));
+            rageBurst.ProjectileSpreadMultiplier = 0.4f; // acc buff calculation: 1 / value - 100 = +acc%, 1 / 0.4 - 100 = +150%
+            rageBurst.ConeSpread = 20.0f;
+            rageBurst.ViewElementDef.Description = new LocalizedTextBind("Shoot 5 times across a wide arc with increased accuracy", doNotLocalize);
 
             // Jetpack Control: 2 AP jump, 12 tiles range
 
             // Boom Blast: -30% range instead of +50%
+        }
+
+        public static void Create_DynamicResistance(bool doNotLocalize = true)
+        {
+            string skillName = "BC_DynamicResistance_AbilityDef";
+            ApplyStatusAbilityDef source = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(asa => asa.name.Equals("Acheron_DynamicResistance_AbilityDef"));
+            ApplyStatusAbilityDef dynamicResistance = Helper.CreateDefFromClone(
+                source,
+                "d6d9041b-9763-4673-a057-2bbefd96aa67",
+                skillName);
+            dynamicResistance.CharacterProgressionData = Helper.CreateDefFromClone(
+                Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(p => p.name.Equals("MasterMarksman_AbilityDef")).CharacterProgressionData,
+                "657f3e2b-08c0-4234-b16f-3f6d57d049e1",
+                skillName);
+            dynamicResistance.ViewElementDef = Helper.CreateDefFromClone(
+                source.ViewElementDef,
+                "",
+                skillName);
+            dynamicResistance.ViewElementDef.DisplayName1 = new LocalizedTextBind("DYNAMIC RESISTANCE", doNotLocalize);
+            dynamicResistance.ViewElementDef.Description = new LocalizedTextBind("Gain 50% resistance to damage type suffered this turn", doNotLocalize);
         }
 
         // War Cry Harmony patches
@@ -69,7 +94,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
         internal static class WC_Activate_patch
         {
             [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
-            private static void Postfix(ApplyStatusAbility __instance, object parameter)
+            private static void Postfix(ApplyStatusAbility __instance)
             {
                 try
                 {
