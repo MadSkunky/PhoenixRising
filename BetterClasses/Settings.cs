@@ -260,7 +260,7 @@ namespace PhoenixRising.BetterClasses
             { "MOUNTED WEAPON PROFICIENCY", new List<string> { ClassKeys.Heavy.Name } },
             { Proficiency.VW, new List<string> { ClassKeys.Priest.Name } },
             { Proficiency.SW, new List<string> { ClassKeys.Infiltrator.Name } },
-            { "JETPACK PROFICIENCY", new List<string> { ClassKeys.Heavy.Name } },
+            { "ASTRONAUT", new List<string> { ClassKeys.Heavy.Name } },
             { "STEALTH SPECIALIST", new List<string> { ClassKeys.Infiltrator.Name } }
         };
 

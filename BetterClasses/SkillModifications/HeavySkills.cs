@@ -80,7 +80,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                 skillName);
             dynamicResistance.ViewElementDef = Helper.CreateDefFromClone(
                 source.ViewElementDef,
-                "",
+                "5ef3fb17-03d0-4e33-b76a-d74cbeefc509",
                 skillName);
             dynamicResistance.ViewElementDef.DisplayName1 = new LocalizedTextBind("DYNAMIC RESISTANCE", doNotLocalize);
             dynamicResistance.ViewElementDef.Description = new LocalizedTextBind("Gain 50% resistance to damage type suffered this turn", doNotLocalize);
@@ -111,28 +111,28 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                                 TacticalActorBase targetActor = enumerator.Current.GetTargetActor();
                                 float sourceActorWP = sourceActorFromBase.CharacterStats.WillPoints + 6;
                                 float targetActorWP = targetActor.Status.GetStat(StatModificationTarget.WillPoints.ToString(), null);
-                                Logger.Always("War Cry ability <Activate> method called from ...");
-                                Logger.Always("  Source actor      : " + sourceActorFromBase.name);
-                                Logger.Always("  Source actor WP   : " + sourceActorWP);
-                                Logger.Always("  Target actor      : " + targetActor.name);
-                                Logger.Always("  Target actor WP   : " + targetActorWP);
-                                Logger.Always("----------------------------------------------------");
-                                Logger.Always("  Target actor AP and damage statuses: " + targetActor.name);
+                                Logger.Debug("War Cry ability <Activate> method called from ...");
+                                Logger.Debug("  Source actor      : " + sourceActorFromBase.name);
+                                Logger.Debug("  Source actor WP   : " + sourceActorWP);
+                                Logger.Debug("  Target actor      : " + targetActor.name);
+                                Logger.Debug("  Target actor WP   : " + targetActorWP);
+                                Logger.Debug("----------------------------------------------------");
+                                Logger.Debug("  Target actor AP and damage statuses: " + targetActor.name);
                                 foreach (StatModification statModAp1 in targetActor.Status.GetStat(StatModificationTarget.ActionPoints.ToString()).Modifications)
                                 {
-                                    Logger.Always("    " + statModAp1);
+                                    Logger.Debug("    " + statModAp1);
                                 }
                                 foreach (StatModification statModBad1 in targetActor.Status.GetStat(StatModificationTarget.BonusAttackDamage.ToString()).Modifications)
                                 {
-                                    Logger.Always("    " + statModBad1);
+                                    Logger.Debug("    " + statModBad1);
                                 }
                                 if (Utl.LesserThan(targetActorWP, sourceActorWP))
                                 {
                                     WarCryLowerWpList.Add(targetActor.name);
-                                    Logger.Always("  Target actor '" + targetActor.name + "' added to <WarCryLowerWpList>");
+                                    Logger.Debug("  Target actor '" + targetActor.name + "' added to <WarCryLowerWpList>");
                                     //targetActor.Status.UnapplyStatus()
                                 }
-                                Logger.Always("----------------------------------------------------", false);
+                                Logger.Debug("----------------------------------------------------", false);
                             }
                         }
                     }
@@ -157,35 +157,35 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                         TacticalActorBase targetActor = (TacticalActorBase)AccessTools.Property(typeof(TacStatus), "TacticalActorBase").GetValue(__instance);
                         DefRepository repo = (DefRepository)AccessTools.Property(typeof(TacStatus), "Repo").GetValue(__instance);
                         object source = AccessTools.Property(typeof(TacStatus), "Source").GetValue(__instance);
-                        Logger.Always("War Cry status <OnUnapply> called from ...");
-                        Logger.Always("  Target actor      : " + targetActor.name);
-                        Logger.Always("    " + targetActor.Status.GetStat(StatModificationTarget.WillPoints.ToString()));
+                        Logger.Debug("War Cry status <OnUnapply> called from ...");
+                        Logger.Debug("  Target actor      : " + targetActor.name);
+                        Logger.Debug("    " + targetActor.Status.GetStat(StatModificationTarget.WillPoints.ToString()));
                         foreach (StatModification statModAp1 in targetActor.Status.GetStat(StatModificationTarget.ActionPoints.ToString()).Modifications)
                         {
-                            Logger.Always("    " + statModAp1);
+                            Logger.Debug("    " + statModAp1);
                         }
                         foreach (StatModification statModBad1 in targetActor.Status.GetStat(StatModificationTarget.BonusAttackDamage.ToString()).Modifications)
                         {
-                            Logger.Always("    " + statModBad1);
+                            Logger.Debug("    " + statModBad1);
                         }
-                        Logger.Always("----------------------------------------------------");
+                        Logger.Debug("----------------------------------------------------");
                         if (WarCryLowerWpList.Contains(targetActor.name))
                         {
-                            Logger.Always("  Target actor was added to <WarCryLowerWpList>, apply the penalty effect a 2nd time and remove him from the list.");
+                            Logger.Debug("  Target actor was added to <WarCryLowerWpList>, apply the penalty effect a 2nd time and remove him from the list.");
                             EffectTarget actorEffectTarget = TacUtil.GetActorEffectTarget(targetActor, null);
                             _ = Effect.Apply(repo, __instance.DelayedEffectStatusDef.EffectDef, actorEffectTarget, source ?? __instance);
                             _ = WarCryLowerWpList.Remove(targetActor.name);
         
                             foreach (StatModification statModAp2 in targetActor.Status.GetStat(StatModificationTarget.ActionPoints.ToString()).Modifications)
                             {
-                                Logger.Always("    " + statModAp2);
+                                Logger.Debug("    " + statModAp2);
                             }
                             foreach (StatModification statModBad2 in targetActor.Status.GetStat(StatModificationTarget.BonusAttackDamage.ToString()).Modifications)
                             {
-                                Logger.Always("    " + statModBad2);
+                                Logger.Debug("    " + statModBad2);
                             }
                         }
-                        Logger.Always("----------------------------------------------------", false);
+                        Logger.Debug("----------------------------------------------------", false);
                     }
                 }
                 catch (Exception e)
