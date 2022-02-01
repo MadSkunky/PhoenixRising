@@ -1,5 +1,6 @@
 ﻿using Base.Core;
 using Base.Defs;
+using Base.Entities.Abilities;
 using Base.Entities.Statuses;
 using Base.UI;
 using Harmony;
@@ -9,6 +10,7 @@ using PhoenixPoint.Common.Entities.GameTags;
 using PhoenixPoint.Common.UI;
 using PhoenixPoint.Tactical.Entities;
 using PhoenixPoint.Tactical.Entities.Abilities;
+using PhoenixPoint.Tactical.Entities.Animations;
 using PhoenixPoint.Tactical.Entities.DamageKeywords;
 using PhoenixPoint.Tactical.Entities.Effects.DamageTypes;
 using PhoenixPoint.Tactical.Entities.Equipments;
@@ -340,8 +342,13 @@ namespace PhoenixRising.BetterClasses.SkillModifications
         public static void Change_Thief(bool doNotLocalize = true)
         {
             PassiveModifierAbilityDef thief = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(p => p.name.Equals("Thief_AbilityDef"));
-            ItemStatModification thiefStealth = thief.StatModifications.FirstOrDefault(sm => sm.TargetStat == StatModificationTarget.Stealth);
-            thiefStealth.Value = 0.15f;
+            for (int i = 0; i < thief.StatModifications.Length; i++)
+            {
+                if (thief.StatModifications[i].TargetStat == StatModificationTarget.Stealth)
+                {
+                    thief.StatModifications[i].Value = 0.15f;
+                }
+            }
             thief.ViewElementDef.Description = new LocalizedTextBind("Gain 1 speed and 15% stealth", doNotLocalize);
         }
         public static void Create_SpecialForces(bool doNotLocalize = true)
@@ -362,8 +369,13 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                 skillName);
 
             // Set necessary fields
-            ItemStatModification specialForcesAccMod = specialForces.StatModifications.FirstOrDefault(sm => sm.TargetStat == StatModificationTarget.Accuracy);
-            specialForcesAccMod.Value = 0.1f;
+            for (int i = 0; i < specialForces.StatModifications.Length; i++)
+            {
+                if (specialForces.StatModifications[i].TargetStat == StatModificationTarget.Accuracy)
+                {
+                    specialForces.StatModifications[i].Value = 0.1f;
+                }
+            }
             specialForces.CharacterProgressionData.RequiredSpeed = 0;
             specialForces.CharacterProgressionData.RequiredStrength = 0;
             specialForces.CharacterProgressionData.RequiredWill = 0;
@@ -550,7 +562,18 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                 source.ViewElementDef,
                 "e853a40d-7117-46bb-9504-7c0dea1fff97",
                 skillName);
-
+            foreach (TacActorSimpleAbilityAnimActionDef animActionDef in Repo.GetAllDefs<TacActorSimpleAbilityAnimActionDef>().Where(
+                aad => aad.name.Contains("PsychicScream")
+                && aad.name.Contains("Soldier_Utka_AnimActionsDef")))
+            {
+                animActionDef.AbilityDefs = animActionDef.AbilityDefs.Append(psychic).ToArray();
+                Logger.Debug("Anim Action '" + animActionDef.name + "' set for abilities:");
+                foreach (AbilityDef ad in animActionDef.AbilityDefs)
+                {
+                    Logger.Debug("  " + ad.name);
+                }
+            }
+            Logger.Debug("---------------------------------------------------------------", false);
             // Set necessary fields
             psychic.CharacterProgressionData.RequiredSpeed = 0;
             psychic.CharacterProgressionData.RequiredStrength = 0;
@@ -642,7 +665,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             // Don't used! It messes up different melee weapons with additional status damages
             //Fix_MeleeWeaponDamageType(meleeDamageTypes);
 
-            string skillName = "MartialArtist_AbilityDef";
+            string skillName = "BC_MartialArtist_AbilityDef";
             ApplyStatusAbilityDef source = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(p => p.name.Equals("CloseQuarters_AbilityDef"));
             ApplyStatusAbilityDef martialArtist = Helper.CreateDefFromClone(
                 source,

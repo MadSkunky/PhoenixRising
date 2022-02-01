@@ -87,7 +87,7 @@
   "LAUNCH GOO BOMB": "Mutoid_Adapt_Arm_GooGrenade_AbilityDef",
   "LAUNCH POISONWORM": "Mutoid_Adapt_Arm_PoisonWorm_AbilityDef",
   "MARKED FOR DEATH": "MarkedForDeath_AbilityDef",
-  "MARTIAL ARTIST": "MartialArtist_AbilityDef",
+  "MARTIAL ARTIST": "BC_MartialArtist_AbilityDef",
   "MASTER MARKSMAN": "MasterMarksman_AbilityDef",
   "MELEE WEAPON PROFICIENCY": "MeleeProficiency_AbilityDef",
   "MELEE WEAPON PROFICIENCY+": "MeleeWeaponTalent_AbilityDef",
