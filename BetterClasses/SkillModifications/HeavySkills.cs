@@ -58,7 +58,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             // Rage Burst: Increase accuracy and cone angle
             RageBurstInConeAbilityDef rageBurst = Repo.GetAllDefs<RageBurstInConeAbilityDef>().FirstOrDefault(p => p.name.Equals("RageBurst_RageBurstInConeAbilityDef"));
             rageBurst.ProjectileSpreadMultiplier = 0.4f; // acc buff calculation: 1 / value - 100 = +acc%, 1 / 0.4 - 100 = +150%
-            rageBurst.ConeSpread = 20.0f;
+            rageBurst.ConeSpread = 15.0f;
             rageBurst.ViewElementDef.Description = new LocalizedTextBind("Shoot 5 times across a wide arc with increased accuracy", doNotLocalize);
 
             // Jetpack Control: 2 AP jump, 12 tiles range
