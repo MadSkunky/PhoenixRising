@@ -16,15 +16,16 @@ using PhoenixPoint.Geoscape.View.ViewControllers.BaseRecruits;
 using PhoenixPoint.Common.UI;
 using PhoenixPoint.Geoscape.View.DataObjects;
 using UnityEngine;
+using PhoenixPoint.Common.Core;
 
 namespace PhoenixRising.BetterClasses
 {
     class PersonalSpecModification
     {
-        // Get config, definition repository (and shared data, not neccesary currently)
+        // Get config, definition repository and shared data
         private static readonly Settings Config = BetterClassesMain.Config;
-        private static readonly DefRepository Repo = GameUtl.GameComponent<DefRepository>();
-        //private static readonly SharedData Shared = GameUtl.GameComponent<SharedData>();
+        private static readonly DefRepository Repo = BetterClassesMain.Repo;
+        private static readonly SharedData Shared = BetterClassesMain.Shared;
 
         // Change personal abilities (3rd row skills) by configured settings
         [HarmonyPatch(typeof(FactionCharacterGenerator), "GenerateUnit", new Type[] { typeof(GeoFaction), typeof(TacCharacterDef) })]
@@ -178,7 +179,7 @@ namespace PhoenixRising.BetterClasses
             }
         }
 
-        // Expand ability icon list in PX base recruit screen (vanilly fixed 3, we need 7)
+        // Expand ability icon list in PX base recruit screen (vanilla fixed 3, we need 7)
         // Problem: The 7th skill overlappes with the recruit button.
         // TODO: Rearrange this UI so it can show 7 skills without overlapping
         [HarmonyPatch(typeof(RecruitsListElementController), "SetRecruitElement")]

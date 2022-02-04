@@ -19,19 +19,38 @@ namespace PhoenixRising.BetterClasses.SkillModifications
 {
     class SniperSkills
     {
-        // Get config, definition repository (and shared data, not neccesary currently)
+        // Get config, definition repository and shared data
         private static readonly Settings Config = BetterClassesMain.Config;
-        private static readonly DefRepository Repo = GameUtl.GameComponent<DefRepository>();
-        private static readonly SharedData Shared = GameUtl.GameComponent<SharedData>();
-        public static void ApplyChanges(bool doNotLocalize = true)
+        private static readonly DefRepository Repo = BetterClassesMain.Repo;
+        private static readonly SharedData Shared = BetterClassesMain.Shared;
+
+        private static readonly bool doNotLocalize = BetterClassesMain.doNotLocalize;
+
+        public static void ApplyChanges()
         {
             // Extreme Focus: Set to 1 AP regardless of weapon type
+            Change_ExtremeFocus();
+
+            // Armor Break: Set to 15 shred and -25% damage
+            Change_ArmourBreak();
+
+            // Gunslinger: 3 pistol shots in one action (like Rage Burst)
+            Change_Gunslinger();
+
+            // Kill Zone: An additional overwatch shot
+            Create_KillZone();
+        }
+
+        private static void Change_ExtremeFocus()
+        {
             ChangeAbilitiesCostStatusDef extremeFocusAPcostMod = Repo.GetAllDefs<ChangeAbilitiesCostStatusDef>().FirstOrDefault(c => c.name.Contains("ExtremeFocus_AbilityDef"));
             extremeFocusAPcostMod.AbilityCostModification.ActionPointModType = TacticalAbilityModificationType.Set;
             extremeFocusAPcostMod.AbilityCostModification.ActionPointMod = 0.25f;
             extremeFocusAPcostMod.Visuals.Description = new LocalizedTextBind("Overwatch cost is set to 1 Action Point cost for all weapons", doNotLocalize);
+        }
 
-            // Armor Break: Set to 15 shred and -25% damage
+        private static void Change_ArmourBreak()
+        {
             ApplyStatusAbilityDef armourBreak = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(ad => ad.name.Contains("ArmourBreak_AbilityDef"));
             armourBreak.WillPointCost = 2.0f;
             armourBreak.ViewElementDef.Description = new LocalizedTextBind("Next shot has 15 shred but -25% damage", doNotLocalize);
@@ -50,8 +69,10 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             armourBreakDamageReduction.Visuals = armourBreak.ViewElementDef;
             armourBreakDamageReduction.StatModifications[0].Value = 0.75f;
             armourBreakShredMod.AdditionalStatusesToApply = new TacStatusDef[] { armourBreakDamageReduction };
+        }
 
-            // Gunslinger: 3 pistol shots in one action (like Rage Burst)
+        private static void Change_Gunslinger()
+        {
             ShootAbilityDef gunslinger = Repo.GetAllDefs<ShootAbilityDef>().FirstOrDefault(s => s.name.Equals("Gunslinger_AbilityDef"));
             gunslinger.CharacterProgressionData.RequiredSpeed = 0;
             gunslinger.CharacterProgressionData.RequiredStrength = 0;
@@ -62,13 +83,15 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             gunslinger.ViewElementDef.SmallIcon = gunslingerIcon;
             gunslinger.ActionPointCost = -1.0f;
             gunslinger.WillPointCost = 4.0f;
-            gunslinger.EquipmentTags = new GameTagDef[] { 
+            gunslinger.EquipmentTags = new GameTagDef[] {
                 Repo.GetAllDefs<GameTagDef>().FirstOrDefault(g => g.name.Equals("HandgunItem_TagDef"))
             };
             gunslinger.ExecutionsCount = 3;
             gunslinger.ProjectileSpreadMultiplier = 2.0f;
+        }
 
-            // Kill Zone: An additional overwatch shot
+        private static void Create_KillZone()
+        {
             // Harmony patch PhoenixPoint.Tactical.Entities.Weapons.Weapon.GetNumberOfShots
             // Adding an ability that get checked in the patched method (see below)
             string skillName = "KillZone_AbilityDef";

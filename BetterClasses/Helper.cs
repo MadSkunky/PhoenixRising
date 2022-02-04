@@ -1,6 +1,7 @@
 ﻿using Base.Core;
 using Base.Defs;
 using Newtonsoft.Json;
+using PhoenixPoint.Common.Core;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,8 +15,8 @@ namespace PhoenixRising.BetterClasses
     {
         // Get config, definition repository (and shared data, not neccesary currently)
         private static readonly Settings Config = BetterClassesMain.Config;
-        private static readonly DefRepository Repo = GameUtl.GameComponent<DefRepository>();
-        //private static readonly SharedData Shared = GameUtl.GameComponent<SharedData>();
+        private static readonly DefRepository Repo = BetterClassesMain.Repo;
+        private static readonly SharedData Shared = BetterClassesMain.Shared;
 
         internal static string ModDirectory;
         internal static string ManagedDirectory;

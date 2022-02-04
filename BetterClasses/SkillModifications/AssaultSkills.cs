@@ -5,6 +5,7 @@ using Base.Entities.Abilities;
 using Base.Entities.Effects;
 using Base.Entities.Statuses;
 using Base.UI;
+using PhoenixPoint.Common.Core;
 using PhoenixPoint.Common.Entities.GameTags;
 using PhoenixPoint.Common.Entities.GameTagsTypes;
 using PhoenixPoint.Common.UI;
@@ -12,50 +13,52 @@ using PhoenixPoint.Tactical.Cameras.Filters;
 using PhoenixPoint.Tactical.Entities.Abilities;
 using PhoenixPoint.Tactical.Entities.Animations;
 using PhoenixPoint.Tactical.Entities.Statuses;
+using System;
 using System.Linq;
+using System.Reflection;
 using UnityEngine;
 
 namespace PhoenixRising.BetterClasses.SkillModifications
 {
     class AssaultSkills
     {
-        // Get config, definition repository (and shared data, not neccesary currently)
+        // Get config, definition repository and shared data
         private static readonly Settings Config = BetterClassesMain.Config;
-        private static readonly DefRepository Repo = GameUtl.GameComponent<DefRepository>();
-        //private static readonly SharedData Shared = GameUtl.GameComponent<SharedData>();
-        public static void ApplyChanges(bool doNotLocalize = true)
+        private static readonly DefRepository Repo = BetterClassesMain.Repo;
+        private static readonly SharedData Shared = BetterClassesMain.Shared;
+
+        private static readonly bool doNotLocalize = BetterClassesMain.doNotLocalize;
+
+        public static void ApplyChanges()
         {
             // Quick Aim: Adding aim modification
-            ApplyStatusAbilityDef quickAim = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(a => a.name.Equals("QuickAim_AbilityDef"));
-            quickAim.UsesPerTurn = 2;
-            StatMultiplierStatusDef qaAccMod = Helper.CreateDefFromClone(
-                Repo.GetAllDefs<StatMultiplierStatusDef>().FirstOrDefault(sms => sms.name.Equals("Trembling_StatusDef")),
-                "4a6f7cc4-1bd6-45a5-b572-053963966b07",
-                "E AccuracyMultiplier [QuickAim_AbilityDef]");
-            qaAccMod.ShowNotification = true;
-            qaAccMod.VisibleOnHealthbar = TacStatusDef.HealthBarVisibility.VisibleWhenSelected;
-            qaAccMod.VisibleOnStatusScreen = TacStatusDef.StatusScreenVisibility.VisibleOnBodyPartStatusList;
-            qaAccMod.Visuals = quickAim.ViewElementDef;
-            qaAccMod.StatsMultipliers[0].StatName = "Accuracy";
-            qaAccMod.StatsMultipliers[0].Multiplier = 0.7f;
-            AddAttackBoostStatusDef qaAttackBoost = (AddAttackBoostStatusDef)quickAim.StatusDef;
-            qaAttackBoost.DurationTurns = -1; // same as Master Marksman, not sure if neccessary, it worked this way ;-)
-            qaAttackBoost.AdditionalStatusesToApply =  qaAttackBoost.AdditionalStatusesToApply.Append(qaAccMod).ToArray();
-            quickAim.ViewElementDef.Description = new LocalizedTextBind(
-                "The Action Point cost of the next shot with a proficient weapon is reduced by 1 with -30% accuracy. Limited to 2 uses per turn.",
-                doNotLocalize);
+            Change_QuickAim();
 
             // Kill'n'Run: Recive one free Dash move when killing an enemy, once per turn
-            Create_KillAndRun(Repo, Config);
+            Create_KillAndRun();
 
             // Onslaught (DeterminedAdvance_AbilityDef): Receiver can get only 1 onslaught per turn.
-            // This below works on the target but he can be targeted again from another Assault without any response => the Assault loses 2 AP and the target gets nothing
-            // Looking for a solution, maybe MC fuctionality could be a solution (thx to Iko)
-            //TacEffectStatusDef onslaughtStatus = Repo.GetAllDefs<TacEffectStatusDef>().FirstOrDefault(c => c.name.Contains("E_Status [DeterminedAdvance_AbilityDef]"));
-            //onslaughtStatus.SingleInstance = true;
-            // .... delayed ....
+            Change_Onslaught();
 
             // Rapid Clearance: Until end of turn, after killing an enemy next attack cost -2AP
+            Change_RapidClearance();
+
+            // Barrage: 2 bursts with increased accuracy for 3 AP and 4 WP
+            Create_Barrage();
+        }
+
+        private static void Change_Onslaught()
+        {
+            // This below works on the target but he can be targeted again from another Assault without any response => the Assault loses 2 AP and the target gets nothing
+            // Looking for a solution, maybe MC fuctionality could be a solution (thx to Iko)
+            // .... delayed ....
+            //TacEffectStatusDef onslaughtStatus = Repo.GetAllDefs<TacEffectStatusDef>().FirstOrDefault(c => c.name.Contains("E_Status [DeterminedAdvance_AbilityDef]"));
+            //onslaughtStatus.SingleInstance = true;
+            Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
+        }
+
+        private static void Change_RapidClearance()
+        {
             // Get Rapid Clearance ability def
             ApplyStatusAbilityDef rapidClearance = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(a => a.name.Equals("RapidClearance_AbilityDef"));
             // Clone status apply effect from Vanish
@@ -83,13 +86,32 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             applyStatusEffect.StatusDef = addAttackBoostStatus;
             rapidClearance.ViewElementDef.Description = new LocalizedTextBind("Until end of turn, after killing an enemy next attack cost -2AP", doNotLocalize);
             (rapidClearance.StatusDef as OnActorDeathEffectStatusDef).EffectDef = applyStatusEffect;
+        }
 
-            // Barrage: 2 bursts with increased accuracy for 3 AP and 4 WP
-            Create_Barrage(Repo, Config);
+        private static void Change_QuickAim()
+        {
+            ApplyStatusAbilityDef quickAim = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(a => a.name.Equals("QuickAim_AbilityDef"));
+            quickAim.UsesPerTurn = 2;
+            StatMultiplierStatusDef qaAccMod = Helper.CreateDefFromClone(
+                Repo.GetAllDefs<StatMultiplierStatusDef>().FirstOrDefault(sms => sms.name.Equals("Trembling_StatusDef")),
+                "4a6f7cc4-1bd6-45a5-b572-053963966b07",
+                "E AccuracyMultiplier [QuickAim_AbilityDef]");
+            qaAccMod.ShowNotification = true;
+            qaAccMod.VisibleOnHealthbar = TacStatusDef.HealthBarVisibility.VisibleWhenSelected;
+            qaAccMod.VisibleOnStatusScreen = TacStatusDef.StatusScreenVisibility.VisibleOnBodyPartStatusList;
+            qaAccMod.Visuals = quickAim.ViewElementDef;
+            qaAccMod.StatsMultipliers[0].StatName = "Accuracy";
+            qaAccMod.StatsMultipliers[0].Multiplier = 0.7f;
+            AddAttackBoostStatusDef qaAttackBoost = (AddAttackBoostStatusDef)quickAim.StatusDef;
+            qaAttackBoost.DurationTurns = -1; // same as Master Marksman, not sure if neccessary, it worked this way ;-)
+            qaAttackBoost.AdditionalStatusesToApply = qaAttackBoost.AdditionalStatusesToApply.Append(qaAccMod).ToArray();
+            quickAim.ViewElementDef.Description = new LocalizedTextBind(
+                "The Action Point cost of the next shot with a proficient weapon is reduced by 1 with -30% accuracy. Limited to 2 uses per turn.",
+                doNotLocalize);
         }
 
         // New Kill'n'Run ability
-        public static void Create_KillAndRun(DefRepository Repo, Settings Config)
+        public static void Create_KillAndRun()
         {
             string skillName = "KillAndRun_AbilityDef";
             bool doNotLocalize = Config.DoNotLocalizeChangedTexts;
@@ -191,7 +213,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
         }
 
         // New Barrage ability
-        public static void Create_Barrage(DefRepository Repo, Settings Config)
+        public static void Create_Barrage()
         {
             string skillName = "Barrage_AbilityDef";
             bool doNotLocalize = Config.DoNotLocalizeChangedTexts;

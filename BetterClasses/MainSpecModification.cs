@@ -2,6 +2,7 @@
 using System.Linq;
 using Base.Core;
 using Base.Defs;
+using PhoenixPoint.Common.Core;
 using PhoenixPoint.Common.Entities.Characters;
 using PhoenixPoint.Tactical.Entities.Abilities;
 
@@ -9,10 +10,10 @@ namespace PhoenixRising.BetterClasses
 {
     class MainSpecModification
     {
-        // Get config, definition repository (and shared data, not neccesary currently)
+        // Get config, definition repository and shared data
         private static readonly Settings Config = BetterClassesMain.Config;
-        private static readonly DefRepository Repo = GameUtl.GameComponent<DefRepository>();
-        //private static readonly SharedData Shared = GameUtl.GameComponent<SharedData>();
+        private static readonly DefRepository Repo = BetterClassesMain.Repo;
+        private static readonly SharedData Shared = BetterClassesMain.Shared;
         public static void GenerateMainSpec()
         {
             try

@@ -7,7 +7,7 @@
     <ProjectGuid>{CB34FBCF-9B4A-4375-AB3B-4EFBCAA77AE4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PhoenixRising</RootNamespace>
+    <RootNamespace>PhoenixRising.BetterClasses</RootNamespace>
     <AssemblyName>BetterClasses</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -88,6 +88,7 @@
     <Compile Include="SkillModifications\AssaultSkills.cs" />
     <Compile Include="SkillModifications\BackgroundPerks.cs" />
     <Compile Include="SkillModifications\BerserkerSkills.cs" />
+    <Compile Include="SkillModifications\FactionPerks.cs" />
     <Compile Include="SkillModifications\HeavySkills.cs" />
     <Compile Include="SkillModifications\InfiltratorSkills.cs" />
     <Compile Include="SkillModifications\PriestSkills.cs" />

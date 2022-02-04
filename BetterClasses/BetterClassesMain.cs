@@ -10,6 +10,7 @@ using PhoenixPoint.Tactical.Entities.Abilities;
 using Harmony;
 using PhoenixRising.BetterClasses.SkillModifications;
 using PhoenixPoint.Geoscape.Events.Eventus;
+using Base.Assets;
 
 namespace PhoenixRising.BetterClasses
 {
@@ -21,8 +22,10 @@ namespace PhoenixRising.BetterClasses
         internal static string ModDirectory;
         internal static string ManagedDirectory;
         internal static string TexturesDirectory;
-        private static readonly DefRepository Repo = GameUtl.GameComponent<DefRepository>();
-        private static readonly SharedData Shared = GameUtl.GameComponent<SharedData>();
+        internal static bool doNotLocalize = true;
+        internal static readonly DefRepository Repo = GameUtl.GameComponent<DefRepository>();
+        internal static readonly SharedData Shared = GameUtl.GameComponent<SharedData>();
+        private static readonly AssetsManager assetsManager = GameUtl.GameComponent<AssetsManager>();
 
         public static void MainMod(Func<string, object, object> api)
         {
@@ -42,6 +45,18 @@ namespace PhoenixRising.BetterClasses
             // Initialize Helper
             Helper.Initialize();
 
+            // Set localization for project
+            doNotLocalize = Config.DoNotLocalizeChangedTexts;
+
+            // Apply skill modifications
+            SkillModsMain.ApplyChanges();
+
+            // Generate the main specialization as configured
+            MainSpecModification.GenerateMainSpec();
+
+            // Patch all Harmony patches
+            HarmonyInstance.Create("BetterClasses.PhoenixRising").PatchAll();
+
             // Print out ODI titles and texts
             //foreach (GeoscapeEventDef ged in Repo.GetAllDefs<GeoscapeEventDef>().Where(g => g.name.Contains("SDI_")))
             //{
@@ -59,15 +74,6 @@ namespace PhoenixRising.BetterClasses
             //{
             //    Logger.Always(Guid.NewGuid().ToString(), false);
             //}
-
-            // Apply skill modifications
-            SkillModsMain.ApplyChanges();
-
-            // Generate the main specialization as configured
-            MainSpecModification.GenerateMainSpec();
-
-            // Patch all Harmony patches
-            HarmonyInstance.Create("BetterClasses.PhoenixRising").PatchAll();
 
             try
             {

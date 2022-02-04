@@ -3,6 +3,7 @@ using Base.Defs;
 using Base.Entities.Abilities;
 using Base.Entities.Effects.ApplicationConditions;
 using Base.UI;
+using PhoenixPoint.Common.Core;
 using PhoenixPoint.Common.Entities.GameTags;
 using PhoenixPoint.Common.UI;
 using PhoenixPoint.Tactical.Entities.Abilities;
@@ -15,97 +16,49 @@ namespace PhoenixRising.BetterClasses.SkillModifications
 {
     class SkillModsMain
     {
-        // Get config, definition repository (and shared data, not neccesary currently)
+        // Get config, definition repository and shared data
         private static readonly Settings Config = BetterClassesMain.Config;
-        private static readonly DefRepository Repo = GameUtl.GameComponent<DefRepository>();
-        //private static readonly AssetsManager assetsManager = GameUtl.GameComponent<AssetsManager>();
-        //private static readonly SharedData Shared = GameUtl.GameComponent<SharedData>();
+        private static readonly DefRepository Repo = BetterClassesMain.Repo;
+        private static readonly SharedData Shared = BetterClassesMain.Shared;
+
+        private static readonly bool doNotLocalize = BetterClassesMain.doNotLocalize;
 
         public static void ApplyChanges()
         {
             try
             {
-                // Get config setting for localized texts.
-                bool doNotLocalize = Config.DoNotLocalizeChangedTexts;
-
-                // BattleFocus, currently used as placeholder, will go to Vengeance Torso
-                Create_BattleFocus(Repo, Config);
-
                 // Assault skills ------------------------------------------------------
-                AssaultSkills.ApplyChanges(doNotLocalize);
+                AssaultSkills.ApplyChanges();
 
                 // Sniper skills start ------------------------------------------------------
-                SniperSkills.ApplyChanges(doNotLocalize);
+                SniperSkills.ApplyChanges();
 
                 // Heavy skills start --------------------------------------------------------
-                HeavySkills.ApplyChanges(doNotLocalize);
+                HeavySkills.ApplyChanges();
 
                 // Berserker skills start ----------------------------------------------------
-                BerserkerSkills.ApplyChanges(doNotLocalize);
+                BerserkerSkills.ApplyChanges();
 
                 // Infiltrator skills start --------------------------------------------------
-                InfiltratorSkills.ApplyChanges(doNotLocalize);
+                InfiltratorSkills.ApplyChanges();
 
                 // Technician skills start ---------------------------------------------------
-                TechnicianSkills.ApplyChanges(doNotLocalize);
+                TechnicianSkills.ApplyChanges();
 
                 // Priest skills start -------------------------------------------------------
-                PriestSkills.ApplyChanges(doNotLocalize);
-
-                // Faction perks
-                // Mist Breather adding progression def
-                ApplyEffectAbilityDef mistBreather = Repo.GetAllDefs<ApplyEffectAbilityDef>().FirstOrDefault(a => a.name.Equals("MistBreather_AbilityDef"));
-                AbilityCharacterProgressionDef mbProgressionDef = Helper.CreateDefFromClone(
-                    Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(p => p.name.Equals("MasterMarksman_AbilityDef")).CharacterProgressionData,
-                    "9eaf8809-01d9-4582-89e0-78c8596f5e7d",
-                    "MistBreather_AbilityDef");
-                mbProgressionDef.RequiredStrength = 0;
-                mbProgressionDef.RequiredWill = 0;
-                mbProgressionDef.RequiredSpeed = 0;
-                mistBreather.CharacterProgressionData = mbProgressionDef;
-
-                // Tweaking the weapon proficiency perks incl. descriptions
-                foreach (PassiveModifierAbilityDef pmad in Repo.GetAllDefs<PassiveModifierAbilityDef>())
-                {
-                    if (pmad.CharacterProgressionData != null && pmad.name.Contains("Talent"))
-                    {
-                        // Assault rifle proficiency fix, was set to shotguns
-                        if (pmad.name.Contains("Assault"))
-                        {
-                            GameTagDef ARtagDef = Repo.GetAllDefs<GameTagDef>().FirstOrDefault(gtd => gtd.name.Contains("AssaultRifleItem_TagDef"));
-                            pmad.ItemTagStatModifications[0].ItemTag = ARtagDef;
-                        }
-
-                        // Change descrition text, not localized (currently), old one mentions fixed buffs that are taken away or set differently by this mod
-                        string newText = Helper.NotLocalizedTextMap[pmad.ViewElementDef.name][ViewElement.Description];
-                        pmad.ViewElementDef.Description = new LocalizedTextBind(newText, doNotLocalize);
-
-                        Logger.Debug("Proficiency def name: " + pmad.name);
-                        Logger.Debug("Viewelement name:     " + pmad.ViewElementDef.name);
-                        Logger.Debug("Display1 name:        " + pmad.ViewElementDef.DisplayName1.Localize());
-                        Logger.Debug("Description:          " + pmad.ViewElementDef.Description.Localize());
-
-                        // Get modification from config, but first -0.1 to normalise to 0.0 (proficiency perks are all set to +0.1 buff)
-                        float newStatModification = -0.1f + Config.BuffsForAdditionalProficiency[Proficiency.Buff];
-                        // Loop through all subsequent item stat modifications
-                        if (pmad.ItemTagStatModifications.Length > 0)
-                        {
-                            for (int i = 0; i < pmad.ItemTagStatModifications.Length; i++)
-                            {
-                                pmad.ItemTagStatModifications[i].EquipmentStatModification.Value += newStatModification;
-
-                                Logger.Debug("  Target item: " + pmad.ItemTagStatModifications[i].ItemTag.name);
-                                Logger.Debug("  Target stat: " + pmad.ItemTagStatModifications[i].EquipmentStatModification.TargetStat);
-                                Logger.Debug(" Modification: " + pmad.ItemTagStatModifications[i].EquipmentStatModification.Modification);
-                                Logger.Debug("        Value: " + pmad.ItemTagStatModifications[i].EquipmentStatModification.Value);
-                            }
-                        }
-                        Logger.Debug("----------------------------------------------------", false);
-                    }
-                }
+                PriestSkills.ApplyChanges();
 
                 // Call Background perk changes -------------------------------------------------------
-                BackgroundPerks.ApplyChanges(doNotLocalize);
+                BackgroundPerks.ApplyChanges();
+
+                // Faction perks
+                FactionPerks.ApplyChanges();
+
+                // Tweaking the weapon proficiency perks incl. descriptions, see below
+                Change_ProficiencyPerks();
+
+                // BattleFocus, currently used as placeholder, will go to Vengeance Torso
+                Create_BattleFocus();
             }
             catch (Exception e)
             {
@@ -113,8 +66,50 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             }
         }
 
+        private static void Change_ProficiencyPerks()
+        {
+            foreach (PassiveModifierAbilityDef pmad in Repo.GetAllDefs<PassiveModifierAbilityDef>())
+            {
+                if (pmad.CharacterProgressionData != null && pmad.name.Contains("Talent"))
+                {
+                    // Assault rifle proficiency fix, was set to shotguns
+                    if (pmad.name.Contains("Assault"))
+                    {
+                        GameTagDef ARtagDef = Repo.GetAllDefs<GameTagDef>().FirstOrDefault(gtd => gtd.name.Contains("AssaultRifleItem_TagDef"));
+                        pmad.ItemTagStatModifications[0].ItemTag = ARtagDef;
+                    }
+
+                    // Change descrition text, not localized (currently), old one mentions fixed buffs that are taken away or set differently by this mod
+                    string newText = Helper.NotLocalizedTextMap[pmad.ViewElementDef.name][ViewElement.Description];
+                    pmad.ViewElementDef.Description = new LocalizedTextBind(newText, doNotLocalize);
+
+                    Logger.Debug("Proficiency def name: " + pmad.name);
+                    Logger.Debug("Viewelement name:     " + pmad.ViewElementDef.name);
+                    Logger.Debug("Display1 name:        " + pmad.ViewElementDef.DisplayName1.Localize());
+                    Logger.Debug("Description:          " + pmad.ViewElementDef.Description.Localize());
+
+                    // Get modification from config, but first -0.1 to normalise to 0.0 (proficiency perks are all set to +0.1 buff)
+                    float newStatModification = -0.1f + Config.BuffsForAdditionalProficiency[Proficiency.Buff];
+                    // Loop through all subsequent item stat modifications
+                    if (pmad.ItemTagStatModifications.Length > 0)
+                    {
+                        for (int i = 0; i < pmad.ItemTagStatModifications.Length; i++)
+                        {
+                            pmad.ItemTagStatModifications[i].EquipmentStatModification.Value += newStatModification;
+
+                            Logger.Debug("  Target item: " + pmad.ItemTagStatModifications[i].ItemTag.name);
+                            Logger.Debug("  Target stat: " + pmad.ItemTagStatModifications[i].EquipmentStatModification.TargetStat);
+                            Logger.Debug(" Modification: " + pmad.ItemTagStatModifications[i].EquipmentStatModification.Modification);
+                            Logger.Debug("        Value: " + pmad.ItemTagStatModifications[i].EquipmentStatModification.Value);
+                        }
+                    }
+                    Logger.Debug("----------------------------------------------------", false);
+                }
+            }
+        }
+
         // New Battle Focus ability
-        public static void Create_BattleFocus(DefRepository Repo, Settings Config)
+        public static void Create_BattleFocus()
         {
             string skillName = "BattleFocus_AbilityDef";
             bool doNotLocalize = Config.DoNotLocalizeChangedTexts;

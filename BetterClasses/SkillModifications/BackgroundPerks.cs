@@ -17,60 +17,64 @@ using PhoenixPoint.Tactical.Entities.Equipments;
 using PhoenixPoint.Tactical.Entities.Statuses;
 using PhoenixPoint.Tactical.Entities.Weapons;
 using System.Linq;
+using System.Reflection;
 using UnityEngine;
 
 namespace PhoenixRising.BetterClasses.SkillModifications
 {
     class BackgroundPerks
     {
-        // Get config, definition repository (and shared data, not neccesary currently)
-        //private static readonly Settings Config = BetterClassesMain.Config;
-        private static readonly DefRepository Repo = GameUtl.GameComponent<DefRepository>();
-        //private static readonly SharedData Shared = GameUtl.GameComponent<SharedData>();
-        public static void ApplyChanges(bool doNotLocalize = true)
+        // Get config, definition repository and shared data
+        private static readonly Settings Config = BetterClassesMain.Config;
+        private static readonly DefRepository Repo = BetterClassesMain.Repo;
+        private static readonly SharedData Shared = BetterClassesMain.Shared;
+
+        private static readonly bool doNotLocalize = BetterClassesMain.doNotLocalize;
+
+        public static void ApplyChanges()
         {
             // Pacifist, WP +4, but - 4 STR
-            Create_Pacifist(doNotLocalize);
-            // Healer, WP + 2, Healing + 30 %, <- vanilla, needs no change
-            Change_Healer(doNotLocalize);
+            Create_Pacifist();
+            // Healer, WP + 2, Healing + 30 %
+            Change_Healer();
             // Farsighted, WP + 2, Perception + 4
-            Change_Farsighted(doNotLocalize);
+            Change_Farsighted();
             // Firefighter, Fire Resistance, STR + 2
-            Create_Firefighter(doNotLocalize);
+            Create_Firefighter();
             // Strongman, STR +4, Perception - 10
-            Change_Strongman(doNotLocalize);
+            Change_Strongman();
             // Gym Rat, STR + 2, Carry Weight +25 %
-            Change_GymRat(doNotLocalize);
+            Change_GymRat();
             // Night Owl, Nightvision, +2 SPD, -2WP
-            Create_NightOwl(doNotLocalize);
+            Create_NightOwl();
             // Athlete, "Jump", +1 SPD
-            Create_Athlete(doNotLocalize);
+            Create_Athlete();
             // Thief, Stealth + 15 %, SPD + 1
-            Change_Thief(doNotLocalize);
+            Change_Thief();
             // Special Forces, Accuracy + 10 %
-            Create_SpecialForces(doNotLocalize);
+            Create_SpecialForces();
             // Guerilla, Grenades deal +10 % damage
-            Create_Guerilla(doNotLocalize);
+            Create_Guerilla();
             // Attentive, Perception +4, Hearing Range +10
-            Create_Attentive(doNotLocalize);
+            Create_Attentive();
             // Martial Artist, Melee Resistance 10 %
-            Create_MartialArtist(doNotLocalize);
+            Create_MartialArtist();
             // Transhumanist, Can mutate all body parts
-            //Create_Transhumanist(doNotLocalize);
+            Create_Transhumanist();
             // Hitman, Damage + 10 %, Willpower - 3
-            Create_Hitman(doNotLocalize);
+            Create_Hitman();
             // Thug, Damage +10 %, Accuracy - 10 %
-            Create_Thug(doNotLocalize);
+            Create_Thug();
             // Psychic, Gain "Psychic Scream"
-            Create_Psychic(doNotLocalize);
+            Create_Psychic();
             // Plumber, Immune to goo
-            Create_Plumber(doNotLocalize);
+            Create_Plumber();
             // Junkie, Acid Resistance
-            Create_Junkie(doNotLocalize);
+            Create_Junkie();
             // Astronaut, Jetpack Proficiency
-            Create_Astronaut(doNotLocalize);
+            Create_Astronaut();
         }
-        public static void Create_Pacifist(bool doNotLocalize = true)
+        private static void Create_Pacifist()
         {
             string skillName = "Pacifist_AbilityDef";
             PassiveModifierAbilityDef source = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(p => p.name.Contains("Talent"));
@@ -140,7 +144,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             Pacifist.ViewElementDef.LargeIcon = PacifistIcon;
             Pacifist.ViewElementDef.SmallIcon = PacifistIcon;
         }
-        public static void Change_Healer(bool doNotLocalize = true)
+        private static void Change_Healer()
         {
             PassiveModifierAbilityDef healer = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(p => p.name.Equals("Helpful_AbilityDef"));
             for (int i = 0; i < healer.StatModifications.Length; i++)
@@ -157,7 +161,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             }
             healer.ViewElementDef.Description = new LocalizedTextBind("Gain 2 points to willpower and 30% bonus heal value", doNotLocalize);
         }
-        public static void Change_Farsighted(bool doNotLocalize = true)
+        private static void Change_Farsighted()
         {
             PassiveModifierAbilityDef brainiac = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(p => p.name.Equals("Brainiac_AbilityDef"));
             for (int i =0; i < brainiac.StatModifications.Length; i++)
@@ -169,7 +173,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             }
             brainiac.ViewElementDef.Description = new LocalizedTextBind("Gain 2 willpower and 4 perception", doNotLocalize);
         }
-        public static void Change_Strongman(bool doNotLocalize = true)
+        private static void Change_Strongman()
         {
             PassiveModifierAbilityDef strongMan = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(p => p.name.Equals("Strongman_AbilityDef"));
             for (int i = 0; i < strongMan.StatModifications.Length; i++)
@@ -186,7 +190,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             strongMan.ItemTagStatModifications = new EquipmentItemTagStatModification[0]; // delete weapon buff and proficiency
             strongMan.ViewElementDef.Description = new LocalizedTextBind("Gain 4 strength but lose 10 perception", doNotLocalize);
         }
-        public static void Change_GymRat(bool doNotLocalize = true)
+        private static void Change_GymRat()
         {
             PassiveModifierAbilityDef gymRat = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(p => p.name.Equals("GymRat_AbilityDef"));
             gymRat.StatModifications = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(p => p.name.Contains("Resourceful_AbilityDef")).StatModifications;
@@ -196,7 +200,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             gymRat.ViewElementDef.LargeIcon = gymRatIcon;
             gymRat.ViewElementDef.SmallIcon = gymRatIcon;
         }
-        public static void Create_Firefighter(bool doNotLocalize = true)
+        private static void Create_Firefighter()
         {
             string skillName = "FireFighter_AbilityDef";
             DamageMultiplierAbilityDef source = Repo.GetAllDefs<DamageMultiplierAbilityDef>().FirstOrDefault(p => p.name.Equals("FireResistant_DamageMultiplierAbilityDef"));
@@ -231,7 +235,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             fireFighter.ViewElementDef.DisplayName1 = new LocalizedTextBind("FIREFIGHTER", doNotLocalize);
             fireFighter.ViewElementDef.Description = new LocalizedTextBind("Reduce fire damage by 50%", doNotLocalize);
         }
-        public static void Create_NightOwl(bool doNotLocalize = true)
+        private static void Create_NightOwl()
         {
             string skillName = "NightOwl_AbilityDef";
             PassiveModifierAbilityDef source = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(p => p.name.Equals("EnhancedVision_AbilityDef"));
@@ -301,7 +305,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             nightOwl.ViewElementDef.LargeIcon = NightOwlIcon;
             nightOwl.ViewElementDef.SmallIcon = NightOwlIcon;
         }
-        public static void Create_Athlete(bool doNotLocalize = true)
+        private static void Create_Athlete()
         {
             string skillName = "Athlete_AbilityDef";
             AddNavAreasAbilityDef source = Repo.GetAllDefs<AddNavAreasAbilityDef>().FirstOrDefault(p => p.name.Equals("Humanoid_HighJump_AbilityDef"));
@@ -339,7 +343,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             athlete.ViewElementDef.LargeIcon = athleteIcon;
             athlete.ViewElementDef.SmallIcon = athleteIcon;
         }
-        public static void Change_Thief(bool doNotLocalize = true)
+        private static void Change_Thief()
         {
             PassiveModifierAbilityDef thief = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(p => p.name.Equals("Thief_AbilityDef"));
             for (int i = 0; i < thief.StatModifications.Length; i++)
@@ -351,7 +355,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             }
             thief.ViewElementDef.Description = new LocalizedTextBind("Gain 1 speed and 15% stealth", doNotLocalize);
         }
-        public static void Create_SpecialForces(bool doNotLocalize = true)
+        private static void Create_SpecialForces()
         {
             string skillName = "SpecialForces_AbilityDef";
             PassiveModifierAbilityDef source = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(p => p.name.Equals("EagleEyed_AbilityDef"));
@@ -385,7 +389,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             specialForces.ViewElementDef.LargeIcon = specialForcesIcon;
             specialForces.ViewElementDef.SmallIcon = specialForcesIcon;
         }
-        public static void Create_Guerilla(bool doNotLocalize = true)
+        private static void Create_Guerilla()
         {
             string skillName = "Guerilla_AbilityDef";
             PassiveModifierAbilityDef source = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(p => p.name.Equals("ExpertThrower_AbilityDef"));
@@ -417,7 +421,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             Guerilla.ViewElementDef.LargeIcon = GuerillaIcon;
             Guerilla.ViewElementDef.SmallIcon = GuerillaIcon;
         }
-        public static void Create_Attentive(bool doNotLocalize = true)
+        private static void Create_Attentive()
         {
             string skillName = "Attentive_AbilityDef";
             PassiveModifierAbilityDef source = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(p => p.name.Equals("SelfDefenseSpecialist_AbilityDef"));
@@ -455,10 +459,11 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             attentive.ViewElementDef.LargeIcon = attentiveIcon;
             attentive.ViewElementDef.SmallIcon = attentiveIcon;
         }
-        public static void Create_Transhumanist(bool doNotLocalize = true)
+        private static void Create_Transhumanist()
         {
+            Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
         }
-        public static void Create_Hitman(bool doNotLocalize = true)
+        private static void Create_Hitman()
         {
             string skillName = "Hitman_AbilityDef";
             PassiveModifierAbilityDef source = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(p => p.name.Equals("Focused_AbilityDef"));
@@ -522,7 +527,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             hitMan.ViewElementDef.LargeIcon = hitManIcon;
             hitMan.ViewElementDef.SmallIcon = hitManIcon;
         }
-        public static void Create_Thug(bool doNotLocalize = true)
+        private static void Create_Thug()
         {
             string skillName = "Thug_AbilityDef";
             PassiveModifierAbilityDef source = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(p => p.name.Equals("Reckless_AbilityDef"));
@@ -546,7 +551,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             Thug.ViewElementDef.LargeIcon = thugIcon;
             Thug.ViewElementDef.SmallIcon = thugIcon;
         }
-        public static void Create_Psychic(bool doNotLocalize = true)
+        private static void Create_Psychic()
         {
             string skillName = "Psychic_AbilityDef";
             PsychicScreamAbilityDef source = Repo.GetAllDefs<PsychicScreamAbilityDef>().FirstOrDefault(p => p.name.Equals("Priest_PsychicScream_AbilityDef"));
@@ -584,7 +589,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             psychic.ViewElementDef.LargeIcon = psychicIcon;
             psychic.ViewElementDef.SmallIcon = psychicIcon;
         }
-        public static void Create_Plumber(bool doNotLocalize = true)
+        private static void Create_Plumber()
         {
             string skillName = "Plumber_AbilityDef";
             GooDamageMultiplierAbilityDef source = Repo.GetAllDefs<GooDamageMultiplierAbilityDef>().FirstOrDefault(p => p.name.Equals("GooImmunity_AbilityDef"));
@@ -605,7 +610,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             plumber.ViewElementDef.LargeIcon = plumberIcon;
             plumber.ViewElementDef.SmallIcon = plumberIcon;
         }
-        public static void Create_Junkie(bool doNotLocalize = true)
+        private static void Create_Junkie()
         {
             string skillName = "Junkie_AbilityDef";
             DamageMultiplierAbilityDef source = Repo.GetAllDefs<DamageMultiplierAbilityDef>().FirstOrDefault(p => p.name.Equals("AcidResistant_DamageMultiplierAbilityDef"));
@@ -626,7 +631,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             junkie.ViewElementDef.LargeIcon = junkieIcon;
             junkie.ViewElementDef.SmallIcon = junkieIcon;
         }
-        public static void Create_Astronaut(bool doNotLocalize = true)
+        private static void Create_Astronaut()
         {
             string skillName = "Astronaut_AbilityDef";
             ClassProficiencyAbilityDef source = Repo.GetAllDefs<ClassProficiencyAbilityDef>().FirstOrDefault(p => p.name.Equals("UseAttachedEquipment_AbilityDef"));
@@ -652,17 +657,17 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             astronaut.ViewElementDef.LargeIcon = astronautIcon;
             astronaut.ViewElementDef.SmallIcon = astronautIcon;
         }
-        public static void Create_MartialArtist(bool doNotLocalize = true)
+        private static void Create_MartialArtist()
         {
-            // create a new array with both melee damage types
+            // Set all melee weapon defs to the a melee damage type
+            // Don't used! It messes up different melee weapons with additional status damages
+            // Create a new array with both melee damage types
             //DamageTypeBaseEffectDef[] meleeDamageTypes = new DamageTypeBaseEffectDef[]
             //{
             //    Repo.GetAllDefs<DamageTypeBaseEffectDef>().FirstOrDefault(dtb => dtb.name.Equals("Slash_StandardDamageTypeEffectDef")),
             //    Repo.GetAllDefs<DamageTypeBaseEffectDef>().FirstOrDefault(dtb => dtb.name.Equals("MeleeBash_StandardDamageTypeEffectDef")),
             //    Repo.GetAllDefs<DamageTypeBaseEffectDef>().FirstOrDefault(dtb => dtb.name.Equals("Bash_StandardDamageTypeEffectDef"))
             //};
-            // set all melee weapon defs to the a melee damage type
-            // Don't used! It messes up different melee weapons with additional status damages
             //Fix_MeleeWeaponDamageType(meleeDamageTypes);
 
             string skillName = "BC_MartialArtist_AbilityDef";
@@ -695,24 +700,24 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             martialArtist.ViewElementDef.LargeIcon = martialArtistIcon;
             martialArtist.ViewElementDef.SmallIcon = martialArtistIcon;
         }
-        public static void Fix_MeleeWeaponDamageType(DamageTypeBaseEffectDef[] meleeDamageTypes)
-        {
-            Logger.Always("Fix_MeleeWeaponDamageType called, fixed melee weapons:", false);
-            int count = 0;
-            foreach (WeaponDef weapon in Repo.GetAllDefs<WeaponDef>())
-            {
-                if (weapon.DamagePayload.DamageDeliveryType == DamageDeliveryType.Melee && !meleeDamageTypes.Contains(weapon.DamagePayload.DamageType))
-                {
-                    Logger.Always("   <" + weapon.name + "> with damage type <" + weapon.DamagePayload.DamageType.name + "> set to <" + meleeDamageTypes[0].name + ">");
-                    weapon.DamagePayload.DamageType = meleeDamageTypes[0];
-                    count++;
-                }
-            }
-            if (count == 0)
-            {
-                Logger.Always("  None");
-            }
-            Logger.Always("------------------------------------------------------------", false);
-        }
+        //private static void Fix_MeleeWeaponDamageType(DamageTypeBaseEffectDef[] meleeDamageTypes)
+        //{
+        //    Logger.Always("Fix_MeleeWeaponDamageType called, fixed melee weapons:", false);
+        //    int count = 0;
+        //    foreach (WeaponDef weapon in Repo.GetAllDefs<WeaponDef>())
+        //    {
+        //        if (weapon.DamagePayload.DamageDeliveryType == DamageDeliveryType.Melee && !meleeDamageTypes.Contains(weapon.DamagePayload.DamageType))
+        //        {
+        //            Logger.Always("   <" + weapon.name + "> with damage type <" + weapon.DamagePayload.DamageType.name + "> set to <" + meleeDamageTypes[0].name + ">");
+        //            weapon.DamagePayload.DamageType = meleeDamageTypes[0];
+        //            count++;
+        //        }
+        //    }
+        //    if (count == 0)
+        //    {
+        //        Logger.Always("  None");
+        //    }
+        //    Logger.Always("------------------------------------------------------------", false);
+        //}
     }
 }

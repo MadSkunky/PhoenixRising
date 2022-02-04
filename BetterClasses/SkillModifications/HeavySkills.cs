@@ -5,6 +5,7 @@ using Base.Entities.Statuses;
 using Base.UI;
 using Base.Utils.Maths;
 using Harmony;
+using PhoenixPoint.Common.Core;
 using PhoenixPoint.Common.Entities;
 using PhoenixPoint.Common.Entities.GameTags;
 using PhoenixPoint.Tactical;
@@ -21,17 +22,44 @@ namespace PhoenixRising.BetterClasses.SkillModifications
 {
     class HeavySkills
     {
-        // Get config, definition repository (and shared data, not neccesary currently)
-        //private static readonly Settings Config = BetterClassesMain.Config;
-        private static readonly DefRepository Repo = GameUtl.GameComponent<DefRepository>();
-        //private static readonly SharedData Shared = GameUtl.GameComponent<SharedData>();
-        public static void ApplyChanges(bool doNotLocalize = true)
+        // Get config, definition repository and shared data
+        private static readonly Settings Config = BetterClassesMain.Config;
+        private static readonly DefRepository Repo = BetterClassesMain.Repo;
+        private static readonly SharedData Shared = BetterClassesMain.Shared;
+
+        private static readonly bool doNotLocalize = BetterClassesMain.doNotLocalize;
+
+        public static void ApplyChanges()
         {
             // Return Fire: Fix to work on all classes
-            TacticalAbilityDef returnFire = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Contains("ReturnFire_AbilityDef"));
-            returnFire.ActorTags = new GameTagDef[0]; // Deletes all given tags => no restriction for any class
+            Change_ReturnFire();
 
             // War Cry: -1 AP and -10% damage, doubled if WP of target < WP of caster (see Harmony patch below)
+            Change_WarCry();
+
+            // Hunker Down: -25% incoming damage for 2 AP and 2 WP
+            Create_HunkerDown();
+
+            // Dynamic Resistance: Copy from Acheron
+            Create_DynamicResistance();
+
+            // Rage Burst: Increase accuracy and cone angle
+            Change_RageBurst();
+
+            // Jetpack Control: 2 AP jump, 12 tiles range
+            Create_JetpackControl();
+
+            // Boom Blast: -30% range instead of +50%
+            Change_BoomBlast();
+        }
+
+        private static void Change_ReturnFire()
+        {
+            TacticalAbilityDef returnFire = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Contains("ReturnFire_AbilityDef"));
+            returnFire.ActorTags = new GameTagDef[0]; // Deletes all given tags => no restriction for any class
+        }
+        private static void Change_WarCry()
+        {
             ApplyStatusAbilityDef warCry = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(asa => asa.name.Equals("WarCry_AbilityDef"));
             warCry.ViewElementDef.Description = new LocalizedTextBind(
                 "Enemies in 10 tiles gain -1AP and -10% damage. If their current will points are less than yours effect is doubled.",
@@ -49,24 +77,12 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                 Value = 0.9f
             };
             ((warCry.StatusDef as DelayedEffectStatusDef).EffectDef as StatsModifyEffectDef).StatModifications = new List<StatModification> { warCryApMultipier, warCryDamageMultiplier };
-
-            // Hunker Down: -25% incoming damage for 2 AP and 2 WP
-
-            // Dynamic Resistance: Copy from Acheron
-            Create_DynamicResistance(doNotLocalize);
-
-            // Rage Burst: Increase accuracy and cone angle
-            RageBurstInConeAbilityDef rageBurst = Repo.GetAllDefs<RageBurstInConeAbilityDef>().FirstOrDefault(p => p.name.Equals("RageBurst_RageBurstInConeAbilityDef"));
-            rageBurst.ProjectileSpreadMultiplier = 0.4f; // acc buff calculation: 1 / value - 100 = +acc%, 1 / 0.4 - 100 = +150%
-            rageBurst.ConeSpread = 15.0f;
-            rageBurst.ViewElementDef.Description = new LocalizedTextBind("Shoot 5 times across a wide arc with increased accuracy", doNotLocalize);
-
-            // Jetpack Control: 2 AP jump, 12 tiles range
-
-            // Boom Blast: -30% range instead of +50%
         }
-
-        public static void Create_DynamicResistance(bool doNotLocalize = true)
+        private static void Create_HunkerDown()
+        {
+            Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
+        }
+        public static void Create_DynamicResistance()
         {
             string skillName = "BC_DynamicResistance_AbilityDef";
             ApplyStatusAbilityDef source = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(asa => asa.name.Equals("Acheron_DynamicResistance_AbilityDef"));
@@ -84,6 +100,21 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                 skillName);
             dynamicResistance.ViewElementDef.DisplayName1 = new LocalizedTextBind("DYNAMIC RESISTANCE", doNotLocalize);
             dynamicResistance.ViewElementDef.Description = new LocalizedTextBind("Gain 50% resistance to damage type suffered this turn", doNotLocalize);
+        }
+        private static void Change_RageBurst()
+        {
+            RageBurstInConeAbilityDef rageBurst = Repo.GetAllDefs<RageBurstInConeAbilityDef>().FirstOrDefault(p => p.name.Equals("RageBurst_RageBurstInConeAbilityDef"));
+            rageBurst.ProjectileSpreadMultiplier = 0.4f; // acc buff calculation: 1 / value - 100 = +acc%, 1 / 0.4 - 100 = +150%
+            rageBurst.ConeSpread = 15.0f;
+            rageBurst.ViewElementDef.Description = new LocalizedTextBind("Shoot 5 times across a wide arc with increased accuracy", doNotLocalize);
+        }
+        private static void Create_JetpackControl()
+        {
+            Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
+        }
+        private static void Change_BoomBlast()
+        {
+            Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
         }
 
         // War Cry Harmony patches
