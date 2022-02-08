@@ -47,47 +47,6 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             Create_Barrage();
         }
 
-        private static void Change_Onslaught()
-        {
-            // This below works on the target but he can be targeted again from another Assault without any response => the Assault loses 2 AP and the target gets nothing
-            // Looking for a solution, maybe MC fuctionality could be a solution (thx to Iko)
-            // .... delayed ....
-            //TacEffectStatusDef onslaughtStatus = Repo.GetAllDefs<TacEffectStatusDef>().FirstOrDefault(c => c.name.Contains("E_Status [DeterminedAdvance_AbilityDef]"));
-            //onslaughtStatus.SingleInstance = true;
-            Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
-        }
-
-        private static void Change_RapidClearance()
-        {
-            // Get Rapid Clearance ability def
-            ApplyStatusAbilityDef rapidClearance = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(a => a.name.Equals("RapidClearance_AbilityDef"));
-            // Clone status apply effect from Vanish
-            StatusEffectDef applyStatusEffect = Helper.CreateDefFromClone(
-                Repo.GetAllDefs<StatusEffectDef>().FirstOrDefault(s => s.name.Equals("E_ApplyVanishStatusEffect [Vanish_AbilityDef]")),
-                "8ea85920-588b-4e1d-a8e6-31ffbe9d3a02",
-                "E_ApplyStatusEffect [RapidClearance_AbilityDef]");
-            // Clone AP reduction statuses from QA
-            AddAttackBoostStatusDef addAttackBoostStatus = Helper.CreateDefFromClone( // applies the AP reduction status only for the next attack
-                Repo.GetAllDefs<AddAttackBoostStatusDef>().FirstOrDefault(s => s.name.Equals("E_Status [QuickAim_AbilityDef]")),
-                "9385a73f-8d20-4022-acc1-9210e2e29b8f",
-                "E_AttackBoostStatus [RapidClearance_AbilityDef]");
-            ChangeAbilitiesCostStatusDef apReductionStatusEffect = Helper.CreateDefFromClone(
-                Repo.GetAllDefs<ChangeAbilitiesCostStatusDef>().FirstOrDefault(s => s.name.Equals("E_AbilityCostModifier [QuickAim_AbilityDef]")),
-                "e3062779-8f2f-4407-bc4f-a20f5c2d267b",
-                "E_AbilityCostModifier [RapidClearance_AbilityDef]");
-            // change properties and references
-            apReductionStatusEffect.AbilityCostModification.RequiresProficientEquipment = false; // original QA true
-            apReductionStatusEffect.AbilityCostModification.SkillTagCullFilter = new SkillTagDef[0]; // No restrictions, original QA disables melee and throwing grenades
-            apReductionStatusEffect.AbilityCostModification.ActionPointMod = -0.5f; // -2 AP, original QA -1 AP
-            addAttackBoostStatus.Visuals = rapidClearance.ViewElementDef;
-            addAttackBoostStatus.SkillTagCullFilter = new SkillTagDef[0]; // No restrictions, original QA disables melee and throwing grenades
-            addAttackBoostStatus.NumberOfAttacks = 2;
-            addAttackBoostStatus.AdditionalStatusesToApply = new TacStatusDef[] { apReductionStatusEffect };
-            applyStatusEffect.StatusDef = addAttackBoostStatus;
-            rapidClearance.ViewElementDef.Description = new LocalizedTextBind("Until end of turn, after killing an enemy next attack cost -2AP", doNotLocalize);
-            (rapidClearance.StatusDef as OnActorDeathEffectStatusDef).EffectDef = applyStatusEffect;
-        }
-
         private static void Change_QuickAim()
         {
             ApplyStatusAbilityDef quickAim = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(a => a.name.Equals("QuickAim_AbilityDef"));
@@ -110,7 +69,6 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                 doNotLocalize);
         }
 
-        // New Kill'n'Run ability
         public static void Create_KillAndRun()
         {
             string skillName = "KillAndRun_AbilityDef";
@@ -212,7 +170,47 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             addAbiltyStatus.AbilityDef = dashAbility;
         }
 
-        // New Barrage ability
+        private static void Change_Onslaught()
+        {
+            // This below works on the target but he can be targeted again from another Assault without any response => the Assault loses 2 AP and the target gets nothing
+            // Looking for a solution, maybe MC fuctionality could be a solution (thx to Iko)
+            // .... delayed ....
+            //TacEffectStatusDef onslaughtStatus = Repo.GetAllDefs<TacEffectStatusDef>().FirstOrDefault(c => c.name.Contains("E_Status [DeterminedAdvance_AbilityDef]"));
+            //onslaughtStatus.SingleInstance = true;
+            Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
+        }
+
+        private static void Change_RapidClearance()
+        {
+            // Get Rapid Clearance ability def
+            ApplyStatusAbilityDef rapidClearance = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(a => a.name.Equals("RapidClearance_AbilityDef"));
+            // Clone status apply effect from Vanish
+            StatusEffectDef applyStatusEffect = Helper.CreateDefFromClone(
+                Repo.GetAllDefs<StatusEffectDef>().FirstOrDefault(s => s.name.Equals("E_ApplyVanishStatusEffect [Vanish_AbilityDef]")),
+                "8ea85920-588b-4e1d-a8e6-31ffbe9d3a02",
+                "E_ApplyStatusEffect [RapidClearance_AbilityDef]");
+            // Clone AP reduction statuses from QA
+            AddAttackBoostStatusDef addAttackBoostStatus = Helper.CreateDefFromClone( // applies the AP reduction status only for the next attack
+                Repo.GetAllDefs<AddAttackBoostStatusDef>().FirstOrDefault(s => s.name.Equals("E_Status [QuickAim_AbilityDef]")),
+                "9385a73f-8d20-4022-acc1-9210e2e29b8f",
+                "E_AttackBoostStatus [RapidClearance_AbilityDef]");
+            ChangeAbilitiesCostStatusDef apReductionStatusEffect = Helper.CreateDefFromClone(
+                Repo.GetAllDefs<ChangeAbilitiesCostStatusDef>().FirstOrDefault(s => s.name.Equals("E_AbilityCostModifier [QuickAim_AbilityDef]")),
+                "e3062779-8f2f-4407-bc4f-a20f5c2d267b",
+                "E_AbilityCostModifier [RapidClearance_AbilityDef]");
+            // change properties and references
+            apReductionStatusEffect.AbilityCostModification.RequiresProficientEquipment = false; // original QA true
+            apReductionStatusEffect.AbilityCostModification.SkillTagCullFilter = new SkillTagDef[0]; // No restrictions, original QA disables melee and throwing grenades
+            apReductionStatusEffect.AbilityCostModification.ActionPointMod = -0.5f; // -2 AP, original QA -1 AP
+            addAttackBoostStatus.Visuals = rapidClearance.ViewElementDef;
+            addAttackBoostStatus.SkillTagCullFilter = new SkillTagDef[0]; // No restrictions, original QA disables melee and throwing grenades
+            addAttackBoostStatus.NumberOfAttacks = 2;
+            addAttackBoostStatus.AdditionalStatusesToApply = new TacStatusDef[] { apReductionStatusEffect };
+            applyStatusEffect.StatusDef = addAttackBoostStatus;
+            rapidClearance.ViewElementDef.Description = new LocalizedTextBind("Until end of turn, after killing an enemy next attack cost -2AP", doNotLocalize);
+            (rapidClearance.StatusDef as OnActorDeathEffectStatusDef).EffectDef = applyStatusEffect;
+        }
+
         public static void Create_Barrage()
         {
             string skillName = "Barrage_AbilityDef";

@@ -138,8 +138,8 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             Pacifist.CharacterProgressionData.RequiredSpeed = 0;
             Pacifist.CharacterProgressionData.RequiredStrength = 0;
             Pacifist.CharacterProgressionData.RequiredWill = 0;
-            Pacifist.ViewElementDef.DisplayName1 = new LocalizedTextBind("PACIFIST", doNotLocalize);
-            Pacifist.ViewElementDef.Description = new LocalizedTextBind("Gain 4 points to willpower but lose 4 strength", doNotLocalize);
+            Pacifist.ViewElementDef.DisplayName1 = new LocalizedTextBind("SURVIVOR", doNotLocalize);
+            Pacifist.ViewElementDef.Description = new LocalizedTextBind("You have had it tougher than most, and that's saying a lot. Your body took a toll, but your mind grew stronger.\n-4 Strength, +4 Willpower", doNotLocalize);
             Sprite PacifistIcon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_PersonalTrack_Pacifist.png");
             Pacifist.ViewElementDef.LargeIcon = PacifistIcon;
             Pacifist.ViewElementDef.SmallIcon = PacifistIcon;
@@ -159,19 +159,21 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                     healer.StatModifications[i].Value = 2.0f;
                 }
             }
-            healer.ViewElementDef.Description = new LocalizedTextBind("Gain 2 points to willpower and 30% bonus heal value", doNotLocalize);
+            healer.ViewElementDef.DisplayName1 = new LocalizedTextBind("EDUCATED", doNotLocalize);
+            healer.ViewElementDef.Description = new LocalizedTextBind("Medkits are not magic, you have to point the muzzle at the wound, not spray it from head to toes like pixie dust.\n+2 WP, +30% Healing", doNotLocalize);
         }
         private static void Change_Farsighted()
         {
             PassiveModifierAbilityDef brainiac = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(p => p.name.Equals("Brainiac_AbilityDef"));
-            for (int i =0; i < brainiac.StatModifications.Length; i++)
+            for (int i = 0; i < brainiac.StatModifications.Length; i++)
             {
                 if (brainiac.StatModifications[i].TargetStat == StatModificationTarget.Perception)
                 {
                     brainiac.StatModifications[i].Value = 4.0f;
                 }
             }
-            brainiac.ViewElementDef.Description = new LocalizedTextBind("Gain 2 willpower and 4 perception", doNotLocalize);
+            brainiac.ViewElementDef.DisplayName1 = new LocalizedTextBind("SCAV", doNotLocalize);
+            brainiac.ViewElementDef.Description = new LocalizedTextBind("The Old World left behind all sorts of interesting things. It takes patience and a keen eye to find them.\n+2 Willpower, +4 Perception", doNotLocalize);
         }
         private static void Change_Strongman()
         {
@@ -188,14 +190,15 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                 }
             }
             strongMan.ItemTagStatModifications = new EquipmentItemTagStatModification[0]; // delete weapon buff and proficiency
-            strongMan.ViewElementDef.Description = new LocalizedTextBind("Gain 4 strength but lose 10 perception", doNotLocalize);
+            strongMan.ViewElementDef.DisplayName1 = new LocalizedTextBind("HARD LABOR", doNotLocalize);
+            strongMan.ViewElementDef.Description = new LocalizedTextBind("The New World didn't just build itself. There was lot of digging, lifting and carrying, and dust and noise everywhere.\n+4 Strength, -10 Perception", doNotLocalize);
         }
         private static void Change_GymRat()
         {
             PassiveModifierAbilityDef gymRat = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(p => p.name.Equals("GymRat_AbilityDef"));
             gymRat.StatModifications = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(p => p.name.Contains("Resourceful_AbilityDef")).StatModifications;
-            gymRat.ViewElementDef.DisplayName1 = new LocalizedTextBind("GYM RAT", doNotLocalize);
-            gymRat.ViewElementDef.Description = new LocalizedTextBind("Gain 2 strength and 25% bonus carry weight", doNotLocalize);
+            gymRat.ViewElementDef.DisplayName1 = new LocalizedTextBind("SQUATTER", doNotLocalize);
+            gymRat.ViewElementDef.Description = new LocalizedTextBind("In the camps you carried everything on your person at all times. And sometimes you had to take things from other people.\n+2 Strength, +25% carry weight", doNotLocalize);
             Sprite gymRatIcon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_PersonalTrack_GymRat-2.png");
             gymRat.ViewElementDef.LargeIcon = gymRatIcon;
             gymRat.ViewElementDef.SmallIcon = gymRatIcon;
@@ -232,8 +235,8 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             fireFighter.CharacterProgressionData.RequiredSpeed = 0;
             fireFighter.CharacterProgressionData.RequiredStrength = 0;
             fireFighter.CharacterProgressionData.RequiredWill = 0;
-            fireFighter.ViewElementDef.DisplayName1 = new LocalizedTextBind("FIREFIGHTER", doNotLocalize);
-            fireFighter.ViewElementDef.Description = new LocalizedTextBind("Reduce fire damage by 50%", doNotLocalize);
+            fireFighter.ViewElementDef.DisplayName1 = new LocalizedTextBind("CORPSE DISPOSER", doNotLocalize);
+            fireFighter.ViewElementDef.Description = new LocalizedTextBind("There were too many to bury, so you had to burn them. Day after day, week after week. It's not the fire that scares you.\n50% Fire Resistance.", doNotLocalize);
         }
         private static void Create_NightOwl()
         {
@@ -299,8 +302,8 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             nightOwl.CharacterProgressionData.RequiredSpeed = 0;
             nightOwl.CharacterProgressionData.RequiredStrength = 0;
             nightOwl.CharacterProgressionData.RequiredWill = 0;
-            nightOwl.ViewElementDef.DisplayName1 = new LocalizedTextBind("NIGHT OWL", doNotLocalize);
-            nightOwl.ViewElementDef.Description = new LocalizedTextBind("No penalty incurred in dark enviornments, +2 speed, -2 willpower", doNotLocalize);
+            nightOwl.ViewElementDef.DisplayName1 = new LocalizedTextBind("VOLUNTEERED", doNotLocalize);
+            nightOwl.ViewElementDef.Description = new LocalizedTextBind("They gave you cat eyes and reflex enhancers, and nothing for the headaches that came after.\nNight vision, +2 Speed, -2 Willpower", doNotLocalize);
             Sprite NightOwlIcon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_PersonalTrack_NightOwl.png");
             nightOwl.ViewElementDef.LargeIcon = NightOwlIcon;
             nightOwl.ViewElementDef.SmallIcon = NightOwlIcon;
@@ -337,8 +340,8 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             athlete.CharacterProgressionData.RequiredSpeed = 0;
             athlete.CharacterProgressionData.RequiredStrength = 0;
             athlete.CharacterProgressionData.RequiredWill = 0;
-            athlete.ViewElementDef.DisplayName1 = new LocalizedTextBind("ATHLETE", doNotLocalize);
-            athlete.ViewElementDef.Description = new LocalizedTextBind("Jump up one floor", doNotLocalize);
+            athlete.ViewElementDef.DisplayName1 = new LocalizedTextBind("CONDO RAIDER", doNotLocalize);
+            athlete.ViewElementDef.Description = new LocalizedTextBind("The world is full of broken elevators and collapsed staircases, and the pros in this business don't use ladders.\nJump", doNotLocalize);
             Sprite athleteIcon = Repo.GetAllDefs<TacticalAbilityViewElementDef>().FirstOrDefault(t => t.name.Equals("E_ViewElement [ExpertRunner_AbilityDef]")).LargeIcon;
             athlete.ViewElementDef.LargeIcon = athleteIcon;
             athlete.ViewElementDef.SmallIcon = athleteIcon;
@@ -353,7 +356,8 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                     thief.StatModifications[i].Value = 0.15f;
                 }
             }
-            thief.ViewElementDef.Description = new LocalizedTextBind("Gain 1 speed and 15% stealth", doNotLocalize);
+            thief.ViewElementDef.DisplayName1 = new LocalizedTextBind("TUNNEL RAT", doNotLocalize);
+            thief.ViewElementDef.Description = new LocalizedTextBind("You spent a good spell in the sewers. You had to be quiet, real quiet... And then run like hell!\n+15% Sneak, +1 Speed", doNotLocalize);
         }
         private static void Create_SpecialForces()
         {
@@ -383,8 +387,8 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             specialForces.CharacterProgressionData.RequiredSpeed = 0;
             specialForces.CharacterProgressionData.RequiredStrength = 0;
             specialForces.CharacterProgressionData.RequiredWill = 0;
-            specialForces.ViewElementDef.DisplayName1 = new LocalizedTextBind("SPECIAL FORCES", doNotLocalize);
-            specialForces.ViewElementDef.Description = new LocalizedTextBind("Gain 10% accuracy", doNotLocalize);
+            specialForces.ViewElementDef.DisplayName1 = new LocalizedTextBind("DESK JOCKEY", doNotLocalize);
+            specialForces.ViewElementDef.Description = new LocalizedTextBind("Sometimes you get lucky and after training you to shoot people, they put you behind a desk. But luck doesn't last.\n+10% Accuracy", doNotLocalize);
             Sprite specialForcesIcon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_PersonalTrack_SpecOp-3.png");
             specialForces.ViewElementDef.LargeIcon = specialForcesIcon;
             specialForces.ViewElementDef.SmallIcon = specialForcesIcon;
@@ -415,8 +419,8 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             Guerilla.CharacterProgressionData.RequiredSpeed = 0;
             Guerilla.CharacterProgressionData.RequiredStrength = 0;
             Guerilla.CharacterProgressionData.RequiredWill = 0;
-            Guerilla.ViewElementDef.DisplayName1 = new LocalizedTextBind("GUERILLA", doNotLocalize);
-            Guerilla.ViewElementDef.Description = new LocalizedTextBind("Grenades deal +10% damage", doNotLocalize);
+            Guerilla.ViewElementDef.DisplayName1 = new LocalizedTextBind("TROUBLEMAKER", doNotLocalize);
+            Guerilla.ViewElementDef.Description = new LocalizedTextBind("You have a knack for irritating the authorities. Maybe that's why you are here? Think about it.\n+10% Grenade Damage", doNotLocalize);
             Sprite GuerillaIcon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_PersonalTrack_Guerilla.png");
             Guerilla.ViewElementDef.LargeIcon = GuerillaIcon;
             Guerilla.ViewElementDef.SmallIcon = GuerillaIcon;
@@ -453,8 +457,8 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                 },
               };
             attentive.ItemTagStatModifications = new EquipmentItemTagStatModification[0];
-            attentive.ViewElementDef.DisplayName1 = new LocalizedTextBind("ATTENTIVE", doNotLocalize);
-            attentive.ViewElementDef.Description = new LocalizedTextBind("Gain 4 perception and 10 tile hearing range", doNotLocalize);
+            attentive.ViewElementDef.DisplayName1 = new LocalizedTextBind("PARANOID", doNotLocalize);
+            attentive.ViewElementDef.Description = new LocalizedTextBind("But you are not, because the monsters are real!\n+ 4 Perception, +10 Hearing Range", doNotLocalize);
             Sprite attentiveIcon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_PersonalTrack_FastLearner.png");
             attentive.ViewElementDef.LargeIcon = attentiveIcon;
             attentive.ViewElementDef.SmallIcon = attentiveIcon;
@@ -521,8 +525,8 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             hitMan.CharacterProgressionData.RequiredSpeed = 0;
             hitMan.CharacterProgressionData.RequiredStrength = 0;
             hitMan.CharacterProgressionData.RequiredWill = 0;
-            hitMan.ViewElementDef.DisplayName1 = new LocalizedTextBind("HITMAN", doNotLocalize);
-            hitMan.ViewElementDef.Description = new LocalizedTextBind("Gain 10% damage but lose 3 willpower", doNotLocalize);
+            hitMan.ViewElementDef.DisplayName1 = new LocalizedTextBind("A HISTORY OF VIOLENCE", doNotLocalize);
+            hitMan.ViewElementDef.Description = new LocalizedTextBind("In the past, you hurt some people. They probably deserved it.\n +10% Damage, -3 Willpower", doNotLocalize);
             Sprite hitManIcon = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(pm => pm.name.Equals("SilencedWeaponTalent_AbilityDef")).ViewElementDef.LargeIcon;
             hitMan.ViewElementDef.LargeIcon = hitManIcon;
             hitMan.ViewElementDef.SmallIcon = hitManIcon;
@@ -545,8 +549,8 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                 skillName);
             //Thug.StatModifications[0].Value = 1.1f; // no change, not necessary
             //Thug.StatModifications[1].Value = -0.1f; // no change, not necessary
-            Thug.ViewElementDef.DisplayName1 = new LocalizedTextBind("THUG", doNotLocalize);
-            Thug.ViewElementDef.Description = new LocalizedTextBind("Gain 10% damage but lose 10% accuracy", doNotLocalize);
+            Thug.ViewElementDef.DisplayName1 = new LocalizedTextBind("DAREDEVIL", doNotLocalize);
+            Thug.ViewElementDef.Description = new LocalizedTextBind("In the world you were born to, you have to live dangerously if at all. Strike first, strike hard, aim not.\n+10% Damage, -10% Accuracy", doNotLocalize);
             Sprite thugIcon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_PersonalTrack_Heartless.png");
             Thug.ViewElementDef.LargeIcon = thugIcon;
             Thug.ViewElementDef.SmallIcon = thugIcon;
@@ -605,7 +609,8 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                 source.ViewElementDef,
                 "533d07ea-4928-43ba-a4af-91bb2be260fe",
                 skillName);
-            plumber.ViewElementDef.DisplayName1 = new LocalizedTextBind("PLUMBER", doNotLocalize);
+            plumber.ViewElementDef.DisplayName1 = new LocalizedTextBind("SANITATION EXPERT", doNotLocalize);
+            plumber.ViewElementDef.Description = new LocalizedTextBind("Robots can't do everything. Grime, dirt, slime, ooze, yuck, sludge: you have been through it all and come on the other side.\nGoo Immunity", doNotLocalize);
             Sprite plumberIcon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_PersonalTrack_Plumber.png");
             plumber.ViewElementDef.LargeIcon = plumberIcon;
             plumber.ViewElementDef.SmallIcon = plumberIcon;
@@ -626,7 +631,8 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                 source.ViewElementDef,
                 "7a0f28dd-ee19-4c52-a2af-ab894bf70845",
                 skillName);
-            junkie.ViewElementDef.DisplayName1 = new LocalizedTextBind("JUNKIE", doNotLocalize);
+            junkie.ViewElementDef.DisplayName1 = new LocalizedTextBind("LAB ASSISTANT", doNotLocalize);
+            junkie.ViewElementDef.Description = new LocalizedTextBind("All those little accidents throughout the years have taught you a lot about safely dealing with acid spills.\nAcid Resistance", doNotLocalize);
             Sprite junkieIcon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_PersonalTrack_Stimpack-2.png");
             junkie.ViewElementDef.LargeIcon = junkieIcon;
             junkie.ViewElementDef.SmallIcon = junkieIcon;
@@ -651,8 +657,8 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             astronaut.CharacterProgressionData.RequiredSpeed = 0;
             astronaut.CharacterProgressionData.RequiredStrength = 0;
             astronaut.CharacterProgressionData.RequiredWill = 0;
-            astronaut.ViewElementDef.DisplayName1 = new LocalizedTextBind("ASTRONAUT", doNotLocalize);
-            astronaut.ViewElementDef.Description = new LocalizedTextBind("Gain Jet Pack proficiency", doNotLocalize);
+            astronaut.ViewElementDef.DisplayName1 = new LocalizedTextBind("ROCKETEER", doNotLocalize);
+            astronaut.ViewElementDef.Description = new LocalizedTextBind("Since you were a child you dreamt of flying rockets. Perhaps now you can!\nJetpack Proficiency", doNotLocalize);
             Sprite astronautIcon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_CharacterAbility_LaunchMissile-2.png");
             astronaut.ViewElementDef.LargeIcon = astronautIcon;
             astronaut.ViewElementDef.SmallIcon = astronautIcon;
@@ -694,7 +700,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             martialArtist.CharacterProgressionData.RequiredSpeed = 0;
             martialArtist.CharacterProgressionData.RequiredStrength = 0;
             martialArtist.CharacterProgressionData.RequiredWill = 0;
-            martialArtist.ViewElementDef.DisplayName1 = new LocalizedTextBind("MARTIAL ARTIST", doNotLocalize);
+            martialArtist.ViewElementDef.DisplayName1 = new LocalizedTextBind("TRUE GRIT", doNotLocalize);
             martialArtist.ViewElementDef.Description = new LocalizedTextBind("Reduce incoming damage in melee range by 10%", doNotLocalize);
             Sprite martialArtistIcon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_TentacularBody_MeleeAttackRetaliation-2.png");
             martialArtist.ViewElementDef.LargeIcon = martialArtistIcon;
