@@ -8,15 +8,18 @@ using Harmony;
 using PhoenixPoint.Common.Core;
 using PhoenixPoint.Common.Entities;
 using PhoenixPoint.Common.Entities.GameTags;
+using PhoenixPoint.Common.UI;
 using PhoenixPoint.Tactical;
 using PhoenixPoint.Tactical.Entities;
 using PhoenixPoint.Tactical.Entities.Abilities;
+using PhoenixPoint.Tactical.Entities.Effects.DamageTypes;
 using PhoenixPoint.Tactical.Entities.Equipments;
 using PhoenixPoint.Tactical.Entities.Statuses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using UnityEngine;
 
 namespace PhoenixRising.BetterClasses.SkillModifications
 {
@@ -80,7 +83,44 @@ namespace PhoenixRising.BetterClasses.SkillModifications
         }
         private static void Create_HunkerDown()
         {
-            Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
+            string skillName = "HunkerDown_AbilityDef";
+            ApplyStatusAbilityDef source = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(asa => asa.name.Equals("CloseQuarters_AbilityDef"));
+            ApplyStatusAbilityDef hunkerDown = Helper.CreateDefFromClone(
+                source,
+                "a3d841c5-b3dd-440b-ae4e-629dcabd14df",
+                skillName);
+            hunkerDown.CharacterProgressionData = Helper.CreateDefFromClone(
+                source.CharacterProgressionData,
+                "64add472-da6f-4584-b5e9-f204b7d3c735",
+                skillName);
+            hunkerDown.ViewElementDef = Helper.CreateDefFromClone(
+                source.ViewElementDef,
+                "c0b8b645-b1b7-4f4e-87ea-3f6bacc2dc4f",
+                skillName);
+            hunkerDown.StatusDef = Helper.CreateDefFromClone(
+                source.StatusDef,
+                "adc38c08-1878-422f-a37c-a859aa67ceed",
+                skillName);
+            hunkerDown.Active = true;
+            hunkerDown.EndsTurn = true;
+            hunkerDown.ActionPointCost = 0.5f;
+            hunkerDown.WillPointCost = 2.0f;
+            hunkerDown.TraitsRequired = new string[] { "start", "ability" };
+            hunkerDown.TraitsToApply = new string[] { "ability" };
+            hunkerDown.ShowNotificationOnUse = true;
+            hunkerDown.StatusApplicationTrigger = StatusApplicationTrigger.ActivateAbility;
+            hunkerDown.CharacterProgressionData.RequiredStrength = 0;
+            hunkerDown.CharacterProgressionData.RequiredWill = 0;
+            hunkerDown.CharacterProgressionData.RequiredSpeed = 0;
+            hunkerDown.ViewElementDef.DisplayName1 = new LocalizedTextBind("HUNKER DOWN", doNotLocalize);
+            hunkerDown.ViewElementDef.Description = new LocalizedTextBind("Gain 25% damage resistance until your next turn.", doNotLocalize);
+            Sprite hunkerDownIcon = Repo.GetAllDefs<TacticalAbilityViewElementDef>().FirstOrDefault(ve => ve.name.Equals("E_ViewElement [Chiron_EnterStabilityStance_AbilityDef]")).SmallIcon;
+            hunkerDown.ViewElementDef.LargeIcon = hunkerDownIcon;
+            hunkerDown.ViewElementDef.SmallIcon = hunkerDownIcon;
+            (hunkerDown.StatusDef as DamageMultiplierStatusDef).Visuals = hunkerDown.ViewElementDef;
+            (hunkerDown.StatusDef as DamageMultiplierStatusDef).DamageTypeDefs = new DamageTypeBaseEffectDef[0]; // Empty = all damage types
+            (hunkerDown.StatusDef as DamageMultiplierStatusDef).Range = -1.0f; // -1 = no range restriction
+            //Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
         }
         public static void Create_DynamicResistance()
         {

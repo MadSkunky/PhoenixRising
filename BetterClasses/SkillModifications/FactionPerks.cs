@@ -1,14 +1,22 @@
 ﻿using Base.Core;
 using Base.Defs;
 using Base.Entities.Abilities;
+using Base.UI;
+using Harmony;
 using PhoenixPoint.Common.Core;
+using PhoenixPoint.Common.UI;
+using PhoenixPoint.Tactical.Entities;
 using PhoenixPoint.Tactical.Entities.Abilities;
+using PhoenixPoint.Tactical.Entities.Animations;
+using PhoenixPoint.Tactical.Entities.Effects.DamageTypes;
+using PhoenixPoint.Tactical.Entities.Weapons;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace PhoenixRising.BetterClasses.SkillModifications
 {
@@ -49,14 +57,18 @@ namespace PhoenixRising.BetterClasses.SkillModifications
 
         private static void Change_OWFocus()
         {
-            Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
+            OverwatchFocusAbilityDef overwatchFocus = Repo.GetAllDefs<OverwatchFocusAbilityDef>().FirstOrDefault(of => of.name.Equals("OverwatchFocus_AbilityDef"));
+            Sprite owSprite = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_EquipmentAbility_OverwatchFocus-2.png");
+            overwatchFocus.ViewElementDef.LargeIcon = owSprite;
+            overwatchFocus.ViewElementDef.SmallIcon = owSprite;
         }
         private static void Change_Shadowstep()
         {
-            Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
+            Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' no changes implemented yet!");
         }
         private static void Change_Rally()
         {
+
             Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
         }
         private static void Change_CureSpray()
@@ -69,7 +81,8 @@ namespace PhoenixRising.BetterClasses.SkillModifications
         }
         private static void Change_SonicBlast()
         {
-            Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
+
+            //Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
         }
         private static void Change_BreatheMist()
         {
@@ -98,7 +111,49 @@ namespace PhoenixRising.BetterClasses.SkillModifications
         }
         private static void Create_Endurance()
         {
-            Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
+            string skillName = "Endurance_AbilityDef";
+            RecoverWillAbilityDef source = Repo.GetAllDefs<RecoverWillAbilityDef>().FirstOrDefault(p => p.name.Equals("RecoverWill_AbilityDef"));
+            RecoverWillAbilityDef endurance = Helper.CreateDefFromClone(
+                source,
+                "4e9712b6-8a46-489d-9553-fdc1380c334a",
+                skillName);
+            endurance.CharacterProgressionData = Helper.CreateDefFromClone(
+                Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(p => p.name.Equals("MasterMarksman_AbilityDef")).CharacterProgressionData,
+                "ffc75f46-adf0-4683-b28c-a59e91a99843",
+                skillName);
+            endurance.ViewElementDef = Helper.CreateDefFromClone(
+                source.ViewElementDef,
+                "75155fd6-7cef-40d8-a03d-28bdb3dc0929",
+                skillName);
+
+            endurance.WillPointsReturnedPerc = 75;
+
+            endurance.CharacterProgressionData.RequiredSpeed = 0;
+            endurance.CharacterProgressionData.RequiredStrength = 0;
+            endurance.CharacterProgressionData.RequiredWill = 0;
+            endurance.ViewElementDef.DisplayName1 = new LocalizedTextBind("ENDURANCE", doNotLocalize);
+            endurance.ViewElementDef.Description = new LocalizedTextBind("Recover restores 75% WP", doNotLocalize);
+            Sprite enduranceIcon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_PersonalTrack_Stamina.png");
+            endurance.ViewElementDef.LargeIcon = enduranceIcon;
+        }
+
+        [HarmonyPatch(typeof(RecoverWillAbility), "GetWillpowerRecover")]
+        internal static class RecoverWillAbility_GetWillpowerRecover
+        {
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
+            private static void Postfix(ref float __result, RecoverWillAbility __instance)
+            {
+                TacticalActor ___TacticalActor = (TacticalActor)AccessTools.Property(typeof(TacticalAbility), "TacticalActor").GetValue(__instance, null);
+                TacticalAbility endurance = ___TacticalActor.GetAbilities<TacticalAbility>().FirstOrDefault(s => s.AbilityDef.name.Equals("Endurance_AbilityDef"));
+                if (endurance != null)
+                {
+                    __result = Mathf.Ceil(___TacticalActor.CharacterStats.WillPoints.Max * 75 / 100f);
+                }
+                else
+                {
+                    __result = Mathf.Ceil(___TacticalActor.CharacterStats.WillPoints.Max * __instance.RecoverWillAbilityDef.WillPointsReturnedPerc / 100f);
+                }
+            }
         }
     }
 }
