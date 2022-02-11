@@ -1,5 +1,6 @@
 ﻿using Base.Core;
 using Base.Defs;
+using Base.Entities.Abilities;
 using Base.Entities.Effects;
 using Base.Entities.Statuses;
 using Base.UI;
@@ -12,6 +13,7 @@ using PhoenixPoint.Common.UI;
 using PhoenixPoint.Tactical;
 using PhoenixPoint.Tactical.Entities;
 using PhoenixPoint.Tactical.Entities.Abilities;
+using PhoenixPoint.Tactical.Entities.Animations;
 using PhoenixPoint.Tactical.Entities.Effects.DamageTypes;
 using PhoenixPoint.Tactical.Entities.Equipments;
 using PhoenixPoint.Tactical.Entities.Statuses;
@@ -93,6 +95,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                 source.CharacterProgressionData,
                 "64add472-da6f-4584-b5e9-f204b7d3c735",
                 skillName);
+            hunkerDown.TargetingDataDef = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(a => a.name.Equals("QuickAim_AbilityDef")).TargetingDataDef;
             hunkerDown.ViewElementDef = Helper.CreateDefFromClone(
                 source.ViewElementDef,
                 "c0b8b645-b1b7-4f4e-87ea-3f6bacc2dc4f",
@@ -105,7 +108,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             hunkerDown.EndsTurn = true;
             hunkerDown.ActionPointCost = 0.5f;
             hunkerDown.WillPointCost = 2.0f;
-            hunkerDown.TraitsRequired = new string[] { "start", "ability" };
+            hunkerDown.TraitsRequired = new string[] { "start", "ability", "move" };
             hunkerDown.TraitsToApply = new string[] { "ability" };
             hunkerDown.ShowNotificationOnUse = true;
             hunkerDown.StatusApplicationTrigger = StatusApplicationTrigger.ActivateAbility;
@@ -120,6 +123,19 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             (hunkerDown.StatusDef as DamageMultiplierStatusDef).Visuals = hunkerDown.ViewElementDef;
             (hunkerDown.StatusDef as DamageMultiplierStatusDef).DamageTypeDefs = new DamageTypeBaseEffectDef[0]; // Empty = all damage types
             (hunkerDown.StatusDef as DamageMultiplierStatusDef).Range = -1.0f; // -1 = no range restriction
+            AbilityDef animationSearchDef = Repo.GetAllDefs<AbilityDef>().FirstOrDefault(ad => ad.name.Equals("QuickAim_AbilityDef"));
+            foreach (TacActorSimpleAbilityAnimActionDef animActionDef in Repo.GetAllDefs<TacActorSimpleAbilityAnimActionDef>().Where(aad => aad.name.Contains("Soldier_Utka_AnimActionsDef")))
+            {
+                if (animActionDef.AbilityDefs != null && animActionDef.AbilityDefs.Contains(animationSearchDef))
+                {
+                    animActionDef.AbilityDefs = animActionDef.AbilityDefs.Append(hunkerDown).ToArray();
+                    Logger.Debug("Anim Action '" + animActionDef.name + "' set for abilities:");
+                    foreach (AbilityDef ad in animActionDef.AbilityDefs)
+                    {
+                        Logger.Debug("  " + ad.name);
+                    }
+                }
+            }
         }
         public static void Create_DynamicResistance()
         {
@@ -173,8 +189,8 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             jetpackControl.CharacterProgressionData.RequiredStrength = 0;
             jetpackControl.CharacterProgressionData.RequiredWill = 0;
             jetpackControl.CharacterProgressionData.RequiredSpeed = 0;
-            jetpackControl.ViewElementDef.DisplayName1 = new LocalizedTextBind("JETPACKCONTROL", doNotLocalize);
-            string description = String.Format("Jet jump to a location within {0} tiles", jetpackControlRange);
+            jetpackControl.ViewElementDef.DisplayName1 = new LocalizedTextBind("JETPACK CONTROL", doNotLocalize);
+            string description = $"Jet jump to a location within {jetpackControlRange} tiles";
             jetpackControl.ViewElementDef.Description = new LocalizedTextBind(description, doNotLocalize);
             Sprite jetpackControlIcon = Repo.GetAllDefs<ClassProficiencyAbilityDef>().FirstOrDefault(cp => cp.name.Equals("UseAttachedEquipment_AbilityDef")).ViewElementDef.LargeIcon;
             jetpackControl.ViewElementDef.LargeIcon = jetpackControlIcon;
@@ -182,6 +198,18 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             jetpackControl.ActionPointCost = jetpackControlAPCost;
             jetpackControl.WillPointCost = jetpackControlWPCost;
             jetpackControl.TargetingDataDef.Origin.Range = jetpackControlRange;
+            foreach (TacActorSimpleAbilityAnimActionDef animActionDef in Repo.GetAllDefs<TacActorSimpleAbilityAnimActionDef>().Where(aad => aad.name.Contains("Soldier_Utka_AnimActionsDef")))
+            {
+                if (animActionDef.AbilityDefs != null && animActionDef.AbilityDefs.Contains(source))
+                {
+                    animActionDef.AbilityDefs = animActionDef.AbilityDefs.Append(jetpackControl).ToArray();
+                    Logger.Debug("Anim Action '" + animActionDef.name + "' set for abilities:");
+                    foreach (AbilityDef ad in animActionDef.AbilityDefs)
+                    {
+                        Logger.Debug("  " + ad.name);
+                    }
+                }
+            }
         }
         private static void Change_BoomBlast()
         {

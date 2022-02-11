@@ -120,18 +120,18 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                     Modification = StatModificationType.AddMax,
                     Value = willpower
                 },
-                new ItemStatModification()
-                {
-                    TargetStat = StatModificationTarget.WillPoints,
-                    Modification = StatModificationType.Add,
-                    Value = willpower
-                },
-                new ItemStatModification()
-                {
-                    TargetStat = StatModificationTarget.WillPoints,
-                    Modification = StatModificationType.AddMax,
-                    Value = willpower
-                }
+                //new ItemStatModification()
+                //{
+                //    TargetStat = StatModificationTarget.WillPoints,
+                //    Modification = StatModificationType.Add,
+                //    Value = willpower
+                //},
+                //new ItemStatModification()
+                //{
+                //    TargetStat = StatModificationTarget.WillPoints,
+                //    Modification = StatModificationType.AddMax,
+                //    Value = willpower
+                //}
             };
             Pacifist.ItemTagStatModifications = new EquipmentItemTagStatModification[0];
             Pacifist.DamageKeywordPairs = new DamageKeywordPair[0];
@@ -273,18 +273,18 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                     Modification = StatModificationType.AddMax,
                     Value = willpower
                 },
-                new ItemStatModification() // same for WillPoints
-                {
-                    TargetStat = StatModificationTarget.WillPoints,
-                    Modification = StatModificationType.Add,
-                    Value = willpower
-                },
-                new ItemStatModification() // and WillPoints max
-                {
-                    TargetStat = StatModificationTarget.WillPoints,
-                    Modification = StatModificationType.AddMax,
-                    Value = willpower
-                },
+                //new ItemStatModification() // same for WillPoints
+                //{
+                //    TargetStat = StatModificationTarget.WillPoints,
+                //    Modification = StatModificationType.Add,
+                //    Value = willpower
+                //},
+                //new ItemStatModification() // and WillPoints max
+                //{
+                //    TargetStat = StatModificationTarget.WillPoints,
+                //    Modification = StatModificationType.AddMax,
+                //    Value = willpower
+                //},
                 new ItemStatModification()
                 {
                     TargetStat = StatModificationTarget.Speed,
@@ -507,18 +507,18 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                     Modification = StatModificationType.Multiply,
                     Value = bonusDamage
                 },
-                new ItemStatModification()
-                {
-                    TargetStat = StatModificationTarget.WillPoints,
-                    Modification = StatModificationType.Add,
-                    Value = willpower
-                },
-                new ItemStatModification()
-                {
-                    TargetStat = StatModificationTarget.WillPoints,
-                    Modification = StatModificationType.AddMax,
-                    Value = willpower
-                }
+                //new ItemStatModification()
+                //{
+                //    TargetStat = StatModificationTarget.WillPoints,
+                //    Modification = StatModificationType.Add,
+                //    Value = willpower
+                //},
+                //new ItemStatModification()
+                //{
+                //    TargetStat = StatModificationTarget.WillPoints,
+                //    Modification = StatModificationType.AddMax,
+                //    Value = willpower
+                //}
             };
             hitMan.ItemTagStatModifications = new EquipmentItemTagStatModification[0];
             hitMan.DamageKeywordPairs = new DamageKeywordPair[0];

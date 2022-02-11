@@ -7,13 +7,14 @@ We are currently a small group looking to expand. If you like our mods and have 
 ### The Team behind this project
 
 - Belial: The master mind and heart of the team, main designer and the brain behind almost anything.
-- MadSkunky: Coding, design, balancing and testing.
 - Ikobot: Dataminer, master hacker, tester & coder, a lot of things he found in the game files are the base of this mod.
-- BFIG: Graphics design and editing
-- dtony22: Coding and datamining
+- MadSkunky: Coding, design, balancing and testing.
+- Voland, Mikey C: Storytelling.
+- BFIG: Graphics design and editing.
+- dtony22, Linus Lim: Coding and datamining.
 
-- Voland, Mikey C, Yokes, conductiv, Torinus, Pantolomin, Dorante, mad2342 ...
-Designing, balancing, testing, storytelling and always open to productive discussions.
+- Yokes, conductiv, Torinus, Pantolomin, Dorante, mad2342 ...
+Designing, balancing, testing, storytelling and always open to productive discussions and helping on all fronts.
 
 ## Subparts
 
