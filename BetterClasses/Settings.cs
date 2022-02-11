@@ -30,7 +30,7 @@ namespace PhoenixRising.BetterClasses
                     "RETURN FIRE",
                     "WAR CRY",
                     "",
-                    "BOOM BLAST", // -> Hunker Down
+                    "HUNKER DOWN",
                     "DYNAMIC RESISTANCE",
                     "RAGE BURST"
                 }),
@@ -154,7 +154,7 @@ namespace PhoenixRising.BetterClasses
                 relList: new Dictionary<string, Dictionary<string, string>>
                 {{ FactionKeys.All, new Dictionary<string,string> {
                     { ClassKeys.Assault.Name, "BARRAGE" },
-                    { ClassKeys.Heavy.Name, "BATTLE FOCUS" }, // -> JetpackControl
+                    { ClassKeys.Heavy.Name, "JETPACKCONTROL" },
                     { ClassKeys.Sniper.Name, "GUNSLINGER" },
                     { ClassKeys.Berserker.Name, "BRAWLER" },
                     { ClassKeys.Priest.Name, "DEVOTED" },
@@ -168,7 +168,7 @@ namespace PhoenixRising.BetterClasses
                 relList: new Dictionary<string, Dictionary<string, string>>
                 {{ FactionKeys.All, new Dictionary<string,string> {
                     { ClassKeys.Assault.Name, "QUARTERBACK" },
-                    { ClassKeys.Heavy.Name, "EXPERT HEAVY WEAPONS" },
+                    { ClassKeys.Heavy.Name, "BOOM BLAST" },
                     { ClassKeys.Sniper.Name, "KILL ZONE" },
                     { ClassKeys.Berserker.Name, "EXPERT MELEE" },
                     { ClassKeys.Priest.Name, "BIOCHEMIST" },
@@ -183,10 +183,10 @@ namespace PhoenixRising.BetterClasses
                 {{ ClassKeys.AllClasses.Name, new Dictionary<string,string> {
                     { FactionKeys.PX, "OVERWATCH FOCUS" },
                     { FactionKeys.Anu, "BREATHE MIST" },
-                    { FactionKeys.NJ, "RECKLESS" },
+                    { FactionKeys.NJ, "ENDURANCE" },
                     { FactionKeys.Syn, "SHADOWSTEP" },
                     { FactionKeys.IN, "OVERWATCH FOCUS" },
-                    { FactionKeys.PU, "RECKLESS" },
+                    { FactionKeys.PU, "ENDURANCE" },
                     { FactionKeys.FS, "BREATHE MIST" }
                 } } }),
             new PersonalPerksDef(

@@ -120,7 +120,6 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             (hunkerDown.StatusDef as DamageMultiplierStatusDef).Visuals = hunkerDown.ViewElementDef;
             (hunkerDown.StatusDef as DamageMultiplierStatusDef).DamageTypeDefs = new DamageTypeBaseEffectDef[0]; // Empty = all damage types
             (hunkerDown.StatusDef as DamageMultiplierStatusDef).Range = -1.0f; // -1 = no range restriction
-            //Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
         }
         public static void Create_DynamicResistance()
         {
@@ -150,11 +149,61 @@ namespace PhoenixRising.BetterClasses.SkillModifications
         }
         private static void Create_JetpackControl()
         {
-            Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
+            string skillName = "JetpackControl_AbilityDef";
+            float jetpackControlAPCost = 0.5f;
+            float jetpackControlWPCost = 3f;
+            float jetpackControlRange = 12f;
+            JetJumpAbilityDef source = Repo.GetAllDefs<JetJumpAbilityDef>().FirstOrDefault(jj => jj.name.Equals("JetJump_AbilityDef"));
+            JetJumpAbilityDef jetpackControl = Helper.CreateDefFromClone(
+                source,
+                "ddbb58e8-9ea4-417c-bddb-8ed62837bb10",
+                skillName);
+            jetpackControl.CharacterProgressionData = Helper.CreateDefFromClone(
+                Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(p => p.name.Equals("MasterMarksman_AbilityDef")).CharacterProgressionData,
+                "f330ce45-361a-4444-bd69-04b3e6350a0e",
+                skillName);
+            jetpackControl.ViewElementDef = Helper.CreateDefFromClone(
+                source.ViewElementDef,
+                "629a8d02-1dfe-48bb-9ae5-4ef8d789b5eb",
+                skillName);
+            jetpackControl.TargetingDataDef = Helper.CreateDefFromClone(
+                source.TargetingDataDef,
+                "c97fda50-4e29-443d-a043-cf852fa0ec12",
+                skillName);
+            jetpackControl.CharacterProgressionData.RequiredStrength = 0;
+            jetpackControl.CharacterProgressionData.RequiredWill = 0;
+            jetpackControl.CharacterProgressionData.RequiredSpeed = 0;
+            jetpackControl.ViewElementDef.DisplayName1 = new LocalizedTextBind("JETPACKCONTROL", doNotLocalize);
+            string description = String.Format("Jet jump to a location within {0} tiles", jetpackControlRange);
+            jetpackControl.ViewElementDef.Description = new LocalizedTextBind(description, doNotLocalize);
+            Sprite jetpackControlIcon = Repo.GetAllDefs<ClassProficiencyAbilityDef>().FirstOrDefault(cp => cp.name.Equals("UseAttachedEquipment_AbilityDef")).ViewElementDef.LargeIcon;
+            jetpackControl.ViewElementDef.LargeIcon = jetpackControlIcon;
+            jetpackControl.ViewElementDef.SmallIcon = jetpackControlIcon;
+            jetpackControl.ActionPointCost = jetpackControlAPCost;
+            jetpackControl.WillPointCost = jetpackControlWPCost;
+            jetpackControl.TargetingDataDef.Origin.Range = jetpackControlRange;
         }
         private static void Change_BoomBlast()
         {
-            Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
+            float bbRangeModValue = 0.8f;
+            ApplyStatusAbilityDef boomBlast = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(asa => asa.name.Equals("BigBooms_AbilityDef"));
+            boomBlast.ViewElementDef.Description = new LocalizedTextBind(
+                $"The Action Point cost of Grenades, and other explosive weapons, is reduced by 1 and their range is modified by {(bbRangeModValue * 100) - 100}% until the end of the turn.",
+                doNotLocalize);
+            EquipmentItemTagStatModification bbRangeMod = new EquipmentItemTagStatModification()
+            {
+                ItemTag = Repo.GetAllDefs<GameTagDef>().FirstOrDefault(gt => gt.name.Equals("ExplosiveWeapon_TagDef")),
+                EquipmentStatModification = new ItemStatModification()
+                {
+                    TargetStat = StatModificationTarget.BonusAttackRange,
+                    Modification = StatModificationType.Multiply,
+                    Value = bbRangeModValue
+                }
+            };
+            (boomBlast.StatusDef as AddAttackBoostStatusDef).AdditionalStatusesToApply.OfType<StanceStatusDef>().First().EquipmentsStatModifications = new EquipmentItemTagStatModification[]
+            {
+                bbRangeMod
+            };
         }
 
         // War Cry Harmony patches

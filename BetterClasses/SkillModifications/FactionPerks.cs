@@ -8,7 +8,9 @@ using PhoenixPoint.Common.UI;
 using PhoenixPoint.Tactical.Entities;
 using PhoenixPoint.Tactical.Entities.Abilities;
 using PhoenixPoint.Tactical.Entities.Animations;
+using PhoenixPoint.Tactical.Entities.DamageKeywords;
 using PhoenixPoint.Tactical.Entities.Effects.DamageTypes;
+using PhoenixPoint.Tactical.Entities.Equipments;
 using PhoenixPoint.Tactical.Entities.Weapons;
 using System;
 using System.Collections.Generic;
@@ -47,7 +49,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             Change_BreatheMist();
             //Resurrect: 3AP 6WP, to check if the Mutoid_ResurrectAbilityDef will work, change to only allow 1 ressurect at one time (same as MC)
             Change_Resurrect();
-            //Pepper Cloud: 3AP 6WP, to check if the Mutoid_PepperCloud_ApplyStatusAbilityDef will work, change range from 5 to 8 tiles
+            //Pepper Cloud: 1AP 2WP, to check if the Mutoid_PepperCloud_ApplyStatusAbilityDef will work, change range from 5 to 8 tiles
             Change_PepperCloud();
             //Paralyse Limb: 3AP 6WP, to check if the Mutoid_ParalyticSpray_AbilityDef will work
             Change_ParalyseLimb();
@@ -81,8 +83,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
         }
         private static void Change_SonicBlast()
         {
-
-            //Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
+            Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
         }
         private static void Change_BreatheMist()
         {
@@ -99,11 +100,15 @@ namespace PhoenixRising.BetterClasses.SkillModifications
         }
         private static void Change_Resurrect()
         {
-            Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
+            ResurrectAbilityDef resurrect = Repo.GetAllDefs<ResurrectAbilityDef>().FirstOrDefault(a => a.name.Equals("Mutoid_ResurrectAbilityDef"));
+            resurrect.ActionPointCost = 0.75f;
+            resurrect.WillPointCost = 6;
+            resurrect.UsesPerTurn = 1;
         }
         private static void Change_PepperCloud()
         {
-            Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
+            ApplyStatusAbilityDef pepperCloud = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(p => p.name.Equals("Mutoid_PepperCloud_ApplyStatusAbilityDef"));
+            pepperCloud.TargetingDataDef.Origin.Range = 8;
         }
         private static void Change_ParalyseLimb()
         {
@@ -111,32 +116,38 @@ namespace PhoenixRising.BetterClasses.SkillModifications
         }
         private static void Create_Endurance()
         {
+            // Harmony patch RecoverWillAbility.GetWillpowerRecover
+            // Adding an ability that get checked in the patched method (see below)
             string skillName = "Endurance_AbilityDef";
-            RecoverWillAbilityDef source = Repo.GetAllDefs<RecoverWillAbilityDef>().FirstOrDefault(p => p.name.Equals("RecoverWill_AbilityDef"));
-            RecoverWillAbilityDef endurance = Helper.CreateDefFromClone(
+            PassiveModifierAbilityDef source = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(p => p.name.Contains("Talent"));
+            PassiveModifierAbilityDef endurance = Helper.CreateDefFromClone(
                 source,
                 "4e9712b6-8a46-489d-9553-fdc1380c334a",
                 skillName);
             endurance.CharacterProgressionData = Helper.CreateDefFromClone(
-                Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(p => p.name.Equals("MasterMarksman_AbilityDef")).CharacterProgressionData,
+                source.CharacterProgressionData,
                 "ffc75f46-adf0-4683-b28c-a59e91a99843",
                 skillName);
             endurance.ViewElementDef = Helper.CreateDefFromClone(
                 source.ViewElementDef,
                 "75155fd6-7cef-40d8-a03d-28bdb3dc0929",
                 skillName);
-
-            endurance.WillPointsReturnedPerc = 75;
-
+            // reset all possible passive modifications, we need none, this ability is only to have something to chose and as flag for the Endurance Harmony patch
+            endurance.StatModifications = new ItemStatModification[0];
+            endurance.ItemTagStatModifications = new EquipmentItemTagStatModification[0];
+            endurance.DamageKeywordPairs = new DamageKeywordPair[0];
+            // Set necessary fields
             endurance.CharacterProgressionData.RequiredSpeed = 0;
             endurance.CharacterProgressionData.RequiredStrength = 0;
             endurance.CharacterProgressionData.RequiredWill = 0;
             endurance.ViewElementDef.DisplayName1 = new LocalizedTextBind("ENDURANCE", doNotLocalize);
             endurance.ViewElementDef.Description = new LocalizedTextBind("Recover restores 75% WP", doNotLocalize);
-            Sprite enduranceIcon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_PersonalTrack_Stamina.png");
+            Sprite enduranceIcon = Repo.GetAllDefs<TacticalAbilityViewElementDef>().FirstOrDefault(ve => ve.name.Equals("E_ViewElement [Reckless_AbilityDef]")).LargeIcon;
             endurance.ViewElementDef.LargeIcon = enduranceIcon;
+            endurance.ViewElementDef.SmallIcon = enduranceIcon;
         }
 
+        // Endurance: Patching GetWillpowerRecover from active actor when he uses Recover to check if Endurance ability is active and return 75% WP to recover
         [HarmonyPatch(typeof(RecoverWillAbility), "GetWillpowerRecover")]
         internal static class RecoverWillAbility_GetWillpowerRecover
         {
