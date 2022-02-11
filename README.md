@@ -20,7 +20,7 @@ Designing, balancing, testing, storytelling and always open to productive discus
 
 ### Better Classes
 
-Reworks, rebalances and overhauls all 7 vanilla classes and introduces entirely different 3rd row of skills that depend on soldier origin, background and class.
+Reworks, rebalances and overhauls all 7 vanilla classes and most of their skills and also introduces entirely different 3rd row of skills that depend on soldier origin, background and class. Below is the explanation how 3rd row is compiled:
 
 Better Classes 3rd row features 2 Background perks, 2 Faction Perks, 2 Class Perks and 1 Proficiency Perk
 
