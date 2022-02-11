@@ -30,3 +30,5 @@ They are aquired on level 1 and 5 and are chosen randomly from a pool of 19 tota
 "Faction Perks": Each recruit comes from specific faction that affects his training and abilities. These Perks are aquired on level 2 and 7 and are fixed based on faction, but elite classes(Priest, Technician and Inflitrator) get their own unique faction perks on level 6.
 
 "Class Skills" aquired on lvl 3 and 6 are powerful abilities that define the class and are direct expansion of his row 1 skill tree. As class-defining abilities they are only available on core class, allowing unique multi-class combinations, where Assault-Sniper is not the same as Sniper-Assault.
+
+Finally "Proficiency Perk" is randomly aquired on lvl 4 and simply allows you to learn additional weapon proficiency.
