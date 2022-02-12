@@ -107,9 +107,14 @@ namespace PhoenixRising.BetterClasses
                                     }
                                     else
                                     {
-                                        Logger.Always("Ability '" + ability + "' was not configured for level 1-7 or was not received from Repo and so not applied!");
+                                        Logger.Always("Ability '" + ability + "' was not configured for level " + i + " or was not received from Repo and so not applied!");
                                         Logger.Always("----------------------------------------------------------------------------------------------------", false);
                                     }
+                                }
+                                else
+                                {
+                                    Logger.Always(" The method personalPerksDef.GetPerk() does not return an ability for level " + i + " and so none got applied!");
+                                    Logger.Always("----------------------------------------------------------------------------------------------------", false);
                                 }
                             }
                             Logger.Debug("----------------------------------------------------", false);

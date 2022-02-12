@@ -153,7 +153,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             Sprite knR_IconSprite = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_KillNRun.png");
             viewElement.LargeIcon = knR_IconSprite;
             viewElement.SmallIcon = knR_IconSprite;
-            viewElement.HideFromPassives = true;
+            //viewElement.HideFromPassives = true;
 
             multiStatus.Statuses = new StatusDef[] { onActorDeathEffectStatus, addAbiltyStatus };
 
@@ -177,7 +177,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             // .... delayed ....
             //TacEffectStatusDef onslaughtStatus = Repo.GetAllDefs<TacEffectStatusDef>().FirstOrDefault(c => c.name.Contains("E_Status [DeterminedAdvance_AbilityDef]"));
             //onslaughtStatus.SingleInstance = true;
-            Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
+            Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' no changes implemented yet!");
         }
 
         private static void Change_RapidClearance()

@@ -112,25 +112,25 @@ namespace PhoenixRising.BetterClasses
                 spc: 10,
                 rngList: new List<string>
                 {
-                    "PACIFIST",
-                    "HEALER",
-                    "FARSIGHTED",
-                    "STRONGMAN",
-                    "GYM RAT",
-                    "FIREFIGHTER",
-                    "NIGHT OWL",
-                    "ATHLETE",
-                    "THIEF",
-                    "SPECIAL FORCES",
-                    "GUERILLA",
-                    "ATTENTIVE",
-                    "HITMAN",
-                    "THUG",
+                    "SURVIVOR",
+                    "EDUCATED",
+                    "SCAV",
+                    "HARD LABOR",
+                    "SQUATTER",
+                    "CORPSE DISPOSER",
+                    "VOLUNTEERED",
+                    "CONDO RAIDER",
+                    "TUNNEL RAT",
+                    "DESK JOCKEY",
+                    "TROUBLEMAKER",
+                    "PARANOID",
+                    "A HISTORY OF VIOLENCE",
+                    "DAREDEVIL",
                     "PSYCHIC",
-                    "PLUMBER",
-                    "JUNKIE",
-                    "ASTRONAUT",
-                    "MARTIAL ARTIST"
+                    "SANITATION EXPERT",
+                    "LAB ASSISTANT",
+                    "ROCKETEER",
+                    "TRUE GRIT"
                 }),
             new PersonalPerksDef(
                 key: PerkType.Proficiency,
@@ -154,7 +154,7 @@ namespace PhoenixRising.BetterClasses
                 relList: new Dictionary<string, Dictionary<string, string>>
                 {{ FactionKeys.All, new Dictionary<string,string> {
                     { ClassKeys.Assault.Name, "BARRAGE" },
-                    { ClassKeys.Heavy.Name, "JETPACKCONTROL" },
+                    { ClassKeys.Heavy.Name, "JETPACK CONTROL" },
                     { ClassKeys.Sniper.Name, "GUNSLINGER" },
                     { ClassKeys.Berserker.Name, "BRAWLER" },
                     { ClassKeys.Priest.Name, "DEVOTED" },
@@ -197,12 +197,12 @@ namespace PhoenixRising.BetterClasses
                 {
                     { FactionKeys.PX, new Dictionary<string, string>
                     {
-                        { ClassKeys.Assault.Name, "RALLY THE TROOPS" },
-                        { ClassKeys.Heavy.Name, "RALLY THE TROOPS" },
-                        { ClassKeys.Sniper.Name, "RALLY THE TROOPS" },
+                        { ClassKeys.Assault.Name, "RALLY" },
+                        { ClassKeys.Heavy.Name, "RALLY" },
+                        { ClassKeys.Sniper.Name, "RALLY" },
                         { ClassKeys.Berserker.Name, "SONIC BLAST" },
                         { ClassKeys.Priest.Name, "RESURRECT" },
-                        { ClassKeys.Technician.Name, "PARALYZE LIMB" },
+                        { ClassKeys.Technician.Name, "AR TARGETING" },
                         { ClassKeys.Infiltrator.Name, "PAIN CHAMELEON" }
                     } },
                     { FactionKeys.Anu, new Dictionary<string, string>
@@ -216,26 +216,26 @@ namespace PhoenixRising.BetterClasses
                         { ClassKeys.Assault.Name, "PEPPER CLOUD" },
                         { ClassKeys.Heavy.Name, "PEPPER CLOUD" },
                         { ClassKeys.Sniper.Name, "PEPPER CLOUD" },
-                        { ClassKeys.Technician.Name, "PARALYZE LIMB" },
+                        { ClassKeys.Technician.Name, "AR TARGETING" },
                     } },
                     { FactionKeys.Syn, new Dictionary<string, string>
                     {
-                        { ClassKeys.Assault.Name, "CURE SPRAY" },
-                        { ClassKeys.Sniper.Name, "CURE SPRAY" },
+                        { ClassKeys.Assault.Name, "PHANTOM PROTOCOL" },
+                        { ClassKeys.Sniper.Name, "PHANTOM PROTOCOL" },
                         { ClassKeys.Infiltrator.Name, "PAIN CHAMELEON" }
                     } },
                     { FactionKeys.IN, new Dictionary<string, string>
                     {
-                        { ClassKeys.Assault.Name, "RALLY THE TROOPS" },
-                        { ClassKeys.Heavy.Name, "RALLY THE TROOPS" },
-                        { ClassKeys.Sniper.Name, "RALLY THE TROOPS" },
+                        { ClassKeys.Assault.Name, "RALLY" },
+                        { ClassKeys.Heavy.Name, "RALLY" },
+                        { ClassKeys.Sniper.Name, "RALLY" },
                     } },
                     { FactionKeys.PU, new Dictionary<string, string>
                     {
                         { ClassKeys.Assault.Name, "PEPPER CLOUD" },
                         { ClassKeys.Heavy.Name, "PEPPER CLOUD" },
                         { ClassKeys.Sniper.Name, "PEPPER CLOUD" },
-                        { ClassKeys.Technician.Name, "PARALYZE LIMB" },
+                        { ClassKeys.Technician.Name, "AR TARGETING" },
                         { ClassKeys.Infiltrator.Name, "PAIN CHAMELEON" }
                     } },
                     { FactionKeys.FS, new Dictionary<string, string>
@@ -260,7 +260,7 @@ namespace PhoenixRising.BetterClasses
             { "MOUNTED WEAPON PROFICIENCY", new List<string> { ClassKeys.Heavy.Name } },
             { Proficiency.VW, new List<string> { ClassKeys.Priest.Name } },
             { Proficiency.SW, new List<string> { ClassKeys.Infiltrator.Name } },
-            { "ASTRONAUT", new List<string> { ClassKeys.Heavy.Name } },
+            { "ROCKETEER", new List<string> { ClassKeys.Heavy.Name } },
             { "STEALTH SPECIALIST", new List<string> { ClassKeys.Infiltrator.Name } }
         };
 

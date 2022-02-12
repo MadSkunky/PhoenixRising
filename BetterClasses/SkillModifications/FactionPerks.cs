@@ -1,6 +1,7 @@
 ﻿using Base.Core;
 using Base.Defs;
 using Base.Entities.Abilities;
+using Base.Entities.Statuses;
 using Base.UI;
 using Harmony;
 using PhoenixPoint.Common.Core;
@@ -11,6 +12,7 @@ using PhoenixPoint.Tactical.Entities.Animations;
 using PhoenixPoint.Tactical.Entities.DamageKeywords;
 using PhoenixPoint.Tactical.Entities.Effects.DamageTypes;
 using PhoenixPoint.Tactical.Entities.Equipments;
+using PhoenixPoint.Tactical.Entities.Statuses;
 using PhoenixPoint.Tactical.Entities.Weapons;
 using System;
 using System.Collections.Generic;
@@ -19,6 +21,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using static PhoenixPoint.Tactical.Entities.Statuses.StatMultiplierStatusDef;
 
 namespace PhoenixRising.BetterClasses.SkillModifications
 {
@@ -39,20 +42,20 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             Change_Rally();
             //Shadowstep: No changes
             Change_Shadowstep();
-            //Cure Spray: Maybe no change, to check if Mutoid_CureSpray_AbilityDef will work
-            Change_CureSpray();
+            //Phantom Protocol: 0AP 3WP, You gain +25% accuracy and stealth until next turn
+            Create_PhantomProtocol();
             //Pain Chameleon:  Maybe no change, to check if one of the ..._PainChameleon_AbilityDef will work
             Change_PainChameloen();
-            //Sonic Blast: 1AP 2WP, to check if the Mutoid_Adapt_Head_Sonic_AbilityDef will work
-            Change_SonicBlast();
+            //Putrid Flesh: Passive, Returns 10% of damage as Viral to the attacker within 10 tiles
+            Create_PutridFlesh();
             //Breathe Mist: Adding progression def, READY
             Change_BreatheMist();
             //Resurrect: 3AP 6WP, to check if the Mutoid_ResurrectAbilityDef will work, change to only allow 1 ressurect at one time (same as MC)
             Change_Resurrect();
             //Pepper Cloud: 1AP 2WP, to check if the Mutoid_PepperCloud_ApplyStatusAbilityDef will work, change range from 5 to 8 tiles
             Change_PepperCloud();
-            //Paralyse Limb: 3AP 6WP, to check if the Mutoid_ParalyticSpray_AbilityDef will work
-            Change_ParalyseLimb();
+            //AR Targeting: 2AP 2WP, Target ally gains +20% accuracy
+            Create_AR_Targeting();
             //Endurance: Create new with 'Recover Restores 75% WP (instead of 50%)', check cloning from 'RecoverWill_AbilityDef', icon to LargeIcon from 'Reckless_AbilityDef'
             Create_Endurance();
         }
@@ -70,18 +73,108 @@ namespace PhoenixRising.BetterClasses.SkillModifications
         }
         private static void Change_Rally()
         {
+            string skillName = "BC_Rally_AbilityDef";
+            ApplyStatusAbilityDef source = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(p => p.name.Equals("Rally_AbilityDef"));
+            ApplyStatusAbilityDef rally = Helper.CreateDefFromClone(
+                source,
+                "edea324b-e435-416f-bb93-8e1ea16d2e64",
+                skillName);
+            rally.CharacterProgressionData = Helper.CreateDefFromClone(
+                source.CharacterProgressionData,
+                "cf2604ea-f8b8-43b3-97fd-8f2812704370",
+                skillName);
+            rally.ViewElementDef = Helper.CreateDefFromClone(
+                source.ViewElementDef,
+                "30fdd27a-88d9-416d-ae6d-32991c2ba72a",
+                skillName);
+            TacStatusDef ignorePainStatusDef = Helper.CreateDefFromClone(
+                Repo.GetAllDefs<TacStatusDef>().FirstOrDefault(p => p.name.Equals("IgnorePain_StatusDef")),
+                "210a4f59-0b7f-4291-953d-7f7ab56c5041",
+                "RallyIgnorePain_StatusDef");
+            ignorePainStatusDef.DurationTurns = 1;
+            ignorePainStatusDef.ShowNotification = true;
+            ignorePainStatusDef.VisibleOnHealthbar = TacStatusDef.HealthBarVisibility.AlwaysVisible;
+            ignorePainStatusDef.VisibleOnStatusScreen = TacStatusDef.StatusScreenVisibility.VisibleOnStatusesList;
+            ignorePainStatusDef.Visuals = rally.ViewElementDef;
 
-            Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
+
+            rally.StatusDef = ignorePainStatusDef;
+            
+            rally.CharacterProgressionData.RequiredSpeed = 0;
+            rally.CharacterProgressionData.RequiredStrength = 0;
+            rally.CharacterProgressionData.RequiredWill = 0;
+            rally.ViewElementDef.DisplayName1 = new LocalizedTextBind("RALLY", doNotLocalize);
+            rally.ViewElementDef.Description = new LocalizedTextBind("Until next turn: Allies in 10 tile radius can use disabled limbs and gain panic immunity", doNotLocalize);
+            Sprite rallyIcon = Repo.GetAllDefs<TacticalAbilityViewElementDef>().FirstOrDefault(ve => ve.name.Equals("E_ViewElement [Acheron_CallReinforcements_AbilityDef]")).LargeIcon;
+            rally.ViewElementDef.LargeIcon = rallyIcon;
+            rally.ViewElementDef.SmallIcon = rallyIcon;
+            foreach (TacActorSimpleAbilityAnimActionDef animActionDef in Repo.GetAllDefs<TacActorSimpleAbilityAnimActionDef>().Where(aad => aad.name.Contains("Soldier_Utka_AnimActionsDef")))
+            {
+                if (animActionDef.AbilityDefs != null && animActionDef.AbilityDefs.Contains(source))
+                {
+                    animActionDef.AbilityDefs = animActionDef.AbilityDefs.Append(rally).ToArray();
+                    Logger.Debug("Anim Action '" + animActionDef.name + "' set for abilities:");
+                    foreach (AbilityDef ad in animActionDef.AbilityDefs)
+                    {
+                        Logger.Debug("  " + ad.name);
+                    }
+                }
+            }
+            //Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
         }
-        private static void Change_CureSpray()
+        private static void Create_PhantomProtocol()
         {
-            Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
+            string skillName = "BC_PhantomProtocol_AbilityDef";
+            ApplyStatusAbilityDef source = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(p => p.name.Equals("QuickAim_AbilityDef"));
+            ApplyStatusAbilityDef phantomProtocol = Helper.CreateDefFromClone(
+                source,
+                "5f3e257c-aff7-4296-9992-f6728bfa8af8",
+                skillName);
+            phantomProtocol.CharacterProgressionData = Helper.CreateDefFromClone(
+                source.CharacterProgressionData,
+                "08545868-2bed-47a4-8628-371bbce5f718",
+                skillName);
+            phantomProtocol.ViewElementDef = Helper.CreateDefFromClone(
+                source.ViewElementDef,
+                "c312e7f4-3339-4ee8-9717-d1f9c8bd2b32",
+                skillName);
+
+            StatMultiplierStatusDef pPAM = Helper.CreateDefFromClone(
+                Repo.GetAllDefs<StatMultiplierStatusDef>().FirstOrDefault(sms => sms.name.Equals("Trembling_StatusDef")),
+                "06ca77ea-223b-4ec0-a7e6-734e6b7fefe9",
+                "E AccuracyMultiplier [QuickAim_AbilityDef]");
+
+            pPAM.StatsMultipliers = new StatMultiplier[]
+            {
+                new StatMultiplier()
+                {
+                    StatName = "Accuracy",
+                    Multiplier = 1.25f
+                },
+                new StatMultiplier()
+                {
+                    StatName = "Stealth",
+                    Multiplier = 1.25f
+                },
+            };
+
+            phantomProtocol.ActionPointCost = 0;
+            phantomProtocol.WillPointCost = 3;
+
+            AddAttackBoostStatusDef phantomProtocolStatus = (AddAttackBoostStatusDef)phantomProtocol.StatusDef;
+            phantomProtocolStatus.AdditionalStatusesToApply = phantomProtocolStatus.AdditionalStatusesToApply.Append(pPAM).ToArray();
+
+            phantomProtocol.CharacterProgressionData.RequiredSpeed = 0;
+            phantomProtocol.CharacterProgressionData.RequiredStrength = 0;
+            phantomProtocol.CharacterProgressionData.RequiredWill = 0;
+            phantomProtocol.ViewElementDef.DisplayName1 = new LocalizedTextBind("PHANTOM PROTOCOL", doNotLocalize);
+            phantomProtocol.ViewElementDef.Description = new LocalizedTextBind("You gain +25% accuracy and stealth until next turn", doNotLocalize);
         }
         private static void Change_PainChameloen()
         {
-            Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
+            Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' no changes implemented yet!");
         }
-        private static void Change_SonicBlast()
+        private static void Create_PutridFlesh()
         {
             Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
         }
@@ -110,9 +203,56 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             ApplyStatusAbilityDef pepperCloud = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(p => p.name.Equals("Mutoid_PepperCloud_ApplyStatusAbilityDef"));
             pepperCloud.TargetingDataDef.Origin.Range = 8;
         }
-        private static void Change_ParalyseLimb()
+        private static void Create_AR_Targeting()
         {
-            Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
+            string skillName = "BC_ARTargeting_AbilityDef";
+            ApplyStatusAbilityDef source = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(p => p.name.Equals("DeterminedAdvance_AbilityDef"));
+            ApplyStatusAbilityDef arTargeting = Helper.CreateDefFromClone(
+                source,
+                "ad95d7cb-b172-4e0d-acc5-e7e514fcb824",
+                skillName);
+            arTargeting.CharacterProgressionData = Helper.CreateDefFromClone(
+                source.CharacterProgressionData,
+                "143a743b-e42e-4f65-9f83-f76bf42c733b",
+                skillName);
+            arTargeting.ViewElementDef = Helper.CreateDefFromClone(
+                source.ViewElementDef,
+                "7019bd7f-d30d-4ce8-9c3d-0b6161bd4ee0",
+                skillName);
+            StanceStatusDef artStatus = Helper.CreateDefFromClone(
+                Repo.GetAllDefs<StanceStatusDef>().FirstOrDefault(p => p.name.Equals("StomperLegs_StabilityStance_StatusDef")),
+                "56b4ea0e-d0cc-4fc9-b6cf-26e45b2dc81c",
+                "ARTargeting_Stance_StatusDef");
+            artStatus.DurationTurns = 0;
+            artStatus.SingleInstance = true;
+            artStatus.Visuals = arTargeting.ViewElementDef;
+
+            arTargeting.StatusDef = artStatus;
+
+            arTargeting.WillPointCost = 2;
+            arTargeting.UsesPerTurn = 8;
+
+            arTargeting.CharacterProgressionData.RequiredSpeed = 0;
+            arTargeting.CharacterProgressionData.RequiredStrength = 0;
+            arTargeting.CharacterProgressionData.RequiredWill = 0;
+            arTargeting.ViewElementDef.DisplayName1 = new LocalizedTextBind("AR TARGETING", doNotLocalize);
+            arTargeting.ViewElementDef.Description = new LocalizedTextBind("Target ally gains +20% accuracy", doNotLocalize);
+            Sprite artIcon = Repo.GetAllDefs<TacticalAbilityViewElementDef>().FirstOrDefault(ve => ve.name.Equals("E_ViewElement [EagleEye_AbilityDef]")).LargeIcon;
+            arTargeting.ViewElementDef.LargeIcon = artIcon;
+            arTargeting.ViewElementDef.SmallIcon = artIcon;
+
+            foreach (TacActorSimpleAbilityAnimActionDef animActionDef in Repo.GetAllDefs<TacActorSimpleAbilityAnimActionDef>().Where(aad => aad.name.Contains("Soldier_Utka_AnimActionsDef")))
+            {
+                if (animActionDef.AbilityDefs != null && animActionDef.AbilityDefs.Contains(source))
+                {
+                    animActionDef.AbilityDefs = animActionDef.AbilityDefs.Append(arTargeting).ToArray();
+                    Logger.Debug("Anim Action '" + animActionDef.name + "' set for abilities:");
+                    foreach (AbilityDef ad in animActionDef.AbilityDefs)
+                    {
+                        Logger.Debug("  " + ad.name);
+                    }
+                }
+            }
         }
         private static void Create_Endurance()
         {
