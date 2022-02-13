@@ -38,17 +38,19 @@ namespace PhoenixRising.BetterClasses.SkillModifications
         {
             //OW Focus: Change icon to 'UI_AbilitiesIcon_EquipmentAbility_OverwatchFocus-2.png'
             Change_OWFocus();
-            //Rally: 1AP 4WP, 'Until next turn: Allies in 10 tile radius can use disabled limbs and gain panic immunity', icon to LargeIcon from 'E_View [Acheron_CallReinforcements_AbilityDef]'
-            Change_Rally();
+            //Takedown: Your bash and melee attacks gain +100 Shock value.
+            Create_Takedown();
             //Shadowstep: No changes
             Change_Shadowstep();
+            //Rally: 1AP 4WP, 'Until next turn: Allies in 10 tile radius can use disabled limbs and gain panic immunity', icon to LargeIcon from 'E_View [Acheron_CallReinforcements_AbilityDef]'
+            Change_Rally();
             //Phantom Protocol: 0AP 3WP, You gain +25% accuracy and stealth until next turn
             Create_PhantomProtocol();
             //Pain Chameleon:  Maybe no change, to check if one of the ..._PainChameleon_AbilityDef will work
             Change_PainChameloen();
             //Putrid Flesh: Passive, Returns 10% of damage as Viral to the attacker within 10 tiles
             Create_PutridFlesh();
-            //Breathe Mist: Adding progression def, READY
+            //Breathe Mist: Adding progression def
             Change_BreatheMist();
             //Resurrect: 3AP 6WP, to check if the Mutoid_ResurrectAbilityDef will work, change to only allow 1 ressurect at one time (same as MC)
             Change_Resurrect();
@@ -66,6 +68,10 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             Sprite owSprite = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_EquipmentAbility_OverwatchFocus-2.png");
             overwatchFocus.ViewElementDef.LargeIcon = owSprite;
             overwatchFocus.ViewElementDef.SmallIcon = owSprite;
+        }
+        private static void Create_Takedown()
+        {
+            Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' no changes implemented yet!");
         }
         private static void Change_Shadowstep()
         {

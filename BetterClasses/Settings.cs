@@ -156,7 +156,7 @@ namespace PhoenixRising.BetterClasses
                     { ClassKeys.Assault.Name, "BARRAGE" },
                     { ClassKeys.Heavy.Name, "JETPACK CONTROL" },
                     { ClassKeys.Sniper.Name, "GUNSLINGER" },
-                    { ClassKeys.Berserker.Name, "BRAWLER" },
+                    { ClassKeys.Berserker.Name, "MELEE SPECIALIST" },
                     { ClassKeys.Priest.Name, "DEVOTED" },
                     { ClassKeys.Technician.Name, "SELF DEFENSE SPECIALIST" },
                     { ClassKeys.Infiltrator.Name, "STEALTH SPECIALIST" }
@@ -170,7 +170,7 @@ namespace PhoenixRising.BetterClasses
                     { ClassKeys.Assault.Name, "QUARTERBACK" },
                     { ClassKeys.Heavy.Name, "BOOM BLAST" },
                     { ClassKeys.Sniper.Name, "KILL ZONE" },
-                    { ClassKeys.Berserker.Name, "EXPERT MELEE" },
+                    { ClassKeys.Berserker.Name, "BRAWLER" },
                     { ClassKeys.Priest.Name, "BIOCHEMIST" },
                     { ClassKeys.Technician.Name, "POISON RESISTANT" },
                     { ClassKeys.Infiltrator.Name, "CAUTIOUS" }

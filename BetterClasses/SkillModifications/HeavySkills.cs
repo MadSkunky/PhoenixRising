@@ -120,6 +120,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             Sprite hunkerDownIcon = Repo.GetAllDefs<TacticalAbilityViewElementDef>().FirstOrDefault(ve => ve.name.Equals("E_ViewElement [Chiron_EnterStabilityStance_AbilityDef]")).SmallIcon;
             hunkerDown.ViewElementDef.LargeIcon = hunkerDownIcon;
             hunkerDown.ViewElementDef.SmallIcon = hunkerDownIcon;
+            (hunkerDown.StatusDef as DamageMultiplierStatusDef).DurationTurns = 1;
             (hunkerDown.StatusDef as DamageMultiplierStatusDef).Visuals = hunkerDown.ViewElementDef;
             (hunkerDown.StatusDef as DamageMultiplierStatusDef).DamageTypeDefs = new DamageTypeBaseEffectDef[0]; // Empty = all damage types
             (hunkerDown.StatusDef as DamageMultiplierStatusDef).Range = -1.0f; // -1 = no range restriction

@@ -31,7 +31,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
 
         public static void ApplyChanges()
         {
-            // Quick Aim: Adding aim modification
+            // Quick Aim: Adding accuracy modification
             Change_QuickAim();
 
             // Kill'n'Run: Recive one free Dash move when killing an enemy, once per turn
@@ -43,7 +43,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             // Rapid Clearance: Until end of turn, after killing an enemy next attack cost -2AP
             Change_RapidClearance();
 
-            // Barrage: 2 bursts with increased accuracy for 3 AP and 4 WP
+            // Barrage: 2 bursts with increased accuracy for 3 AP and 4 WP, AR only
             Create_Barrage();
         }
 
@@ -137,9 +137,28 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             killAndRunAbility.StatusDef = multiStatus;
             killAndRunAbility.StatusApplicationTrigger = StatusApplicationTrigger.StartTurn;
 
+            viewElement.DisplayName1 = new LocalizedTextBind("KILL'N'RUN", doNotLocalize);
+            viewElement.Description = new LocalizedTextBind("Once per turn, take a free move after killing an enemy.", doNotLocalize);
+            Sprite knR_IconSprite = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_KillNRun.png");
+            viewElement.LargeIcon = knR_IconSprite;
+            viewElement.SmallIcon = knR_IconSprite;
+            viewElement.ShowInStatusScreen = true;
+            viewElement.HideFromPassives = true;
+
             dashAbility.TargetingDataDef = dashTargetingData;
             dashAbility.TargetingDataDef.Origin.Range = 7.0f;
-            dashAbility.ViewElementDef = viewElement;
+
+            dashAbility.ViewElementDef = Helper.CreateDefFromClone(
+                inspireAbility.ViewElementDef,
+                "1ab98dd0-cb7c-4285-9aaf-b1770b5ebcb8",
+                "KillAndRun_Dash_AbilityDef");
+            dashAbility.ViewElementDef.DisplayName1 = viewElement.DisplayName1;
+            dashAbility.ViewElementDef.Description = viewElement.Description;
+            dashAbility.ViewElementDef.LargeIcon = knR_IconSprite;
+            dashAbility.ViewElementDef.SmallIcon = knR_IconSprite;
+            dashAbility.ViewElementDef.ShowInStatusScreen = false;
+            dashAbility.ViewElementDef.HideFromPassives = true;
+
             dashAbility.SuppressAutoStandBy = true;
             dashAbility.DisablingStatuses = new StatusDef[] { onActorDeathEffectStatus };
             dashAbility.UsesPerTurn = 1;
@@ -147,13 +166,6 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             dashAbility.WillPointCost = 0.0f;
             dashAbility.SamePositionIsValidTarget = true;
             dashAbility.AmountOfMovementToUseAsRange = -1.0f;
-
-            viewElement.DisplayName1 = new LocalizedTextBind("KILL'N'RUN", doNotLocalize);
-            viewElement.Description = new LocalizedTextBind("Once per turn, take a free move after killing an enemy.", doNotLocalize);
-            Sprite knR_IconSprite = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_KillNRun.png");
-            viewElement.LargeIcon = knR_IconSprite;
-            viewElement.SmallIcon = knR_IconSprite;
-            //viewElement.HideFromPassives = true;
 
             multiStatus.Statuses = new StatusDef[] { onActorDeathEffectStatus, addAbiltyStatus };
 

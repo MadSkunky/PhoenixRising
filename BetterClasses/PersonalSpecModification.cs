@@ -107,12 +107,16 @@ namespace PhoenixRising.BetterClasses
                                     }
                                     else
                                     {
+                                        Logger.Always(" Faction: " + faction);
+                                        Logger.Always("   Class: " + className);
                                         Logger.Always("Ability '" + ability + "' was not configured for level " + i + " or was not received from Repo and so not applied!");
                                         Logger.Always("----------------------------------------------------------------------------------------------------", false);
                                     }
                                 }
                                 else
                                 {
+                                    Logger.Always(" Faction: " + faction);
+                                    Logger.Always("   Class: " + className);
                                     Logger.Always(" The method personalPerksDef.GetPerk() does not return an ability for level " + i + " and so none got applied!");
                                     Logger.Always("----------------------------------------------------------------------------------------------------", false);
                                 }
