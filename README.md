@@ -11,10 +11,10 @@ We are currently a small group looking to expand. If you like our mods and have 
 - MadSkunky: Coding, design, balancing and testing.
 - Voland, Mikey C: Storytelling.
 - BFIG: Graphics design and editing.
-- dtony22, Linus Lim: Coding and datamining.
+- dtony22, Linuslim: Coding and datamining.
 
 - Yokes, conductiv, Torinus, Pantolomin, Dorante, mad2342 ...
-Designing, balancing, testing, storytelling and always open to productive discussions and helping on all fronts.
+modding and design councilors and testers, always open to productive discussions and helping on all fronts.
 
 ## Subparts
 
