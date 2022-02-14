@@ -32,3 +32,10 @@ They are aquired on level 1 and 5 and are chosen randomly from a pool of 19 tota
 "Class Skills" aquired on lvl 3 and 6 are powerful abilities that define the class and are direct expansion of his row 1 skill tree. As class-defining abilities they are only available on core class, allowing unique multi-class combinations, where Assault-Sniper is not the same as Sniper-Assault.
 
 Finally "Proficiency Perk" is randomly aquired on lvl 4 and simply allows you to learn additional weapon proficiency.
+
+INSTALLATION: 7z file must be selected via "Add Mod" button in Modnix
+
+!WARNING!: Turn OFF "Show Detailed Equipment Info in Battle" setting in Options -> Gameplay. Otherwise some text on abilities will be missing.
+Do NOT use any language besides ENGLISH, otherwise text will be broken. Sadly, adjusting localisation is a lot of work due to how the game is coded.
+
+COMPATIBILITY: Naturally, this mod is not compatible with any other mod that adjusts skills, perks or Personal abilities.
