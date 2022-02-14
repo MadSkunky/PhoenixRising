@@ -33,7 +33,7 @@ They are aquired on level 1 and 5 and are chosen randomly from a pool of 19 tota
 
 Finally "Proficiency Perk" is randomly aquired on lvl 4 and simply allows you to learn additional weapon proficiency.
 
-INSTALLATION: 7z file must be selected via "Add Mod" button in Modnix
+<b>INSTALLATION:</b> 7z file must be selected via "Add Mod" button in Modnix
 
 !WARNING!: Turn OFF "Show Detailed Equipment Info in Battle" setting in Options -> Gameplay. Otherwise some text on abilities will be missing.
 Do NOT use any language besides ENGLISH, otherwise text will be broken. Sadly, adjusting localisation is a lot of work due to how the game is coded.
