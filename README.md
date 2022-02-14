@@ -7,8 +7,8 @@ We are currently a small group looking to expand. If you like our mods and have 
 ### The Team behind this project
 
 - Belial: The master mind and heart of the team, main designer and the brain behind almost anything.
+- MadSkunky: Main coder, design, balancing and testing.
 - Ikobot: Dataminer, master hacker, tester & coder, a lot of things he found in the game files are the base of this mod.
-- MadSkunky: Coding, design, balancing and testing.
 - Voland, Mikey C: Storytelling.
 - BFIG: Graphics design and editing.
 - dtony22, Linuslim: Coding and datamining.
