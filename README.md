@@ -7,14 +7,14 @@ We are currently a small group looking to expand. If you like our mods and have 
 ### The Team behind this project
 
 - Belial: The master mind and heart of the team, main designer and the brain behind almost anything.
+- MadSkunky: Main coder, design, balancing and testing.
 - Ikobot: Dataminer, master hacker, tester & coder, a lot of things he found in the game files are the base of this mod.
-- MadSkunky: Coding, design, balancing and testing.
-- Voland, Mikey C: Storytelling.
+- Voland: Storytelling.
 - BFIG: Graphics design and editing.
-- dtony22, Linus Lim: Coding and datamining.
+- dtony22, Linuslim: Coding and datamining.
 
-- Yokes, conductiv, Torinus, Pantolomin, Dorante, mad2342 ...
-Designing, balancing, testing, storytelling and always open to productive discussions and helping on all fronts.
+- Mikey C, Yokes, Conductiv, Torinus, Pantolomin, Dorante, mad2342 ...
+modding and design councilors and testers, always open to productive discussions and helping on all fronts.
 
 ## Subparts
 
@@ -32,3 +32,10 @@ They are aquired on level 1 and 5 and are chosen randomly from a pool of 19 tota
 "Class Skills" aquired on lvl 3 and 6 are powerful abilities that define the class and are direct expansion of his row 1 skill tree. As class-defining abilities they are only available on core class, allowing unique multi-class combinations, where Assault-Sniper is not the same as Sniper-Assault.
 
 Finally "Proficiency Perk" is randomly aquired on lvl 4 and simply allows you to learn additional weapon proficiency.
+
+<b>INSTALLATION:</b> 7z file must be selected via "Add Mod" button in Modnix
+
+!WARNING!: Turn OFF "Show Detailed Equipment Info in Battle" setting in Options -> Gameplay. Otherwise some text on abilities will be missing.
+Do NOT use any language besides ENGLISH, otherwise text will be broken. Sadly, adjusting localisation is a lot of work due to how the game is coded.
+
+COMPATIBILITY: Naturally, this mod is not compatible with any other mod that adjusts skills, perks or Personal abilities.
