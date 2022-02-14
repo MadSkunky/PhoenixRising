@@ -32,7 +32,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
         public static void ApplyChanges()
         {
             // Quick Aim: Adding accuracy modification
-            Change_QuickAim();
+            Create_BC_QuickAim();
 
             // Kill'n'Run: Recive one free Dash move when killing an enemy, once per turn
             Create_KillAndRun();
@@ -47,26 +47,60 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             Create_Barrage();
         }
 
-        private static void Change_QuickAim()
+        private static void Create_BC_QuickAim()
         {
-            ApplyStatusAbilityDef quickAim = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(a => a.name.Equals("QuickAim_AbilityDef"));
-            quickAim.UsesPerTurn = 2;
+            string skillName = "BC_QuickAim_AbilityDef";
+            float qaAccMultiplier = 0.7f;
+            int qaUsesPerTurn = 2;
+            LocalizedTextBind qaDescription = new LocalizedTextBind(
+                $"The Action Point cost of the next shot with a proficient weapon is reduced by 1 with {(qaAccMultiplier * 100) - 100}% accuracy. Limited to {qaUsesPerTurn} uses per turn.",
+                doNotLocalize);
+
+            ApplyStatusAbilityDef source = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(a => a.name.Equals("QuickAim_AbilityDef"));
+            ApplyStatusAbilityDef quickAim = Helper.CreateDefFromClone(
+                source,
+                "a92d0cab-60a8-4a42-aeed-b5415906b39d",
+                skillName);
+            quickAim.ViewElementDef = Helper.CreateDefFromClone(
+                source.ViewElementDef,
+                "8cdddcfd-a93c-4efa-a5a5-5dc099cb7ea5",
+                skillName);
+            quickAim.StatusDef = Helper.CreateDefFromClone(
+                source.StatusDef,
+                "c60511db-2785-4932-8654-086adc8e9e1b",
+                skillName);
             StatMultiplierStatusDef qaAccMod = Helper.CreateDefFromClone(
                 Repo.GetAllDefs<StatMultiplierStatusDef>().FirstOrDefault(sms => sms.name.Equals("Trembling_StatusDef")),
                 "4a6f7cc4-1bd6-45a5-b572-053963966b07",
-                "E AccuracyMultiplier [QuickAim_AbilityDef]");
-            qaAccMod.ShowNotification = true;
-            qaAccMod.VisibleOnHealthbar = TacStatusDef.HealthBarVisibility.VisibleWhenSelected;
-            qaAccMod.VisibleOnStatusScreen = TacStatusDef.StatusScreenVisibility.VisibleOnBodyPartStatusList;
-            qaAccMod.Visuals = quickAim.ViewElementDef;
+                $"E AccuracyMultiplier [{skillName}]");
+
+            quickAim.ViewElementDef.Description = qaDescription;
+            quickAim.UsesPerTurn = qaUsesPerTurn;
+            quickAim.DisablingStatuses = new StatusDef[] { quickAim.StatusDef };
+            qaAccMod.EffectName = "";
+            qaAccMod.ShowNotification = false;
+            qaAccMod.VisibleOnHealthbar = 0;
+            qaAccMod.VisibleOnStatusScreen = 0;
+            qaAccMod.Visuals = null;
             qaAccMod.StatsMultipliers[0].StatName = "Accuracy";
-            qaAccMod.StatsMultipliers[0].Multiplier = 0.7f;
-            AddAttackBoostStatusDef qaAttackBoost = (AddAttackBoostStatusDef)quickAim.StatusDef;
-            qaAttackBoost.DurationTurns = -1; // same as Master Marksman, not sure if neccessary, it worked this way ;-)
-            qaAttackBoost.AdditionalStatusesToApply = qaAttackBoost.AdditionalStatusesToApply.Append(qaAccMod).ToArray();
-            quickAim.ViewElementDef.Description = new LocalizedTextBind(
-                "The Action Point cost of the next shot with a proficient weapon is reduced by 1 with -30% accuracy. Limited to 2 uses per turn.",
-                doNotLocalize);
+            qaAccMod.StatsMultipliers[0].Multiplier = qaAccMultiplier;
+            (quickAim.StatusDef as AddAttackBoostStatusDef).DurationTurns = -1; // same as Master Marksman, not sure if neccessary, it worked this way ;-)
+            (quickAim.StatusDef as AddAttackBoostStatusDef).Visuals = quickAim.ViewElementDef;
+            TacStatusDef[] qaAddStatusesToApply = (quickAim.StatusDef as AddAttackBoostStatusDef).AdditionalStatusesToApply.Append(qaAccMod).ToArray();
+            (quickAim.StatusDef as AddAttackBoostStatusDef).AdditionalStatusesToApply = qaAddStatusesToApply;
+
+            foreach (TacActorSimpleAbilityAnimActionDef animActionDef in Repo.GetAllDefs<TacActorSimpleAbilityAnimActionDef>().Where(aad => aad.name.Contains("Soldier_Utka_AnimActionsDef")))
+            {
+                if (animActionDef.AbilityDefs != null && animActionDef.AbilityDefs.Contains(source))
+                {
+                    animActionDef.AbilityDefs = animActionDef.AbilityDefs.Append(quickAim).ToArray();
+                    Logger.Debug("Anim Action '" + animActionDef.name + "' set for abilities:");
+                    foreach (AbilityDef ad in animActionDef.AbilityDefs)
+                    {
+                        Logger.Debug("  " + ad.name);
+                    }
+                }
+            }
         }
 
         public static void Create_KillAndRun()

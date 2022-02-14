@@ -183,7 +183,7 @@ namespace PhoenixRising.BetterClasses
                 {{ ClassKeys.AllClasses.Name, new Dictionary<string,string> {
                     { FactionKeys.PX, "OVERWATCH FOCUS" },
                     { FactionKeys.Anu, "BREATHE MIST" },
-                    { FactionKeys.NJ, "ENDURANCE" },
+                    { FactionKeys.NJ, "TAKEDOWN" },
                     { FactionKeys.Syn, "SHADOWSTEP" },
                     { FactionKeys.IN, "OVERWATCH FOCUS" },
                     { FactionKeys.PU, "ENDURANCE" },
@@ -197,9 +197,9 @@ namespace PhoenixRising.BetterClasses
                 {
                     { FactionKeys.PX, new Dictionary<string, string>
                     {
-                        { ClassKeys.Assault.Name, "RALLY" },
-                        { ClassKeys.Heavy.Name, "RALLY" },
-                        { ClassKeys.Sniper.Name, "RALLY" },
+                        { ClassKeys.Assault.Name, "ENDURANCE" },
+                        { ClassKeys.Heavy.Name, "ENDURANCE" },
+                        { ClassKeys.Sniper.Name, "ENDURANCE" },
                         { ClassKeys.Berserker.Name, "SONIC BLAST" },
                         { ClassKeys.Priest.Name, "RESURRECT" },
                         { ClassKeys.Technician.Name, "AR TARGETING" },
@@ -226,9 +226,9 @@ namespace PhoenixRising.BetterClasses
                     } },
                     { FactionKeys.IN, new Dictionary<string, string>
                     {
-                        { ClassKeys.Assault.Name, "RALLY" },
-                        { ClassKeys.Heavy.Name, "RALLY" },
-                        { ClassKeys.Sniper.Name, "RALLY" },
+                        { ClassKeys.Assault.Name, "ENDURANCE" },
+                        { ClassKeys.Heavy.Name, "ENDURANCE" },
+                        { ClassKeys.Sniper.Name, "ENDURANCE" },
                     } },
                     { FactionKeys.PU, new Dictionary<string, string>
                     {

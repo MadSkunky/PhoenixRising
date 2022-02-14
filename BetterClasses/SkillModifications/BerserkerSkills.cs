@@ -9,6 +9,7 @@ using PhoenixPoint.Common.Core;
 using PhoenixPoint.Common.Entities;
 using PhoenixPoint.Common.Entities.GameTags;
 using PhoenixPoint.Common.Entities.GameTagsTypes;
+using PhoenixPoint.Common.UI;
 using PhoenixPoint.Tactical.Entities.Abilities;
 using PhoenixPoint.Tactical.Entities.Equipments;
 using PhoenixPoint.Tactical.Entities.Statuses;
@@ -18,6 +19,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace PhoenixRising.BetterClasses.SkillModifications
 {
@@ -50,9 +52,18 @@ namespace PhoenixRising.BetterClasses.SkillModifications
 
         private static void Change_Dash()
         {
-            // cancelled, delayed
-            //RepositionAbilityDef dash = Repo.GetAllDefs<RepositionAbilityDef>().FirstOrDefault(r => r.name.Equals("Dash_AbilityDef"));
-            Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' no changes implemented yet!");
+            float dashRange = 13;
+            int dashUsesPerTurn = 1;
+            string dashDescription = $"Move up to {(int)dashRange} tiles. Limited to {dashUsesPerTurn} use per turn";
+            Sprite dashIcon = Repo.GetAllDefs<TacticalAbilityViewElementDef>().FirstOrDefault(tave => tave.name.Equals("E_View [BodySlam_AbilityDef]")).LargeIcon;
+
+            RepositionAbilityDef dash = Repo.GetAllDefs<RepositionAbilityDef>().FirstOrDefault(r => r.name.Equals("Dash_AbilityDef"));
+            dash.TargetingDataDef.Origin.Range = dashRange;
+            dash.ViewElementDef.Description = new LocalizedTextBind(dashDescription, doNotLocalize);
+            dash.ViewElementDef.LargeIcon = dashIcon;
+            dash.ViewElementDef.SmallIcon = dashIcon;
+            dash.UsesPerTurn = dashUsesPerTurn;
+            dash.AmountOfMovementToUseAsRange = -1.0f;
         }
 
         private static void Change_IgnorePain()
@@ -66,14 +77,14 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             }
             // Change description
             ApplyStatusAbilityDef ignorePain = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(asa => asa.name.Equals("IgnorePain_AbilityDef"));
-            ignorePain.ViewElementDef.Description = new LocalizedTextBind("Disabled body parts remain functional and cannot panic.", doNotLocalize);
+            ignorePain.ViewElementDef.Description = new LocalizedTextBind("Disabled body parts remain functional and cannot Panic.", doNotLocalize);
         }
 
         private static void Change_AdrenalineRush()
         {
             ApplyStatusAbilityDef adrenalineRush = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(asa => asa.name.Equals("AdrenalineRush_AbilityDef"));
             adrenalineRush.StatusDef = Repo.GetAllDefs<ChangeAbilitiesCostStatusDef>().FirstOrDefault(sd => sd.name.Equals("E_SetAbilitiesTo1AP [AdrenalineRush_AbilityDef]"));
-            adrenalineRush.ViewElementDef.Description = new LocalizedTextBind("Until end of turn one-handed weapon and all non-weapon skills cost 1AP, except recover.", doNotLocalize);
+            adrenalineRush.ViewElementDef.Description = new LocalizedTextBind("Until end of turn one-handed weapon and all non-weapon skills cost 1AP, except Recover.", doNotLocalize);
         }
 
         private static void Change_MeleeSpecialist()
@@ -106,32 +117,37 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                 "Overwatch_AbilityDef"
             };
             internal static SkillTagDef attackAbility_Tag = Repo.GetAllDefs<SkillTagDef>().FirstOrDefault(st => st.name.Equals("AttackAbility_SkillTagDef"));
+            internal static ApplyStatusAbilityDef adrenalineRush = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(asa => asa.name.Equals("AdrenalineRush_AbilityDef"));
+            internal static ChangeAbilitiesCostStatusDef arStatus = Repo.GetAllDefs<ChangeAbilitiesCostStatusDef>().FirstOrDefault(sd => sd.name.Equals("E_SetAbilitiesTo1AP [AdrenalineRush_AbilityDef]"));
 
             [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
             private static void Postfix(ref bool __result, TacticalAbility ability)
             {
                 try
                 {
-                    if (ability != null && ability.TacticalAbilityDef.SkillTags.Contains(attackAbility_Tag))
+                    if (ability.TacticalActor.Status.HasStatus(arStatus))
                     {
-                        Equipment source = ability.GetSource<Equipment>();
-                        if (source != null && source.HandsToUse == 1)
+                        if (ability.TacticalAbilityDef.SkillTags.Contains(attackAbility_Tag))
                         {
-                            __result = true;
-                            return;
+                            Equipment source = ability.GetSource<Equipment>();
+                            if (source != null && source.HandsToUse == 1)
+                            {
+                                __result = true;
+                                return;
+                            }
+                            else
+                            {
+                                __result = false;
+                                return;
+                            }
                         }
-                        else
+                        if (arExcludeList.Contains(ability.TacticalAbilityDef.name))
                         {
                             __result = false;
                             return;
                         }
+                        __result = true;
                     }
-                    if (ability != null && arExcludeList.Contains(ability.TacticalAbilityDef.name))
-                    {
-                        __result = false;
-                        return;
-                    }
-                    __result = true;
                 }
                 catch (Exception e)
                 {

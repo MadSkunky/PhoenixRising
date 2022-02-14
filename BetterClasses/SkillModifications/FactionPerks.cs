@@ -1,15 +1,20 @@
-﻿using Base.Core;
+﻿using AK.Wwise;
+using Base.Core;
 using Base.Defs;
 using Base.Entities.Abilities;
 using Base.Entities.Statuses;
 using Base.UI;
 using Harmony;
 using PhoenixPoint.Common.Core;
+using PhoenixPoint.Common.Entities.GameTags;
+using PhoenixPoint.Common.Entities.GameTagsTypes;
 using PhoenixPoint.Common.UI;
+using PhoenixPoint.Geoscape.Events.Eventus;
 using PhoenixPoint.Tactical.Entities;
 using PhoenixPoint.Tactical.Entities.Abilities;
 using PhoenixPoint.Tactical.Entities.Animations;
 using PhoenixPoint.Tactical.Entities.DamageKeywords;
+using PhoenixPoint.Tactical.Entities.Effects;
 using PhoenixPoint.Tactical.Entities.Effects.DamageTypes;
 using PhoenixPoint.Tactical.Entities.Equipments;
 using PhoenixPoint.Tactical.Entities.Statuses;
@@ -43,7 +48,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             //Shadowstep: No changes
             Change_Shadowstep();
             //Rally: 1AP 4WP, 'Until next turn: Allies in 10 tile radius can use disabled limbs and gain panic immunity', icon to LargeIcon from 'E_View [Acheron_CallReinforcements_AbilityDef]'
-            Change_Rally();
+            //Change_Rally();
             //Phantom Protocol: 0AP 3WP, You gain +25% accuracy and stealth until next turn
             Create_PhantomProtocol();
             //Pain Chameleon:  Maybe no change, to check if one of the ..._PainChameleon_AbilityDef will work
@@ -71,63 +76,120 @@ namespace PhoenixRising.BetterClasses.SkillModifications
         }
         private static void Create_Takedown()
         {
-            Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' no changes implemented yet!");
+            string skillName = "BC_Takedown_AbilityDef";
+            float shockDamage = 100.0f;
+            LocalizedTextBind displayName = new LocalizedTextBind("TAKEDOWN", doNotLocalize);
+            LocalizedTextBind description = new LocalizedTextBind($"Your bash and melee attacks gain +{(int)shockDamage} Shock value.", doNotLocalize);
+            Sprite icon = Repo.GetAllDefs<TacticalAbilityViewElementDef>().FirstOrDefault(tave => tave.name.Equals("E_ViewElement [Brawler_AbilityDef]")).LargeIcon;
+
+            ApplyStatusAbilityDef source = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(asa => asa.name.Equals("WeakSpot_AbilityDef"));
+            ApplyStatusAbilityDef takedown = Helper.CreateDefFromClone(
+                source,
+                "d2711bfc-b4cb-46dd-bb9f-599a88c1ebff",
+                skillName);
+            takedown.CharacterProgressionData = Helper.CreateDefFromClone(
+                source.CharacterProgressionData,
+                "f7ce1c44-1447-41a3-8112-666c82451e25",
+                skillName);
+            takedown.ViewElementDef = Helper.CreateDefFromClone(
+                source.ViewElementDef,
+                "0324925f-e318-40b6-ac8c-b68033823cd9",
+                skillName);
+            takedown.StatusDef = Helper.CreateDefFromClone(
+                source.StatusDef,
+                "39663161-e7d1-425b-a024-d3964dfb39ff",
+                skillName);
+
+            takedown.CharacterProgressionData.RequiredStrength = 0;
+            takedown.CharacterProgressionData.RequiredWill = 0;
+            takedown.CharacterProgressionData.RequiredSpeed = 0;
+            takedown.ViewElementDef.DisplayName1 = displayName;
+            takedown.ViewElementDef.Description = description;
+            takedown.ViewElementDef.LargeIcon = icon;
+            takedown.ViewElementDef.SmallIcon = icon;
+            (takedown.StatusDef as AddAttackBoostStatusDef).Visuals = takedown.ViewElementDef;
+            (takedown.StatusDef as AddAttackBoostStatusDef).WeaponTagFilter = Repo.GetAllDefs<GameTagDef>().FirstOrDefault(gt => gt.name.Equals("MeleeWeapon_TagDef"));
+            (takedown.StatusDef as AddAttackBoostStatusDef).DamageKeywordPairs = new DamageKeywordPair[] {
+                new DamageKeywordPair()
+                {
+                    DamageKeywordDef = Shared.SharedDamageKeywords.ShockKeyword,
+                    Value = 100f
+                }
+            };
         }
+        // Takedown: Patching GeDamage from active actor when he select Bash to check if Takedown ability is active and return +100 Shock damage.
+        //[HarmonyPatch(typeof(BashAbility), "GetDamagePayload")]
+        //internal static class BashAbility_GetDamagePayload_Patch
+        //{
+        //    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
+        //    private static void Postfix(ref DamagePayload __result, BashAbility __instance)
+        //    {
+        //        TacticalActor tacticalActor = (TacticalActor)AccessTools.Property(typeof(TacticalAbility), "TacticalActor").GetValue(__instance, null);
+        //        TacticalAbility takedown = tacticalActor.GetAbilities<TacticalAbility>().FirstOrDefault(s => s.AbilityDef.name.Equals("BC_Takedown_AbilityDef"));
+        //        if (takedown != null)
+        //        {
+        //            Logger.Always("BashAbility_GetDamagePayload POSTFIX called and Takedown Ability detected ...");
+        //            Logger.Always(" Gernerated damage value: " + __result.GenerateDamageValue(tacticalActor.CharacterStats.BonusAttackDamage));
+        //            Logger.Always("------------------------------------------------------------------------------------------------------", false);
+        //        }
+        //    }
+        //}
+
         private static void Change_Shadowstep()
         {
             Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' no changes implemented yet!");
         }
-        private static void Change_Rally()
-        {
-            string skillName = "BC_Rally_AbilityDef";
-            ApplyStatusAbilityDef source = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(p => p.name.Equals("Rally_AbilityDef"));
-            ApplyStatusAbilityDef rally = Helper.CreateDefFromClone(
-                source,
-                "edea324b-e435-416f-bb93-8e1ea16d2e64",
-                skillName);
-            rally.CharacterProgressionData = Helper.CreateDefFromClone(
-                source.CharacterProgressionData,
-                "cf2604ea-f8b8-43b3-97fd-8f2812704370",
-                skillName);
-            rally.ViewElementDef = Helper.CreateDefFromClone(
-                source.ViewElementDef,
-                "30fdd27a-88d9-416d-ae6d-32991c2ba72a",
-                skillName);
-            TacStatusDef ignorePainStatusDef = Helper.CreateDefFromClone(
-                Repo.GetAllDefs<TacStatusDef>().FirstOrDefault(p => p.name.Equals("IgnorePain_StatusDef")),
-                "210a4f59-0b7f-4291-953d-7f7ab56c5041",
-                "RallyIgnorePain_StatusDef");
-            ignorePainStatusDef.DurationTurns = 1;
-            ignorePainStatusDef.ShowNotification = true;
-            ignorePainStatusDef.VisibleOnHealthbar = TacStatusDef.HealthBarVisibility.AlwaysVisible;
-            ignorePainStatusDef.VisibleOnStatusScreen = TacStatusDef.StatusScreenVisibility.VisibleOnStatusesList;
-            ignorePainStatusDef.Visuals = rally.ViewElementDef;
-
-
-            rally.StatusDef = ignorePainStatusDef;
-            
-            rally.CharacterProgressionData.RequiredSpeed = 0;
-            rally.CharacterProgressionData.RequiredStrength = 0;
-            rally.CharacterProgressionData.RequiredWill = 0;
-            rally.ViewElementDef.DisplayName1 = new LocalizedTextBind("RALLY", doNotLocalize);
-            rally.ViewElementDef.Description = new LocalizedTextBind("Until next turn: Allies in 10 tile radius can use disabled limbs and gain panic immunity", doNotLocalize);
-            Sprite rallyIcon = Repo.GetAllDefs<TacticalAbilityViewElementDef>().FirstOrDefault(ve => ve.name.Equals("E_ViewElement [Acheron_CallReinforcements_AbilityDef]")).LargeIcon;
-            rally.ViewElementDef.LargeIcon = rallyIcon;
-            rally.ViewElementDef.SmallIcon = rallyIcon;
-            foreach (TacActorSimpleAbilityAnimActionDef animActionDef in Repo.GetAllDefs<TacActorSimpleAbilityAnimActionDef>().Where(aad => aad.name.Contains("Soldier_Utka_AnimActionsDef")))
-            {
-                if (animActionDef.AbilityDefs != null && animActionDef.AbilityDefs.Contains(source))
-                {
-                    animActionDef.AbilityDefs = animActionDef.AbilityDefs.Append(rally).ToArray();
-                    Logger.Debug("Anim Action '" + animActionDef.name + "' set for abilities:");
-                    foreach (AbilityDef ad in animActionDef.AbilityDefs)
-                    {
-                        Logger.Debug("  " + ad.name);
-                    }
-                }
-            }
-            //Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
-        }
+        //private static void Change_Rally()
+        //{
+        //    string skillName = "BC_Rally_AbilityDef";
+        //    ApplyStatusAbilityDef source = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(p => p.name.Equals("Rally_AbilityDef"));
+        //    ApplyStatusAbilityDef rally = Helper.CreateDefFromClone(
+        //        source,
+        //        "edea324b-e435-416f-bb93-8e1ea16d2e64",
+        //        skillName);
+        //    rally.CharacterProgressionData = Helper.CreateDefFromClone(
+        //        source.CharacterProgressionData,
+        //        "cf2604ea-f8b8-43b3-97fd-8f2812704370",
+        //        skillName);
+        //    rally.ViewElementDef = Helper.CreateDefFromClone(
+        //        source.ViewElementDef,
+        //        "30fdd27a-88d9-416d-ae6d-32991c2ba72a",
+        //        skillName);
+        //    TacStatusDef ignorePainStatusDef = Helper.CreateDefFromClone(
+        //        Repo.GetAllDefs<TacStatusDef>().FirstOrDefault(p => p.name.Equals("IgnorePain_StatusDef")),
+        //        "210a4f59-0b7f-4291-953d-7f7ab56c5041",
+        //        "RallyIgnorePain_StatusDef");
+        //    ignorePainStatusDef.DurationTurns = 1;
+        //    ignorePainStatusDef.ShowNotification = true;
+        //    ignorePainStatusDef.VisibleOnHealthbar = TacStatusDef.HealthBarVisibility.AlwaysVisible;
+        //    ignorePainStatusDef.VisibleOnStatusScreen = TacStatusDef.StatusScreenVisibility.VisibleOnStatusesList;
+        //    ignorePainStatusDef.Visuals = rally.ViewElementDef;
+        //
+        //
+        //    rally.StatusDef = ignorePainStatusDef;
+        //    
+        //    rally.CharacterProgressionData.RequiredSpeed = 0;
+        //    rally.CharacterProgressionData.RequiredStrength = 0;
+        //    rally.CharacterProgressionData.RequiredWill = 0;
+        //    rally.ViewElementDef.DisplayName1 = new LocalizedTextBind("RALLY", doNotLocalize);
+        //    rally.ViewElementDef.Description = new LocalizedTextBind("Until next turn: Allies in 10 tile radius can use disabled limbs and gain panic immunity", doNotLocalize);
+        //    Sprite rallyIcon = Repo.GetAllDefs<TacticalAbilityViewElementDef>().FirstOrDefault(ve => ve.name.Equals("E_ViewElement [Acheron_CallReinforcements_AbilityDef]")).LargeIcon;
+        //    rally.ViewElementDef.LargeIcon = rallyIcon;
+        //    rally.ViewElementDef.SmallIcon = rallyIcon;
+        //    foreach (TacActorSimpleAbilityAnimActionDef animActionDef in Repo.GetAllDefs<TacActorSimpleAbilityAnimActionDef>().Where(aad => aad.name.Contains("Soldier_Utka_AnimActionsDef")))
+        //    {
+        //        if (animActionDef.AbilityDefs != null && animActionDef.AbilityDefs.Contains(source))
+        //        {
+        //            animActionDef.AbilityDefs = animActionDef.AbilityDefs.Append(rally).ToArray();
+        //            Logger.Debug("Anim Action '" + animActionDef.name + "' set for abilities:");
+        //            foreach (AbilityDef ad in animActionDef.AbilityDefs)
+        //            {
+        //                Logger.Debug("  " + ad.name);
+        //            }
+        //        }
+        //    }
+        //    //Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
+        //}
         private static void Create_PhantomProtocol()
         {
             string skillName = "BC_PhantomProtocol_AbilityDef";
@@ -148,8 +210,9 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             StatMultiplierStatusDef pPAM = Helper.CreateDefFromClone(
                 Repo.GetAllDefs<StatMultiplierStatusDef>().FirstOrDefault(sms => sms.name.Equals("Trembling_StatusDef")),
                 "06ca77ea-223b-4ec0-a7e6-734e6b7fefe9",
-                "E AccuracyMultiplier [QuickAim_AbilityDef]");
+                "E AccuracyMultiplier [BC_PhantomProtocol_AbilityDef]");
 
+            pPAM.EffectName = "";
             pPAM.StatsMultipliers = new StatMultiplier[]
             {
                 new StatMultiplier()

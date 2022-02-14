@@ -27,7 +27,7 @@ namespace PhoenixRising.BetterClasses
         internal static readonly SharedData Shared = GameUtl.GameComponent<SharedData>();
         private static readonly AssetsManager assetsManager = GameUtl.GameComponent<AssetsManager>();
 
-        public static void MainMod(Func<string, object, object> api)
+        public static void GameMod(Func<string, object, object> api)
         {
             // Read config and assign to config field.
             Config = api("config", null) as Settings ?? new Settings();
@@ -56,6 +56,10 @@ namespace PhoenixRising.BetterClasses
 
             // Patch all Harmony patches
             HarmonyInstance.Create("BetterClasses.PhoenixRising").PatchAll();
+
+            Logger.Always("----------------------------------------------------------------------------------------------------", false);
+            Logger.Always("Number of RuntimeDefs created: " + Repo.GetRuntimeDefs<BaseDef>(true).Count());
+            Logger.Always("----------------------------------------------------------------------------------------------------", false);
 
             // Print out ODI titles and texts
             //foreach (GeoscapeEventDef ged in Repo.GetAllDefs<GeoscapeEventDef>().Where(g => g.name.Contains("SDI_")))
