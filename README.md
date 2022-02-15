@@ -20,18 +20,20 @@ modding and design councilors and testers, always open to productive discussions
 
 ### Better Classes
 
-Reworks, rebalances and overhauls all 7 vanilla classes and most of their skills and also introduces entirely different 3rd row of skills that depend on soldier origin, background and class. Below is the explanation how 3rd row is compiled:
+<b>FEATURES:</b>
+BETTER CLASSES: Overhaul and rebalance of all 7 vanilla classes adding many new skills, combos and tactics
+Introduces entirely different 3rd row of skills that depend on soldier origin, background and class. Learn more: https://youtu.be/XcaObJJaHCw
 
-Better Classes 3rd row features 2 Background perks, 2 Faction Perks, 2 Class Perks and 1 Proficiency Perk
+FESTERING SKIES RETOLD: Completely rewritten the story of Festering skies - finally it makes sense and aligns properly with game lore.
 
-"Background perks": represent character personality and tell something about himself and postapocalyptic world of Phoenix Point
-They are aquired on level 1 and 5 and are chosen randomly from a pool of 19 total perks.
+BALANCE ADJUSTMENTS: Many skills and some items have been changed in the mod. See complete list of changes here: TBD 
+You can turn off this setting in Config, but its highly recommended you try playing the mod with default settings first.
 
-"Faction Perks": Each recruit comes from specific faction that affects his training and abilities. These Perks are aquired on level 2 and 7 and are fixed based on faction, but elite classes(Priest, Technician and Inflitrator) get their own unique faction perks on level 6.
+ENEMIES IMPROVED: Worms are made faster and Mindfraggers are more threatening. Can be turned off in the Config.
 
-"Class Skills" aquired on lvl 3 and 6 are powerful abilities that define the class and are direct expansion of his row 1 skill tree. As class-defining abilities they are only available on core class, allowing unique multi-class combinations, where Assault-Sniper is not the same as Sniper-Assault.
+HAVEN RECRUITS COME WITH WEAPONS AND ARMOR: Overrides Vanilla settings for Hero&Legend difficulty. Can be turned off in the Config.
 
-Finally "Proficiency Perk" is randomly aquired on lvl 4 and simply allows you to learn additional weapon proficiency.
+BRUTAL LEGEND: Slightly increases deployment on Legend difficulty to better live up to its name. Can be turned off in the Config.
 
 <b>INSTALLATION:</b> 7z file must be selected via "Add Mod" button in Modnix
 
