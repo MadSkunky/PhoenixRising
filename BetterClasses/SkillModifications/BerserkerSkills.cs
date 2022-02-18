@@ -152,6 +152,10 @@ namespace PhoenixRising.BetterClasses.SkillModifications
 
         private static void Create_PersonalSpace()
         {
+            //foreach (TriggerAbilityZoneOfControlStatusDef taz in Repo.GetAllDefs<TriggerAbilityZoneOfControlStatusDef>())
+            //{
+            //    Logger.Always(taz.name, false);
+            //}
             Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
         }
     }
