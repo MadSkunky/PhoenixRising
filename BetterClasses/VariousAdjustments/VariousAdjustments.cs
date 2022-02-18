@@ -33,7 +33,7 @@ using UnityEngine;
 
 namespace PhoenixRising.BetterClasses.VariousAdjustments
 {
-    class Adjustments
+    class VariousAdjustments
     {
         private static readonly Settings Config = BetterClassesMain.Config;
         private static readonly DefRepository Repo = BetterClassesMain.Repo;
