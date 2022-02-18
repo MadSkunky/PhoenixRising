@@ -11,8 +11,10 @@ using PhoenixPoint.Common.Entities.GameTags;
 using PhoenixPoint.Common.Entities.GameTagsTypes;
 using PhoenixPoint.Common.UI;
 using PhoenixPoint.Tactical.Entities.Abilities;
+using PhoenixPoint.Tactical.Entities.Effects.ApplicationConditions;
 using PhoenixPoint.Tactical.Entities.Equipments;
 using PhoenixPoint.Tactical.Entities.Statuses;
+using PhoenixPoint.Tactical.Levels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -152,10 +154,38 @@ namespace PhoenixRising.BetterClasses.SkillModifications
 
         private static void Create_PersonalSpace()
         {
-            //foreach (TriggerAbilityZoneOfControlStatusDef taz in Repo.GetAllDefs<TriggerAbilityZoneOfControlStatusDef>())
+            //BashAbilityDef psStrikeAbility = Repo.GetAllDefs<BashAbilityDef>().FirstOrDefault(ba => ba.name.Equals("Strike_ShootAbilityDef"));
+            //foreach (ApplyStatusAbilityDef asa in Repo.GetAllDefs<ApplyStatusAbilityDef>().Where(a => a.StatusApplicationTrigger == StatusApplicationTrigger.EndTurn))
             //{
-            //    Logger.Always(taz.name, false);
+            //    Logger.Always(asa.name, false);
             //}
+            //TriggerAbilityZoneOfControlStatusDef psTriggerStatus = new TriggerAbilityZoneOfControlStatusDef();
+            //psTriggerStatus.TriggerConditions = new EffectConditionDef[] {
+            //    new ActorHasAbilityEffectConditionDef()
+            //    {
+            //        AbilityDef = psStrikeAbility
+            //    },
+            //    new VisibleActorsInRangeEffectConditionDef()
+            //    {
+            //        TargetingData = psStrikeAbility.TargetingDataDef,
+            //        Relation = FactionRelation.Enemy,
+            //        ShownMode = KnownState.Located | KnownState.Revealed,
+            //        ActorsInRange = true
+            //    }
+            //};
+            //psTriggerStatus.Range = -1; // -1 = ability range will be used, melee attack ability should trigger when enemy is adjacent
+            //psTriggerStatus.ExecuteAbility = psStrikeAbility;
+            //psTriggerStatus.ExecuteAbilityWithTrait = null;
+            //psTriggerStatus.TargetSelf = false;
+            //psTriggerStatus.ApplyTimingScale = true;
+            //
+            //ApplyStatusAbilityDef personalSpace = new ApplyStatusAbilityDef();
+            //personalSpace.CharacterProgressionData = new Base.Entities.Abilities.AbilityCharacterProgressionDef();
+            //personalSpace.ViewElementDef = new TacticalAbilityViewElementDef();
+            //personalSpace.StatusApplicationTrigger = StatusApplicationTrigger.EndTurn;
+            //personalSpace.StatusDef = psTriggerStatus;
+
+
             Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
         }
     }

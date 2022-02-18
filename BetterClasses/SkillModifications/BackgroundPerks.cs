@@ -667,7 +667,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
         {
             // Set all melee weapon defs to the a melee damage type
             // Don't used! It messes up different melee weapons with additional status damages
-            // Create a new array with both melee damage types
+            // Create a new array with some melee damage types
             //DamageTypeBaseEffectDef[] meleeDamageTypes = new DamageTypeBaseEffectDef[]
             //{
             //    Repo.GetAllDefs<DamageTypeBaseEffectDef>().FirstOrDefault(dtb => dtb.name.Equals("Slash_StandardDamageTypeEffectDef")),
@@ -706,6 +706,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             tgStatus.Multiplier = 0.9f;
             tgStatus.Range = 1.5f;
             tgStatus.Visuals = trueGrit.ViewElementDef;
+            tgStatus.VisibleOnStatusScreen = 0;
         }
         //private static void Fix_MeleeWeaponDamageType(DamageTypeBaseEffectDef[] meleeDamageTypes)
         //{
