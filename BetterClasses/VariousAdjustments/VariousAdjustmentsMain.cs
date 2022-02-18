@@ -22,7 +22,7 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
             try
             {
                 // Changes coding down from here
-                Adjustments.ApplyChanges();
+                VariousAdjustments.ApplyChanges();
                 WeaponModifications.ApplyChanges();
             }
             catch (Exception e)
