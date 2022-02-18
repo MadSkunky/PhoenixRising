@@ -101,7 +101,8 @@
     <Compile Include="SkillModifications\SniperSkills.cs" />
     <Compile Include="SkillModifications\TechnicianSkills.cs" />
     <Compile Include="StoryRework\StoryReworkMain.cs" />
-    <Compile Include="WeaponModifications.cs" />
+    <Compile Include="VariousAdjustments\VariousAdjustmentsMain.cs" />
+    <Compile Include="VariousAdjustments\WeaponModifications.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="mod_info.json" />

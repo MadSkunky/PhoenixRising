@@ -1,14 +1,15 @@
-﻿using Base.Defs;
+﻿using Base.Core;
+using Base.Defs;
+using Base.UI;
 using PhoenixPoint.Common.Core;
+using PhoenixPoint.Common.UI;
+using PhoenixPoint.Tactical.Entities.Abilities;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace PhoenixRising.BetterClasses.StoryRework
+namespace PhoenixRising.BetterClasses.VariousAdjustments
 {
-    class StoryReworkMain
+    class WeaponModifications
     {
         // Get config, definition repository and shared data
         private static readonly Settings Config = BetterClassesMain.Config;
@@ -19,15 +20,7 @@ namespace PhoenixRising.BetterClasses.StoryRework
 
         public static void ApplyChanges()
         {
-            try
-            {
-                // Volands magic mission changes coding down from here
 
-            }
-            catch (Exception e)
-            {
-                Logger.Error(e);
-            }
         }
     }
 }

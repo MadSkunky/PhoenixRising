@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PhoenixRising.BetterClasses.StoryRework
+namespace PhoenixRising.BetterClasses.VariousAdjustments
 {
-    class StoryReworkMain
+    class VariousAdjustmentsMain
     {
         // Get config, definition repository and shared data
         private static readonly Settings Config = BetterClassesMain.Config;
@@ -21,8 +21,8 @@ namespace PhoenixRising.BetterClasses.StoryRework
         {
             try
             {
-                // Volands magic mission changes coding down from here
-
+                // Changes coding down from here
+                WeaponModifications.ApplyChanges();
             }
             catch (Exception e)
             {

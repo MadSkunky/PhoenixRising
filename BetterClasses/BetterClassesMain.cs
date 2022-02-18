@@ -12,6 +12,7 @@ using PhoenixRising.BetterClasses.SkillModifications;
 using PhoenixPoint.Geoscape.Events.Eventus;
 using Base.Assets;
 using PhoenixRising.BetterClasses.StoryRework;
+using PhoenixRising.BetterClasses.VariousAdjustments;
 
 namespace PhoenixRising.BetterClasses
 {
@@ -54,6 +55,9 @@ namespace PhoenixRising.BetterClasses
 
             // Apply skill modifications
             SkillModsMain.ApplyChanges();
+
+            // Apply various adjustments
+            VariousAdjustmentsMain.ApplyChanges();
 
             // Generate the main specialization as configured
             MainSpecModification.GenerateMainSpec();
