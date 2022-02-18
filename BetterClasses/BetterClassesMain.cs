@@ -11,6 +11,7 @@ using Harmony;
 using PhoenixRising.BetterClasses.SkillModifications;
 using PhoenixPoint.Geoscape.Events.Eventus;
 using Base.Assets;
+using PhoenixRising.BetterClasses.StoryRework;
 
 namespace PhoenixRising.BetterClasses
 {
@@ -47,6 +48,9 @@ namespace PhoenixRising.BetterClasses
 
             // Set localization for project
             doNotLocalize = Config.DoNotLocalizeChangedTexts;
+
+            // Apply story rework changes (Voland)
+            StoryReworkMain.ApplyChanges();
 
             // Apply skill modifications
             SkillModsMain.ApplyChanges();
