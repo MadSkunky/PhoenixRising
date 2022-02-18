@@ -201,10 +201,12 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
         }
         public static void Change_MindFragger()
         {
-            TacticalActorDef faceHugger = Repo.GetAllDefs<TacticalActorDef>().FirstOrDefault(p => p.name.Contains("Facehugger_ActorDef"));
-            RagdollDieAbilityDef acidSwarmerExplode = Repo.GetAllDefs<RagdollDieAbilityDef>().FirstOrDefault(p => p.name.Contains("SwarmerAcidExplosion_Die_AbilityDef"));
-
-            faceHugger.Abilities[2] = acidSwarmerExplode;
+            TacticalItemDef faceHugger = Repo.GetAllDefs<TacticalItemDef>().FirstOrDefault(p => p.name.Contains("Facehugger_Head_BodyPartDef"));
+            faceHugger.Abilities = new AbilityDef[]
+            {
+                faceHugger.Abilities[0],
+                Repo.GetAllDefs<RagdollDieAbilityDef>().FirstOrDefault(p => p.name.Contains("SwarmerAcidExplosion_Die_AbilityDef")),
+            };
         }
         public static void Change_Worms()
         {
