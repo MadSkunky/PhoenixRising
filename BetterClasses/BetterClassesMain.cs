@@ -51,7 +51,10 @@ namespace PhoenixRising.BetterClasses
             doNotLocalize = Config.DoNotLocalizeChangedTexts;
 
             // Apply story rework changes (Voland)
-            StoryReworkMain.ApplyChanges();
+            if (Config.ActivateStoryRework)
+            {
+                StoryReworkMain.ApplyChanges();
+            }
 
             // Apply skill modifications
             SkillModsMain.ApplyChanges();

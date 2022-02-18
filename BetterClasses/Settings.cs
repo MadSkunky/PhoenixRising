@@ -267,6 +267,9 @@ namespace PhoenixRising.BetterClasses
         // Learn the first personal ability = is set rigth from the start
         public bool LearnFirstPersonalSkill = true;
 
+        // Activate story rework
+        public bool ActivateStoryRework = false;
+
         // Flag if UI texts should be changed to default (Enlish) text or set by localization
         public bool DoNotLocalizeChangedTexts = true;
         // Create new ability dictionary as json file in mod directory
