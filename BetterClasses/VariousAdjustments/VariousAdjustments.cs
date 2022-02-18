@@ -116,7 +116,7 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
         }
         public static void Change_Frenzy()
         {
-            float frenzySpeed = 0.25f;
+            float frenzySpeed = 0.35f;
 
             FrenzyStatusDef frenzy = Repo.GetAllDefs<FrenzyStatusDef>().FirstOrDefault(p => p.name.Contains("Frenzy_StatusDef"));
             frenzy.SpeedCoefficient = frenzySpeed;
@@ -197,11 +197,14 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
         }
         public static void Change_VenomTorso()
         {
-
+          
         }
         public static void Change_MindFragger()
         {
+            TacticalActorDef faceHugger = Repo.GetAllDefs<TacticalActorDef>().FirstOrDefault(p => p.name.Contains("Facehugger_ActorDef"));
+            RagdollDieAbilityDef acidSwarmerExplode = Repo.GetAllDefs<RagdollDieAbilityDef>().FirstOrDefault(p => p.name.Contains("SwarmerAcidExplosion_Die_AbilityDef"));
 
+            faceHugger.Abilities[2] = acidSwarmerExplode;
         }
         public static void Change_Worms()
         {
