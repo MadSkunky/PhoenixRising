@@ -1,6 +1,9 @@
 ﻿using Base.Core;
 using Base.Defs;
+using Base.UI;
 using PhoenixPoint.Common.Core;
+using PhoenixPoint.Tactical.Entities.Abilities;
+using PhoenixPoint.Tactical.Entities.Statuses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,7 +36,16 @@ namespace PhoenixRising.BetterClasses.SkillModifications
 
         private static void Change_ElectricReinforcements()
         {
-            Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
+            float armorBonus = 10f;
+            ApplyStatusAbilityDef eR = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(asa => asa.name.Equals("ElectricReinforcement_AbilityDef"));
+            ItemSlotStatsModifyStatusDef eRStatus = (ItemSlotStatsModifyStatusDef)eR.StatusDef;
+
+            eR.TargetingDataDef.Origin.Range = 10;
+            eR.ActionPointCost = 0.25f;
+            eR.WillPointCost = 3;
+            eR.ViewElementDef.Description = new LocalizedTextBind($"Give yourself and allies within 20 tiles a bonus of {armorBonus} armour for 1 turn. This effect does not stack.", doNotLocalize);
+            eRStatus.StatsModifications[0].Value = armorBonus;
+            eRStatus.StatsModifications[1].Value = armorBonus;
         }
 
         private static void Create_Stability()

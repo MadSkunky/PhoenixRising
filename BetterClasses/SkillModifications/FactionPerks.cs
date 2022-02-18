@@ -2,14 +2,18 @@
 using Base.Core;
 using Base.Defs;
 using Base.Entities.Abilities;
+using Base.Entities.Effects;
 using Base.Entities.Statuses;
+using Base.Levels;
 using Base.UI;
+using Base.Utils.Maths;
 using Harmony;
 using PhoenixPoint.Common.Core;
 using PhoenixPoint.Common.Entities.GameTags;
 using PhoenixPoint.Common.Entities.GameTagsTypes;
 using PhoenixPoint.Common.UI;
 using PhoenixPoint.Geoscape.Events.Eventus;
+using PhoenixPoint.Tactical;
 using PhoenixPoint.Tactical.Entities;
 using PhoenixPoint.Tactical.Entities.Abilities;
 using PhoenixPoint.Tactical.Entities.Animations;
@@ -77,9 +81,11 @@ namespace PhoenixRising.BetterClasses.SkillModifications
         private static void Create_Takedown()
         {
             string skillName = "BC_Takedown_AbilityDef";
-            float shockDamage = 100.0f;
+            float bashDamage = 60f;
+            float bashShock = 160f;
+            //float meleeShockAddition = 100.0f;
             LocalizedTextBind displayName = new LocalizedTextBind("TAKEDOWN", doNotLocalize);
-            LocalizedTextBind description = new LocalizedTextBind($"Your bash and melee attacks gain +{(int)shockDamage} Shock value.", doNotLocalize);
+            LocalizedTextBind description = new LocalizedTextBind($"Assault your enemy attempting to daze him, deals {(int)bashDamage} Damage and {(int)bashShock} Shock. Replaces Bash.", doNotLocalize);
             Sprite icon = Repo.GetAllDefs<TacticalAbilityViewElementDef>().FirstOrDefault(tave => tave.name.Equals("E_ViewElement [Brawler_AbilityDef]")).LargeIcon;
 
             ApplyStatusAbilityDef source = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(asa => asa.name.Equals("WeakSpot_AbilityDef"));
@@ -95,11 +101,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                 source.ViewElementDef,
                 "0324925f-e318-40b6-ac8c-b68033823cd9",
                 skillName);
-            takedown.StatusDef = Helper.CreateDefFromClone(
-                source.StatusDef,
-                "39663161-e7d1-425b-a024-d3964dfb39ff",
-                skillName);
-
+            // Set usual fields for new created base ability (Takedown)
             takedown.CharacterProgressionData.RequiredStrength = 0;
             takedown.CharacterProgressionData.RequiredWill = 0;
             takedown.CharacterProgressionData.RequiredSpeed = 0;
@@ -107,33 +109,90 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             takedown.ViewElementDef.Description = description;
             takedown.ViewElementDef.LargeIcon = icon;
             takedown.ViewElementDef.SmallIcon = icon;
-            (takedown.StatusDef as AddAttackBoostStatusDef).Visuals = takedown.ViewElementDef;
-            (takedown.StatusDef as AddAttackBoostStatusDef).WeaponTagFilter = Repo.GetAllDefs<GameTagDef>().FirstOrDefault(gt => gt.name.Equals("MeleeWeapon_TagDef"));
-            (takedown.StatusDef as AddAttackBoostStatusDef).DamageKeywordPairs = new DamageKeywordPair[] {
+
+            // Create a new Bash ability by cloning from standard Bash with fixed damage and shock values
+            BashAbilityDef bashToRemoveAbility = Repo.GetAllDefs<BashAbilityDef>().FirstOrDefault(gt => gt.name.Equals("Bash_WithWhateverYouCan_AbilityDef"));
+            BashAbilityDef bashAbility = Helper.CreateDefFromClone(
+                bashToRemoveAbility,
+                "b2e1ecee-ad51-445f-afc4-6d2f629a8422",
+                "Takedown_Bash_AbilityDef");
+            bashAbility.DamagePayload.DamageKeywords = new List<DamageKeywordPair>()
+            {
+                new DamageKeywordPair()
+                {
+                    DamageKeywordDef = Shared.SharedDamageKeywords.DamageKeyword,
+                    Value = bashDamage
+                },
                 new DamageKeywordPair()
                 {
                     DamageKeywordDef = Shared.SharedDamageKeywords.ShockKeyword,
-                    Value = 100f
+                    Value = bashShock
                 }
             };
+            bashAbility.ViewElementDef = Helper.CreateDefFromClone(
+                source.ViewElementDef,
+                "e9617a5a-32ae-46a2-b9ca-538956470c0f",
+                skillName);
+            bashAbility.ViewElementDef.ShowInStatusScreen = false;
+            bashAbility.ViewElementDef.DisplayName1 = displayName;
+            bashAbility.ViewElementDef.Description = new LocalizedTextBind("Assault your enemy attempting to daze him.", doNotLocalize);
+            bashAbility.ViewElementDef.LargeIcon = icon;
+            bashAbility.ViewElementDef.SmallIcon = icon;
+
+            // Create a status to apply the bash ability to the actor
+            AddAbilityStatusDef addNewBashAbiltyStatus = Helper.CreateDefFromClone( // Borrow status from Deplay Beacon (final mission)
+                Repo.GetAllDefs<AddAbilityStatusDef>().FirstOrDefault(a => a.name.Equals("E_AddAbilityStatus [DeployBeacon_StatusDef]")),
+                "f084d230-9ad4-4315-a49d-d5e73c954254",
+                $"E_ApplyNewBashAbilityEffect [{skillName}]");
+            addNewBashAbiltyStatus.DurationTurns = -1;
+            addNewBashAbiltyStatus.SingleInstance = true;
+            addNewBashAbiltyStatus.ExpireOnEndOfTurn = false;
+            addNewBashAbiltyStatus.AbilityDef = bashAbility;
+
+            // Create an effect that removes the standard Bash from the actors abilities
+            RemoveAbilityEffectDef removeRegularBashAbilityEffect = Helper.CreateDefFromClone(
+                Repo.GetAllDefs<RemoveAbilityEffectDef>().FirstOrDefault(rae => rae.name.Equals("RemoveAuraAbilities_EffectDef")),
+                "b4bba4bf-f568-42b5-8baf-0169b7aa218a",
+                $"E_RemoveRegularBashAbilityEffect [{skillName}]");
+            removeRegularBashAbilityEffect.AbilityDefs = new AbilityDef[] { bashToRemoveAbility };
+
+            // Create a status that applies the remove ability effect to the actor
+            TacEffectStatusDef applyRemoveAbilityEffectStatus = Helper.CreateDefFromClone(
+                Repo.GetAllDefs<TacEffectStatusDef>().FirstOrDefault(tes => tes.name.Equals("Mist_spawning_StatusDef")),
+                "1a9ba75a-8075-4e07-8a13-b23798eda4a0",
+                $"E_ApplyRemoveAbilityEffect [{skillName}]");
+            applyRemoveAbilityEffectStatus.EffectName = "";
+            applyRemoveAbilityEffectStatus.DurationTurns = -1;
+            applyRemoveAbilityEffectStatus.ExpireOnEndOfTurn = false;
+            applyRemoveAbilityEffectStatus.Visuals = null;
+            applyRemoveAbilityEffectStatus.EffectDef = removeRegularBashAbilityEffect;
+            applyRemoveAbilityEffectStatus.StatusAsEffectSource = false;
+            applyRemoveAbilityEffectStatus.ApplyOnStatusApplication = true;
+            applyRemoveAbilityEffectStatus.ApplyOnTurnStart = true;
+
+            // Create a multi status to hold all statuses that Takedown applies to the actor
+            MultiStatusDef multiStatus = Helper.CreateDefFromClone( // Borrow multi status from Rapid Clearance
+                Repo.GetAllDefs<MultiStatusDef>().FirstOrDefault(m => m.name.Equals("E_MultiStatus [RapidClearance_AbilityDef]")),
+                "f4bc1190-c87c-4162-bf86-aa797c82d5d2",
+                skillName);
+            multiStatus.Statuses = new StatusDef[] { addNewBashAbiltyStatus, applyRemoveAbilityEffectStatus };
+
+            takedown.StatusDef = multiStatus;
+
+            // Adding new bash ability to proper animations
+            foreach (TacActorAimingAbilityAnimActionDef animActionDef in Repo.GetAllDefs<TacActorAimingAbilityAnimActionDef>().Where(aad => aad.name.Contains("Soldier_Utka_AnimActionsDef")))
+            {
+                if (animActionDef.AbilityDefs != null && animActionDef.AbilityDefs.Contains(bashToRemoveAbility))
+                {
+                    animActionDef.AbilityDefs = animActionDef.AbilityDefs.Append(bashAbility).ToArray();
+                    Logger.Debug("Anim Action '" + animActionDef.name + "' set for abilities:");
+                    foreach (AbilityDef ad in animActionDef.AbilityDefs)
+                    {
+                        Logger.Debug("  " + ad.name);
+                    }
+                }
+            }
         }
-        // Takedown: Patching GeDamage from active actor when he select Bash to check if Takedown ability is active and return +100 Shock damage.
-        //[HarmonyPatch(typeof(BashAbility), "GetDamagePayload")]
-        //internal static class BashAbility_GetDamagePayload_Patch
-        //{
-        //    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
-        //    private static void Postfix(ref DamagePayload __result, BashAbility __instance)
-        //    {
-        //        TacticalActor tacticalActor = (TacticalActor)AccessTools.Property(typeof(TacticalAbility), "TacticalActor").GetValue(__instance, null);
-        //        TacticalAbility takedown = tacticalActor.GetAbilities<TacticalAbility>().FirstOrDefault(s => s.AbilityDef.name.Equals("BC_Takedown_AbilityDef"));
-        //        if (takedown != null)
-        //        {
-        //            Logger.Always("BashAbility_GetDamagePayload POSTFIX called and Takedown Ability detected ...");
-        //            Logger.Always(" Gernerated damage value: " + __result.GenerateDamageValue(tacticalActor.CharacterStats.BonusAttackDamage));
-        //            Logger.Always("------------------------------------------------------------------------------------------------------", false);
-        //        }
-        //    }
-        //}
 
         private static void Change_Shadowstep()
         {

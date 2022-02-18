@@ -86,27 +86,6 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             adrenalineRush.StatusDef = Repo.GetAllDefs<ChangeAbilitiesCostStatusDef>().FirstOrDefault(sd => sd.name.Equals("E_SetAbilitiesTo1AP [AdrenalineRush_AbilityDef]"));
             adrenalineRush.ViewElementDef.Description = new LocalizedTextBind("Until end of turn one-handed weapon and all non-weapon skills cost 1AP, except Recover.", doNotLocalize);
         }
-
-        private static void Change_MeleeSpecialist()
-        {
-            float modValue = 1.25f;
-            PassiveModifierAbilityDef meleeSpecialist = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(p => p.name.Equals("ExpertMelee_AbilityDef"));
-            for (int i = 0; i < meleeSpecialist.ItemTagStatModifications.Length; i++)
-            {
-                if (meleeSpecialist.ItemTagStatModifications[i].ItemTag == Repo.GetAllDefs<GameTagDef>().FirstOrDefault(gt => gt.name.Equals("MeleeWeapon_TagDef")))
-                {
-                    meleeSpecialist.ItemTagStatModifications[i].EquipmentStatModification.Value = modValue;
-                }
-            }
-            meleeSpecialist.ViewElementDef.DisplayName1 = new LocalizedTextBind("MELEE SPECIALIST", doNotLocalize);
-            meleeSpecialist.ViewElementDef.Description = new LocalizedTextBind($"Your melee attacks deal {(modValue * 100) - 100}% more damage", doNotLocalize);
-        }
-
-        private static void Create_PersonalSpace()
-        {
-            Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
-        }
-
         // Adrenaline Rush: Patching AbilityQualifies of ARs TacticalAbilityCostModification to determine which ability should get modified
         [HarmonyPatch(typeof(TacticalAbilityCostModification), "AbilityQualifies")]
         internal static class AR_AbilityQualifies_patch
@@ -154,6 +133,26 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                     Logger.Error(e);
                 }
             }
+        }
+
+        private static void Change_MeleeSpecialist()
+        {
+            float modValue = 1.25f;
+            PassiveModifierAbilityDef meleeSpecialist = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(p => p.name.Equals("ExpertMelee_AbilityDef"));
+            for (int i = 0; i < meleeSpecialist.ItemTagStatModifications.Length; i++)
+            {
+                if (meleeSpecialist.ItemTagStatModifications[i].ItemTag == Repo.GetAllDefs<GameTagDef>().FirstOrDefault(gt => gt.name.Equals("MeleeWeapon_TagDef")))
+                {
+                    meleeSpecialist.ItemTagStatModifications[i].EquipmentStatModification.Value = modValue;
+                }
+            }
+            meleeSpecialist.ViewElementDef.DisplayName1 = new LocalizedTextBind("MELEE SPECIALIST", doNotLocalize);
+            meleeSpecialist.ViewElementDef.Description = new LocalizedTextBind($"Your melee attacks deal {(modValue * 100) - 100}% more damage", doNotLocalize);
+        }
+
+        private static void Create_PersonalSpace()
+        {
+            Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
         }
     }
 }

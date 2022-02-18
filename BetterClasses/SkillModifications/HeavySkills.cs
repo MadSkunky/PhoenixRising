@@ -69,6 +69,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             warCry.ViewElementDef.Description = new LocalizedTextBind(
                 "Enemies in 10 tiles gain -1AP and -10% damage. If their current will points are less than yours effect is doubled.",
                 doNotLocalize);
+            WC_Activate_patch.WC_WPCost = warCry.WillPointCost;
             StatModification warCryApMultipier = new StatModification
             {
                 Modification = StatModificationType.MultiplyRestrictedToBounds,
@@ -242,6 +243,8 @@ namespace PhoenixRising.BetterClasses.SkillModifications
         [HarmonyPatch(typeof(ApplyStatusAbility), "Activate")]
         internal static class WC_Activate_patch
         {
+
+            public static float WC_WPCost;
             [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
             private static void Postfix(ApplyStatusAbility __instance)
             {
@@ -258,7 +261,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                             while (enumerator.MoveNext())
                             {
                                 TacticalActorBase targetActor = enumerator.Current.GetTargetActor();
-                                float sourceActorWP = sourceActorFromBase.CharacterStats.WillPoints + 6;
+                                float sourceActorWP = sourceActorFromBase.CharacterStats.WillPoints + WC_WPCost; // Add WP cost for War Cry to let the WP compararison behave as would it be before the cast.
                                 float targetActorWP = targetActor.Status.GetStat(StatModificationTarget.WillPoints.ToString(), null);
                                 Logger.Debug("War Cry ability <Activate> method called from ...");
                                 Logger.Debug("  Source actor      : " + sourceActorFromBase.name);

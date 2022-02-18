@@ -43,8 +43,8 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             // Rapid Clearance: Until end of turn, after killing an enemy next attack cost -2AP
             Change_RapidClearance();
 
-            // Barrage: 2 bursts with increased accuracy for 3 AP and 4 WP, AR only
-            Create_Barrage();
+            // AIMED BURST: 2 bursts with increased accuracy for 3 AP and 4 WP, AR only
+            Create_AimedBurst();
         }
 
         private static void Create_BC_QuickAim()
@@ -257,16 +257,16 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             (rapidClearance.StatusDef as OnActorDeathEffectStatusDef).EffectDef = applyStatusEffect;
         }
 
-        public static void Create_Barrage()
+        public static void Create_AimedBurst()
         {
-            string skillName = "Barrage_AbilityDef";
+            string skillName = "AimedBurst_AbilityDef";
             bool doNotLocalize = Config.DoNotLocalizeChangedTexts;
 
             // Source to clone from
             ShootAbilityDef rageBurst = Repo.GetAllDefs<ShootAbilityDef>().FirstOrDefault(p => p.name.Equals("RageBurst_ShootAbilityDef"));
 
             // Create Neccessary RuntimeDefs
-            ShootAbilityDef barrageAbility = Helper.CreateDefFromClone(
+            ShootAbilityDef aimedBurstAbility = Helper.CreateDefFromClone(
                 rageBurst,
                 "fc5f5cf1-1349-42ff-adc4-515d7ceddde4",
                 skillName);
@@ -284,26 +284,26 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                 skillName);
 
             // Set fields
-            barrageAbility.CharacterProgressionData = progression;
-            barrageAbility.ViewElementDef = viewElement;
-            barrageAbility.SceneViewElementDef = sceneView;
-            barrageAbility.SkillTags = new SkillTagDef[] { rageBurst.SkillTags[0] };
-            barrageAbility.ActionPointCost = 0.75f;
-            barrageAbility.WillPointCost = 4.0f;
-            barrageAbility.ActorTags = new GameTagDef[] { Repo.GetAllDefs<GameTagDef>().FirstOrDefault(t => t.name.Equals("Assault_ClassTagDef")) };
-            barrageAbility.EquipmentTags = new GameTagDef[] { Repo.GetAllDefs<GameTagDef>().FirstOrDefault(t => t.name.Equals("AssaultRifleItem_TagDef")) };
-            barrageAbility.ExecutionsCount = 2;
-            barrageAbility.ForceFirstPersonCam = false;
-            barrageAbility.ProjectileSpreadMultiplier = 0.7f;
+            aimedBurstAbility.CharacterProgressionData = progression;
+            aimedBurstAbility.ViewElementDef = viewElement;
+            aimedBurstAbility.SceneViewElementDef = sceneView;
+            aimedBurstAbility.SkillTags = new SkillTagDef[] { rageBurst.SkillTags[0] };
+            aimedBurstAbility.ActionPointCost = 0.75f;
+            aimedBurstAbility.WillPointCost = 4.0f;
+            aimedBurstAbility.ActorTags = new GameTagDef[] { Repo.GetAllDefs<GameTagDef>().FirstOrDefault(t => t.name.Equals("Assault_ClassTagDef")) };
+            aimedBurstAbility.EquipmentTags = new GameTagDef[] { Repo.GetAllDefs<GameTagDef>().FirstOrDefault(t => t.name.Equals("AssaultRifleItem_TagDef")) };
+            aimedBurstAbility.ExecutionsCount = 2;
+            aimedBurstAbility.ForceFirstPersonCam = false;
+            aimedBurstAbility.ProjectileSpreadMultiplier = 0.7f;
             progression.RequiredStrength = 0;
             progression.RequiredWill = 0;
             progression.RequiredSpeed = 0;
-            viewElement.DisplayName1 = new LocalizedTextBind("BARRAGE", doNotLocalize);
+            viewElement.DisplayName1 = new LocalizedTextBind("AIMED BURST", doNotLocalize);
             viewElement.Description = new LocalizedTextBind("Next shot with Assault Rifle uses double burst and gains +30% acc", doNotLocalize);
             // TODO: Maybe change to own Icon, current borrowed from Deadly Dou, for now we stick with it
-            Sprite barrage_IconSprite = Repo.GetAllDefs<TacticalAbilityViewElementDef>().FirstOrDefault(t => t.name.Equals("E_View [DeadlyDuo_ShootAbilityDef]")).LargeIcon;
-            viewElement.LargeIcon = barrage_IconSprite;
-            viewElement.SmallIcon = barrage_IconSprite;
+            Sprite aimedBurst_IconSprite = Repo.GetAllDefs<TacticalAbilityViewElementDef>().FirstOrDefault(t => t.name.Equals("E_View [DeadlyDuo_ShootAbilityDef]")).LargeIcon;
+            viewElement.LargeIcon = aimedBurst_IconSprite;
+            viewElement.SmallIcon = aimedBurst_IconSprite;
             viewElement.MultiTargetSelectionButtonTexts = new string[0];
         }
     }

@@ -64,8 +64,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             armourBreakDamageReduction.DurationTurns = 0;
             armourBreakDamageReduction.SingleInstance = true;
             armourBreakDamageReduction.VisibleOnHealthbar = TacStatusDef.HealthBarVisibility.Hidden;
-            // Don't show the status on the info screen (it is not tied to a body part), unfortunately there is no "Hidden" for this "StatusScreenVisibility" enum :-/
-            armourBreakDamageReduction.VisibleOnStatusScreen = TacStatusDef.StatusScreenVisibility.VisibleOnBodyPartStatusList;
+            armourBreakDamageReduction.VisibleOnStatusScreen = 0;
             armourBreakDamageReduction.Visuals = armourBreak.ViewElementDef;
             armourBreakDamageReduction.StatModifications[0].Value = 0.75f;
             armourBreakShredMod.AdditionalStatusesToApply = new TacStatusDef[] { armourBreakDamageReduction };

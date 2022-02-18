@@ -1,6 +1,7 @@
 ﻿using Base.Core;
 using Base.Defs;
 using PhoenixPoint.Common.Core;
+using PhoenixPoint.Tactical.Entities.Statuses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,7 +34,8 @@ namespace PhoenixRising.BetterClasses.SkillModifications
 
         private static void Change_PsychicWard()
         {
-            Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
+            DamageMultiplierStatusDef pW = Repo.GetAllDefs<DamageMultiplierStatusDef>().FirstOrDefault(asa => asa.name.Equals("PsychicWard_StatusDef"));
+            pW.Multiplier = 0.001f;
         }
 
         private static void Change_Biochemist()

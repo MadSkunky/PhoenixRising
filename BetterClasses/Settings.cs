@@ -153,7 +153,7 @@ namespace PhoenixRising.BetterClasses
                 spCost: 20,
                 relList: new Dictionary<string, Dictionary<string, string>>
                 {{ FactionKeys.All, new Dictionary<string,string> {
-                    { ClassKeys.Assault.Name, "BARRAGE" },
+                    { ClassKeys.Assault.Name, "AIMED BURST" },
                     { ClassKeys.Heavy.Name, "JETPACK CONTROL" },
                     { ClassKeys.Sniper.Name, "GUNSLINGER" },
                     { ClassKeys.Berserker.Name, "MELEE SPECIALIST" },
