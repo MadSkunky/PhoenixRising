@@ -1,5 +1,10 @@
 ﻿using Base.Defs;
+using Base.Eventus.Filters;
 using PhoenixPoint.Common.Core;
+using PhoenixPoint.Geoscape.Entities.Research;
+using PhoenixPoint.Geoscape.Events.Conditions;
+using PhoenixPoint.Geoscape.Events.Eventus;
+using PhoenixPoint.Geoscape.Events.Eventus.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -104,5 +109,10 @@ namespace PhoenixRising.BetterClasses.StoryRework
                 CH0_Won.GeoscapeEventData.Choices[0].Outcome.TrackEncounters.Add(trackEventCH1_Miss);
 
             }
+            catch (Exception e)
+            {
+                Logger.Error(e);
+            }
+        }
     }
 }
