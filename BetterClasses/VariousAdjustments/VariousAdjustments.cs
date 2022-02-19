@@ -79,6 +79,8 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
             Change_LegendaryDifficulty();
             // Mech Arms: 200 emp damage
             Change_MechArms();
+            // Vengeance Torso: Attacks against enemies within 10 tiles deal 10% more damage
+            Create_VengeanceTorso();
         }
         public static void Change_Turrets()
         {
@@ -338,6 +340,12 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
                 new DamageKeywordPair{DamageKeywordDef = Shared.SharedDamageKeywords.ShockKeyword, Value = mechArmsShockDamage },
                 new DamageKeywordPair{DamageKeywordDef = emp, Value = mechArmsEMPDamage },
                 };
+        }
+        public static void Create_VengeanceTorso()
+        {
+            TacticalItemDef vTorso = Repo.GetAllDefs<TacticalItemDef>().FirstOrDefault(p => p.name.Contains("SY_Shinobi_BIO_Torso_BodyPartDef"));
+
+            vTorso.Abilities[1] = Repo.GetAllDefs<AbilityDef>().FirstOrDefault(p => p.name.Contains("BattleFocus_AbilityDef"));
         }
     }
 }
