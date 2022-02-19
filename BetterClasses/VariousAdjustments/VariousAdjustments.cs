@@ -81,6 +81,8 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
             Change_MechArms();
             // Vengeance Torso: Attacks against enemies within 10 tiles deal 10% more damage
             Create_VengeanceTorso();
+            // Shadow Legs: Electric Kick replace shock damage with Sonic damage (value 20)
+            Change_ShadowLegs();
         }
         public static void Change_Turrets()
         {
@@ -346,6 +348,15 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
             TacticalItemDef vTorso = Repo.GetAllDefs<TacticalItemDef>().FirstOrDefault(p => p.name.Contains("SY_Shinobi_BIO_Torso_BodyPartDef"));
 
             vTorso.Abilities[1] = Repo.GetAllDefs<AbilityDef>().FirstOrDefault(p => p.name.Contains("BattleFocus_AbilityDef"));
+        }
+        public static void Change_ShadowLegs()
+        {
+            int shadowLegsSonicDamage = 20;
+
+            BashAbilityDef shadowLegs = Repo.GetAllDefs<BashAbilityDef>().FirstOrDefault(p => p.name.Contains("ElectricKick_AbilityDef"));
+
+            shadowLegs.DamagePayload.DamageKeywords[0].DamageKeywordDef = Shared.SharedDamageKeywords.SonicKeyword;
+            shadowLegs.DamagePayload.DamageKeywords[0].Value = shadowLegsSonicDamage;
         }
     }
 }
