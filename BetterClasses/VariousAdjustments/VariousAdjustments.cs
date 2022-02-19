@@ -205,6 +205,7 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
             faceHugger.Abilities = new AbilityDef[]
             {
                 faceHugger.Abilities[0],
+                Repo.GetAllDefs<RagdollDieAbilityDef>().FirstOrDefault(p => p.name.Contains("SwarmerAcidExplosion_Die_AbilityDef")),
             };
         }
         public static void Change_Worms()
