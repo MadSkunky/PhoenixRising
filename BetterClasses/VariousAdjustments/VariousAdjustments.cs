@@ -217,8 +217,9 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
         public static void Change_MindFragger()
         {
             int faceHuggerBlastDamage = 1;
-            int faceHuggerAcidDamage = 10;
-            
+            int faceHuggerAcidDamage = 5;
+            int faceHuggerAOERadius = 2;
+
             TacticalItemDef faceHugger = Repo.GetAllDefs<TacticalItemDef>().FirstOrDefault(p => p.name.Contains("Facehugger_Head_BodyPartDef"));
 
             string skillName = "BC_SwarmerAcidExplosion_Die_AbilityDef";
@@ -239,6 +240,7 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
             sAE.DeathEffect = sAEEffect;
             sAEEffect.DamagePayload.DamageKeywords[0].Value = faceHuggerBlastDamage;
             sAEEffect.DamagePayload.DamageKeywords[1].Value = faceHuggerAcidDamage;
+            sAEEffect.DamagePayload.AoeRadius = faceHuggerAOERadius;
 
             sAE.ViewElementDef.DisplayName1 = new LocalizedTextBind("ACID EXPLOSION", doNotLocalize);
             sAE.ViewElementDef.Description = new LocalizedTextBind("Upon death, the mind fragger bursts in an acid explosion damaging nearby targets", doNotLocalize);
