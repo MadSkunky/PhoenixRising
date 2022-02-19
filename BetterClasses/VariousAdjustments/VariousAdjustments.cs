@@ -84,6 +84,8 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
             Create_VengeanceTorso();
             // Shadow Legs: Electric Kick replace shock damage with Sonic damage (value 20)
             Change_ShadowLegs();
+            // Psychic Ward - fix and description to : Allies within 10 tiles are immune to panic and psychic scream damage
+            Change_PsychicImmunity();
         }
         public static void Change_Turrets()
         {
@@ -358,6 +360,11 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
 
             shadowLegs.DamagePayload.DamageKeywords[0].DamageKeywordDef = Shared.SharedDamageKeywords.SonicKeyword;
             shadowLegs.DamagePayload.DamageKeywords[0].Value = shadowLegsSonicDamage;
+        }
+        public static void Change_PsychicImmunity()
+        {
+            ApplyStatusAbilityDef psychicWard = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(p => p.name.Contains("PsychicWard_AbilityDef"));
+            psychicWard.ViewElementDef.Description = new LocalizedTextBind("Allies within 10 tiles are immune to panic and psychic scream damage");
         }
     }
 }
