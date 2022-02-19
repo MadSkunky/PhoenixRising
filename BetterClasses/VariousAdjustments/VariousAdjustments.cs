@@ -364,7 +364,7 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
         public static void Change_PsychicImmunity()
         {
             ApplyStatusAbilityDef psychicWard = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(p => p.name.Contains("PsychicWard_AbilityDef"));
-            psychicWard.ViewElementDef.Description = new LocalizedTextBind("Allies within 10 tiles are immune to panic and psychic scream damage");
+            psychicWard.ViewElementDef.Description = new LocalizedTextBind("Allies within 10 tiles are immune to panic and psychic scream damage", doNotLocalize);
         }
     }
 }
