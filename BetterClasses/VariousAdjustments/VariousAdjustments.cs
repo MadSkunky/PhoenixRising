@@ -201,6 +201,9 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
         }
         public static void Change_MindFragger()
         {
+            int faceHuggerBlastDamage = 1;
+            int faceHuggerAcidDamage = 10;
+            
             TacticalItemDef faceHugger = Repo.GetAllDefs<TacticalItemDef>().FirstOrDefault(p => p.name.Contains("Facehugger_Head_BodyPartDef"));
 
             string skillName = "BC_SwarmerAcidExplosion_Die_AbilityDef";
@@ -219,7 +222,8 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
                 "E_Element0 [BC_SwarmerAcidExplosion_Die_AbilityDef]");
 
             sAE.DeathEffect = sAEEffect;
-            sAEEffect.DamagePayload.DamageKeywords[1].Value = 10;
+            sAEEffect.DamagePayload.DamageKeywords[0].Value = faceHuggerBlastDamage;
+            sAEEffect.DamagePayload.DamageKeywords[1].Value = faceHuggerAcidDamage;
 
             sAE.ViewElementDef.DisplayName1 = new LocalizedTextBind("ACID EXPLOSION", doNotLocalize);
             sAE.ViewElementDef.Description = new LocalizedTextBind("Upon death, the mind fragger bursts in an acid explosion damaging nearby targets", doNotLocalize);
@@ -273,15 +277,44 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
         }
         public static void Change_ArthronShieldBearer()
         {
-
+            TacticalItemDef shieldBearer = Repo.GetAllDefs<TacticalItemDef>().FirstOrDefault(a => a.name.Equals("Crabman_LeftArm_Shield_BodyPartDef"));
+            shieldBearer.Abilities = new AbilityDef[]
+            {
+                Repo.GetAllDefs<AbilityDef>().FirstOrDefault(a => a.name.Equals("CloseQuarters_AbilityDef")),
+            };
         }
         public static void Change_HavenRecruits()
         {
+            bool hasArmor = true;
+            bool hasWeapon = true;
 
+            GameDifficultyLevelDef easy = Repo.GetAllDefs<GameDifficultyLevelDef>().FirstOrDefault(a => a.name.Equals("Easy_GameDifficultyLevelDef"));
+            GameDifficultyLevelDef standard = Repo.GetAllDefs<GameDifficultyLevelDef>().FirstOrDefault(a => a.name.Equals("Standard_GameDifficultyLevelDef"));
+            GameDifficultyLevelDef hard = Repo.GetAllDefs<GameDifficultyLevelDef>().FirstOrDefault(a => a.name.Equals("Hard_GameDifficultyLevelDef"));
+            GameDifficultyLevelDef veryhard = Repo.GetAllDefs<GameDifficultyLevelDef>().FirstOrDefault(a => a.name.Equals("VeryHard_GameDifficultyLevelDef"));
+
+            easy.RecruitsGenerationParams.HasArmor = hasArmor;
+            easy.RecruitsGenerationParams.HasWeapons = hasWeapon;
+            standard.RecruitsGenerationParams.HasArmor = hasArmor;
+            standard.RecruitsGenerationParams.HasWeapons = hasWeapon;
+            hard.RecruitsGenerationParams.HasArmor= hasArmor;
+            hard.RecruitsGenerationParams.HasWeapons= hasWeapon;
+            veryhard.RecruitsGenerationParams.HasArmor = hasArmor;
+            veryhard.RecruitsGenerationParams.HasWeapons = hasWeapon;
         }
         public static void Change_LegendaryDifficulty()
         {
+            float low = 1;
+            float medium = 1.1f;
+            float high = 1.3f;
+            float extreme = 1.75f;
 
+            DynamicDifficultySettingsDef dDSettings = Repo.GetAllDefs<DynamicDifficultySettingsDef>().FirstOrDefault(a => a.name.Equals("DynamicDifficultySettingsDef"));
+
+            dDSettings.ThreatLevels[0].ThreatLevelModifier = low;
+            dDSettings.ThreatLevels[1].ThreatLevelModifier= medium;
+            dDSettings.ThreatLevels[2].ThreatLevelModifier= high;
+            dDSettings.ThreatLevels[3].ThreatLevelModifier= extreme;
         }
         public static void Change_MechArms()
         {
