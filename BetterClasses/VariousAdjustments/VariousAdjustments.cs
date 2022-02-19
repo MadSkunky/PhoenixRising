@@ -202,10 +202,36 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
         public static void Change_MindFragger()
         {
             TacticalItemDef faceHugger = Repo.GetAllDefs<TacticalItemDef>().FirstOrDefault(p => p.name.Contains("Facehugger_Head_BodyPartDef"));
+            
+            string skillName = "BC_SwarmerAcidExplosion_Die_AbilityDef";
+            RagdollDieAbilityDef source = Repo.GetAllDefs<RagdollDieAbilityDef>().FirstOrDefault(p => p.name.Equals("SwarmerAcidExplosion_Die_AbilityDef"));
+            RagdollDieAbilityDef sAE = Helper.CreateDefFromClone(
+                source,
+                "1137345a-a18d-4800-b52e-b15d49f4dabf",
+                skillName);
+            sAE.CharacterProgressionData = Helper.CreateDefFromClone(
+                source.CharacterProgressionData,
+                "d99ea67d-4aa9-4335-99ba-841ca16077c6",
+                skillName);
+            sAE.ViewElementDef = Helper.CreateDefFromClone(
+                source.ViewElementDef,
+                "10729876-f764-41b5-9b4e-c8cb98dca771",
+                skillName);
+
+
+            DamagePayloadEffectDef sAEEffect = (DamagePayloadEffectDef)sAE.DeathEffect;
+            sAEEffect.DamagePayload.DamageKeywords[1].Value = 10;
+
+            sAE.CharacterProgressionData.RequiredSpeed = 0;
+            sAE.CharacterProgressionData.RequiredStrength = 0;
+            sAE.CharacterProgressionData.RequiredWill = 0;
+            sAE.ViewElementDef.DisplayName1 = new LocalizedTextBind("ACID EXPLOSION", doNotLocalize);
+            sAE.ViewElementDef.Description = new LocalizedTextBind("Upon death, the mind fragger bursts in an acid explosion damaging nearby targets", doNotLocalize);
+
             faceHugger.Abilities = new AbilityDef[]
             {
                 faceHugger.Abilities[0],
-                Repo.GetAllDefs<RagdollDieAbilityDef>().FirstOrDefault(p => p.name.Contains("SwarmerAcidExplosion_Die_AbilityDef")),
+                Repo.GetAllDefs<RagdollDieAbilityDef>().FirstOrDefault(p => p.name.Contains("BC_SwarmerAcidExplosion_Die_AbilityDef")),
             };
         }
         public static void Change_Worms()
