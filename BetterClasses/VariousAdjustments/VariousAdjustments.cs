@@ -285,11 +285,13 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
         }
         public static void Change_ArthronShieldBearer()
         {
+            /*
             TacticalItemDef shieldBearer = Repo.GetAllDefs<TacticalItemDef>().FirstOrDefault(a => a.name.Equals("Crabman_LeftArm_Shield_BodyPartDef"));
             shieldBearer.Abilities = new AbilityDef[]
             {
                 Repo.GetAllDefs<AbilityDef>().FirstOrDefault(a => a.name.Equals("CloseQuarters_AbilityDef")),
             };
+            */
         }
         public static void Change_HavenRecruits()
         {
