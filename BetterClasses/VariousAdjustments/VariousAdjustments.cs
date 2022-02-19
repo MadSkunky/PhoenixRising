@@ -11,6 +11,7 @@ using PhoenixPoint.Common.Core;
 using PhoenixPoint.Common.Entities.GameTags;
 using PhoenixPoint.Common.Entities.GameTagsTypes;
 using PhoenixPoint.Common.UI;
+using PhoenixPoint.Geoscape.Entities.DifficultySystem;
 using PhoenixPoint.Geoscape.Events.Eventus;
 using PhoenixPoint.Tactical;
 using PhoenixPoint.Tactical.Entities;

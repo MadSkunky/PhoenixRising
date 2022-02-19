@@ -29,7 +29,7 @@ namespace PhoenixRising.BetterClasses
         internal static readonly SharedData Shared = GameUtl.GameComponent<SharedData>();
         private static readonly AssetsManager assetsManager = GameUtl.GameComponent<AssetsManager>();
 
-        public static void GameMod(Func<string, object, object> api)
+        public static void HomeMod(Func<string, object, object> api)
         {
             // Read config and assign to config field.
             Config = api("config", null) as Settings ?? new Settings();
