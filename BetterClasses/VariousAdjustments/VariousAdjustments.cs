@@ -197,7 +197,15 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
         }
         public static void Change_VenomTorso()
         {
-          
+            WeaponDef venomTorso = Repo.GetAllDefs<WeaponDef>().FirstOrDefault(p => p.name.Contains("AN_Berserker_Shooter_LeftArm_WeaponDef"));
+
+            venomTorso.Tags = new GameTagsList()
+            {
+                venomTorso.Tags[0],
+                venomTorso.Tags[1],
+                venomTorso.Tags[2],
+                Repo.GetAllDefs<GameTagDef>().FirstOrDefault(p => p.name.Contains("GunWeapon_TagDef"))
+            };
         }
         public static void Change_MindFragger()
         {
