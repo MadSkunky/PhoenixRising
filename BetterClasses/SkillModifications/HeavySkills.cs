@@ -199,9 +199,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             jetpackControl.ViewElementDef.SmallIcon = jetpackControlIcon;
             jetpackControl.ActionPointCost = jetpackControlAPCost;
             jetpackControl.WillPointCost = jetpackControlWPCost;
-            jetpackControl.EquipmentTags = new GameTagDef[] {
-                Repo.GetAllDefs<GameTagDef>().FirstOrDefault(gt => gt.name.Equals("JetpackItem_TagDef"))
-            };
+            jetpackControl.AbilitiesRequired = new TacticalAbilityDef[] { source };
             jetpackControl.TargetingDataDef.Origin.Range = jetpackControlRange;
             foreach (TacActorSimpleAbilityAnimActionDef animActionDef in Repo.GetAllDefs<TacActorSimpleAbilityAnimActionDef>().Where(aad => aad.name.Contains("Soldier_Utka_AnimActionsDef")))
             {

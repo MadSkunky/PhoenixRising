@@ -328,8 +328,10 @@ namespace PhoenixRising.BetterClasses.SkillModifications
         }
         private static void Change_PepperCloud()
         {
+            float pcRange = 8.0f;
             ApplyStatusAbilityDef pepperCloud = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(p => p.name.Equals("Mutoid_PepperCloud_ApplyStatusAbilityDef"));
-            pepperCloud.TargetingDataDef.Origin.Range = 8;
+            pepperCloud.TargetingDataDef.Origin.Range = pcRange;
+            pepperCloud.ViewElementDef.Description = new LocalizedTextBind($"Reduces Accuracy by 50% of all organic enemies within {pcRange} tiles for 1 turn.", doNotLocalize);
         }
         private static void Create_AR_Targeting()
         {

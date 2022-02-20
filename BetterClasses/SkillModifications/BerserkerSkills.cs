@@ -213,8 +213,8 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             psTriggerStatus.Visuals = personalSpace.ViewElementDef;
             psTriggerStatus.VisibleOnHealthbar = TacStatusDef.HealthBarVisibility.AlwaysVisible;
             psTriggerStatus.Range = -1; // -1 = ability range will be used, melee attack ability should trigger when enemy is adjacent
-            psTriggerStatus.ExecuteAbility = psStrikeAbility;
-            psTriggerStatus.ExecuteAbilityWithTrait = null;
+            psTriggerStatus.ExecuteAbility = null;
+            psTriggerStatus.ExecuteAbilityWithTrait = "attack";
             psTriggerStatus.TargetSelf = false;
             psTriggerStatus.ApplyTimingScale = true;
 

@@ -83,6 +83,9 @@ namespace PhoenixRising.BetterClasses.SkillModifications
 
         private static void Change_Cautious()
         {
+            float damageMod = 0.9f;
+            float accuracyMod = 0.2f;
+            float stealthMod = 0.1f;
             PassiveModifierAbilityDef cautious = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(asa => asa.name.Equals("Cautious_AbilityDef"));
             cautious.StatModifications = new ItemStatModification[]
             {
@@ -90,21 +93,22 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                 {
                    TargetStat = StatModificationTarget.BonusAttackDamage,
                    Modification = StatModificationType.Multiply,
-                   Value = 0.9f
+                   Value = damageMod
                 },
                 new ItemStatModification()
                 {
                    TargetStat = StatModificationTarget.Accuracy,
                    Modification = StatModificationType.Add,
-                   Value = 0.1f
+                   Value = accuracyMod
                 },
                 new ItemStatModification()
                 {
                    TargetStat = StatModificationTarget.Stealth,
                    Modification = StatModificationType.Add,
-                   Value = 0.1f
+                   Value = stealthMod
                 }
             };
+            cautious.ViewElementDef.Description = new LocalizedTextBind($"Gain {(accuracyMod * 100) - 100}% accuracy and {(stealthMod * 100) - 100}% stealth but {(damageMod * 100) - 100}% damage", doNotLocalize);
         }
     }
 }
