@@ -323,10 +323,10 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
         }
         public static void Change_LegendaryDifficulty()
         {
-            float low = 1;
-            float medium = 1.1f;
-            float high = 1.3f;
-            float extreme = 1.75f;
+            float low = 1.1f;
+            float medium = 1.3f;
+            float high = 1.6f;
+            float extreme = 2;
 
             DynamicDifficultySettingsDef dDSettings = Repo.GetAllDefs<DynamicDifficultySettingsDef>().FirstOrDefault(a => a.name.Equals("DynamicDifficultySettingsDef"));
 
