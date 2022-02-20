@@ -197,10 +197,32 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
         public static void Change_ClarityHead()
         {
             TacticalItemDef clarityHead = Repo.GetAllDefs<TacticalItemDef>().FirstOrDefault(p => p.name.Contains("NJ_Jugg_BIO_Helmet_BodyPartDef"));
-            DamageMultiplierStatusDef panicImmunity = Repo.GetAllDefs<DamageMultiplierStatusDef>().FirstOrDefault(p => p.name.Contains("PanicImmunity_StatusDef"));
-            ApplyStatusAbilityDef clarityHeadStatus = (ApplyStatusAbilityDef)clarityHead.Abilities[0];
+            DamageMultiplierStatusDef panicImmunityStatus = Repo.GetAllDefs<DamageMultiplierStatusDef>().FirstOrDefault(p => p.name.Contains("PanicImmunity_StatusDef"));
 
-            clarityHeadStatus.StatusDef = panicImmunity;
+            string skillName = "BC_PanicImmunity_AbilityDef";
+            ApplyStatusAbilityDef source = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(p => p.name.Contains("MindControlImmunity_AbilityDef"));
+            ApplyStatusAbilityDef pI = Helper.CreateDefFromClone(
+                source,
+                "f2c51f91-fd5b-4f6f-bc19-cf6dfef831ba",
+                skillName);
+            pI.CharacterProgressionData = Helper.CreateDefFromClone(
+                source.CharacterProgressionData,
+                "528863c2-92ca-4690-84be-fb3600316439",
+                skillName);
+            pI.ViewElementDef = Helper.CreateDefFromClone(
+                source.ViewElementDef,
+                "59b36dfb-6b89-4771-8bdc-454bbe4e08e0",
+                skillName);
+
+            pI.StatusDef = panicImmunityStatus;
+            clarityHead.Abilities = new AbilityDef[]
+            {
+                Repo.GetAllDefs<AbilityDef>().FirstOrDefault(p => p.name.Contains("BC_PanicImmunity_AbilityDef")),
+                clarityHead.Abilities[1],
+            };
+
+            pI.ViewElementDef.DisplayName1 = new LocalizedTextBind("PANIC IMMUNITY", doNotLocalize);
+            pI.ViewElementDef.Description = new LocalizedTextBind("Immune to panic", doNotLocalize);
         }
         public static void Change_VenomTorso()
         {
@@ -323,10 +345,10 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
         }
         public static void Change_LegendaryDifficulty()
         {
-            float low = 1;
-            float medium = 1.1f;
-            float high = 1.3f;
-            float extreme = 1.75f;
+            float low = 1.1f;
+            float medium = 1.3f;
+            float high = 1.6f;
+            float extreme = 2;
 
             DynamicDifficultySettingsDef dDSettings = Repo.GetAllDefs<DynamicDifficultySettingsDef>().FirstOrDefault(a => a.name.Equals("DynamicDifficultySettingsDef"));
 
