@@ -35,8 +35,8 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             // Sneak Attack: Direct fire and melee +60 damage while not spotted
             Change_SneakAttack();
 
-            // Master Archer: Shoot your Crossbow 3 times at one target, reveal your position
-            Create_MasterArcher();
+            // Homing Drone:	2 AP 0WP, Shoot your Spider Drone at the target. Next time the target takes damage the drone will explode causing area damage.
+            Create_HomingDrone();
 
             // Cautious: +10% stealth
             Change_Cautious();
@@ -76,7 +76,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             sA.ViewElementDef.Description = new LocalizedTextBind($"Direct Fire and Melee attacks while not spotted deal {damageMod} additional damage", doNotLocalize);
         }
 
-        private static void Create_MasterArcher()
+        private static void Create_HomingDrone()
         {
             Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
         }
