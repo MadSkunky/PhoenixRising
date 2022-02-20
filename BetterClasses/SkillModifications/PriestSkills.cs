@@ -28,8 +28,8 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             // Biochemist: Paralysis, Poison and Viral damage increased 25%
             Change_Biochemist();
 
-            // Enrage (Mutog): Target Mutog becomes "Enraged"
-            Create_MutogEnrage();
+            // Mutog Handler: 1AP 3WP, Target Mutog within 10 tiles gains "Dash" action. Limited to 1 use per turn
+            Create_MutogHandler();
         }
 
         private static void Change_PsychicWard()
@@ -43,7 +43,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
         }
 
-        private static void Create_MutogEnrage()
+        private static void Create_MutogHandler()
         {
             Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
         }
