@@ -108,7 +108,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             hunkerDown.Active = true;
             hunkerDown.EndsTurn = true;
             hunkerDown.ActionPointCost = 0.5f;
-            hunkerDown.WillPointCost = 2.0f;
+            hunkerDown.WillPointCost = 0;
             hunkerDown.TraitsRequired = new string[] { "start", "ability", "move" };
             hunkerDown.TraitsToApply = new string[] { "ability" };
             hunkerDown.ShowNotificationOnUse = true;
