@@ -56,7 +56,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
 
         private static void Change_Dash()
         {
-            float dashRange = 13;
+            float dashRange = 13f;
             int dashUsesPerTurn = 1;
             string dashDescription = $"Move up to {(int)dashRange} tiles. Limited to {dashUsesPerTurn} use per turn";
             Sprite dashIcon = Repo.GetAllDefs<TacticalAbilityViewElementDef>().FirstOrDefault(tave => tave.name.Equals("E_View [BodySlam_AbilityDef]")).LargeIcon;

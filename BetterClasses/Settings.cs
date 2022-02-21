@@ -121,7 +121,7 @@ namespace PhoenixRising.BetterClasses
                     "VOLUNTEERED",
                     "CONDO RAIDER",
                     "TUNNEL RAT",
-                    "DESK JOCKEY",
+                    "HUNTER",
                     "TROUBLEMAKER",
                     "PARANOID",
                     "A HISTORY OF VIOLENCE",
