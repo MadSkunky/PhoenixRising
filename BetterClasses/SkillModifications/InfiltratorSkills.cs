@@ -108,7 +108,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                    Value = stealthMod
                 }
             };
-            cautious.ViewElementDef.Description = new LocalizedTextBind($"Gain {(accuracyMod * 100) - 100}% accuracy and {(stealthMod * 100) - 100}% stealth but {(damageMod * 100) - 100}% damage", doNotLocalize);
+            cautious.ViewElementDef.Description = new LocalizedTextBind($"GCautious_AbilityDefain {accuracyMod * 100}% accuracy and {stealthMod * 100}% stealth but {(damageMod * 100) - 100}% damage", doNotLocalize);
         }
     }
 }
