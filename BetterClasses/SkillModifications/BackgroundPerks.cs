@@ -52,7 +52,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             // TunnelRat, Stealth + 15 %, SPD + 1
             Change_TunnelRat();
             // DESK JOCKEY, Accuracy + 10 %
-            Create_DeskJockey();
+            Create_Hunter();
             // Troublemaker, Grenades deal +10 % damage
             Create_Troublemaker();
             // Attentive, Perception +4, Hearing Range +10
@@ -66,7 +66,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             // DAREDEVIL, Damage +10 %, Accuracy - 10 %
             Create_Daredevil();
             // Psychic, Gain "Psychic Scream"
-            Create_Psychic();
+            Create_DamagedAmygdala();
             // SANITATION EXPERT, Immune to goo
             Create_SanitationExpert();
             // LAB ASSISTANT, Acid Resistance
@@ -359,9 +359,9 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             TunnelRat.ViewElementDef.DisplayName1 = new LocalizedTextBind("TUNNEL RAT", doNotLocalize);
             TunnelRat.ViewElementDef.Description = new LocalizedTextBind("<b>+15% Stealth, +1 Speed</b>\n<i>You spent a good spell in the sewers. You had to be quiet, real quiet... And then run like hell!</i>", doNotLocalize);
         }
-        private static void Create_DeskJockey()
+        private static void Create_Hunter()
         {
-            string skillName = "DeskJockey_AbilityDef";
+            string skillName = "Hunter_AbilityDef";
             PassiveModifierAbilityDef source = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(p => p.name.Equals("EagleEyed_AbilityDef"));
             PassiveModifierAbilityDef DeskJockey = Helper.CreateDefFromClone(
                 source,
@@ -387,8 +387,8 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             DeskJockey.CharacterProgressionData.RequiredSpeed = 0;
             DeskJockey.CharacterProgressionData.RequiredStrength = 0;
             DeskJockey.CharacterProgressionData.RequiredWill = 0;
-            DeskJockey.ViewElementDef.DisplayName1 = new LocalizedTextBind("DESK JOCKEY", doNotLocalize);
-            DeskJockey.ViewElementDef.Description = new LocalizedTextBind("<b>+10% Accuracy</b>\n<i>Sometimes you get lucky and after training you to shoot people, they put you behind a desk. But luck doesn't last.</i>", doNotLocalize);
+            DeskJockey.ViewElementDef.DisplayName1 = new LocalizedTextBind("HUNTER", doNotLocalize);
+            DeskJockey.ViewElementDef.Description = new LocalizedTextBind("<b>+10% Accuracy</b>\n<i>There used to be game and hunger around these parts.</i>", doNotLocalize);
             Sprite DeskJockeyIcon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_PersonalTrack_SpecOp-3.png");
             DeskJockey.ViewElementDef.LargeIcon = DeskJockeyIcon;
             DeskJockey.ViewElementDef.SmallIcon = DeskJockeyIcon;
@@ -555,43 +555,29 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             daredevil.ViewElementDef.LargeIcon = ddIcon;
             daredevil.ViewElementDef.SmallIcon = ddIcon;
         }
-        private static void Create_Psychic()
+        private static void Create_DamagedAmygdala()
         {
-            string skillName = "Psychic_AbilityDef";
-            PsychicScreamAbilityDef source = Repo.GetAllDefs<PsychicScreamAbilityDef>().FirstOrDefault(p => p.name.Equals("Priest_PsychicScream_AbilityDef"));
-            PsychicScreamAbilityDef psychic = Helper.CreateDefFromClone(
+            string skillName = "DamagedAmygdala_AbilityDef";
+            DamageMultiplierAbilityDef source = Repo.GetAllDefs<DamageMultiplierAbilityDef>().FirstOrDefault(p => p.name.Equals("PsychicResistant_DamageMultiplierAbilityDef"));
+            DamageMultiplierAbilityDef damagedAmygdala = Helper.CreateDefFromClone(
                 source,
                 "5fe50c69-3081-4502-98bf-1ba9d6911c99",
                 skillName);
-            psychic.CharacterProgressionData = Helper.CreateDefFromClone(
-                source.CharacterProgressionData,
+            damagedAmygdala.CharacterProgressionData = Helper.CreateDefFromClone(
+                Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(p => p.name.Equals("MasterMarksman_AbilityDef")).CharacterProgressionData,
                 "ed634d13-34ec-43ef-9940-04400369535f",
                 skillName);
-            psychic.ViewElementDef = Helper.CreateDefFromClone(
+            damagedAmygdala.ViewElementDef = Helper.CreateDefFromClone(
                 source.ViewElementDef,
                 "e853a40d-7117-46bb-9504-7c0dea1fff97",
                 skillName);
-            foreach (TacActorSimpleAbilityAnimActionDef animActionDef in Repo.GetAllDefs<TacActorSimpleAbilityAnimActionDef>().Where(
-                aad => aad.name.Contains("PsychicScream")
-                && aad.name.Contains("Soldier_Utka_AnimActionsDef")))
-            {
-                animActionDef.AbilityDefs = animActionDef.AbilityDefs.Append(psychic).ToArray();
-                Logger.Debug("Anim Action '" + animActionDef.name + "' set for abilities:");
-                foreach (AbilityDef ad in animActionDef.AbilityDefs)
-                {
-                    Logger.Debug("  " + ad.name);
-                }
-            }
             Logger.Debug("---------------------------------------------------------------", false);
             // Set necessary fields
-            psychic.CharacterProgressionData.RequiredSpeed = 0;
-            psychic.CharacterProgressionData.RequiredStrength = 0;
-            psychic.CharacterProgressionData.RequiredWill = 0;
-            psychic.ViewElementDef.DisplayName1 = new LocalizedTextBind("PSYCHIC", doNotLocalize);
-            psychic.ViewElementDef.Description = new LocalizedTextBind("Gain psychic scream", doNotLocalize);
-            Sprite psychicIcon = Repo.GetAllDefs<TacticalAbilityViewElementDef>().FirstOrDefault(tav => tav.name.Equals("E_ViewElement [PsychicResistant_DamageMultiplierAbilityDef]")).LargeIcon;
-            psychic.ViewElementDef.LargeIcon = psychicIcon;
-            psychic.ViewElementDef.SmallIcon = psychicIcon;
+            damagedAmygdala.CharacterProgressionData.RequiredSpeed = 0;
+            damagedAmygdala.CharacterProgressionData.RequiredStrength = 0;
+            damagedAmygdala.CharacterProgressionData.RequiredWill = 0;
+            damagedAmygdala.ViewElementDef.DisplayName1 = new LocalizedTextBind("DAMAGED AMYGDALA", doNotLocalize);
+            damagedAmygdala.ViewElementDef.Description = new LocalizedTextBind("<b>Psychic Resistance</b>\n<i>All brains are different, and yours couldn't take seeing your family return as sea monsters.</i>", doNotLocalize);
         }
         private static void Create_SanitationExpert()
         {
@@ -633,9 +619,6 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                 skillName);
             labAssistant.ViewElementDef.DisplayName1 = new LocalizedTextBind("LAB ASSISTANT", doNotLocalize);
             labAssistant.ViewElementDef.Description = new LocalizedTextBind("<b>Acid Resistance</b>\n<i>All those little accidents throughout the years have taught you a lot about safely dealing with acid spills.</i>", doNotLocalize);
-            Sprite laIcon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_PersonalTrack_Stimpack-2.png");
-            labAssistant.ViewElementDef.LargeIcon = laIcon;
-            labAssistant.ViewElementDef.SmallIcon = laIcon;
         }
         private static void Create_Rockteer()
         {
@@ -698,7 +681,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             trueGrit.CharacterProgressionData.RequiredStrength = 0;
             trueGrit.CharacterProgressionData.RequiredWill = 0;
             trueGrit.ViewElementDef.DisplayName1 = new LocalizedTextBind("TRUE GRIT", doNotLocalize);
-            trueGrit.ViewElementDef.Description = new LocalizedTextBind("Reduce incoming damage in melee range by 10%", doNotLocalize);
+            trueGrit.ViewElementDef.Description = new LocalizedTextBind("<b>-10% damage from adjacent enemies</b>\n<i>The end of civilization wasn't kind to you, but when things get up close and personal, you just suck it up.</i>", doNotLocalize);
             Sprite tgIcon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_TentacularBody_MeleeAttackRetaliation-2.png");
             trueGrit.ViewElementDef.LargeIcon = tgIcon;
             trueGrit.ViewElementDef.SmallIcon = tgIcon;

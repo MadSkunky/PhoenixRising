@@ -126,7 +126,7 @@ namespace PhoenixRising.BetterClasses
                     "PARANOID",
                     "A HISTORY OF VIOLENCE",
                     "DAREDEVIL",
-                    "PSYCHIC",
+                    "DAMAGED AMYGDALA",
                     "SANITATION EXPERT",
                     "LAB ASSISTANT",
                     "ROCKETEER",

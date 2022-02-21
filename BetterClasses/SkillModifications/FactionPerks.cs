@@ -57,8 +57,8 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             Create_PhantomProtocol();
             //Pain Chameleon:  Maybe no change, to check if one of the ..._PainChameleon_AbilityDef will work
             Change_PainChameloen();
-            //Putrid Flesh: Passive, Returns 10% of damage as Viral to the attacker within 10 tiles
-            Create_PutridFlesh();
+            //Sower of Change: Passive, Returns 10% of damage as Viral to the attacker within 10 tiles
+            Create_SowerOfChange();
             //Breathe Mist: Adding progression def
             Change_BreatheMist();
             //Resurrect: 3AP 6WP, to check if the Mutoid_ResurrectAbilityDef will work, change to only allow 1 ressurect at one time (same as MC)
@@ -302,7 +302,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
         {
             Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' no changes implemented yet!");
         }
-        private static void Create_PutridFlesh()
+        private static void Create_SowerOfChange()
         {
             Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
         }
