@@ -22,7 +22,7 @@ modding and design councilors and testers, always open to productive discussions
 
 <b>INSTALLATION:</b> 7z file must be selected via "Add Mod" button in Modnix
 
-!WARNING!: Turn OFF "Show Detailed Equipment Info in Battle" setting in Options -> Gameplay. Otherwise some text on abilities will be missing.
+<b>!WARNING!:</b> Turn OFF "Show Detailed Equipment Info in Battle" setting in Options -> Gameplay and restart the game. Otherwise some text on abilities will be missing.
 Do NOT use any language besides ENGLISH, otherwise text will be broken. Sadly, adjusting localisation is a lot of work due to how the game is coded.
 
 COMPATIBILITY: Naturally, this mod is not compatible with any other mod that adjusts skills, perks or Personal abilities.
