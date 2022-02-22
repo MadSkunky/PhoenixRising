@@ -156,14 +156,14 @@ namespace PhoenixRising.BetterClasses.SkillModifications
 
         private static void Create_PersonalSpace()
         {
-            //Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
-            float apCost = 0.5f;
-            float wpCost = 4.0f;
-            
-            string skillName = "PersonalSpace_AbilityDef";
+            Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
+            //float apCost = 0.5f;
+            //float wpCost = 4.0f;
+            //
+            //string skillName = "PersonalSpace_AbilityDef";
             
             // Get standard melee attack ability
-            BashAbilityDef psStrikeAbility = Repo.GetAllDefs<BashAbilityDef>().FirstOrDefault(ba => ba.name.Equals("Strike_ShootAbilityDef"));
+            //BashAbilityDef psStrikeAbility = Repo.GetAllDefs<BashAbilityDef>().FirstOrDefault(ba => ba.name.Equals("Strike_ShootAbilityDef"));
 
             //OverwatchAbilityDef source = Repo.GetAllDefs<OverwatchAbilityDef>().FirstOrDefault(oa => oa.name.Equals("Overwatch_AbilityDef"));
             //OverwatchAbilityDef personalSpace = Helper.CreateDefFromClone(
