@@ -165,90 +165,106 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             // Get standard melee attack ability
             BashAbilityDef psStrikeAbility = Repo.GetAllDefs<BashAbilityDef>().FirstOrDefault(ba => ba.name.Equals("Strike_ShootAbilityDef"));
 
-            // Create main ability that applies the trigger status an the actor
-            ApplyStatusAbilityDef source = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(asa => asa.name.Equals("CloseQuarters_AbilityDef"));
-            ApplyStatusAbilityDef personalSpace = Helper.CreateDefFromClone(
-                source,
-                "d4d4ce0f-39b2-4630-97ce-96ab00f4b4ec",
-                skillName);
-            personalSpace.CharacterProgressionData = Helper.CreateDefFromClone(
-                source.CharacterProgressionData,
-                "a9994647-673e-43a8-b3f2-22fc2933cd70",
-                skillName);
-            personalSpace.TargetingDataDef = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(a => a.name.Equals("QuickAim_AbilityDef")).TargetingDataDef;
-            personalSpace.ViewElementDef = Helper.CreateDefFromClone(
-                source.ViewElementDef,
-                "96297e2e-978f-46ac-b008-78c612b6c6df",
-                skillName);
-
-            // Create status that triggers when an enemy enters adjacent tiles, cloned from "CanBeRecruitedIntoPhoenix_1x1_StatusDef"
-            TriggerAbilityZoneOfControlStatusDef triggerSource = Repo.GetAllDefs<TriggerAbilityZoneOfControlStatusDef>().FirstOrDefault(taz => taz.name.Equals("CanBeRecruitedIntoPhoenix_1x1_StatusDef"));
-            TriggerAbilityZoneOfControlStatusDef psTriggerStatus = Helper.CreateDefFromClone(
-                triggerSource,
-                "75a0ef17-a35c-4275-bcc0-93d80753949a",
-                $"E_TriggerStatus [{skillName}]");
-
-            // Create EffectConditionDef's to check if melee attack ability is present and for the trigger condition that enemy is in range
-            ActorHasAbilityEffectConditionDef actorHasAbility = Helper.CreateDefFromClone(
-                Repo.GetAllDefs<ActorHasAbilityEffectConditionDef>().FirstOrDefault(aha => aha.name.Equals("HasRecoverWillAbility_ApplicationCondition")),
-                "611859a0-673f-4ca1-8604-584a3903423b",
-                $"E_ActorHasAbility [{skillName}]");
-            actorHasAbility.AbilityDef = psStrikeAbility;
+            //OverwatchAbilityDef source = Repo.GetAllDefs<OverwatchAbilityDef>().FirstOrDefault(oa => oa.name.Equals("Overwatch_AbilityDef"));
+            //OverwatchAbilityDef personalSpace = Helper.CreateDefFromClone(
+            //    source,
+            //    "d4d4ce0f-39b2-4630-97ce-96ab00f4b4ec",
+            //    skillName);
+            //personalSpace.CharacterProgressionData = Helper.CreateDefFromClone(
+            //    Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(p => p.name.Equals("MasterMarksman_AbilityDef")).CharacterProgressionData,
+            //    "a9994647-673e-43a8-b3f2-22fc2933cd70",
+            //    skillName);
+            //personalSpace.ViewElementDef = Helper.CreateDefFromClone(
+            //    source.ViewElementDef,
+            //    "96297e2e-978f-46ac-b008-78c612b6c6df",
+            //    skillName);
+            //personalSpace.ActionPointCost = apCost;
+            //personalSpace.WillPointCost = wpCost;
             
-            VisibleActorsInRangeEffectConditionDef visibleActorsInRange = Helper.CreateDefFromClone(
-                Repo.GetAllDefs<VisibleActorsInRangeEffectConditionDef>().FirstOrDefault(aha => aha.name.Equals("E_VisibleActorsInRange [MasterMarksman_AbilityDef]")),
-                "a505d354-b47c-43e3-b74e-d904e795c1c1",
-                skillName);
-            visibleActorsInRange.TargetingData.Origin.LineOfSight = LineOfSightType.InSight;
-            visibleActorsInRange.TargetingData.Origin.FactionVisibility = LineOfSightType.InSight;
-            visibleActorsInRange.TargetingData.Origin.Range = 1.45f;
-            visibleActorsInRange.TargetingData.Origin.HorizontalRangeOnly = true;
-            visibleActorsInRange.Relation = FactionRelation.Enemy;
-            visibleActorsInRange.ShownMode = KnownState.Revealed;
-            visibleActorsInRange.ActorsInRange = true;
-
-            // Set fields
-            psTriggerStatus.ApplicationConditions = new EffectConditionDef[0];
-            psTriggerStatus.TriggerConditions = new EffectConditionDef[] { actorHasAbility, visibleActorsInRange };
-            psTriggerStatus.Visuals = personalSpace.ViewElementDef;
-            psTriggerStatus.VisibleOnHealthbar = TacStatusDef.HealthBarVisibility.AlwaysVisible;
-            psTriggerStatus.Range = -1; // -1 = ability range will be used, melee attack ability should trigger when enemy is adjacent
-            psTriggerStatus.ExecuteAbility = null;
-            psTriggerStatus.ExecuteAbilityWithTrait = "attack";
-            psTriggerStatus.TargetSelf = false;
-            psTriggerStatus.ApplyTimingScale = true;
-
-            personalSpace.CharacterProgressionData.RequiredStrength = 0;
-            personalSpace.CharacterProgressionData.RequiredWill = 0;
-            personalSpace.CharacterProgressionData.RequiredSpeed = 0;
-            personalSpace.ViewElementDef.DisplayName1 = new LocalizedTextBind("PERSONAL SPACE", doNotLocalize);
-            personalSpace.ViewElementDef.Description = new LocalizedTextBind("Until your next turn, attack the first enemy entering melee range. Ends Turn.", doNotLocalize);
-            Sprite personalSpaceIcon = Repo.GetAllDefs<TacticalAbilityViewElementDef>().FirstOrDefault(ve => ve.name.Equals("E_View [MeleeReturnFire_WithBashAbility_AbilityDef]")).SmallIcon;
-            personalSpace.ViewElementDef.LargeIcon = personalSpaceIcon;
-            personalSpace.ViewElementDef.SmallIcon = personalSpaceIcon;
-            personalSpace.Active = true;
-            personalSpace.EndsTurn = true;
-            personalSpace.ActionPointCost = apCost;
-            personalSpace.WillPointCost = wpCost;
-            personalSpace.TraitsRequired = new string[] { "start", "ability", "move" };
-            personalSpace.TraitsToApply = new string[] { "ability" };
-            personalSpace.ShowNotificationOnUse = true;
-            //personalSpace.TargetApplicationConditions = new EffectConditionDef[] { actorHasAbility };
-            personalSpace.StatusApplicationTrigger = StatusApplicationTrigger.ActivateAbility;
-            personalSpace.StatusDef = psTriggerStatus;
-            AbilityDef animationSearchDef = Repo.GetAllDefs<AbilityDef>().FirstOrDefault(ad => ad.name.Equals("QuickAim_AbilityDef"));
-            foreach (TacActorSimpleAbilityAnimActionDef animActionDef in Repo.GetAllDefs<TacActorSimpleAbilityAnimActionDef>().Where(aad => aad.name.Contains("Soldier_Utka_AnimActionsDef")))
-            {
-                if (animActionDef.AbilityDefs != null && animActionDef.AbilityDefs.Contains(animationSearchDef))
-                {
-                    animActionDef.AbilityDefs = animActionDef.AbilityDefs.Append(personalSpace).ToArray();
-                    Logger.Debug("Anim Action '" + animActionDef.name + "' set for abilities:");
-                    foreach (AbilityDef ad in animActionDef.AbilityDefs)
-                    {
-                        Logger.Debug("  " + ad.name);
-                    }
-                }
-            }
+            //// Create main ability that applies the trigger status an the actor
+            //ApplyStatusAbilityDef source = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(asa => asa.name.Equals("CloseQuarters_AbilityDef"));
+            //ApplyStatusAbilityDef personalSpace = Helper.CreateDefFromClone(
+            //    source,
+            //    "d4d4ce0f-39b2-4630-97ce-96ab00f4b4ec",
+            //    skillName);
+            //personalSpace.CharacterProgressionData = Helper.CreateDefFromClone(
+            //    source.CharacterProgressionData,
+            //    "a9994647-673e-43a8-b3f2-22fc2933cd70",
+            //    skillName);
+            //personalSpace.TargetingDataDef = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(a => a.name.Equals("QuickAim_AbilityDef")).TargetingDataDef;
+            //personalSpace.ViewElementDef = Helper.CreateDefFromClone(
+            //    source.ViewElementDef,
+            //    "96297e2e-978f-46ac-b008-78c612b6c6df",
+            //    skillName);
+            //
+            //// Create status that triggers when an enemy enters adjacent tiles, cloned from "CanBeRecruitedIntoPhoenix_1x1_StatusDef"
+            //TriggerAbilityZoneOfControlStatusDef triggerSource = Repo.GetAllDefs<TriggerAbilityZoneOfControlStatusDef>().FirstOrDefault(taz => taz.name.Equals("CanBeRecruitedIntoPhoenix_1x1_StatusDef"));
+            //TriggerAbilityZoneOfControlStatusDef psTriggerStatus = Helper.CreateDefFromClone(
+            //    triggerSource,
+            //    "75a0ef17-a35c-4275-bcc0-93d80753949a",
+            //    $"E_TriggerStatus [{skillName}]");
+            //
+            //// Create EffectConditionDef's to check if melee attack ability is present and for the trigger condition that enemy is in range
+            //ActorHasAbilityEffectConditionDef actorHasAbility = Helper.CreateDefFromClone(
+            //    Repo.GetAllDefs<ActorHasAbilityEffectConditionDef>().FirstOrDefault(aha => aha.name.Equals("HasRecoverWillAbility_ApplicationCondition")),
+            //    "611859a0-673f-4ca1-8604-584a3903423b",
+            //    $"E_ActorHasAbility [{skillName}]");
+            //actorHasAbility.AbilityDef = psStrikeAbility;
+            //
+            //VisibleActorsInRangeEffectConditionDef visibleActorsInRange = Helper.CreateDefFromClone(
+            //    Repo.GetAllDefs<VisibleActorsInRangeEffectConditionDef>().FirstOrDefault(aha => aha.name.Equals("E_VisibleActorsInRange [MasterMarksman_AbilityDef]")),
+            //    "a505d354-b47c-43e3-b74e-d904e795c1c1",
+            //    skillName);
+            //visibleActorsInRange.TargetingData.Origin.LineOfSight = LineOfSightType.InSight;
+            //visibleActorsInRange.TargetingData.Origin.FactionVisibility = LineOfSightType.InSight;
+            //visibleActorsInRange.TargetingData.Origin.Range = 1.45f;
+            //visibleActorsInRange.TargetingData.Origin.HorizontalRangeOnly = true;
+            //visibleActorsInRange.Relation = FactionRelation.Enemy;
+            //visibleActorsInRange.ShownMode = KnownState.Revealed;
+            //visibleActorsInRange.ActorsInRange = true;
+            //
+            //// Set fields
+            //psTriggerStatus.ApplicationConditions = new EffectConditionDef[0];
+            //psTriggerStatus.TriggerConditions = new EffectConditionDef[] { actorHasAbility, visibleActorsInRange };
+            //psTriggerStatus.Visuals = personalSpace.ViewElementDef;
+            //psTriggerStatus.VisibleOnHealthbar = TacStatusDef.HealthBarVisibility.AlwaysVisible;
+            //psTriggerStatus.Range = -1; // -1 = ability range will be used, melee attack ability should trigger when enemy is adjacent
+            //psTriggerStatus.ExecuteAbility = null;
+            //psTriggerStatus.ExecuteAbilityWithTrait = "attack";
+            //psTriggerStatus.TargetSelf = false;
+            //psTriggerStatus.ApplyTimingScale = true;
+            //
+            //personalSpace.CharacterProgressionData.RequiredStrength = 0;
+            //personalSpace.CharacterProgressionData.RequiredWill = 0;
+            //personalSpace.CharacterProgressionData.RequiredSpeed = 0;
+            //personalSpace.ViewElementDef.DisplayName1 = new LocalizedTextBind("PERSONAL SPACE", doNotLocalize);
+            //personalSpace.ViewElementDef.Description = new LocalizedTextBind("Until your next turn, attack the first enemy entering melee range. Ends Turn.", doNotLocalize);
+            //Sprite personalSpaceIcon = Repo.GetAllDefs<TacticalAbilityViewElementDef>().FirstOrDefault(ve => ve.name.Equals("E_View [MeleeReturnFire_WithBashAbility_AbilityDef]")).SmallIcon;
+            //personalSpace.ViewElementDef.LargeIcon = personalSpaceIcon;
+            //personalSpace.ViewElementDef.SmallIcon = personalSpaceIcon;
+            //personalSpace.Active = true;
+            //personalSpace.EndsTurn = true;
+            //personalSpace.ActionPointCost = apCost;
+            //personalSpace.WillPointCost = wpCost;
+            //personalSpace.TraitsRequired = new string[] { "start", "ability", "move" };
+            //personalSpace.TraitsToApply = new string[] { "ability" };
+            //personalSpace.ShowNotificationOnUse = true;
+            ////personalSpace.TargetApplicationConditions = new EffectConditionDef[] { actorHasAbility };
+            //personalSpace.StatusApplicationTrigger = StatusApplicationTrigger.ActivateAbility;
+            //personalSpace.StatusDef = psTriggerStatus;
+            //AbilityDef animationSearchDef = Repo.GetAllDefs<AbilityDef>().FirstOrDefault(ad => ad.name.Equals("QuickAim_AbilityDef"));
+            //foreach (TacActorSimpleAbilityAnimActionDef animActionDef in Repo.GetAllDefs<TacActorSimpleAbilityAnimActionDef>().Where(aad => aad.name.Contains("Soldier_Utka_AnimActionsDef")))
+            //{
+            //    if (animActionDef.AbilityDefs != null && animActionDef.AbilityDefs.Contains(animationSearchDef))
+            //    {
+            //        animActionDef.AbilityDefs = animActionDef.AbilityDefs.Append(personalSpace).ToArray();
+            //        Logger.Debug("Anim Action '" + animActionDef.name + "' set for abilities:");
+            //        foreach (AbilityDef ad in animActionDef.AbilityDefs)
+            //        {
+            //            Logger.Debug("  " + ad.name);
+            //        }
+            //    }
+            //}
         }
     }
 }
