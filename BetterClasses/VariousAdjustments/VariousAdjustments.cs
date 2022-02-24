@@ -345,6 +345,7 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
         }
         public static void Change_LegendaryDifficulty()
         {
+            /*
             float low = 1.1f;
             float medium = 1.3f;
             float high = 1.6f;
@@ -356,6 +357,7 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
             dDSettings.ThreatLevels[1].ThreatLevelModifier= medium;
             dDSettings.ThreatLevels[2].ThreatLevelModifier= high;
             dDSettings.ThreatLevels[3].ThreatLevelModifier= extreme;
+            */
         }
         public static void Change_MechArms()
         {
