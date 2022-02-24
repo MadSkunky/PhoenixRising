@@ -6,10 +6,12 @@ using Base.UI;
 using PhoenixPoint.Common.Core;
 using PhoenixPoint.Common.Entities.GameTags;
 using PhoenixPoint.Common.UI;
+using PhoenixPoint.Tactical.Entities;
 using PhoenixPoint.Tactical.Entities.Abilities;
 using PhoenixPoint.Tactical.Entities.Effects.ApplicationConditions;
 using PhoenixPoint.Tactical.Entities.Statuses;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace PhoenixRising.BetterClasses.SkillModifications
@@ -59,11 +61,79 @@ namespace PhoenixRising.BetterClasses.SkillModifications
 
                 // BattleFocus, currently used as placeholder, will go to Vengeance Torso
                 Create_BattleFocus();
+
+                // Set SP for all skills according to where they are set
+                Set_SPcost();
             }
             catch (Exception e)
             {
                 Logger.Error(e);
             }
+        }
+
+        private static void Set_SPcost()
+        {
+            Logger.Debug("----------------------------------------------------------------------------------------------------", false);
+            Logger.Debug("Set SP cost for all abilities.");
+            Logger.Debug("----------------------------------------------------------------------------------------------------", false);
+            string abilityName = "";
+            // Main spec
+            foreach (ClassSpecDef classSpec in Config.ClassSpecializations)
+            {
+                for (int i = 0; i < classSpec.MainSpec.Length; i++)
+                {
+                    if (i != 0 && i != 3 && Helper.AbilityNameToDefMap.ContainsKey(classSpec.MainSpec[i]))
+                    {
+                        abilityName = Helper.AbilityNameToDefMap[classSpec.MainSpec[i]];
+                        TacticalAbilityDef tacticalAbility = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(ta => ta.name.Equals(abilityName));
+                        if (tacticalAbility != null && tacticalAbility.CharacterProgressionData != null)
+                        {
+                            tacticalAbility.CharacterProgressionData.SkillPointCost = Helper.SPperLevel[i];
+                            Logger.Debug($"Set ability {tacticalAbility.name} to {Helper.SPperLevel[i]} SP cost.");
+                        }
+                    }
+                }
+            }
+            foreach (PersonalPerksDef ppd in Config.PersonalPerks)
+            {
+                switch (ppd.PerkKey)
+                {
+                    case PerkType.Background:
+                    case PerkType.Proficiency:
+                        foreach (string skillName in ppd.UnrelatedRandomPerks)
+                        {
+                            abilityName = Helper.AbilityNameToDefMap[skillName];
+                            TacticalAbilityDef tacticalAbility = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(ta => ta.name.Equals(abilityName));
+                            if (tacticalAbility != null && tacticalAbility.CharacterProgressionData != null)
+                            {
+                                tacticalAbility.CharacterProgressionData.SkillPointCost = ppd.SPcost;
+                                Logger.Debug($"Set ability {tacticalAbility.name} to {ppd.SPcost} SP cost.");
+                            }
+                        }
+                        break;
+                    case PerkType.Class_1:
+                    case PerkType.Class_2:
+                    case PerkType.Faction_1:
+                    case PerkType.Faction_2:
+                        foreach (KeyValuePair<string, Dictionary<string, string>> outerRelation in ppd.RelatedFixedPerks)
+                        {
+                            foreach (KeyValuePair<string, string> innerRelation in outerRelation.Value)
+                            {
+                                abilityName = Helper.AbilityNameToDefMap[innerRelation.Value];
+                                TacticalAbilityDef tacticalAbility = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(ta => ta.name.Equals(abilityName));
+                                if (tacticalAbility != null && tacticalAbility.CharacterProgressionData != null)
+                                {
+                                    tacticalAbility.CharacterProgressionData.SkillPointCost = ppd.SPcost;
+                                    Logger.Debug($"Set ability {tacticalAbility.name} to {ppd.SPcost} SP cost.");
+                                }
+                            }
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+            Logger.Debug("----------------------------------------------------------------------------------------------------", false);
         }
 
         private static void Change_ProficiencyPerks()

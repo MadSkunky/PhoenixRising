@@ -67,6 +67,7 @@
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>..\..\..\..\..\Epic\PhoenixPoint\PhoenixPointWin64_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
       <Private>False</Private>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
     <Reference Include="UnityEngine.ImageConversionModule">
       <HintPath>..\..\..\..\..\Epic\PhoenixPoint\PhoenixPointWin64_Data\Managed\UnityEngine.ImageConversionModule.dll</HintPath>
