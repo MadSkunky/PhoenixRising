@@ -22,7 +22,6 @@ modding and design councilors and testers, always open to productive discussions
 
 <b>INSTALLATION:</b> 7z file must be selected via "Add Mod" button in Modnix
 
-<b>!WARNING!:</b> Turn OFF "Show Detailed Equipment Info in Battle" setting in Options -> Gameplay and restart the game. Otherwise some text on abilities will be missing.
 Do NOT use any language besides ENGLISH, otherwise text will be broken. Sadly, adjusting localisation is a lot of work due to how the game is coded.
 
 COMPATIBILITY: Naturally, this mod is not compatible with any other mod that adjusts skills, perks or Personal abilities.
@@ -40,5 +39,3 @@ ENEMIES IMPROVED: Worms are made faster and Mindfraggers are more threatening. <
 HAVEN RECRUITS COME WITH WEAPONS AND ARMOR: Overrides Vanilla settings for Hero&Legend difficulty. <i>Can be turned off in the Config.</i>
 
 FESTERING SKIES RETOLD: Completely rewritten the story of Festering skies - finally it makes sense and aligns properly with game lore.<i>Can be turned ON in the Config.</i>
-
-BRUTAL LEGEND: Slightly increases deployment on Legend difficulty to better live up to its name. <i>Can be turned ON in the Config.</i>
