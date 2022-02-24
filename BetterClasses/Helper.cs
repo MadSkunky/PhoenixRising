@@ -54,6 +54,16 @@ namespace PhoenixRising.BetterClasses
         {
             try
             {
+                T tmp = Repo.GetAllDefs<T>().FirstOrDefault(t => t.Guid.Equals(guid));
+                if (tmp != null)
+                {
+                    return tmp;
+                }
+                T tmp2 = Repo.GetRuntimeDefs<T>(true).FirstOrDefault(rt => rt.Guid.Equals(guid));
+                if (tmp2 != null)
+                {
+                    return tmp2;
+                }
                 Type type = null;
                 string resultName = "";
                 if (source != null)

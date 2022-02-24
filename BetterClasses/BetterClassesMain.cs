@@ -13,6 +13,7 @@ using PhoenixPoint.Geoscape.Events.Eventus;
 using Base.Assets;
 using PhoenixRising.BetterClasses.StoryRework;
 using PhoenixRising.BetterClasses.VariousAdjustments;
+using PhoenixPoint.Common.UI;
 
 namespace PhoenixRising.BetterClasses
 {
@@ -50,23 +51,23 @@ namespace PhoenixRising.BetterClasses
             // Set localization for project
             doNotLocalize = Config.DoNotLocalizeChangedTexts;
 
+            // Patch all Harmony patches
+            HarmonyInstance.Create("BetterClasses.PhoenixRising").PatchAll();
+
+            // Apply skill modifications
+            SkillModsMain.ApplyChanges();
+
+            // Generate the main specialization as configured
+            MainSpecModification.GenerateMainSpec();
+
             // Apply story rework changes (Voland)
             if (Config.ActivateStoryRework)
             {
                 StoryReworkMain.ApplyChanges();
             }
 
-            // Apply skill modifications
-            SkillModsMain.ApplyChanges();
-
             // Apply various adjustments
             VariousAdjustmentsMain.ApplyChanges();
-
-            // Generate the main specialization as configured
-            MainSpecModification.GenerateMainSpec();
-
-            // Patch all Harmony patches
-            HarmonyInstance.Create("BetterClasses.PhoenixRising").PatchAll();
 
             Logger.Always("----------------------------------------------------------------------------------------------------", false);
             Logger.Always("Number of RuntimeDefs created: " + Repo.GetRuntimeDefs<BaseDef>(true).Count());
@@ -89,6 +90,7 @@ namespace PhoenixRising.BetterClasses
             //{
             //    Logger.Always(Guid.NewGuid().ToString(), false);
             //}
+            // Modnix logging
 
             try
             {
@@ -140,7 +142,32 @@ namespace PhoenixRising.BetterClasses
             }
 
             // Modnix logging
-            _ = api("log verbose", "Mod Initialised.");
+            _ = api("log verbose", "HomeMod done, Mod Initialised.");
+        }
+        public static void TacticalOnHide(Func<string, object, object> api)
+        {
+            Logger.Always("----------------------------------------------------------------------------------------------------", false);
+            Logger.Always("TacticalOnHide start, number of RuntimeDefs: " + Repo.GetRuntimeDefs<BaseDef>(true).Count());
+            Logger.Always("----------------------------------------------------------------------------------------------------", false);
+
+            // Apply skill modifications
+            SkillModsMain.ApplyChanges();
+
+            // Generate the main specialization as configured
+            MainSpecModification.GenerateMainSpec();
+
+            // Apply story rework changes (Voland)
+            if (Config.ActivateStoryRework)
+            {
+                StoryReworkMain.ApplyChanges();
+            }
+
+            // Apply various adjustments
+            VariousAdjustmentsMain.ApplyChanges();
+
+            Logger.Always("----------------------------------------------------------------------------------------------------", false);
+            Logger.Always("TacticalOnHide end, number of RuntimeDefs: " + Repo.GetRuntimeDefs<BaseDef>(true).Count());
+            Logger.Always("----------------------------------------------------------------------------------------------------", false);
         }
     }
 }

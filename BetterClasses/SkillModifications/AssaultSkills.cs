@@ -287,13 +287,13 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             aimedBurstAbility.CharacterProgressionData = progression;
             aimedBurstAbility.ViewElementDef = viewElement;
             aimedBurstAbility.SceneViewElementDef = sceneView;
-            aimedBurstAbility.SkillTags = new SkillTagDef[] { rageBurst.SkillTags[0] };
+            //aimedBurstAbility.SkillTags = new SkillTagDef[] { rageBurst.SkillTags[0] };
             aimedBurstAbility.ActionPointCost = 0.75f;
             aimedBurstAbility.WillPointCost = 4.0f;
             aimedBurstAbility.ActorTags = new GameTagDef[] { Repo.GetAllDefs<GameTagDef>().FirstOrDefault(t => t.name.Equals("Assault_ClassTagDef")) };
             aimedBurstAbility.EquipmentTags = new GameTagDef[] { Repo.GetAllDefs<GameTagDef>().FirstOrDefault(t => t.name.Equals("AssaultRifleItem_TagDef")) };
             aimedBurstAbility.ExecutionsCount = 2;
-            aimedBurstAbility.ForceFirstPersonCam = false;
+            //aimedBurstAbility.ForceFirstPersonCam = false;
             aimedBurstAbility.ProjectileSpreadMultiplier = 0.7f;
             progression.RequiredStrength = 0;
             progression.RequiredWill = 0;
