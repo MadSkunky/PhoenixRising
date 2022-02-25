@@ -28,9 +28,54 @@ namespace PhoenixRising.BetterClasses
         internal static bool doNotLocalize = true;
         internal static readonly DefRepository Repo = GameUtl.GameComponent<DefRepository>();
         internal static readonly SharedData Shared = GameUtl.GameComponent<SharedData>();
-        private static readonly AssetsManager assetsManager = GameUtl.GameComponent<AssetsManager>();
+        internal static readonly AssetsManager assetsManager = GameUtl.GameComponent<AssetsManager>();
 
         public static void HomeMod(Func<string, object, object> api)
+        {
+            InitBetterClasses(api);
+
+            ApplyDefChanges();
+
+            string methodName = MethodBase.GetCurrentMethod().Name;
+            int numRuntimeDefs = Repo.GetRuntimeDefs<BaseDef>(true).Count();
+            Logger.Always("----------------------------------------------------------------------------------------------------", false);
+            Logger.Always($"{methodName} end, number of RuntimeDefs: {numRuntimeDefs}");
+            Logger.Always("----------------------------------------------------------------------------------------------------", false);
+            // Modnix logging
+            _ = api("log verbose", "HomeMod done, Mod Initialised.");
+        }
+        public static void GeoscapeOnHide()
+        {
+            string methodName = MethodBase.GetCurrentMethod().Name;
+            int numRuntimeDefs = Repo.GetRuntimeDefs<BaseDef>(true).Count();
+            Logger.Debug("----------------------------------------------------------------------------------------------------", false);
+            Logger.Debug($"{methodName} start, number of RuntimeDefs: {numRuntimeDefs}");
+            Logger.Debug("----------------------------------------------------------------------------------------------------", false);
+
+            ApplyDefChanges();
+
+            numRuntimeDefs = Repo.GetRuntimeDefs<BaseDef>(true).Count();
+            Logger.Always("----------------------------------------------------------------------------------------------------", false);
+            Logger.Always($"{methodName} end, number of RuntimeDefs: {numRuntimeDefs}");
+            Logger.Always("----------------------------------------------------------------------------------------------------", false);
+        }
+        public static void TacticalOnHide()
+        {
+            string methodName = MethodBase.GetCurrentMethod().Name;
+            int numRuntimeDefs = Repo.GetRuntimeDefs<BaseDef>(true).Count();
+            Logger.Debug("----------------------------------------------------------------------------------------------------", false);
+            Logger.Debug($"{methodName} start, number of RuntimeDefs: {numRuntimeDefs}");
+            Logger.Debug("----------------------------------------------------------------------------------------------------", false);
+
+            ApplyDefChanges();
+
+            numRuntimeDefs = Repo.GetRuntimeDefs<BaseDef>(true).Count();
+            Logger.Always("----------------------------------------------------------------------------------------------------", false);
+            Logger.Always($"{methodName} end, number of RuntimeDefs: {numRuntimeDefs}");
+            Logger.Always("----------------------------------------------------------------------------------------------------", false);
+        }
+
+        public static void InitBetterClasses(Func<string, object, object> api)
         {
             // Read config and assign to config field.
             Config = api("config", null) as Settings ?? new Settings();
@@ -53,25 +98,6 @@ namespace PhoenixRising.BetterClasses
 
             // Patch all Harmony patches
             HarmonyInstance.Create("BetterClasses.PhoenixRising").PatchAll();
-
-            // Apply skill modifications
-            SkillModsMain.ApplyChanges();
-
-            // Generate the main specialization as configured
-            MainSpecModification.GenerateMainSpec();
-
-            // Apply story rework changes (Voland)
-            if (Config.ActivateStoryRework)
-            {
-                StoryReworkMain.ApplyChanges();
-            }
-
-            // Apply various adjustments
-            VariousAdjustmentsMain.ApplyChanges();
-
-            Logger.Always("----------------------------------------------------------------------------------------------------", false);
-            Logger.Always("Number of RuntimeDefs created: " + Repo.GetRuntimeDefs<BaseDef>(true).Count());
-            Logger.Always("----------------------------------------------------------------------------------------------------", false);
 
             // Print out ODI titles and texts
             //foreach (GeoscapeEventDef ged in Repo.GetAllDefs<GeoscapeEventDef>().Where(g => g.name.Contains("SDI_")))
@@ -140,18 +166,10 @@ namespace PhoenixRising.BetterClasses
             {
                 Logger.Error(e);
             }
-
-            // Modnix logging
-            _ = api("log verbose", "HomeMod done, Mod Initialised.");
         }
-        public static void GameOnHide(Func<string, object, object> api)
-        {
-            string methodName = MethodBase.GetCurrentMethod().Name;
-            int numRuntimeDefs = Repo.GetRuntimeDefs<BaseDef>(true).Count();
-            Logger.Debug("----------------------------------------------------------------------------------------------------", false);
-            Logger.Debug($"{methodName} start, number of RuntimeDefs: {numRuntimeDefs}");
-            Logger.Debug("----------------------------------------------------------------------------------------------------", false);
 
+        public static void ApplyDefChanges()
+        {
             // Apply skill modifications
             SkillModsMain.ApplyChanges();
 
@@ -166,11 +184,6 @@ namespace PhoenixRising.BetterClasses
 
             // Apply various adjustments
             VariousAdjustmentsMain.ApplyChanges();
-
-            numRuntimeDefs = Repo.GetRuntimeDefs<BaseDef>(true).Count();
-            Logger.Always("----------------------------------------------------------------------------------------------------", false);
-            Logger.Always($"{methodName} end, number of RuntimeDefs: {numRuntimeDefs}");
-            Logger.Always("----------------------------------------------------------------------------------------------------", false);
         }
     }
 }
