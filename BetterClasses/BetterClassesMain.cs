@@ -144,7 +144,7 @@ namespace PhoenixRising.BetterClasses
             // Modnix logging
             _ = api("log verbose", "HomeMod done, Mod Initialised.");
         }
-        public static void TacticalOnHide(Func<string, object, object> api)
+        public static void GameOnHide(Func<string, object, object> api)
         {
             string methodName = MethodBase.GetCurrentMethod().Name;
             int numRuntimeDefs = Repo.GetRuntimeDefs<BaseDef>(true).Count();
