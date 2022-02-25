@@ -146,9 +146,11 @@ namespace PhoenixRising.BetterClasses
         }
         public static void TacticalOnHide(Func<string, object, object> api)
         {
-            Logger.Always("----------------------------------------------------------------------------------------------------", false);
-            Logger.Always("TacticalOnHide start, number of RuntimeDefs: " + Repo.GetRuntimeDefs<BaseDef>(true).Count());
-            Logger.Always("----------------------------------------------------------------------------------------------------", false);
+            string methodName = MethodBase.GetCurrentMethod().Name;
+            int numRuntimeDefs = Repo.GetRuntimeDefs<BaseDef>(true).Count();
+            Logger.Debug("----------------------------------------------------------------------------------------------------", false);
+            Logger.Debug($"{methodName} start, number of RuntimeDefs: {numRuntimeDefs}");
+            Logger.Debug("----------------------------------------------------------------------------------------------------", false);
 
             // Apply skill modifications
             SkillModsMain.ApplyChanges();
@@ -165,8 +167,9 @@ namespace PhoenixRising.BetterClasses
             // Apply various adjustments
             VariousAdjustmentsMain.ApplyChanges();
 
+            numRuntimeDefs = Repo.GetRuntimeDefs<BaseDef>(true).Count();
             Logger.Always("----------------------------------------------------------------------------------------------------", false);
-            Logger.Always("TacticalOnHide end, number of RuntimeDefs: " + Repo.GetRuntimeDefs<BaseDef>(true).Count());
+            Logger.Always($"{methodName} end, number of RuntimeDefs: {numRuntimeDefs}");
             Logger.Always("----------------------------------------------------------------------------------------------------", false);
         }
     }

@@ -1,4 +1,5 @@
-﻿using Base.Defs;
+﻿using AK.Wwise;
+using Base.Defs;
 using Base.Eventus.Filters;
 using PhoenixPoint.Common.Core;
 using PhoenixPoint.Geoscape.Entities.Research;
@@ -21,6 +22,8 @@ namespace PhoenixRising.BetterClasses.StoryRework
         private static readonly SharedData Shared = BetterClassesMain.Shared;
 
         private static readonly bool doNotLocalize = BetterClassesMain.doNotLocalize;
+
+        private static Event AugeryChant = null;
 
         public static void ApplyChanges()
         {
@@ -78,9 +81,12 @@ namespace PhoenixRising.BetterClasses.StoryRework
                 //Festering Skies changes
                 // copy Augury chant from PROG_FS0 to PROG_FS9 and remove from PROG_FS0, because Augury doesn't happen and FS0 event will be used for a Sleeping Beauty Awakens
                 GeoscapeEventDef geoEventFS0 = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_FS0_GeoscapeEventDef"));
-                var savedVoiceover = geoEventFS0.GeoscapeEventData.Description[0].Voiceover;
+                if (AugeryChant == null && geoEventFS0.GeoscapeEventData.Description[0].Voiceover != null)
+                {
+                    AugeryChant = geoEventFS0.GeoscapeEventData.Description[0].Voiceover;
+                }
                 GeoscapeEventDef geoEventFS9 = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_FS9_GeoscapeEventDef"));
-                geoEventFS9.GeoscapeEventData.Description[0].Voiceover = savedVoiceover;
+                geoEventFS9.GeoscapeEventData.Description[0].Voiceover = AugeryChant;
                 geoEventFS0.GeoscapeEventData.Description[0].Voiceover = null;
                 geoEventFS9.GeoscapeEventData.Flavour = "";
                 //set event timer for meteor arrival (Mount Egg)
