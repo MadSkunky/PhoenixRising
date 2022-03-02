@@ -196,7 +196,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
 
         private static void Change_Shadowstep()
         {
-            Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' no changes implemented yet!");
+            Logger.Debug("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' no changes implemented yet!");
         }
         //private static void Change_Rally()
         //{
@@ -300,11 +300,11 @@ namespace PhoenixRising.BetterClasses.SkillModifications
         }
         private static void Change_PainChameloen()
         {
-            Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' no changes implemented yet!");
+            Logger.Debug("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' no changes implemented yet!");
         }
         private static void Create_SowerOfChange()
         {
-            Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
+            Logger.Debug("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
         }
         private static void Change_BreatheMist()
         {

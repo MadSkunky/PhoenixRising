@@ -226,7 +226,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             // .... delayed ....
             //TacEffectStatusDef onslaughtStatus = Repo.GetAllDefs<TacEffectStatusDef>().FirstOrDefault(c => c.name.Contains("E_Status [DeterminedAdvance_AbilityDef]"));
             //onslaughtStatus.SingleInstance = true;
-            Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' no changes implemented yet!");
+            Logger.Debug("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' no changes implemented yet!");
         }
 
         private static void Change_RapidClearance()

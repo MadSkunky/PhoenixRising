@@ -47,41 +47,41 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             // Adrenaline Rush: 1 AP for one handed weapons and skills, no WP restriction
             Change_AdrenalineRush();
 
-            // Melee Specialist: +10% damage instead of +25%
-            Change_MeleeSpecialist();
+            // Equilibrium: After using melee or bash your overwatch with handguns cost 0 AP until the end of turn
+            Create_Equilibrium();
 
-            // Personal Space: Until next turn, attack first enemy entering melee range
-            Create_PersonalSpace();
+            // Rage: 0AP 4WP, Recover 2AP. Next turn your AP is halved. Limited to 1 use per turn.
+            Create_Rage();
         }
 
         private static void Change_Dash()
         {
-            float dashRange = 13f;
-            int dashUsesPerTurn = 1;
-            string dashDescription = $"Move up to {(int)dashRange} tiles. Limited to {dashUsesPerTurn} use per turn";
-            Sprite dashIcon = Repo.GetAllDefs<TacticalAbilityViewElementDef>().FirstOrDefault(tave => tave.name.Equals("E_View [BodySlam_AbilityDef]")).LargeIcon;
-
-            RepositionAbilityDef dash = Repo.GetAllDefs<RepositionAbilityDef>().FirstOrDefault(r => r.name.Equals("Dash_AbilityDef"));
-            dash.TargetingDataDef.Origin.Range = dashRange;
-            dash.ViewElementDef.Description = new LocalizedTextBind(dashDescription, doNotLocalize);
-            dash.ViewElementDef.LargeIcon = dashIcon;
-            dash.ViewElementDef.SmallIcon = dashIcon;
-            dash.UsesPerTurn = dashUsesPerTurn;
-            dash.AmountOfMovementToUseAsRange = -1.0f;
+            //float dashRange = 13f;
+            //int dashUsesPerTurn = 1;
+            //string dashDescription = $"Move up to {(int)dashRange} tiles. Limited to {dashUsesPerTurn} use per turn";
+            //Sprite dashIcon = Repo.GetAllDefs<TacticalAbilityViewElementDef>().FirstOrDefault(tave => tave.name.Equals("E_View [BodySlam_AbilityDef]")).LargeIcon;
+            //
+            //RepositionAbilityDef dash = Repo.GetAllDefs<RepositionAbilityDef>().FirstOrDefault(r => r.name.Equals("Dash_AbilityDef"));
+            //dash.TargetingDataDef.Origin.Range = dashRange;
+            //dash.ViewElementDef.Description = new LocalizedTextBind(dashDescription, doNotLocalize);
+            //dash.ViewElementDef.LargeIcon = dashIcon;
+            //dash.ViewElementDef.SmallIcon = dashIcon;
+            //dash.UsesPerTurn = dashUsesPerTurn;
+            //dash.AmountOfMovementToUseAsRange = -1.0f;
         }
 
         private static void Change_IgnorePain()
         {
-            // Remove Ignore Pain from mind control application conditions
-            MindControlStatusDef mcStatus = Repo.GetAllDefs<MindControlStatusDef>().FirstOrDefault(mcs => mcs.name.Equals("MindControl_StatusDef"));
-            List<EffectConditionDef> mcApplicationConditions = mcStatus.ApplicationConditions.ToList();
-            if (mcApplicationConditions.Remove(Repo.GetAllDefs<EffectConditionDef>().FirstOrDefault(ec => ec.name.Contains("IgnorePain"))))
-            {
-                mcStatus.ApplicationConditions = mcApplicationConditions.ToArray();
-            }
-            // Change description
-            ApplyStatusAbilityDef ignorePain = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(asa => asa.name.Equals("IgnorePain_AbilityDef"));
-            ignorePain.ViewElementDef.Description = new LocalizedTextBind("Disabled body parts remain functional and cannot Panic.", doNotLocalize);
+            //// Remove Ignore Pain from mind control application conditions
+            //MindControlStatusDef mcStatus = Repo.GetAllDefs<MindControlStatusDef>().FirstOrDefault(mcs => mcs.name.Equals("MindControl_StatusDef"));
+            //List<EffectConditionDef> mcApplicationConditions = mcStatus.ApplicationConditions.ToList();
+            //if (mcApplicationConditions.Remove(Repo.GetAllDefs<EffectConditionDef>().FirstOrDefault(ec => ec.name.Contains("IgnorePain"))))
+            //{
+            //    mcStatus.ApplicationConditions = mcApplicationConditions.ToArray();
+            //}
+            //// Change description
+            //ApplyStatusAbilityDef ignorePain = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(asa => asa.name.Equals("IgnorePain_AbilityDef"));
+            //ignorePain.ViewElementDef.Description = new LocalizedTextBind("Disabled body parts remain functional and cannot Panic.", doNotLocalize);
         }
 
         private static void Change_AdrenalineRush()
@@ -139,118 +139,39 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             }
         }
 
-        private static void Change_MeleeSpecialist()
+        private static void Create_Equilibrium()
         {
-            float modValue = 1.25f;
-            PassiveModifierAbilityDef meleeSpecialist = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(p => p.name.Equals("ExpertMelee_AbilityDef"));
-            for (int i = 0; i < meleeSpecialist.ItemTagStatModifications.Length; i++)
-            {
-                if (meleeSpecialist.ItemTagStatModifications[i].ItemTag == Repo.GetAllDefs<GameTagDef>().FirstOrDefault(gt => gt.name.Equals("MeleeWeapon_TagDef")))
-                {
-                    meleeSpecialist.ItemTagStatModifications[i].EquipmentStatModification.Value = modValue;
-                }
-            }
-            meleeSpecialist.ViewElementDef.DisplayName1 = new LocalizedTextBind("MELEE SPECIALIST", doNotLocalize);
-            meleeSpecialist.ViewElementDef.Description = new LocalizedTextBind($"Your melee attacks deal {(modValue * 100) - 100}% more damage", doNotLocalize);
+            string skillName = "Equilibrium_StrikeAbilityDef";
+            
+            ShootAbilityDef attackSource = Repo.GetAllDefs<ShootAbilityDef>().FirstOrDefault(sa => sa.name.Equals("Strike_ShootAbilityDef"));
+            ShootAbilityDef followUpSource = Repo.GetAllDefs<ShootAbilityDef>().FirstOrDefault(sa => sa.name.Equals("DeadlyDuo_FollowUp_ShootAbilityDef"));
+
+            ShootAbilityDef Equilibrium_StrikeAbility = Helper.CreateDefFromClone(
+                attackSource,
+                "",
+                skillName);
+            Equilibrium_StrikeAbility.CharacterProgressionData = Helper.CreateDefFromClone(
+                Repo.GetAllDefs<AbilityCharacterProgressionDef>().FirstOrDefault(acp => acp.name.Equals("E_CharacterProgressionData [DeadlyDuo_ShootAbilityDef]")),
+                "",
+                skillName);
+            Equilibrium_StrikeAbility.ViewElementDef = Helper.CreateDefFromClone(
+                attackSource.ViewElementDef,
+                "",
+                skillName);
+            Equilibrium_StrikeAbility.AddFollowupAbilityStatusDef = Helper.CreateDefFromClone(
+                Repo.GetAllDefs<AddAbilityStatusDef>().FirstOrDefault(aas => aas.name.Equals("E_AddFollowupAbilityStatus [DeadlyDuo_ShootAbilityDef]")),
+                "",
+                skillName);
+            Equilibrium_StrikeAbility.AddFollowupAbilityStatusDef.AbilityDef = Helper.CreateDefFromClone(
+                followUpSource,
+                "",
+                "Equilibrium_FollowUp_ShootAbilityDef");
+
         }
 
-        private static void Create_PersonalSpace()
+        private static void Create_Rage()
         {
-            Logger.Always("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
-            float apCost = 0.25f;
-            float wpCost = 2.0f;
-            
-            string skillName = "PersonalSpace_AbilityDef";
 
-            // Get standard melee attack ability
-            BashAbilityDef psStrikeAbility = Repo.GetAllDefs<BashAbilityDef>().FirstOrDefault(ba => ba.name.Equals("Strike_ShootAbilityDef"));
-
-            // Create main ability that applies the trigger status an the actor
-            ApplyStatusAbilityDef source = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(asa => asa.name.Equals("CloseQuarters_AbilityDef"));
-            ApplyStatusAbilityDef personalSpace = Helper.CreateDefFromClone(
-                source,
-                "d4d4ce0f-39b2-4630-97ce-96ab00f4b4ec",
-                skillName);
-            personalSpace.CharacterProgressionData = Helper.CreateDefFromClone(
-                source.CharacterProgressionData,
-                "a9994647-673e-43a8-b3f2-22fc2933cd70",
-                skillName);
-            personalSpace.TargetingDataDef = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(a => a.name.Equals("QuickAim_AbilityDef")).TargetingDataDef;
-            personalSpace.ViewElementDef = Helper.CreateDefFromClone(
-                source.ViewElementDef,
-                "96297e2e-978f-46ac-b008-78c612b6c6df",
-                skillName);
-            
-            // Create status that triggers when an enemy enters adjacent tiles, cloned from "CanBeRecruitedIntoPhoenix_1x1_StatusDef"
-            TriggerAbilityZoneOfControlStatusDef triggerSource = Repo.GetAllDefs<TriggerAbilityZoneOfControlStatusDef>().FirstOrDefault(taz => taz.name.Equals("CanBeRecruitedIntoPhoenix_1x1_StatusDef"));
-            TriggerAbilityZoneOfControlStatusDef psTriggerStatus = Helper.CreateDefFromClone(
-                triggerSource,
-                "75a0ef17-a35c-4275-bcc0-93d80753949a",
-                $"E_TriggerStatus [{skillName}]");
-            
-            //// Create EffectConditionDef's to check if melee attack ability is present and for the trigger condition that enemy is in range
-            //ActorHasAbilityEffectConditionDef actorHasAbility = Helper.CreateDefFromClone(
-            //    Repo.GetAllDefs<ActorHasAbilityEffectConditionDef>().FirstOrDefault(aha => aha.name.Equals("HasRecoverWillAbility_ApplicationCondition")),
-            //    "611859a0-673f-4ca1-8604-584a3903423b",
-            //    $"E_ActorHasAbility [{skillName}]");
-            //actorHasAbility.AbilityDef = psStrikeAbility;
-            
-            VisibleActorsInRangeEffectConditionDef visibleActorsInRange = Helper.CreateDefFromClone(
-                Repo.GetAllDefs<VisibleActorsInRangeEffectConditionDef>().FirstOrDefault(aha => aha.name.Equals("E_VisibleActorsInRange [MasterMarksman_AbilityDef]")),
-                "a505d354-b47c-43e3-b74e-d904e795c1c1",
-                skillName);
-            visibleActorsInRange.TargetingData.Origin.LineOfSight = LineOfSightType.InSight;
-            visibleActorsInRange.TargetingData.Origin.FactionVisibility = LineOfSightType.InSight;
-            visibleActorsInRange.TargetingData.Origin.Range = 1.45f;
-            visibleActorsInRange.TargetingData.Origin.HorizontalRangeOnly = true;
-            visibleActorsInRange.Relation = FactionRelation.Enemy;
-            visibleActorsInRange.ShownMode = KnownState.Revealed;
-            visibleActorsInRange.ActorsInRange = true;
-
-            // Set fields
-            psTriggerStatus.DurationTurns = 1;
-            psTriggerStatus.ExpireOnEndOfTurn = false;
-            psTriggerStatus.ApplicationConditions = new EffectConditionDef[0];
-            psTriggerStatus.TriggerConditions = new EffectConditionDef[] { visibleActorsInRange };
-            psTriggerStatus.Visuals = personalSpace.ViewElementDef;
-            psTriggerStatus.VisibleOnHealthbar = TacStatusDef.HealthBarVisibility.AlwaysVisible;
-            psTriggerStatus.Range = -1; // -1 = ability range will be used, melee attack ability should trigger when enemy is adjacent
-            psTriggerStatus.ExecuteAbility = psStrikeAbility;
-            psTriggerStatus.ExecuteAbilityWithTrait = null;
-            psTriggerStatus.TargetSelf = false;
-            psTriggerStatus.ApplyTimingScale = true;
-            
-            personalSpace.CharacterProgressionData.RequiredStrength = 0;
-            personalSpace.CharacterProgressionData.RequiredWill = 0;
-            personalSpace.CharacterProgressionData.RequiredSpeed = 0;
-            personalSpace.ViewElementDef.DisplayName1 = new LocalizedTextBind("PERSONAL SPACE", doNotLocalize);
-            personalSpace.ViewElementDef.Description = new LocalizedTextBind("Until your next turn, attack the first enemy entering melee range. Ends Turn.", doNotLocalize);
-            Sprite personalSpaceIcon = Repo.GetAllDefs<TacticalAbilityViewElementDef>().FirstOrDefault(ve => ve.name.Equals("E_View [MeleeReturnFire_WithBashAbility_AbilityDef]")).SmallIcon;
-            personalSpace.ViewElementDef.LargeIcon = personalSpaceIcon;
-            personalSpace.ViewElementDef.SmallIcon = personalSpaceIcon;
-            personalSpace.Active = true;
-            personalSpace.EndsTurn = true;
-            personalSpace.ActionPointCost = apCost;
-            personalSpace.WillPointCost = wpCost;
-            personalSpace.TraitsRequired = new string[] { "start", "ability", "move" };
-            personalSpace.TraitsToApply = new string[] { "ability" };
-            personalSpace.ShowNotificationOnUse = true;
-            //personalSpace.AbilitiesRequired = new TacticalAbilityDef[] { psStrikeAbility };
-            personalSpace.StatusApplicationTrigger = StatusApplicationTrigger.ActivateAbility;
-            personalSpace.StatusDef = psTriggerStatus;
-            AbilityDef animationSearchDef = Repo.GetAllDefs<AbilityDef>().FirstOrDefault(ad => ad.name.Equals("QuickAim_AbilityDef"));
-            foreach (TacActorSimpleAbilityAnimActionDef animActionDef in Repo.GetAllDefs<TacActorSimpleAbilityAnimActionDef>().Where(aad => aad.name.Contains("Soldier_Utka_AnimActionsDef")))
-            {
-                if (animActionDef.AbilityDefs != null && animActionDef.AbilityDefs.Contains(animationSearchDef) && !animActionDef.AbilityDefs.Contains(personalSpace))
-                {
-                    animActionDef.AbilityDefs = animActionDef.AbilityDefs.Append(personalSpace).ToArray();
-                    Logger.Debug("Anim Action '" + animActionDef.name + "' set for abilities:");
-                    foreach (AbilityDef ad in animActionDef.AbilityDefs)
-                    {
-                        Logger.Debug("  " + ad.name);
-                    }
-                }
-            }
         }
     }
 }

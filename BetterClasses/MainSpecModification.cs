@@ -31,14 +31,14 @@ namespace PhoenixRising.BetterClasses
                         string[] configMainSpec = classSpec.MainSpec;
                         if (abilityTrackDef.AbilitiesByLevel.Length != configMainSpec.Length)
                         {
-                            Logger.Always("----------------------------------------------------------------------------------------------------", false);
-                            Logger.Always("Not enough or too much level skills for 1st row are configured, this one will NOT be set!");
-                            Logger.Always("AbilityTrackDef name: " + abilityTrackDef.name);
-                            Logger.Always("AbilityTrackDef number of abilities: " + abilityTrackDef.AbilitiesByLevel.Length);
-                            Logger.Always("AbilityTrackDef number of abilities: " + abilityTrackDef.Abilities.Select(a => a.name).Join());
-                            Logger.Always("Class preset: " + classSpec.ClassName);
-                            Logger.Always("Number of skills configured (should be 7): " + configMainSpec.Length);
-                            Logger.Always("----------------------------------------------------------------------------------------------------", false);
+                            Logger.Debug("----------------------------------------------------------------------------------------------------", false);
+                            Logger.Debug("Not enough or too much level skills for 1st row are configured, this one will NOT be set!");
+                            Logger.Debug("AbilityTrackDef name: " + abilityTrackDef.name);
+                            Logger.Debug("AbilityTrackDef number of abilities: " + abilityTrackDef.AbilitiesByLevel.Length);
+                            Logger.Debug("AbilityTrackDef number of abilities: " + abilityTrackDef.Abilities.Select(a => a.name).Join());
+                            Logger.Debug("Class preset: " + classSpec.ClassName);
+                            Logger.Debug("Number of skills configured (should be 7): " + configMainSpec.Length);
+                            Logger.Debug("----------------------------------------------------------------------------------------------------", false);
                         }
                         else
                         {
