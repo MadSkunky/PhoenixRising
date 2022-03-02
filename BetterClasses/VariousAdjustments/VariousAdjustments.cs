@@ -93,10 +93,10 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
             int turretArmor = 10;
             int turretAutoFireShotCount = 4;
 
-           WeaponDef turret = Repo.GetAllDefs<WeaponDef>().FirstOrDefault(p => p.name.Contains("NJ_TechTurretGun_WeaponDef"));
-           turret.APToUsePerc = turretAPToUsePerc;
-           turret.Armor = turretArmor;
-           turret.DamagePayload.AutoFireShotCount = turretAutoFireShotCount;
+            WeaponDef turret = Repo.GetAllDefs<WeaponDef>().FirstOrDefault(p => p.name.Contains("NJ_TechTurretGun_WeaponDef"));
+            turret.APToUsePerc = turretAPToUsePerc;
+            turret.Armor = turretArmor;
+            turret.DamagePayload.AutoFireShotCount = turretAutoFireShotCount;
 
             WeaponDef prcrTurret = Repo.GetAllDefs<WeaponDef>().FirstOrDefault(p => p.name.Contains("NJ_PRCRTechTurretGun_WeaponDef"));
             prcrTurret.APToUsePerc = turretAPToUsePerc;
@@ -114,8 +114,8 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
             int StompBlastValue = 50;
 
             ApplyDamageEffectAbilityDef stomp = Repo.GetAllDefs<ApplyDamageEffectAbilityDef>().FirstOrDefault(p => p.name.Contains("StomperLegs_Stomp_AbilityDef"));
-            
-              stomp.DamagePayload.DamageKeywords = new List<DamageKeywordPair>()
+
+            stomp.DamagePayload.DamageKeywords = new List<DamageKeywordPair>()
                 {
                 new DamageKeywordPair{DamageKeywordDef = Shared.SharedDamageKeywords.ShockKeyword, Value = StompShockValue },
                 new DamageKeywordPair{DamageKeywordDef = Shared.SharedDamageKeywords.BlastKeyword, Value = StompBlastValue },

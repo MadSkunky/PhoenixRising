@@ -165,7 +165,11 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                     {
                         for (int i = 0; i < pmad.ItemTagStatModifications.Length; i++)
                         {
-                            pmad.ItemTagStatModifications[i].EquipmentStatModification.Value += newStatModification;
+                            if (pmad.ItemTagStatModifications[i].EquipmentStatModification.Value != (0 + Config.BuffsForAdditionalProficiency[Proficiency.Buff])
+                                && pmad.ItemTagStatModifications[i].EquipmentStatModification.Value != (1 + Config.BuffsForAdditionalProficiency[Proficiency.Buff]))
+                            {
+                                pmad.ItemTagStatModifications[i].EquipmentStatModification.Value += newStatModification;
+                            }
 
                             Logger.Debug("  Target item: " + pmad.ItemTagStatModifications[i].ItemTag.name);
                             Logger.Debug("  Target stat: " + pmad.ItemTagStatModifications[i].EquipmentStatModification.TargetStat);

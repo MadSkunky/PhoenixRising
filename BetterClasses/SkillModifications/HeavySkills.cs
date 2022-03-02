@@ -2,6 +2,7 @@
 using Base.Defs;
 using Base.Entities.Abilities;
 using Base.Entities.Effects;
+using Base.Entities.Effects.ApplicationConditions;
 using Base.Entities.Statuses;
 using Base.UI;
 using Base.Utils.Maths;
@@ -17,6 +18,7 @@ using PhoenixPoint.Tactical.Entities.Animations;
 using PhoenixPoint.Tactical.Entities.Effects.DamageTypes;
 using PhoenixPoint.Tactical.Entities.Equipments;
 using PhoenixPoint.Tactical.Entities.Statuses;
+using PhoenixPoint.Tactical.Entities.Weapons;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,14 +41,14 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             // Return Fire: Fix to work on all classes
             Change_ReturnFire();
 
-            // War Cry: -1 AP and -10% damage, doubled if WP of target < WP of caster (see Harmony patch below)
-            Change_WarCry();
-
             // Hunker Down: -25% incoming damage for 2 AP and 2 WP
             Create_HunkerDown();
 
-            // Dynamic Resistance: Copy from Acheron
-            Create_DynamicResistance();
+            // Skimisher: If you take damage during enemy turn your attacks deal 25% more damage until end of turn
+            Create_Skirmisher();
+
+            // Shred Resistance: 50% shred resistance
+            Create_ShredResistance();
 
             // Rage Burst: Increase accuracy and cone angle
             Change_RageBurst();
@@ -56,33 +58,15 @@ namespace PhoenixRising.BetterClasses.SkillModifications
 
             // Boom Blast: -30% range instead of +50%
             Change_BoomBlast();
+
+            // War Cry: -1 AP and -10% damage, doubled if WP of target < WP of caster (see Harmony patch below)
+            //Change_WarCry();
         }
 
         private static void Change_ReturnFire()
         {
             TacticalAbilityDef returnFire = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Contains("ReturnFire_AbilityDef"));
             returnFire.ActorTags = new GameTagDef[0]; // Deletes all given tags => no restriction for any class
-        }
-        private static void Change_WarCry()
-        {
-            ApplyStatusAbilityDef warCry = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(asa => asa.name.Equals("WarCry_AbilityDef"));
-            warCry.ViewElementDef.Description = new LocalizedTextBind(
-                "Enemies in 10 tiles gain -1AP and -10% damage. If their current will points are less than yours effect is doubled.",
-                doNotLocalize);
-            WC_Activate_patch.WC_WPCost = warCry.WillPointCost;
-            StatModification warCryApMultipier = new StatModification
-            {
-                Modification = StatModificationType.MultiplyRestrictedToBounds,
-                StatName = StatModificationTarget.ActionPoints.ToString(),
-                Value = 0.75f
-            };
-            StatModification warCryDamageMultiplier = new StatModification
-            {
-                Modification = StatModificationType.MultiplyRestrictedToBounds,
-                StatName = StatModificationTarget.BonusAttackDamage.ToString(),
-                Value = 0.9f
-            };
-            ((warCry.StatusDef as DelayedEffectStatusDef).EffectDef as StatsModifyEffectDef).StatModifications = new List<StatModification> { warCryApMultipier, warCryDamageMultiplier };
         }
         private static void Create_HunkerDown()
         {
@@ -128,7 +112,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             AbilityDef animationSearchDef = Repo.GetAllDefs<AbilityDef>().FirstOrDefault(ad => ad.name.Equals("QuickAim_AbilityDef"));
             foreach (TacActorSimpleAbilityAnimActionDef animActionDef in Repo.GetAllDefs<TacActorSimpleAbilityAnimActionDef>().Where(aad => aad.name.Contains("Soldier_Utka_AnimActionsDef")))
             {
-                if (animActionDef.AbilityDefs != null && animActionDef.AbilityDefs.Contains(animationSearchDef))
+                if (animActionDef.AbilityDefs != null && animActionDef.AbilityDefs.Contains(animationSearchDef) && !animActionDef.AbilityDefs.Contains(hunkerDown))
                 {
                     animActionDef.AbilityDefs = animActionDef.AbilityDefs.Append(hunkerDown).ToArray();
                     Logger.Debug("Anim Action '" + animActionDef.name + "' set for abilities:");
@@ -139,24 +123,124 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                 }
             }
         }
-        public static void Create_DynamicResistance()
+        private static void Create_Skirmisher()
         {
-            string skillName = "BC_DynamicResistance_AbilityDef";
+            float damageMod = 1.25f;
+            string skillName = "Skirmisher_AbilityDef";
+
             ApplyStatusAbilityDef source = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(asa => asa.name.Equals("Acheron_DynamicResistance_AbilityDef"));
-            ApplyStatusAbilityDef dynamicResistance = Helper.CreateDefFromClone(
+            ApplyStatusAbilityDef skirmisher = Helper.CreateDefFromClone(
                 source,
                 "d6d9041b-9763-4673-a057-2bbefd96aa67",
                 skillName);
-            dynamicResistance.CharacterProgressionData = Helper.CreateDefFromClone(
+            skirmisher.CharacterProgressionData = Helper.CreateDefFromClone(
                 Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(p => p.name.Equals("MasterMarksman_AbilityDef")).CharacterProgressionData,
                 "657f3e2b-08c0-4234-b16f-3f6d57d049e1",
                 skillName);
-            dynamicResistance.ViewElementDef = Helper.CreateDefFromClone(
+            skirmisher.ViewElementDef = Helper.CreateDefFromClone(
                 source.ViewElementDef,
                 "5ef3fb17-03d0-4e33-b76a-d74cbeefc509",
                 skillName);
-            dynamicResistance.ViewElementDef.DisplayName1 = new LocalizedTextBind("DYNAMIC RESISTANCE", doNotLocalize);
-            dynamicResistance.ViewElementDef.Description = new LocalizedTextBind("Gain 50% resistance to damage type suffered this turn", doNotLocalize);
+            skirmisher.StatusDef = Helper.CreateDefFromClone(
+                source.StatusDef,
+                "2bafd8da-f84a-4fd7-ae41-8ba0f9e7aba6",
+                skillName);
+            skirmisher.ViewElementDef.DisplayName1 = new LocalizedTextBind("SKIRMISHER", doNotLocalize);
+            skirmisher.ViewElementDef.Description = new LocalizedTextBind($"If you take damage during enemy turn your attacks deal {(damageMod * 100) - 100}% more damage until end of turn.", doNotLocalize);
+            Sprite skirmisherIcon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_PersonalTrack_Gifted.png");
+            skirmisher.ViewElementDef.LargeIcon = skirmisherIcon;
+            skirmisher.ViewElementDef.SmallIcon = skirmisherIcon;
+
+            StanceStatusDef skirmisherDamageModification = Helper.CreateDefFromClone( // Borrow status from Sneak Attack for damage modification
+                Repo.GetAllDefs<StanceStatusDef>().FirstOrDefault(p => p.name.Equals("E_SneakAttackStatus [SneakAttack_AbilityDef]")),
+                "728f321f-3a9d-4e63-a160-660c2a2c4664",
+                $"E_DamageModificationStatus [{skillName}]");
+            skirmisherDamageModification.DurationTurns = 1;
+            skirmisherDamageModification.SingleInstance = true;
+            skirmisherDamageModification.Visuals = skirmisher.ViewElementDef;
+            skirmisherDamageModification.EquipmentsStatModifications = new EquipmentItemTagStatModification[0];
+            skirmisherDamageModification.StatModifications = new ItemStatModification[]
+            {
+                new ItemStatModification()
+                {
+                    TargetStat = StatModificationTarget.BonusAttackDamage,
+                    Modification = StatModificationType.Multiply,
+                    Value = damageMod
+                }
+            };
+            DynamicResistanceStatusDef skirmisherReactionStatus = (DynamicResistanceStatusDef)skirmisher.StatusDef;
+            skirmisherReactionStatus.ResistanceStatuses = new DynamicResistanceStatusDef.ResistancePerDamageType[]
+            {
+                new DynamicResistanceStatusDef.ResistancePerDamageType()
+                {
+                    DamageTypeBaseEffectDef = Repo.GetAllDefs<DamageTypeBaseEffectDef>().FirstOrDefault(dtb => dtb.name.Equals("Projectile_StandardDamageTypeEffectDef")),
+                    ResistanceStatusDef = skirmisherDamageModification
+                },
+                new DynamicResistanceStatusDef.ResistancePerDamageType()
+                {
+                    DamageTypeBaseEffectDef = Repo.GetAllDefs<DamageTypeBaseEffectDef>().FirstOrDefault(dtb => dtb.name.Equals("Bash_StandardDamageTypeEffectDef")),
+                    ResistanceStatusDef = skirmisherDamageModification
+                },
+                new DynamicResistanceStatusDef.ResistancePerDamageType()
+                {
+                    DamageTypeBaseEffectDef = Repo.GetAllDefs<DamageTypeBaseEffectDef>().FirstOrDefault(dtb => dtb.name.Equals("MeleeBash_StandardDamageTypeEffectDef")),
+                    ResistanceStatusDef = skirmisherDamageModification
+                },
+                new DynamicResistanceStatusDef.ResistancePerDamageType()
+                {
+                    DamageTypeBaseEffectDef = Repo.GetAllDefs<DamageTypeBaseEffectDef>().FirstOrDefault(dtb => dtb.name.Equals("Blast_StandardDamageTypeEffectDef")),
+                    ResistanceStatusDef = skirmisherDamageModification
+                }
+            };
+        }
+        // Harmony patch for Skirmisher in the moment an ability is activated
+        [HarmonyPatch(typeof(DynamicResistanceStatus), "OnAbilityActivating")]
+        internal static class Skirmisher_DynamicResistanceStatus_OnAbilityActivating_patch
+        {
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
+            private static bool Prefix(DynamicResistanceStatus __instance)
+            {
+                TacticalActorBase base_TacticalActorBase = (TacticalActorBase)AccessTools.Property(typeof(TacStatus), "TacticalActorBase").GetValue(__instance, null);
+                // Don't execute original method (return false) when current instance is called from Skirmisher ability
+                // AND current turn is same turn of ability owner (e.g. self damaging in player turn, no cheese patch)
+                return !(__instance.TacStatusDef.name.Contains("Skirmisher_AbilityDef")
+                    && base_TacticalActorBase.TacticalLevel.CurrentFaction == base_TacticalActorBase.TacticalFaction);
+            }
+        }
+        // Harmony patch for Skirmisher in the moment damage is appilied
+        [HarmonyPatch(typeof(DynamicResistanceStatus), "OnDamageApplied")]
+        internal static class Skirmisher_DynamicResistanceStatus_OnDamageApplied_patch
+        {
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
+            private static bool Prefix(DynamicResistanceStatus __instance)
+            {
+                TacticalActorBase base_TacticalActorBase = (TacticalActorBase)AccessTools.Property(typeof(TacStatus), "TacticalActorBase").GetValue(__instance, null);
+                // Don't execute original method (return false) when current instance is called from Skirmisher ability
+                // AND current turn is same turn of ability owner (e.g. self damaging in player turn, no cheese patch)
+                return !(__instance.TacStatusDef.name.Contains("Skirmisher_AbilityDef")
+                    && base_TacticalActorBase.TacticalLevel.CurrentFaction == base_TacticalActorBase.TacticalFaction);
+            }
+        }
+
+        private static void Create_ShredResistance()
+        {
+            string skillName = "ShredResistant_DamageMultiplierAbilityDef";
+            DamageMultiplierAbilityDef source = Repo.GetAllDefs<DamageMultiplierAbilityDef>().FirstOrDefault(dma => dma.name.Equals("PoisonResistant_DamageMultiplierAbilityDef"));
+            DamageMultiplierAbilityDef shredRes = Helper.CreateDefFromClone(
+                source,
+                "da32f3c3-74d4-440c-9197-8fcccaf66da8",
+                skillName);
+            shredRes.CharacterProgressionData = Helper.CreateDefFromClone(
+                source.CharacterProgressionData,
+                "18a2c7e2-9266-4f8f-acf9-8242c5b529c3",
+                skillName);
+            shredRes.ViewElementDef = Helper.CreateDefFromClone(
+                source.ViewElementDef,
+                "487acaef-7908-436b-b458-b0a670382663",
+                skillName);
+            shredRes.DamageTypeDef = Repo.GetAllDefs<DamageTypeBaseEffectDef>().FirstOrDefault(dtb => dtb.name.Equals("Shred_StandardDamageTypeEffectDef"));
+            shredRes.ViewElementDef.DisplayName1 = new LocalizedTextBind("SHRED RESISTANCE", doNotLocalize);
+            shredRes.ViewElementDef.Description = new LocalizedTextBind("Shred Resistance", doNotLocalize);
         }
         private static void Change_RageBurst()
         {
@@ -203,7 +287,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             jetpackControl.TargetingDataDef.Origin.Range = jetpackControlRange;
             foreach (TacActorSimpleAbilityAnimActionDef animActionDef in Repo.GetAllDefs<TacActorSimpleAbilityAnimActionDef>().Where(aad => aad.name.Contains("Soldier_Utka_AnimActionsDef")))
             {
-                if (animActionDef.AbilityDefs != null && animActionDef.AbilityDefs.Contains(source))
+                if (animActionDef.AbilityDefs != null && animActionDef.AbilityDefs.Contains(source) && !animActionDef.AbilityDefs.Contains(jetpackControl))
                 {
                     animActionDef.AbilityDefs = animActionDef.AbilityDefs.Append(jetpackControl).ToArray();
                     Logger.Debug("Anim Action '" + animActionDef.name + "' set for abilities:");
@@ -216,136 +300,93 @@ namespace PhoenixRising.BetterClasses.SkillModifications
         }
         private static void Change_BoomBlast()
         {
-            float bbRangeModValue = 0.8f;
+            bool setNewStats = false;
             ApplyStatusAbilityDef boomBlast = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(asa => asa.name.Equals("BigBooms_AbilityDef"));
             boomBlast.ViewElementDef.Description = new LocalizedTextBind(
-                $"The Action Point cost of Grenades, and other explosive weapons, is reduced by 1 and their range is modified by {(bbRangeModValue * 100) - 100}% until the end of the turn.",
+                $"Until end of turn your explosives gain +50% range. Grenade Launcher AP cost reduce by 1.",
                 doNotLocalize);
-            EquipmentItemTagStatModification bbRangeMod = new EquipmentItemTagStatModification()
-            {
-                ItemTag = Repo.GetAllDefs<GameTagDef>().FirstOrDefault(gt => gt.name.Equals("ExplosiveWeapon_TagDef")),
-                EquipmentStatModification = new ItemStatModification()
-                {
-                    TargetStat = StatModificationTarget.BonusAttackRange,
-                    Modification = StatModificationType.Multiply,
-                    Value = bbRangeModValue
-                }
-            };
-            (boomBlast.StatusDef as AddAttackBoostStatusDef).AdditionalStatusesToApply.OfType<StanceStatusDef>().First().EquipmentsStatModifications = new EquipmentItemTagStatModification[]
-            {
-                bbRangeMod
-            };
-        }
 
-        // War Cry Harmony patches
-        // Keep track of target actor when WP of target are lower in the moment of casting War Cry
-        internal static List<string> WarCryLowerWpList = new List<string>();
-        // Harmony patch at the moment the source actor casts War Cry to track if WP of target actor is lower
-        [HarmonyPatch(typeof(ApplyStatusAbility), "Activate")]
-        internal static class WC_Activate_patch
-        {
+            // Convert additional statuses to a List for easier access
+            List<TacStatusDef> bbAdditionalStatusesToApply = (boomBlast.StatusDef as AddAttackBoostStatusDef).AdditionalStatusesToApply.ToList();
 
-            public static float WC_WPCost;
-            [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
-            private static void Postfix(ApplyStatusAbility __instance)
+            // Fix AP cost to only affect grenade launcher, incl set the right tag for them (not used and set in vanilla)
+            GameTagDef glTag = Repo.GetAllDefs<GameTagDef>().FirstOrDefault(gt => gt.name.Equals("GrenadeLauncherItem_TagDef"));
+            foreach (WeaponDef wd in Repo.GetAllDefs<WeaponDef>())
             {
-                try
+                if ((wd.name.Equals("PX_GrenadeLauncher_WeaponDef") || wd.name.Equals("AC_Rebuke_WeaponDef"))
+                    && !wd.Tags.Contains(glTag))
                 {
-                    if (__instance.ApplyStatusAbilityDef.name.Equals("WarCry_AbilityDef"))
-                    {
-                        TacticalActor sourceActorFromBase = (TacticalActor)AccessTools.Property(typeof(TacticalAbility), "TacticalActor").GetValue(__instance, null);
-                        MethodInfo methodInfo_GetTargetActors = AccessTools.Method(typeof(TacticalAbility), "GetTargetActors", new Type[] { typeof(TacticalTargetData) });
-                        using (IEnumerator<TacticalAbilityTarget> enumerator = ((IEnumerable<TacticalAbilityTarget>)methodInfo_GetTargetActors.Invoke(
-                            __instance,
-                            new object[] { __instance.OriginTargetData })).GetEnumerator())
-                        {
-                            while (enumerator.MoveNext())
-                            {
-                                TacticalActorBase targetActor = enumerator.Current.GetTargetActor();
-                                float sourceActorWP = sourceActorFromBase.CharacterStats.WillPoints + WC_WPCost; // Add WP cost for War Cry to let the WP compararison behave as would it be before the cast.
-                                float targetActorWP = targetActor.Status.GetStat(StatModificationTarget.WillPoints.ToString(), null);
-                                Logger.Debug("War Cry ability <Activate> method called from ...");
-                                Logger.Debug("  Source actor      : " + sourceActorFromBase.name);
-                                Logger.Debug("  Source actor WP   : " + sourceActorWP);
-                                Logger.Debug("  Target actor      : " + targetActor.name);
-                                Logger.Debug("  Target actor WP   : " + targetActorWP);
-                                Logger.Debug("----------------------------------------------------");
-                                Logger.Debug("  Target actor AP and damage statuses: " + targetActor.name);
-                                foreach (StatModification statModAp1 in targetActor.Status.GetStat(StatModificationTarget.ActionPoints.ToString()).Modifications)
-                                {
-                                    Logger.Debug("    " + statModAp1);
-                                }
-                                foreach (StatModification statModBad1 in targetActor.Status.GetStat(StatModificationTarget.BonusAttackDamage.ToString()).Modifications)
-                                {
-                                    Logger.Debug("    " + statModBad1);
-                                }
-                                if (Utl.LesserThan(targetActorWP, sourceActorWP))
-                                {
-                                    WarCryLowerWpList.Add(targetActor.name);
-                                    Logger.Debug("  Target actor '" + targetActor.name + "' added to <WarCryLowerWpList>");
-                                    //targetActor.Status.UnapplyStatus()
-                                }
-                                Logger.Debug("----------------------------------------------------", false);
-                            }
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
-                    Logger.Error(e);
+                    wd.Tags.Add(glTag);
                 }
             }
-        }
-        // Harmony patch after the War Cry status applied the StatModification effect on a target 
-        [HarmonyPatch(typeof(DelayedEffectStatus), "OnUnapply")]
-        internal static class WC_OnUnapply_patch
-        {
-            [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
-            private static void Postfix(DelayedEffectStatus __instance)
+            ChangeAbilitiesCostStatusDef reduceApCostStatus = (ChangeAbilitiesCostStatusDef)bbAdditionalStatusesToApply.FirstOrDefault(a => a.name.Equals("E_ReduceExplosiveAbilitiesCost [BigBooms_AbilityDef]"));
+            if (reduceApCostStatus != null && reduceApCostStatus.AbilityCostModification.EquipmentTagDef != glTag)
             {
-                try
+                reduceApCostStatus.AbilityCostModification.EquipmentTagDef = glTag;
+                //bbAdditionalStatusesToApply.Remove(reduceApCostStatus);
+            }
+            
+            // Set new detailed stats if configured
+            if (setNewStats)
+            {
+                float bbDamageMod = 0.33f;
+                float bbRangeMod = 1.4f;
+                float bbAccuracyMod = 0.5f;
+                float bbProjectileMod = 7.0f;
+                boomBlast.ViewElementDef.Description = new LocalizedTextBind(
+                    $"Until end of turn your explosives get {(bbDamageMod * 100) - 100}% damage, {(bbRangeMod * 100) - 100}% range, {(bbAccuracyMod * 100) - 100}% accuracy. Launcher with multiple explosives per magazine gain +{bbProjectileMod} projectiles per shot.",
+                    doNotLocalize);
+
+                StatMultiplierStatusDef bbAccModStatus = Helper.CreateDefFromClone(
+                   Repo.GetAllDefs<StatMultiplierStatusDef>().FirstOrDefault(sms => sms.name.Equals("Trembling_StatusDef")),
+                   "4a6f7cc4-1bd6-45a5-b572-053963966b07",
+                   $"E AccuracyMultiplier [Boom Blast]");
+                bbAccModStatus.EffectName = "";
+                bbAccModStatus.ShowNotification = false;
+                bbAccModStatus.VisibleOnHealthbar = 0;
+                bbAccModStatus.VisibleOnStatusScreen = 0;
+                bbAccModStatus.Visuals = null;
+                bbAccModStatus.StatsMultipliers[0].StatName = "Accuracy";
+                bbAccModStatus.StatsMultipliers[0].Multiplier = bbAccuracyMod;
+                EquipmentItemTagStatModification[] bbMods = new EquipmentItemTagStatModification[]
                 {
-                    if (__instance.DelayedEffectStatusDef.name.Equals("E_Status [WarCry_AbilityDef]"))
+                new EquipmentItemTagStatModification()
+                {
+                    ItemTag = Repo.GetAllDefs<GameTagDef>().FirstOrDefault(gt => gt.name.Equals("ExplosiveWeapon_TagDef")),
+                    EquipmentStatModification = new ItemStatModification()
                     {
-                        TacticalActorBase targetActor = (TacticalActorBase)AccessTools.Property(typeof(TacStatus), "TacticalActorBase").GetValue(__instance);
-                        DefRepository repo = (DefRepository)AccessTools.Property(typeof(TacStatus), "Repo").GetValue(__instance);
-                        object source = AccessTools.Property(typeof(TacStatus), "Source").GetValue(__instance);
-                        Logger.Debug("War Cry status <OnUnapply> called from ...");
-                        Logger.Debug("  Target actor      : " + targetActor.name);
-                        Logger.Debug("    " + targetActor.Status.GetStat(StatModificationTarget.WillPoints.ToString()));
-                        foreach (StatModification statModAp1 in targetActor.Status.GetStat(StatModificationTarget.ActionPoints.ToString()).Modifications)
-                        {
-                            Logger.Debug("    " + statModAp1);
-                        }
-                        foreach (StatModification statModBad1 in targetActor.Status.GetStat(StatModificationTarget.BonusAttackDamage.ToString()).Modifications)
-                        {
-                            Logger.Debug("    " + statModBad1);
-                        }
-                        Logger.Debug("----------------------------------------------------");
-                        if (WarCryLowerWpList.Contains(targetActor.name))
-                        {
-                            Logger.Debug("  Target actor was added to <WarCryLowerWpList>, apply the penalty effect a 2nd time and remove him from the list.");
-                            EffectTarget actorEffectTarget = TacUtil.GetActorEffectTarget(targetActor, null);
-                            _ = Effect.Apply(repo, __instance.DelayedEffectStatusDef.EffectDef, actorEffectTarget, source ?? __instance);
-                            _ = WarCryLowerWpList.Remove(targetActor.name);
-        
-                            foreach (StatModification statModAp2 in targetActor.Status.GetStat(StatModificationTarget.ActionPoints.ToString()).Modifications)
-                            {
-                                Logger.Debug("    " + statModAp2);
-                            }
-                            foreach (StatModification statModBad2 in targetActor.Status.GetStat(StatModificationTarget.BonusAttackDamage.ToString()).Modifications)
-                            {
-                                Logger.Debug("    " + statModBad2);
-                            }
-                        }
-                        Logger.Debug("----------------------------------------------------", false);
+                        TargetStat = StatModificationTarget.BonusAttackDamage,
+                        Modification = StatModificationType.Multiply,
+                        Value = bbDamageMod
+                    }
+                },
+                new EquipmentItemTagStatModification()
+                {
+                    ItemTag = Repo.GetAllDefs<GameTagDef>().FirstOrDefault(gt => gt.name.Equals("ExplosiveWeapon_TagDef")),
+                    EquipmentStatModification = new ItemStatModification()
+                    {
+                        TargetStat = StatModificationTarget.BonusAttackRange,
+                        Modification = StatModificationType.Multiply,
+                        Value = bbRangeMod
+                    }
+                },
+                new EquipmentItemTagStatModification()
+                {
+                    ItemTag = Repo.GetAllDefs<GameTagDef>().FirstOrDefault(gt => gt.name.Equals("ExplosiveWeapon_TagDef")),
+                    EquipmentStatModification = new ItemStatModification()
+                    {
+                        TargetStat = StatModificationTarget.BonusProjectilesPerShot,
+                        Modification = StatModificationType.AddRestrictedToBounds,
+                        Value = bbProjectileMod
                     }
                 }
-                catch (Exception e)
-                {
-                    Logger.Error(e);
-                }
+                };
+                bbAdditionalStatusesToApply.OfType<StanceStatusDef>().First().EquipmentsStatModifications = bbMods;
+                bbAdditionalStatusesToApply.Add(bbAccModStatus);
             }
+
+            // Convert changed list with additional statuses back to array
+            (boomBlast.StatusDef as AddAttackBoostStatusDef).AdditionalStatusesToApply = bbAdditionalStatusesToApply.ToArray();
         }
     }
 }

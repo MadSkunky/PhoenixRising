@@ -182,7 +182,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             // Adding new bash ability to proper animations
             foreach (TacActorAimingAbilityAnimActionDef animActionDef in Repo.GetAllDefs<TacActorAimingAbilityAnimActionDef>().Where(aad => aad.name.Contains("Soldier_Utka_AnimActionsDef")))
             {
-                if (animActionDef.AbilityDefs != null && animActionDef.AbilityDefs.Contains(bashToRemoveAbility))
+                if (animActionDef.AbilityDefs != null && animActionDef.AbilityDefs.Contains(bashToRemoveAbility) && !animActionDef.AbilityDefs.Contains(bashAbility))
                 {
                     animActionDef.AbilityDefs = animActionDef.AbilityDefs.Append(bashAbility).ToArray();
                     Logger.Debug("Anim Action '" + animActionDef.name + "' set for abilities:");
@@ -373,7 +373,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
 
             foreach (TacActorSimpleAbilityAnimActionDef animActionDef in Repo.GetAllDefs<TacActorSimpleAbilityAnimActionDef>().Where(aad => aad.name.Contains("Soldier_Utka_AnimActionsDef")))
             {
-                if (animActionDef.AbilityDefs != null && animActionDef.AbilityDefs.Contains(source))
+                if (animActionDef.AbilityDefs != null && animActionDef.AbilityDefs.Contains(source) && !animActionDef.AbilityDefs.Contains(arTargeting))
                 {
                     animActionDef.AbilityDefs = animActionDef.AbilityDefs.Append(arTargeting).ToArray();
                     Logger.Debug("Anim Action '" + animActionDef.name + "' set for abilities:");

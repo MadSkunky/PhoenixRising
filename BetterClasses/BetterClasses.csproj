@@ -158,6 +158,9 @@
     <Content Include="Assets\Textures\UI_AbilitiesIcon_PersonalTrack_FastLearner.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\Textures\UI_AbilitiesIcon_PersonalTrack_Gifted.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\Textures\UI_AbilitiesIcon_PersonalTrack_Guerilla.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

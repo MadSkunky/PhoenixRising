@@ -161,7 +161,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             float wpCost = 2.0f;
             
             string skillName = "PersonalSpace_AbilityDef";
-            
+
             // Get standard melee attack ability
             BashAbilityDef psStrikeAbility = Repo.GetAllDefs<BashAbilityDef>().FirstOrDefault(ba => ba.name.Equals("Strike_ShootAbilityDef"));
 
@@ -241,7 +241,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             AbilityDef animationSearchDef = Repo.GetAllDefs<AbilityDef>().FirstOrDefault(ad => ad.name.Equals("QuickAim_AbilityDef"));
             foreach (TacActorSimpleAbilityAnimActionDef animActionDef in Repo.GetAllDefs<TacActorSimpleAbilityAnimActionDef>().Where(aad => aad.name.Contains("Soldier_Utka_AnimActionsDef")))
             {
-                if (animActionDef.AbilityDefs != null && animActionDef.AbilityDefs.Contains(animationSearchDef))
+                if (animActionDef.AbilityDefs != null && animActionDef.AbilityDefs.Contains(animationSearchDef) && !animActionDef.AbilityDefs.Contains(personalSpace))
                 {
                     animActionDef.AbilityDefs = animActionDef.AbilityDefs.Append(personalSpace).ToArray();
                     Logger.Debug("Anim Action '" + animActionDef.name + "' set for abilities:");

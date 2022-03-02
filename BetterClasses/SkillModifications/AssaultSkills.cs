@@ -91,7 +91,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
 
             foreach (TacActorSimpleAbilityAnimActionDef animActionDef in Repo.GetAllDefs<TacActorSimpleAbilityAnimActionDef>().Where(aad => aad.name.Contains("Soldier_Utka_AnimActionsDef")))
             {
-                if (animActionDef.AbilityDefs != null && animActionDef.AbilityDefs.Contains(source))
+                if (animActionDef.AbilityDefs != null && animActionDef.AbilityDefs.Contains(source) && !animActionDef.AbilityDefs.Contains(quickAim))
                 {
                     animActionDef.AbilityDefs = animActionDef.AbilityDefs.Append(quickAim).ToArray();
                     Logger.Debug("Anim Action '" + animActionDef.name + "' set for abilities:");
@@ -161,7 +161,10 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             // Add new KnR Dash ability to animation action handler for dash (same animation)
             foreach (TacActorSimpleAbilityAnimActionDef def in Repo.GetAllDefs<TacActorSimpleAbilityAnimActionDef>().Where(b => b.name.Contains("Dash")))
             {
-                def.AbilityDefs = def.AbilityDefs.Append(dashAbility).ToArray();
+                if (!def.AbilityDefs.Contains(dashAbility))
+                {
+                    def.AbilityDefs = def.AbilityDefs.Append(dashAbility).ToArray();
+                }
             }
 
             // Set fields
@@ -293,6 +296,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             aimedBurstAbility.ActorTags = new GameTagDef[] { Repo.GetAllDefs<GameTagDef>().FirstOrDefault(t => t.name.Equals("Assault_ClassTagDef")) };
             aimedBurstAbility.EquipmentTags = new GameTagDef[] { Repo.GetAllDefs<GameTagDef>().FirstOrDefault(t => t.name.Equals("AssaultRifleItem_TagDef")) };
             aimedBurstAbility.ExecutionsCount = 2;
+            //aimedBurstAbility.TargetsCount = 1;
             //aimedBurstAbility.ForceFirstPersonCam = false;
             aimedBurstAbility.ProjectileSpreadMultiplier = 0.7f;
             progression.RequiredStrength = 0;

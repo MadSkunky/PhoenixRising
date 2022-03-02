@@ -14,6 +14,10 @@ using Base.Assets;
 using PhoenixRising.BetterClasses.StoryRework;
 using PhoenixRising.BetterClasses.VariousAdjustments;
 using PhoenixPoint.Common.UI;
+using PhoenixPoint.Tactical.Entities;
+using PhoenixPoint.Common.Entities;
+using PhoenixPoint.Geoscape.Levels;
+using PhoenixPoint.Common.Entities.Items;
 
 namespace PhoenixRising.BetterClasses
 {

@@ -28,10 +28,10 @@ namespace PhoenixRising.BetterClasses
                 {
                     "",
                     "RETURN FIRE",
-                    "WAR CRY",
-                    "",
                     "HUNKER DOWN",
-                    "DYNAMIC RESISTANCE",
+                    "",
+                    "SKIRMISHER",
+                    "SHRED RESISTANCE",
                     "RAGE BURST"
                 }),
             new ClassSpecDef(
