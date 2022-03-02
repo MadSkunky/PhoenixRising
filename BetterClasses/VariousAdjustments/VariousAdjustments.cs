@@ -93,17 +93,17 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
             int turretArmor = 10;
             int turretAutoFireShotCount = 4;
 
-            WeaponDef turret = Repo.GetAllDefs<WeaponDef>().FirstOrDefault(p => p.name.Contains("NJ_TechTurretGun_WeaponDef"));
+            WeaponDef turret = Repo.GetAllDefs<WeaponDef>().FirstOrDefault(p => p.name.Equals("NJ_TechTurretGun_WeaponDef"));
             turret.APToUsePerc = turretAPToUsePerc;
             turret.Armor = turretArmor;
             turret.DamagePayload.AutoFireShotCount = turretAutoFireShotCount;
 
-            WeaponDef prcrTurret = Repo.GetAllDefs<WeaponDef>().FirstOrDefault(p => p.name.Contains("NJ_PRCRTechTurretGun_WeaponDef"));
+            WeaponDef prcrTurret = Repo.GetAllDefs<WeaponDef>().FirstOrDefault(p => p.name.Equals("NJ_PRCRTechTurretGun_WeaponDef"));
             prcrTurret.APToUsePerc = turretAPToUsePerc;
             prcrTurret.Armor = turretArmor;
             prcrTurret.DamagePayload.AutoFireShotCount = turretAutoFireShotCount;
 
-            WeaponDef laserTurret = Repo.GetAllDefs<WeaponDef>().FirstOrDefault(p => p.name.Contains("PX_LaserTechTurretGun_WeaponDef"));
+            WeaponDef laserTurret = Repo.GetAllDefs<WeaponDef>().FirstOrDefault(p => p.name.Equals("PX_LaserTechTurretGun_WeaponDef"));
             laserTurret.APToUsePerc = turretAPToUsePerc;
             laserTurret.Armor = turretArmor;
             laserTurret.DamagePayload.AutoFireShotCount = turretAutoFireShotCount;
@@ -113,7 +113,7 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
             int StompShockValue = 200;
             int StompBlastValue = 50;
 
-            ApplyDamageEffectAbilityDef stomp = Repo.GetAllDefs<ApplyDamageEffectAbilityDef>().FirstOrDefault(p => p.name.Contains("StomperLegs_Stomp_AbilityDef"));
+            ApplyDamageEffectAbilityDef stomp = Repo.GetAllDefs<ApplyDamageEffectAbilityDef>().FirstOrDefault(p => p.name.Equals("StomperLegs_Stomp_AbilityDef"));
 
             stomp.DamagePayload.DamageKeywords = new List<DamageKeywordPair>()
                 {
@@ -125,7 +125,7 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
         {
             float frenzySpeed = 0.35f;
 
-            FrenzyStatusDef frenzy = Repo.GetAllDefs<FrenzyStatusDef>().FirstOrDefault(p => p.name.Contains("Frenzy_StatusDef"));
+            FrenzyStatusDef frenzy = Repo.GetAllDefs<FrenzyStatusDef>().FirstOrDefault(p => p.name.Equals("Frenzy_StatusDef"));
             frenzy.SpeedCoefficient = frenzySpeed;
         }
         public static void Change_PsychicResistance()
@@ -140,9 +140,9 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
         {
             int mutoidWormCharges = 5;
 
-            WeaponDef mAWorm = Repo.GetAllDefs<WeaponDef>().FirstOrDefault(p => p.name.Contains("Mutoid_Arm_AcidWorm_WeaponDef"));
-            WeaponDef mFWorm = Repo.GetAllDefs<WeaponDef>().FirstOrDefault(p => p.name.Contains("Mutoid_Arm_FireWorm_WeaponDef"));
-            WeaponDef mPWorm = Repo.GetAllDefs<WeaponDef>().FirstOrDefault(p => p.name.Contains("Mutoid_Arm_PoisonWorm_WeaponDef"));
+            WeaponDef mAWorm = Repo.GetAllDefs<WeaponDef>().FirstOrDefault(p => p.name.Equals("Mutoid_Arm_AcidWorm_WeaponDef"));
+            WeaponDef mFWorm = Repo.GetAllDefs<WeaponDef>().FirstOrDefault(p => p.name.Equals("Mutoid_Arm_FireWorm_WeaponDef"));
+            WeaponDef mPWorm = Repo.GetAllDefs<WeaponDef>().FirstOrDefault(p => p.name.Equals("Mutoid_Arm_PoisonWorm_WeaponDef"));
 
             mAWorm.ChargesMax = mutoidWormCharges;
             mFWorm.ChargesMax = mutoidWormCharges;
@@ -150,26 +150,26 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
         }
         public static void Change_ScreamingHead()
         {
-          TacticalItemDef screamingHead = Repo.GetAllDefs<TacticalItemDef>().FirstOrDefault(p => p.name.Contains("AN_Priest_Head03_BodyPartDef"));
+          TacticalItemDef screamingHead = Repo.GetAllDefs<TacticalItemDef>().FirstOrDefault(p => p.name.Equals("AN_Priest_Head03_BodyPartDef"));
 
             screamingHead.Abilities = new AbilityDef[]
             {
               screamingHead.Abilities[0],
-              Repo.GetAllDefs<AbilityDef>().FirstOrDefault(p => p.name.Contains("MindControlImmunity_AbilityDef"))
+              Repo.GetAllDefs<AbilityDef>().FirstOrDefault(p => p.name.Equals("MindControlImmunity_AbilityDef"))
             };
         }
         public static void Change_Grenades()
         {
             float grenadeManufacturePoints = 0;
 
-            WeaponDef handGrenade = Repo.GetAllDefs<WeaponDef>().FirstOrDefault(p => p.name.Contains("PX_HandGrenade_WeaponDef"));
-            WeaponDef virophage = Repo.GetAllDefs<WeaponDef>().FirstOrDefault(p => p.name.Contains("PX_VirophageGrenade_WeaponDef"));
-            WeaponDef emp = Repo.GetAllDefs<WeaponDef>().FirstOrDefault(p => p.name.Contains("SY_EMPGrenade_WeaponDef"));
-            WeaponDef poison = Repo.GetAllDefs<WeaponDef>().FirstOrDefault(p => p.name.Contains("SY_PoisonGrenade_WeaponDef"));
-            WeaponDef sonic = Repo.GetAllDefs<WeaponDef>().FirstOrDefault(p => p.name.Contains("SY_SonicGrenade_WeaponDef"));
-            WeaponDef shredding = Repo.GetAllDefs<WeaponDef>().FirstOrDefault(p => p.name.Contains("PX_ShredderGrenade_WeaponDef"));
-            WeaponDef acid = Repo.GetAllDefs<WeaponDef>().FirstOrDefault(p => p.name.Contains("AN_AcidGrenade_WeaponDef"));
-            WeaponDef fire = Repo.GetAllDefs<WeaponDef>().FirstOrDefault(p => p.name.Contains("NJ_IncindieryGrenade_WeaponDef"));
+            WeaponDef handGrenade = Repo.GetAllDefs<WeaponDef>().FirstOrDefault(p => p.name.Equals("PX_HandGrenade_WeaponDef"));
+            WeaponDef virophage = Repo.GetAllDefs<WeaponDef>().FirstOrDefault(p => p.name.Equals("PX_VirophageGrenade_WeaponDef"));
+            WeaponDef emp = Repo.GetAllDefs<WeaponDef>().FirstOrDefault(p => p.name.Equals("SY_EMPGrenade_WeaponDef"));
+            WeaponDef poison = Repo.GetAllDefs<WeaponDef>().FirstOrDefault(p => p.name.Equals("SY_PoisonGrenade_WeaponDef"));
+            WeaponDef sonic = Repo.GetAllDefs<WeaponDef>().FirstOrDefault(p => p.name.Equals("SY_SonicGrenade_WeaponDef"));
+            WeaponDef shredding = Repo.GetAllDefs<WeaponDef>().FirstOrDefault(p => p.name.Equals("PX_ShredderGrenade_WeaponDef"));
+            WeaponDef acid = Repo.GetAllDefs<WeaponDef>().FirstOrDefault(p => p.name.Equals("AN_AcidGrenade_WeaponDef"));
+            WeaponDef fire = Repo.GetAllDefs<WeaponDef>().FirstOrDefault(p => p.name.Equals("NJ_IncindieryGrenade_WeaponDef"));
 
             handGrenade.ManufacturePointsCost = grenadeManufacturePoints;
             virophage.ManufacturePointsCost = grenadeManufacturePoints;
@@ -184,23 +184,23 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
         {
             int spiderDroneArmor = 10;
 
-            TacticalItemDef spiderDrone = Repo.GetAllDefs<TacticalItemDef>().FirstOrDefault(p => p.name.Contains("SpiderDrone_Torso_BodyPartDef"));
+            TacticalItemDef spiderDrone = Repo.GetAllDefs<TacticalItemDef>().FirstOrDefault(p => p.name.Equals("SpiderDrone_Torso_BodyPartDef"));
             spiderDrone.Armor = spiderDroneArmor;
         }
         public static void Change_DanchevMG()
         {
             float danchevMGSpreadDegrees = 2.86240523f;
 
-            WeaponDef danchevMG = Repo.GetAllDefs<WeaponDef>().FirstOrDefault(p => p.name.Contains("PX_PoisonMachineGun_WeaponDef"));
+            WeaponDef danchevMG = Repo.GetAllDefs<WeaponDef>().FirstOrDefault(p => p.name.Equals("PX_PoisonMachineGun_WeaponDef"));
             danchevMG.SpreadDegrees = danchevMGSpreadDegrees;
         }
         public static void Change_ClarityHead()
         {
-            TacticalItemDef clarityHead = Repo.GetAllDefs<TacticalItemDef>().FirstOrDefault(p => p.name.Contains("NJ_Jugg_BIO_Helmet_BodyPartDef"));
-            DamageMultiplierStatusDef panicImmunityStatus = Repo.GetAllDefs<DamageMultiplierStatusDef>().FirstOrDefault(p => p.name.Contains("PanicImmunity_StatusDef"));
+            TacticalItemDef clarityHead = Repo.GetAllDefs<TacticalItemDef>().FirstOrDefault(p => p.name.Equals("NJ_Jugg_BIO_Helmet_BodyPartDef"));
+            DamageMultiplierStatusDef panicImmunityStatus = Repo.GetAllDefs<DamageMultiplierStatusDef>().FirstOrDefault(p => p.name.Equals("PanicImmunity_StatusDef"));
 
             string skillName = "BC_PanicImmunity_AbilityDef";
-            ApplyStatusAbilityDef source = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(p => p.name.Contains("MindControlImmunity_AbilityDef"));
+            ApplyStatusAbilityDef source = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(p => p.name.Equals("MindControlImmunity_AbilityDef"));
             ApplyStatusAbilityDef pI = Helper.CreateDefFromClone(
                 source,
                 "f2c51f91-fd5b-4f6f-bc19-cf6dfef831ba",
@@ -217,7 +217,7 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
             pI.StatusDef = panicImmunityStatus;
             clarityHead.Abilities = new AbilityDef[]
             {
-                Repo.GetAllDefs<AbilityDef>().FirstOrDefault(p => p.name.Contains("BC_PanicImmunity_AbilityDef")),
+                pI,
                 clarityHead.Abilities[1],
             };
 
@@ -226,14 +226,14 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
         }
         public static void Change_VenomTorso()
         {
-            WeaponDef venomTorso = Repo.GetAllDefs<WeaponDef>().FirstOrDefault(p => p.name.Contains("AN_Berserker_Shooter_LeftArm_WeaponDef"));
+            WeaponDef venomTorso = Repo.GetAllDefs<WeaponDef>().FirstOrDefault(p => p.name.Equals("AN_Berserker_Shooter_LeftArm_WeaponDef"));
 
             venomTorso.Tags = new GameTagsList()
             {
                 venomTorso.Tags[0],
                 venomTorso.Tags[1],
                 venomTorso.Tags[2],
-                Repo.GetAllDefs<GameTagDef>().FirstOrDefault(p => p.name.Contains("GunWeapon_TagDef"))
+                Repo.GetAllDefs<GameTagDef>().FirstOrDefault(p => p.name.Equals("GunWeapon_TagDef"))
             };
         }
         public static void Change_MindFragger()
@@ -242,7 +242,7 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
             int faceHuggerAcidDamage = 5;
             int faceHuggerAOERadius = 2;
 
-            TacticalItemDef faceHugger = Repo.GetAllDefs<TacticalItemDef>().FirstOrDefault(p => p.name.Contains("Facehugger_Head_BodyPartDef"));
+            TacticalItemDef faceHugger = Repo.GetAllDefs<TacticalItemDef>().FirstOrDefault(p => p.name.Equals("Facehugger_Head_BodyPartDef"));
 
             string skillName = "BC_SwarmerAcidExplosion_Die_AbilityDef";
             RagdollDieAbilityDef source = Repo.GetAllDefs<RagdollDieAbilityDef>().FirstOrDefault(p => p.name.Equals("SwarmerAcidExplosion_Die_AbilityDef"));
@@ -270,7 +270,7 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
             faceHugger.Abilities = new AbilityDef[]
             {
                 faceHugger.Abilities[0],
-                Repo.GetAllDefs<RagdollDieAbilityDef>().FirstOrDefault(p => p.name.Contains("BC_SwarmerAcidExplosion_Die_AbilityDef")),
+                sAE,
             };
         }
         public static void Change_Worms()
@@ -364,8 +364,8 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
             int mechArmsShockDamage = 0;
             int mechArmsEMPDamage = 200;
 
-            WeaponDef mechArms = Repo.GetAllDefs<WeaponDef>().FirstOrDefault(p => p.name.Contains("NJ_Technician_MechArms_WeaponDef"));
-            DamageKeywordDef emp = Repo.GetAllDefs<DamageKeywordDef>().FirstOrDefault(p => p.name.Contains("EMP_DamageKeywordDataDef")); 
+            WeaponDef mechArms = Repo.GetAllDefs<WeaponDef>().FirstOrDefault(p => p.name.Equals("NJ_Technician_MechArms_WeaponDef"));
+            DamageKeywordDef emp = Repo.GetAllDefs<DamageKeywordDef>().FirstOrDefault(p => p.name.Equals("EMP_DamageKeywordDataDef")); 
             mechArms.DamagePayload.DamageKeywords = new List<DamageKeywordPair>()
                 {
                 new DamageKeywordPair{DamageKeywordDef = Shared.SharedDamageKeywords.ShockKeyword, Value = mechArmsShockDamage },
@@ -374,22 +374,22 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
         }
         public static void Create_VengeanceTorso()
         {
-            TacticalItemDef vTorso = Repo.GetAllDefs<TacticalItemDef>().FirstOrDefault(p => p.name.Contains("SY_Shinobi_BIO_Torso_BodyPartDef"));
+            TacticalItemDef vTorso = Repo.GetAllDefs<TacticalItemDef>().FirstOrDefault(p => p.name.Equals("SY_Shinobi_BIO_Torso_BodyPartDef"));
 
-            vTorso.Abilities[1] = Repo.GetAllDefs<AbilityDef>().FirstOrDefault(p => p.name.Contains("BattleFocus_AbilityDef"));
+            vTorso.Abilities[1] = Repo.GetAllDefs<AbilityDef>().FirstOrDefault(p => p.name.Equals("BattleFocus_AbilityDef"));
         }
         public static void Change_ShadowLegs()
         {
             int shadowLegsSonicDamage = 20;
 
-            BashAbilityDef shadowLegs = Repo.GetAllDefs<BashAbilityDef>().FirstOrDefault(p => p.name.Contains("ElectricKick_AbilityDef"));
+            BashAbilityDef shadowLegs = Repo.GetAllDefs<BashAbilityDef>().FirstOrDefault(p => p.name.Equals("ElectricKick_AbilityDef"));
 
             shadowLegs.DamagePayload.DamageKeywords[0].DamageKeywordDef = Shared.SharedDamageKeywords.SonicKeyword;
             shadowLegs.DamagePayload.DamageKeywords[0].Value = shadowLegsSonicDamage;
         }
         public static void Change_PsychicImmunity()
         {
-            ApplyStatusAbilityDef psychicWard = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(p => p.name.Contains("PsychicWard_AbilityDef"));
+            ApplyStatusAbilityDef psychicWard = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(p => p.name.Equals("PsychicWard_AbilityDef"));
             psychicWard.ViewElementDef.Description = new LocalizedTextBind("Allies within 10 tiles are immune to panic and psychic scream damage", doNotLocalize);
         }
     }
