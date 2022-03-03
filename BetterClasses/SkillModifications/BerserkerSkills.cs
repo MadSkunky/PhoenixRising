@@ -1,6 +1,7 @@
 ﻿using Base.Core;
 using Base.Defs;
 using Base.Entities.Abilities;
+using Base.Entities.Effects;
 using Base.Entities.Effects.ApplicationConditions;
 using Base.Entities.Statuses;
 using Base.UI;
@@ -14,8 +15,10 @@ using PhoenixPoint.Common.UI;
 using PhoenixPoint.Tactical.Entities.Abilities;
 using PhoenixPoint.Tactical.Entities.Animations;
 using PhoenixPoint.Tactical.Entities.Effects.ApplicationConditions;
+using PhoenixPoint.Tactical.Entities.Effects.DamageTypes;
 using PhoenixPoint.Tactical.Entities.Equipments;
 using PhoenixPoint.Tactical.Entities.Statuses;
+using PhoenixPoint.Tactical.Entities.Weapons;
 using PhoenixPoint.Tactical.Levels;
 using System;
 using System.Collections.Generic;
@@ -141,32 +144,90 @@ namespace PhoenixRising.BetterClasses.SkillModifications
 
         private static void Create_Equilibrium()
         {
+            float wpCost = 3.0f;
             string skillName = "Equilibrium_StrikeAbilityDef";
-            
-            ShootAbilityDef attackSource = Repo.GetAllDefs<ShootAbilityDef>().FirstOrDefault(sa => sa.name.Equals("Strike_ShootAbilityDef"));
-            ShootAbilityDef followUpSource = Repo.GetAllDefs<ShootAbilityDef>().FirstOrDefault(sa => sa.name.Equals("DeadlyDuo_FollowUp_ShootAbilityDef"));
+            string hgQaSkillName = "Equilibrium_HandgunQuickAim_AbilityDef";
 
-            ShootAbilityDef Equilibrium_StrikeAbility = Helper.CreateDefFromClone(
-                attackSource,
-                "",
-                skillName);
-            Equilibrium_StrikeAbility.CharacterProgressionData = Helper.CreateDefFromClone(
-                Repo.GetAllDefs<AbilityCharacterProgressionDef>().FirstOrDefault(acp => acp.name.Equals("E_CharacterProgressionData [DeadlyDuo_ShootAbilityDef]")),
-                "",
-                skillName);
-            Equilibrium_StrikeAbility.ViewElementDef = Helper.CreateDefFromClone(
-                attackSource.ViewElementDef,
-                "",
-                skillName);
-            Equilibrium_StrikeAbility.AddFollowupAbilityStatusDef = Helper.CreateDefFromClone(
-                Repo.GetAllDefs<AddAbilityStatusDef>().FirstOrDefault(aas => aas.name.Equals("E_AddFollowupAbilityStatus [DeadlyDuo_ShootAbilityDef]")),
-                "",
-                skillName);
-            Equilibrium_StrikeAbility.AddFollowupAbilityStatusDef.AbilityDef = Helper.CreateDefFromClone(
-                followUpSource,
-                "",
-                "Equilibrium_FollowUp_ShootAbilityDef");
+            // Get some basics from repo
+            ShootAbilityDef standardMeleeAbility = Repo.GetAllDefs<ShootAbilityDef>().FirstOrDefault(sa => sa.name.Equals("Strike_ShootAbilityDef"));
+            ApplyStatusAbilityDef martialArtist = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(a => a.name.Equals("MartialArtist_AbilityDef"));
+            GameTagDef handgunWeaponTag = Repo.GetAllDefs<GameTagDef>().FirstOrDefault(gt => gt.name.Equals("HandgunItem_TagDef"));
+            GameTagDef meleeWeaponTag = Repo.GetAllDefs<GameTagDef>().FirstOrDefault(gt => gt.name.Equals("MeleeWeapon_TagDef"));
+            //SkillTagDef attackSkillTag = Repo.GetAllDefs<SkillTagDef>().FirstOrDefault(st => st.name.Equals("AttackAbility_SkillTagDef"));
+            //DamageTypeBaseEffectDef meleeDamage = Repo.GetAllDefs<DamageTypeBaseEffectDef>().FirstOrDefault(dtbe => dtbe.name.Equals("MeleeBash_StandardDamageTypeEffectDef"));
+            //DamageTypeBaseEffectDef slashDamage = Repo.GetAllDefs<DamageTypeBaseEffectDef>().FirstOrDefault(dtbe => dtbe.name.Equals("Slash_StandardDamageTypeEffectDef"));
+            //DamageTypeBaseEffectDef bashDamage = Repo.GetAllDefs<DamageTypeBaseEffectDef>().FirstOrDefault(dtbe => dtbe.name.Equals("Bash_StandardDamageTypeEffectDef"));
+            //ActorLastDamageTypeEffectConditionDef actorLastDamage = Repo.GetAllDefs<ActorLastDamageTypeEffectConditionDef>().FirstOrDefault(ald => ald.name.Equals("ActorLastDamageType_Fire_ApplicationCondition"));
 
+            Sprite icon = martialArtist.ViewElementDef.LargeIcon;
+            LocalizedTextBind name = new LocalizedTextBind("EQUILIBRIUM", doNotLocalize);
+            LocalizedTextBind descripion = new LocalizedTextBind("After using melee attack your next shot with handguns cost 0 AP.", doNotLocalize);
+
+            // Create necessary Defs
+            ShootAbilityDef Equilibrium = Helper.CreateDefFromClone(
+                standardMeleeAbility,
+                "1217a22e-0857-4094-a548-d224db6776a2",
+                skillName);
+            Equilibrium.CharacterProgressionData = Helper.CreateDefFromClone(
+                Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(p => p.name.Equals("MasterMarksman_AbilityDef")).CharacterProgressionData,
+                "cf65b3b6-ec33-48ab-a08f-71a3cb44567a",
+                skillName);
+            Equilibrium.TargetingDataDef = Helper.CreateDefFromClone(
+                standardMeleeAbility.TargetingDataDef,
+                "790233f5-5aa5-4769-931c-c2f740271836",
+                skillName);
+            Equilibrium.ViewElementDef = Helper.CreateDefFromClone(
+                standardMeleeAbility.ViewElementDef,
+                "008272c9-2431-4681-a0a1-3bf61f3462bb",
+                skillName);
+            Equilibrium.AddFollowupAbilityStatusDef = Helper.CreateDefFromClone(
+                Repo.GetAllDefs<AddAbilityStatusDef>().FirstOrDefault(aas => aas.name.Equals("E_AddAbilityStatus [DeployBeacon_StatusDef]")),
+                "40d9f907-a5a4-4f9a-bc12-e1a3f5459b3e",
+                skillName);
+            // AP reduction for handguns
+            ApplyStatusAbilityDef HandGunQA = Helper.CreateDefFromClone(
+                martialArtist,
+                "4c6e3ad0-787a-4185-9011-f568f382abba",
+                hgQaSkillName);
+            HandGunQA.CharacterProgressionData = Helper.CreateDefFromClone(
+                martialArtist.CharacterProgressionData,
+                "0aefa178-33db-4d96-8d95-b548cec1a848",
+                hgQaSkillName);
+            HandGunQA.TargetingDataDef = Helper.CreateDefFromClone(
+                martialArtist.TargetingDataDef,
+                "c6fdce21-fd70-4c8c-a92a-b623715c8762",
+                hgQaSkillName);
+            HandGunQA.ViewElementDef = Helper.CreateDefFromClone(
+                martialArtist.ViewElementDef,
+                "d20f2149-a24b-4419-8a7f-b86bb7837a4d",
+                hgQaSkillName);
+            HandGunQA.StatusDef = Helper.CreateDefFromClone(
+                martialArtist.StatusDef,
+                "f0bdbe30-2947-49f6-a1e7-276c6245861b",
+                hgQaSkillName);
+
+            // Set fields
+            Equilibrium.ViewElementDef.DisplayName1 = name;
+            Equilibrium.ViewElementDef.Description = descripion;
+            Equilibrium.ViewElementDef.LargeIcon = icon;
+            Equilibrium.ViewElementDef.SmallIcon = icon;
+            Equilibrium.ViewElementDef.DisplayPriority = 5;
+            Equilibrium.ViewElementDef.ShowInStatusScreen = true;
+            Equilibrium.WillPointCost = wpCost;
+            Equilibrium.EquipmentTags = new GameTagDef[] { meleeWeaponTag };
+            Equilibrium.IsDefault = false;
+            Equilibrium.AddFollowupAbilityStatusDef.AbilityDef = HandGunQA;
+            TacticalAbilityCostModification costModification = new TacticalAbilityCostModification()
+            {
+                TargetAbilityTagDef = null,
+                AbilityCullFilter = null,
+                SkillTagCullFilter = null,
+                EquipmentTagDef = handgunWeaponTag,
+                RequiresProficientEquipment = true,
+                ActionPointModType = TacticalAbilityModificationType.Add,
+                ActionPointMod = -0.25f
+            };
+            (HandGunQA.StatusDef as ChangeAbilitiesCostStatusDef).AbilityCostModification = costModification;
         }
 
         private static void Create_Rage()

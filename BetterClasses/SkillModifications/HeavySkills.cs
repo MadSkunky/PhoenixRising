@@ -91,8 +91,8 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                 skillName);
             hunkerDown.Active = true;
             hunkerDown.EndsTurn = true;
-            hunkerDown.ActionPointCost = 0.5f;
-            hunkerDown.WillPointCost = 0;
+            hunkerDown.ActionPointCost = 0.25f;
+            hunkerDown.WillPointCost = 2.0f;
             hunkerDown.TraitsRequired = new string[] { "start", "ability", "move" };
             hunkerDown.TraitsToApply = new string[] { "ability" };
             hunkerDown.ShowNotificationOnUse = true;
@@ -350,39 +350,42 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                 bbAccModStatus.StatsMultipliers[0].Multiplier = bbAccuracyMod;
                 EquipmentItemTagStatModification[] bbMods = new EquipmentItemTagStatModification[]
                 {
-                new EquipmentItemTagStatModification()
-                {
-                    ItemTag = Repo.GetAllDefs<GameTagDef>().FirstOrDefault(gt => gt.name.Equals("ExplosiveWeapon_TagDef")),
-                    EquipmentStatModification = new ItemStatModification()
+                    new EquipmentItemTagStatModification()
                     {
-                        TargetStat = StatModificationTarget.BonusAttackDamage,
-                        Modification = StatModificationType.Multiply,
-                        Value = bbDamageMod
-                    }
-                },
-                new EquipmentItemTagStatModification()
-                {
-                    ItemTag = Repo.GetAllDefs<GameTagDef>().FirstOrDefault(gt => gt.name.Equals("ExplosiveWeapon_TagDef")),
-                    EquipmentStatModification = new ItemStatModification()
+                        ItemTag = Repo.GetAllDefs<GameTagDef>().FirstOrDefault(gt => gt.name.Equals("ExplosiveWeapon_TagDef")),
+                        EquipmentStatModification = new ItemStatModification()
+                        {
+                            TargetStat = StatModificationTarget.BonusAttackDamage,
+                            Modification = StatModificationType.Multiply,
+                            Value = bbDamageMod
+                        }
+                    },
+                    new EquipmentItemTagStatModification()
                     {
-                        TargetStat = StatModificationTarget.BonusAttackRange,
-                        Modification = StatModificationType.Multiply,
-                        Value = bbRangeMod
-                    }
-                },
-                new EquipmentItemTagStatModification()
-                {
-                    ItemTag = Repo.GetAllDefs<GameTagDef>().FirstOrDefault(gt => gt.name.Equals("ExplosiveWeapon_TagDef")),
-                    EquipmentStatModification = new ItemStatModification()
+                        ItemTag = Repo.GetAllDefs<GameTagDef>().FirstOrDefault(gt => gt.name.Equals("ExplosiveWeapon_TagDef")),
+                        EquipmentStatModification = new ItemStatModification()
+                        {
+                            TargetStat = StatModificationTarget.BonusAttackRange,
+                            Modification = StatModificationType.Multiply,
+                            Value = bbRangeMod
+                        }
+                    },
+                    new EquipmentItemTagStatModification()
                     {
-                        TargetStat = StatModificationTarget.BonusProjectilesPerShot,
-                        Modification = StatModificationType.AddRestrictedToBounds,
-                        Value = bbProjectileMod
+                        ItemTag = Repo.GetAllDefs<GameTagDef>().FirstOrDefault(gt => gt.name.Equals("ExplosiveWeapon_TagDef")),
+                        EquipmentStatModification = new ItemStatModification()
+                        {
+                            TargetStat = StatModificationTarget.BonusProjectilesPerShot,
+                            Modification = StatModificationType.AddRestrictedToBounds,
+                            Value = bbProjectileMod
+                        }
                     }
-                }
                 };
                 bbAdditionalStatusesToApply.OfType<StanceStatusDef>().First().EquipmentsStatModifications = bbMods;
-                bbAdditionalStatusesToApply.Add(bbAccModStatus);
+                if (!bbAdditionalStatusesToApply.Contains(bbAccModStatus))
+                {
+                    bbAdditionalStatusesToApply.Add(bbAccModStatus);
+                }
             }
 
             // Convert changed list with additional statuses back to array

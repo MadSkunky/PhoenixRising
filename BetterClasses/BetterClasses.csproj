@@ -116,6 +116,9 @@
     <EmbeddedResource Include="Assets\Presets\NotLocalizedTextMap.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
+    <None Include="Assets\Localization\PR_BC_Localization.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

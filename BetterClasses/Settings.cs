@@ -156,7 +156,7 @@ namespace PhoenixRising.BetterClasses
                     { ClassKeys.Assault.Name, "AIMED BURST" },
                     { ClassKeys.Heavy.Name, "JETPACK CONTROL" },
                     { ClassKeys.Sniper.Name, "GUNSLINGER" },
-                    { ClassKeys.Berserker.Name, "PERSONAL SPACE" },
+                    { ClassKeys.Berserker.Name, "EQUILIBRIUM" },
                     { ClassKeys.Priest.Name, "DEVOTED" },
                     { ClassKeys.Technician.Name, "SELF DEFENSE SPECIALIST" },
                     { ClassKeys.Infiltrator.Name, "STEALTH SPECIALIST" }
