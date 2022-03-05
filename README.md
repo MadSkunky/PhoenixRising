@@ -23,6 +23,23 @@ modding and design councilors and testers, always open to productive discussions
 <b>EARLY ACCESS WARNING</b>
 This is a beta-version of the mod with a lot of features incomplete. Currently complete Classes: Assault, Heavy, Sniper, Berserker. It is recommended you DO NOT hire Elite Classes (Priest, Infiltrator, Technician). Please do not change or adjust config settings.
 
+INTENDED TO BE USED WITH PANTOLOMIN RF MOD https://github.com/pantolomin/pp-return-fire-a-la-carte
+Adjust (or copy/paste) its Config to this:
+{
+  "shotLimit": 1,
+  "turretsShotLimit": 0,
+  "perceptionRatio": 0.5,
+  "turretsPerceptionRatio": 1.0,
+  "allowBashRiposte": true,
+  "targetCanRetaliate": true,
+  "casualtiesCanRetaliate": true,
+  "bystandersCanRetaliate": true,
+  "checkFriendlyFire": true,
+  "reactionAngle": 360.0,
+  "turretsReactionAngle": 360.0,
+  "allowReturnToCover": true
+}
+
 <b>Feedback Request:</b>
 1) How do core classes + berserker play at the moment compared to vanilla? 
 2) Multi classing options and combinations you find interesting(maybe use a lower diff for that)
