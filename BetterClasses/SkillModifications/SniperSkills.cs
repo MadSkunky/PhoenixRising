@@ -72,21 +72,42 @@ namespace PhoenixRising.BetterClasses.SkillModifications
 
         private static void Change_Gunslinger()
         {
-            ShootAbilityDef gunslinger = Repo.GetAllDefs<ShootAbilityDef>().FirstOrDefault(s => s.name.Equals("Gunslinger_AbilityDef"));
+            string skillName = "BC_Gunslinger_AbilityDef";
+            float apCost = -1.0f;
+            float wpCost = 4.0f;
+            int burst = 3;
+            float accPenalty = 2.0f;
+            LocalizedTextBind name = new LocalizedTextBind("GUNSLINGER", doNotLocalize);
+            LocalizedTextBind description = new LocalizedTextBind("Shoot handgun 3 times at -50% accuracy", doNotLocalize);
+
+            ShootAbilityDef source = Repo.GetAllDefs<ShootAbilityDef>().FirstOrDefault(s => s.name.Equals("Gunslinger_AbilityDef"));
+            ShootAbilityDef gunslinger = Helper.CreateDefFromClone(
+                source,
+                "c6fdce21-fd70-4c8c-a92a-b623715c8762",
+                skillName);
+            gunslinger.CharacterProgressionData = Helper.CreateDefFromClone(
+                source.CharacterProgressionData,
+                "0aefa178-33db-4d96-8d95-b548cec1a848",
+                skillName);
+            gunslinger.ViewElementDef = Helper.CreateDefFromClone(
+                source.ViewElementDef,
+                "4c6e3ad0-787a-4185-9011-f568f382abba",
+                skillName);
             gunslinger.CharacterProgressionData.RequiredSpeed = 0;
             gunslinger.CharacterProgressionData.RequiredStrength = 0;
             gunslinger.CharacterProgressionData.RequiredWill = 0;
-            gunslinger.ViewElementDef.Description = new LocalizedTextBind("Shoot handgun 3 times at -50% accuracy", doNotLocalize);
+            gunslinger.ViewElementDef.DisplayName1 = name;
+            gunslinger.ViewElementDef.Description = description;
             Sprite gunslingerIcon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_CharacterAbility_Gunslinger-3.png");
             gunslinger.ViewElementDef.LargeIcon = gunslingerIcon;
             gunslinger.ViewElementDef.SmallIcon = gunslingerIcon;
-            gunslinger.ActionPointCost = -1.0f;
-            gunslinger.WillPointCost = 4.0f;
+            gunslinger.ActionPointCost = apCost;
+            gunslinger.WillPointCost = wpCost;
             gunslinger.EquipmentTags = new GameTagDef[] {
                 Repo.GetAllDefs<GameTagDef>().FirstOrDefault(g => g.name.Equals("HandgunItem_TagDef"))
             };
-            gunslinger.ExecutionsCount = 3;
-            gunslinger.ProjectileSpreadMultiplier = 2.0f;
+            gunslinger.ExecutionsCount = burst;
+            gunslinger.ProjectileSpreadMultiplier = accPenalty;
         }
 
         private static void Create_KillZone()

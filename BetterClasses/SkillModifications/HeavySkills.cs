@@ -241,6 +241,12 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             shredRes.DamageTypeDef = Repo.GetAllDefs<DamageTypeBaseEffectDef>().FirstOrDefault(dtb => dtb.name.Equals("Shred_StandardDamageTypeEffectDef"));
             shredRes.ViewElementDef.DisplayName1 = new LocalizedTextBind("SHRED RESISTANCE", doNotLocalize);
             shredRes.ViewElementDef.Description = new LocalizedTextBind("Shred Resistance", doNotLocalize);
+            TacticalAbilityViewElementDef pr_ViewElement = (TacticalAbilityViewElementDef)Repo.GetDef("00431749-6f3f-d7e3-41a1-56e07706bd5a");
+            if (pr_ViewElement != null)
+            {
+                shredRes.ViewElementDef.LargeIcon = pr_ViewElement.LargeIcon;
+                shredRes.ViewElementDef.SmallIcon = pr_ViewElement.LargeIcon;
+            }
         }
         private static void Change_RageBurst()
         {

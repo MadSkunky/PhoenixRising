@@ -14,6 +14,7 @@ using PhoenixPoint.Common.Entities.GameTagsTypes;
 using PhoenixPoint.Common.UI;
 using PhoenixPoint.Tactical.Entities.Abilities;
 using PhoenixPoint.Tactical.Entities.Animations;
+using PhoenixPoint.Tactical.Entities.Effects;
 using PhoenixPoint.Tactical.Entities.Effects.ApplicationConditions;
 using PhoenixPoint.Tactical.Entities.Effects.DamageTypes;
 using PhoenixPoint.Tactical.Entities.Equipments;
@@ -50,11 +51,11 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             // Adrenaline Rush: 1 AP for one handed weapons and skills, no WP restriction
             Change_AdrenalineRush();
 
-            // Equilibrium: After using melee or bash your overwatch with handguns cost 0 AP until the end of turn
-            Create_Equilibrium();
+            // Gun Kata 0AP 2WP Shoot your handgun for free. Limited to 2 uses per turn.
+            Create_GunKata();
 
-            // Rage: 0AP 4WP, Recover 2AP. Next turn your AP is halved. Limited to 1 use per turn.
-            Create_Rage();
+            // Exertion: 0AP 2WP Recover 1AP. Next turn you have -1 AP. Limited to 1 use per turn.
+            Create_Exertion();
         }
 
         private static void Change_Dash()
@@ -62,13 +63,13 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             //float dashRange = 13f;
             //int dashUsesPerTurn = 1;
             //string dashDescription = $"Move up to {(int)dashRange} tiles. Limited to {dashUsesPerTurn} use per turn";
-            //Sprite dashIcon = Repo.GetAllDefs<TacticalAbilityViewElementDef>().FirstOrDefault(tave => tave.name.Equals("E_View [BodySlam_AbilityDef]")).LargeIcon;
+            Sprite dashIcon = Repo.GetAllDefs<TacticalAbilityViewElementDef>().FirstOrDefault(tave => tave.name.Equals("E_View [BodySlam_AbilityDef]")).LargeIcon;
             //
-            //RepositionAbilityDef dash = Repo.GetAllDefs<RepositionAbilityDef>().FirstOrDefault(r => r.name.Equals("Dash_AbilityDef"));
+            RepositionAbilityDef dash = Repo.GetAllDefs<RepositionAbilityDef>().FirstOrDefault(r => r.name.Equals("Dash_AbilityDef"));
             //dash.TargetingDataDef.Origin.Range = dashRange;
             //dash.ViewElementDef.Description = new LocalizedTextBind(dashDescription, doNotLocalize);
-            //dash.ViewElementDef.LargeIcon = dashIcon;
-            //dash.ViewElementDef.SmallIcon = dashIcon;
+            dash.ViewElementDef.LargeIcon = dashIcon;
+            dash.ViewElementDef.SmallIcon = dashIcon;
             //dash.UsesPerTurn = dashUsesPerTurn;
             //dash.AmountOfMovementToUseAsRange = -1.0f;
         }
@@ -142,97 +143,71 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             }
         }
 
-        private static void Create_Equilibrium()
+        private static void Create_GunKata()
         {
-            float wpCost = 3.0f;
-            string skillName = "Equilibrium_StrikeAbilityDef";
-            string hgQaSkillName = "Equilibrium_HandgunQuickAim_AbilityDef";
+            int usesPerTurn = 2;
+            float wpCost = 2.0f;
+            float accMod = 1.0f;
+            bool useFPC = true;
+            string skillName = "GunKata_AbilityDef";
+            LocalizedTextBind name = new LocalizedTextBind("GUN KATA", doNotLocalize);
+            LocalizedTextBind description = new LocalizedTextBind("Shoot your handgun for free. Limited to 2 uses per turn.", doNotLocalize);
 
             // Get some basics from repo
-            ShootAbilityDef standardMeleeAbility = Repo.GetAllDefs<ShootAbilityDef>().FirstOrDefault(sa => sa.name.Equals("Strike_ShootAbilityDef"));
-            ApplyStatusAbilityDef martialArtist = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(a => a.name.Equals("MartialArtist_AbilityDef"));
+            ShootAbilityDef source = Repo.GetAllDefs<ShootAbilityDef>().FirstOrDefault(sa => sa.name.Equals("Gunslinger_AbilityDef"));
             GameTagDef handgunWeaponTag = Repo.GetAllDefs<GameTagDef>().FirstOrDefault(gt => gt.name.Equals("HandgunItem_TagDef"));
-            GameTagDef meleeWeaponTag = Repo.GetAllDefs<GameTagDef>().FirstOrDefault(gt => gt.name.Equals("MeleeWeapon_TagDef"));
-            //SkillTagDef attackSkillTag = Repo.GetAllDefs<SkillTagDef>().FirstOrDefault(st => st.name.Equals("AttackAbility_SkillTagDef"));
-            //DamageTypeBaseEffectDef meleeDamage = Repo.GetAllDefs<DamageTypeBaseEffectDef>().FirstOrDefault(dtbe => dtbe.name.Equals("MeleeBash_StandardDamageTypeEffectDef"));
-            //DamageTypeBaseEffectDef slashDamage = Repo.GetAllDefs<DamageTypeBaseEffectDef>().FirstOrDefault(dtbe => dtbe.name.Equals("Slash_StandardDamageTypeEffectDef"));
-            //DamageTypeBaseEffectDef bashDamage = Repo.GetAllDefs<DamageTypeBaseEffectDef>().FirstOrDefault(dtbe => dtbe.name.Equals("Bash_StandardDamageTypeEffectDef"));
-            //ActorLastDamageTypeEffectConditionDef actorLastDamage = Repo.GetAllDefs<ActorLastDamageTypeEffectConditionDef>().FirstOrDefault(ald => ald.name.Equals("ActorLastDamageType_Fire_ApplicationCondition"));
 
-            Sprite icon = martialArtist.ViewElementDef.LargeIcon;
-            LocalizedTextBind name = new LocalizedTextBind("EQUILIBRIUM", doNotLocalize);
-            LocalizedTextBind descripion = new LocalizedTextBind("After using melee attack your next shot with handguns cost 0 AP.", doNotLocalize);
-
-            // Create necessary Defs
-            ShootAbilityDef Equilibrium = Helper.CreateDefFromClone(
-                standardMeleeAbility,
-                "1217a22e-0857-4094-a548-d224db6776a2",
+            ShootAbilityDef GunKata = Helper.CreateDefFromClone(
+                source,
+                "f7d997ce-1272-4337-a55e-97ecab56d58e",
                 skillName);
-            Equilibrium.CharacterProgressionData = Helper.CreateDefFromClone(
-                Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(p => p.name.Equals("MasterMarksman_AbilityDef")).CharacterProgressionData,
+            GunKata.CharacterProgressionData = Helper.CreateDefFromClone(
+                source.CharacterProgressionData,
+                "fe360ad7-fd39-432b-97c9-8354f1823dbd",
+                skillName);
+            GunKata.ViewElementDef = Helper.CreateDefFromClone(
+                source.ViewElementDef,
                 "cf65b3b6-ec33-48ab-a08f-71a3cb44567a",
                 skillName);
-            Equilibrium.TargetingDataDef = Helper.CreateDefFromClone(
-                standardMeleeAbility.TargetingDataDef,
-                "790233f5-5aa5-4769-931c-c2f740271836",
-                skillName);
-            Equilibrium.ViewElementDef = Helper.CreateDefFromClone(
-                standardMeleeAbility.ViewElementDef,
-                "008272c9-2431-4681-a0a1-3bf61f3462bb",
-                skillName);
-            Equilibrium.AddFollowupAbilityStatusDef = Helper.CreateDefFromClone(
-                Repo.GetAllDefs<AddAbilityStatusDef>().FirstOrDefault(aas => aas.name.Equals("E_AddAbilityStatus [DeployBeacon_StatusDef]")),
-                "40d9f907-a5a4-4f9a-bc12-e1a3f5459b3e",
-                skillName);
-            // AP reduction for handguns
-            ApplyStatusAbilityDef HandGunQA = Helper.CreateDefFromClone(
-                martialArtist,
-                "4c6e3ad0-787a-4185-9011-f568f382abba",
-                hgQaSkillName);
-            HandGunQA.CharacterProgressionData = Helper.CreateDefFromClone(
-                martialArtist.CharacterProgressionData,
-                "0aefa178-33db-4d96-8d95-b548cec1a848",
-                hgQaSkillName);
-            HandGunQA.TargetingDataDef = Helper.CreateDefFromClone(
-                martialArtist.TargetingDataDef,
-                "c6fdce21-fd70-4c8c-a92a-b623715c8762",
-                hgQaSkillName);
-            HandGunQA.ViewElementDef = Helper.CreateDefFromClone(
-                martialArtist.ViewElementDef,
-                "d20f2149-a24b-4419-8a7f-b86bb7837a4d",
-                hgQaSkillName);
-            HandGunQA.StatusDef = Helper.CreateDefFromClone(
-                martialArtist.StatusDef,
-                "f0bdbe30-2947-49f6-a1e7-276c6245861b",
-                hgQaSkillName);
-
-            // Set fields
-            Equilibrium.ViewElementDef.DisplayName1 = name;
-            Equilibrium.ViewElementDef.Description = descripion;
-            Equilibrium.ViewElementDef.LargeIcon = icon;
-            Equilibrium.ViewElementDef.SmallIcon = icon;
-            Equilibrium.ViewElementDef.DisplayPriority = 5;
-            Equilibrium.ViewElementDef.ShowInStatusScreen = true;
-            Equilibrium.WillPointCost = wpCost;
-            Equilibrium.EquipmentTags = new GameTagDef[] { meleeWeaponTag };
-            Equilibrium.IsDefault = false;
-            Equilibrium.AddFollowupAbilityStatusDef.AbilityDef = HandGunQA;
-            TacticalAbilityCostModification costModification = new TacticalAbilityCostModification()
-            {
-                TargetAbilityTagDef = null,
-                AbilityCullFilter = null,
-                SkillTagCullFilter = null,
-                EquipmentTagDef = handgunWeaponTag,
-                RequiresProficientEquipment = true,
-                ActionPointModType = TacticalAbilityModificationType.Add,
-                ActionPointMod = -0.25f
-            };
-            (HandGunQA.StatusDef as ChangeAbilitiesCostStatusDef).AbilityCostModification = costModification;
+            GunKata.ViewElementDef.DisplayName1 = name;
+            GunKata.ViewElementDef.Description = description;
+            GunKata.EquipmentTags = new GameTagDef[] { handgunWeaponTag };
+            GunKata.UsesPerTurn = usesPerTurn;
+            GunKata.WillPointCost = wpCost;
+            GunKata.CanUseFirstPersonCam = useFPC;
+            GunKata.ProjectileSpreadMultiplier = accMod;
         }
 
-        private static void Create_Rage()
+        private static void Create_Exertion()
         {
+            int usesPerTurn = 1;
+            float wpCost = 3.0f;
+            float apMod = 25.0f;
+            string skillName = "Exertion_AbilityDef";
+            LocalizedTextBind name = new LocalizedTextBind("EXERTION", doNotLocalize);
+            LocalizedTextBind description = new LocalizedTextBind("Recover 1AP. Limited to 1 use per turn.", doNotLocalize);
 
+            // Get some basics from repo
+            ExtraMoveAbilityDef source = Repo.GetAllDefs<ExtraMoveAbilityDef>().FirstOrDefault(asa => asa.name.Equals("ExtraMove_AbilityDef"));
+            //ExtraMoveAbilityDef Exertion = Repo.GetAllDefs<ExtraMoveAbilityDef>().FirstOrDefault(asa => asa.name.Equals("ExtraMove_AbilityDef"));
+
+            ExtraMoveAbilityDef Exertion = Helper.CreateDefFromClone(
+                source,
+                "790233f5-5aa5-4769-931c-c2f740271836",
+                skillName);
+            Exertion.CharacterProgressionData = Helper.CreateDefFromClone(
+                source.CharacterProgressionData,
+                "f0bdbe30-2947-49f6-a1e7-276c6245861b",
+                skillName);
+            Exertion.ViewElementDef = Helper.CreateDefFromClone(
+                source.ViewElementDef,
+                "d20f2149-a24b-4419-8a7f-b86bb7837a4d",
+                skillName);
+            Exertion.UsesPerTurn = usesPerTurn;
+            Exertion.WillPointCost = wpCost;
+            Exertion.ViewElementDef.DisplayName1 = name;
+            Exertion.ViewElementDef.Description = description;
+            Exertion.ActionPointsReturnedPerc = apMod;
         }
     }
 }

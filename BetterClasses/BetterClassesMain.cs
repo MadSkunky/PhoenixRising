@@ -29,6 +29,7 @@ namespace PhoenixRising.BetterClasses
         internal static string ModDirectory;
         internal static string ManagedDirectory;
         internal static string TexturesDirectory;
+        internal static string LocalizationDirectory;
         internal static bool doNotLocalize = true;
         internal static readonly DefRepository Repo = GameUtl.GameComponent<DefRepository>();
         internal static readonly SharedData Shared = GameUtl.GameComponent<SharedData>();
@@ -89,6 +90,8 @@ namespace PhoenixRising.BetterClasses
             ManagedDirectory = Path.Combine(ModDirectory, "Assets", "Presets");
             // Path to texture files
             TexturesDirectory = Path.Combine(ModDirectory, "Assets", "Textures");
+            // Path to localization CSVs
+            LocalizationDirectory = Path.Combine(ModDirectory, "Assets", "Localization");
 
             // Initialize Logger
             LogPath = Path.Combine(ModDirectory, "BetterClasses.log");

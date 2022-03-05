@@ -1,5 +1,7 @@
 ﻿using Base.Core;
 using Base.Defs;
+using Harmony;
+using I2.Loc;
 using Newtonsoft.Json;
 using PhoenixPoint.Common.Core;
 using System;
@@ -21,7 +23,10 @@ namespace PhoenixRising.BetterClasses
         internal static string ModDirectory;
         internal static string ManagedDirectory;
         internal static string TexturesDirectory;
-        
+        internal static string LocalizationDirectory;
+
+        public static readonly string LocalizationFileName = "PR_BC_Localization.csv";
+
         // SP cost for main specialisation skills per level
         public static readonly int[] SPperLevel = new int[] { 0, 10, 15, 0, 20, 25, 30 };
 
@@ -40,6 +45,8 @@ namespace PhoenixRising.BetterClasses
                 ModDirectory = BetterClassesMain.ModDirectory;
                 ManagedDirectory = BetterClassesMain.ManagedDirectory;
                 TexturesDirectory = BetterClassesMain.TexturesDirectory;
+                LocalizationDirectory = BetterClassesMain.LocalizationDirectory;
+                AddLocalizationFromCSV(LocalizationFileName, null);
                 AbilityNameToDefMap = ReadJson<Dictionary<string, string>>(AbilitiesJsonFileName);
                 NotLocalizedTextMap = ReadJson<Dictionary<string, Dictionary<string, string>>>(TextMapFileName);
             }
@@ -49,6 +56,40 @@ namespace PhoenixRising.BetterClasses
             }
         }
 
+        // Read localization from CSV file
+        public static void AddLocalizationFromCSV(string LocalizationFileName, string Category = null)
+        {
+            try
+            {
+                string CSVstring = File.ReadAllText(Path.Combine(LocalizationDirectory, LocalizationFileName));
+                LanguageSourceData SourceToChange = Category == null ? // if category is not given
+                    LocalizationManager.Sources[0] :                   // use fist language source
+                    LocalizationManager.Sources.First(source => source.GetCategories().Contains(Category));
+                if (SourceToChange != null)
+                {
+                    _ = SourceToChange.Import_CSV(string.Empty, CSVstring, eSpreadsheetUpdateMode.AddNewTerms, ',');
+                    LocalizationManager.LocalizeAll(true);    // Force localing all enabled labels/sprites with the new data
+                    Logger.Always("----------------------------------------------------------------------------------------------------", false);
+                    Logger.Always($"Added localization data from {LocalizationFileName} in localization source, category: {Category}");
+                    Logger.Debug("CSV Data:" + Environment.NewLine + CSVstring);
+                    foreach (LanguageSourceData source in LocalizationManager.Sources)
+                    {
+                        Logger.Debug($"Source owner {source.owner}{Environment.NewLine}Categories:{Environment.NewLine}{{source.GetCategories().Join()}}{Environment.NewLine}", false);
+                    }
+                    Logger.Always("----------------------------------------------------------------------------------------------------", false);
+                }
+                else
+                {
+                    Logger.Always("----------------------------------------------------------------------------------------------------", false);
+                    Logger.Always($"No language source with category {Category} found!");
+                    Logger.Always("----------------------------------------------------------------------------------------------------", false);
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e);
+            }
+        }
         // Creating new runtime def by cloning from existing def
         public static T CreateDefFromClone<T>(T source, string guid, string name) where T : BaseDef
         {
