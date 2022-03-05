@@ -29,11 +29,11 @@ This is a beta-version of the mod with a lot of features incomplete. Currently c
 3) Your impressions about 3rd row skills and how it affects your gameplay and mood (things you like : backgrounds flavors, faction skills etc?)
 
 <b>Balance Concerns.</b> Some of the following combinations require testing and feedback:
-Gunslinger 	Used with Hera or Sneak Attack + Adrenaline + Nergal
-Kill Zone	Extreme Focus + Deceptor + OW focus + Jump Jet can lead to very high damage potential
-Dash + Kill'n'Run	Possible to achieve very high Mobility
-QCE + Hunker Down + True Grit	Possible to achieve very high Damage Reduction
-Skirmisher + Bloodlust	Possible to achieve very high Damage 
+Gunslinger 	Used with Hera or Sneak Attack + Adrenaline + Nergal; 
+Kill Zone	Extreme Focus + Deceptor + OW focus + Jump Jet can lead to very high damage potential; 
+Dash + Kill'n'Run	Possible to achieve very high Mobility; 
+QCE + Hunker Down + True Grit	Possible to achieve very high Damage Reduction; 
+Skirmisher + Bloodlust	Possible to achieve very high Damage; 
 Berserker Multiclass	Combinations with Assault and Heavy seem particularly powerful
 
 <b>INSTALLATION:</b> 7z file must be selected via "Add Mod" button in Modnix
