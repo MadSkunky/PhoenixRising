@@ -217,7 +217,7 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
             pI.StatusDef = panicImmunityStatus;
             clarityHead.Abilities = new AbilityDef[]
             {
-                pI,
+                Repo.GetAllDefs<AbilityDef>().FirstOrDefault(p => p.name.Equals("BC_PanicImmunity_AbilityDef")),
                 clarityHead.Abilities[1],
             };
 
