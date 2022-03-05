@@ -23,7 +23,7 @@ modding and design councilors and testers, always open to productive discussions
 <b>EARLY ACCESS WARNING</b>
 This is a beta-version of the mod with a lot of features incomplete. Currently complete Classes: Assault, Heavy, Sniper, Berserker. It is recommended you DO NOT hire Elite Classes (Priest, Infiltrator, Technician). Please do not change or adjust config settings.
 
-INTENDED TO BE USED WITH PANTOLOMIN RF MOD https://github.com/pantolomin/pp-return-fire-a-la-carte
+INTENDED TO BE USED WITH PANTOLOMIN RF MOD https://www.nexusmods.com/phoenixpoint/mods/40?tab=files
 Adjust its Config setting: "reactionAngle": 360.0,
 
 <b>Feedback Request:</b>
