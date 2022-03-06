@@ -140,7 +140,7 @@ namespace PhoenixRising.BetterClasses
                 {
                     "HANDGUN PROFICIENCY",
                     "PDW PROFICIENCY",
-                    "MELEE WEAPON PROFICIENCY+",
+                    "MELEE WEAPON PROFICIENCY",
                     "ASSAULT RIFLE PROFICIENCY",
                     "SHOTGUN PROFICIENCY",
                     "SNIPER RIFLE PROFICIENCY",
@@ -180,15 +180,67 @@ namespace PhoenixRising.BetterClasses
                 isRandom: false,
                 spCost: 15,
                 relList: new Dictionary<string, Dictionary<string, string>>
-                {{ ClassKeys.AllClasses.Name, new Dictionary<string,string> {
-                    { FactionKeys.PX, "OVERWATCH FOCUS" },
-                    { FactionKeys.Anu, "BREATHE MIST" },
-                    { FactionKeys.NJ, "TAKEDOWN" },
-                    { FactionKeys.Syn, "SHADOWSTEP" },
-                    { FactionKeys.IN, "OVERWATCH FOCUS" },
-                    { FactionKeys.PU, "ENDURANCE" },
-                    { FactionKeys.FS, "BREATHE MIST" }
-                } } }),
+                {
+                    { FactionKeys.PX, new Dictionary<string, string>
+                    {
+                        { ClassKeys.Assault.Name, "OVERWATCH FOCUS" },
+                        { ClassKeys.Heavy.Name, "OVERWATCH FOCUS" },
+                        { ClassKeys.Sniper.Name, "OVERWATCH FOCUS" },
+                        { ClassKeys.Berserker.Name, "OVERWATCH FOCUS" },
+                        { ClassKeys.Priest.Name, "OVERWATCH FOCUS" },
+                        { ClassKeys.Technician.Name, "OVERWATCH FOCUS" },
+                        { ClassKeys.Infiltrator.Name, "OVERWATCH FOCUS" }
+                    } },
+                    { FactionKeys.Anu, new Dictionary<string, string>
+                    {
+                        { ClassKeys.Assault.Name, "BREATHE MIST" },
+                        { ClassKeys.Berserker.Name, "BREATHE MIST" },
+                        { ClassKeys.Priest.Name, "BREATHE MIST" },
+                    } },
+                    { FactionKeys.NJ, new Dictionary<string, string>
+                    {
+                        { ClassKeys.Assault.Name, "TAKEDOWN" },
+                        { ClassKeys.Heavy.Name, "TAKEDOWN" },
+                        { ClassKeys.Sniper.Name, "TAKEDOWN" },
+                        { ClassKeys.Technician.Name, "TAKEDOWN" },
+                    } },
+                    { FactionKeys.Syn, new Dictionary<string, string>
+                    {
+                        { ClassKeys.Assault.Name, "SHADOWSTEP" },
+                        { ClassKeys.Sniper.Name, "SHADOWSTEP" },
+                        { ClassKeys.Infiltrator.Name, "PAIN CHAMELEON" }
+                    } },
+                    { FactionKeys.IN, new Dictionary<string, string>
+                    {
+                        { ClassKeys.Assault.Name, "OVERWATCH FOCUS" },
+                        { ClassKeys.Heavy.Name, "OVERWATCH FOCUS" },
+                        { ClassKeys.Sniper.Name, "OVERWATCH FOCUS" },
+                    } },
+                    { FactionKeys.PU, new Dictionary<string, string>
+                    {
+                        { ClassKeys.Assault.Name, "TAKEDOWN" },
+                        { ClassKeys.Heavy.Name, "TAKEDOWN" },
+                        { ClassKeys.Sniper.Name, "TAKEDOWN" },
+                        { ClassKeys.Technician.Name, "TAKEDOWN" },
+                        { ClassKeys.Infiltrator.Name, "TAKEDOWN" }
+                    } },
+                    { FactionKeys.FS, new Dictionary<string, string>
+                    {
+                        { ClassKeys.Assault.Name, "BREATHE MIST" },
+                        { ClassKeys.Berserker.Name, "BREATHE MIST" },
+                        { ClassKeys.Priest.Name, "BREATHE MIST" },
+                    } },
+                    //{ ClassKeys.AllClasses.Name, new Dictionary<string,string>
+                    //{
+                    //    { FactionKeys.PX, "OVERWATCH FOCUS" },
+                    //    { FactionKeys.Anu, "BREATHE MIST" },
+                    //    { FactionKeys.NJ, "TAKEDOWN" },
+                    //    { FactionKeys.Syn, "SHADOWSTEP" },
+                    //    { FactionKeys.IN, "OVERWATCH FOCUS" },
+                    //    { FactionKeys.PU, "ENDURANCE" },
+                    //    { FactionKeys.FS, "BREATHE MIST" }
+                    //} },
+                }),
             new PersonalPerksDef(
                 perkKey: PerkType.Faction_2,
                 isRandom: false,
@@ -200,15 +252,15 @@ namespace PhoenixRising.BetterClasses
                         { ClassKeys.Assault.Name, "ENDURANCE" },
                         { ClassKeys.Heavy.Name, "ENDURANCE" },
                         { ClassKeys.Sniper.Name, "ENDURANCE" },
-                        { ClassKeys.Berserker.Name, "SONIC BLAST" },
+                        { ClassKeys.Berserker.Name, "SOWER OF CHANGE" },
                         { ClassKeys.Priest.Name, "RESURRECT" },
                         { ClassKeys.Technician.Name, "AR TARGETING" },
-                        { ClassKeys.Infiltrator.Name, "PAIN CHAMELEON" }
+                        { ClassKeys.Infiltrator.Name, "PHANTOM PROTOCOL" }
                     } },
                     { FactionKeys.Anu, new Dictionary<string, string>
                     {
-                        { ClassKeys.Assault.Name, "SONIC BLAST" },
-                        { ClassKeys.Berserker.Name, "SONIC BLAST" },
+                        { ClassKeys.Assault.Name, "SOWER OF CHANGE" },
+                        { ClassKeys.Berserker.Name, "SOWER OF CHANGE" },
                         { ClassKeys.Priest.Name, "RESURRECT" },
                     } },
                     { FactionKeys.NJ, new Dictionary<string, string>
@@ -222,7 +274,7 @@ namespace PhoenixRising.BetterClasses
                     {
                         { ClassKeys.Assault.Name, "PHANTOM PROTOCOL" },
                         { ClassKeys.Sniper.Name, "PHANTOM PROTOCOL" },
-                        { ClassKeys.Infiltrator.Name, "PAIN CHAMELEON" }
+                        { ClassKeys.Infiltrator.Name, "PHANTOM PROTOCOL" }
                     } },
                     { FactionKeys.IN, new Dictionary<string, string>
                     {
@@ -236,12 +288,12 @@ namespace PhoenixRising.BetterClasses
                         { ClassKeys.Heavy.Name, "PEPPER CLOUD" },
                         { ClassKeys.Sniper.Name, "PEPPER CLOUD" },
                         { ClassKeys.Technician.Name, "AR TARGETING" },
-                        { ClassKeys.Infiltrator.Name, "PAIN CHAMELEON" }
+                        { ClassKeys.Infiltrator.Name, "PHANTOM PROTOCOL" }
                     } },
                     { FactionKeys.FS, new Dictionary<string, string>
                     {
-                        { ClassKeys.Assault.Name, "SONIC BLAST" },
-                        { ClassKeys.Berserker.Name, "SONIC BLAST" },
+                        { ClassKeys.Assault.Name, "SOWER OF CHANGE" },
+                        { ClassKeys.Berserker.Name, "SOWER OF CHANGE" },
                         { ClassKeys.Priest.Name, "RESURRECT" },
                     } },
                 })
@@ -273,7 +325,7 @@ namespace PhoenixRising.BetterClasses
         // Flag if UI texts should be changed to default (Enlish) text or set by localization
         public bool DoNotLocalizeChangedTexts = true;
         // Create new ability dictionary as json file in mod directory
-        public bool CreateNewJsonFiles = false;
+        internal bool CreateNewJsonFiles = false;
         // DebugLevel (0: nothing, 1: error, 2: debug, 3: info)
         public int Debug = 1;
     }

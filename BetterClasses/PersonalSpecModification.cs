@@ -157,7 +157,7 @@ namespace PhoenixRising.BetterClasses
             {
                 try
                 {
-                    if (Config.LearnFirstPersonalSkill)
+                    if (Config.LearnFirstPersonalSkill && __instance.UnitType.IsHuman && !__instance.UnitType.IsMutoid && !__instance.UnitType.TemplateDef.IsAlien)
                     {
                         // Personal ability 0 = first skill in the row
                         TacticalAbilityDef persAbility0 = __result.PersonalAbilityTrack.AbilitiesByLevel[0].Ability;
