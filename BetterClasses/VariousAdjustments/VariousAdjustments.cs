@@ -90,6 +90,8 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
             Change_VidarGL();
             // Destiny III - Give chance to fumble when non-proficient
             Change_Destiny();
+            // Technichian remove MindFragger - Increase range to 2
+            Change_TechRemoveFaceHugger();
         }
         public static void Change_Turrets()
         {
@@ -419,6 +421,12 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
         {
             WeaponDef destiny3 = Repo.GetAllDefs<WeaponDef>().FirstOrDefault(p => p.name.Equals("PX_LaserArrayPack_WeaponDef"));
             destiny3.FumblePerc = 50;          
+        }
+        public static void Change_TechRemoveFaceHugger()
+        {
+            int tRFHRange = 2;
+            RemoveFacehuggerAbilityDef tRFH = Repo.GetAllDefs<RemoveFacehuggerAbilityDef>().FirstOrDefault(p => p.name.Equals("TechnicianRemoveFacehugger_AbilityDef"));
+            tRFH.TargetingDataDef.Origin.Range = tRFHRange;
         }
     }
 }
