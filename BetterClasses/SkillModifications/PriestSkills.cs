@@ -28,8 +28,8 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             // Biochemist: Paralysis, Poison and Viral damage increased 25%
             Change_Biochemist();
 
-            // Mutog Handler: 1AP 3WP, Target Mutog within 10 tiles gains "Dash" action. Limited to 1 use per turn
-            Create_MutogHandler();
+            // Lay Waste: 1 AP, 3 WP, If your current Willpower score is higher than target's deal 30 damage for each point of WP difference
+            Create_LayWaste();
         }
 
         private static void Change_PsychicWard()
@@ -43,7 +43,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             Logger.Debug("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
         }
 
-        private static void Create_MutogHandler()
+        private static void Create_LayWaste()
         {
             Logger.Debug("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
         }
