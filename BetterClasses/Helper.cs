@@ -103,7 +103,7 @@ namespace PhoenixRising.BetterClasses
         {
             try
             {
-                T tmp = Repo.GetAllDefs<T>().FirstOrDefault(t => t.Guid.Equals(guid));
+                T tmp = (T)Repo.GetDef(guid);
                 if (tmp != null)
                 {
                     return tmp;
