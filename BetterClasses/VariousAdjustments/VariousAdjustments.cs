@@ -86,6 +86,10 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
             Change_ShadowLegs();
             // Psychic Ward - fix and description to : Allies within 10 tiles are immune to panic and psychic scream damage
             Change_PsychicImmunity();
+            // Vidar GL - Increase Shred to 20 (from 10), Add Acid 10. Increase AP cost to 2 (from 1)
+            Change_VidarGL();
+            // Destiny III - Give chance to fumble when non-proficient
+            Change_Destiny();
         }
         public static void Change_Turrets()
         {
@@ -391,6 +395,30 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
         {
             ApplyStatusAbilityDef psychicWard = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(p => p.name.Equals("PsychicWard_AbilityDef"));
             psychicWard.ViewElementDef.Description = new LocalizedTextBind("Allies within 10 tiles are immune to panic and psychic scream damage", doNotLocalize);
+        }
+        public static void Change_VidarGL()
+        {
+            int vGLNormal = 50;
+            int vGLShred = 20;
+            int vGLAcid = 10;
+            int vGlAPCost = 50;
+
+            WeaponDef vGL = Repo.GetAllDefs<WeaponDef>().FirstOrDefault(p => p.name.Equals("FS_AssaultGrenadeLauncher_WeaponDef"));
+
+            vGL.DamagePayload.DamageKeywords = new List<DamageKeywordPair>
+            {
+                new DamageKeywordPair{DamageKeywordDef = Shared.SharedDamageKeywords.DamageKeyword, Value = vGLNormal },
+                new DamageKeywordPair{DamageKeywordDef = Shared.SharedDamageKeywords.ShreddingKeyword, Value = vGLShred },
+                new DamageKeywordPair{DamageKeywordDef = Shared.SharedDamageKeywords.AcidKeyword, Value = vGLAcid },
+            };
+
+            vGL.APToUsePerc = vGlAPCost;
+            
+        }
+        public static void Change_Destiny()
+        {
+            WeaponDef destiny3 = Repo.GetAllDefs<WeaponDef>().FirstOrDefault(p => p.name.Equals("PX_LaserArrayPack_WeaponDef"));
+            destiny3.FumblePerc = 50;          
         }
     }
 }
