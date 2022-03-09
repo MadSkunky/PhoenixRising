@@ -202,6 +202,7 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
         }
         public static void Change_ClarityHead()
         {
+            /*
             TacticalItemDef clarityHead = Repo.GetAllDefs<TacticalItemDef>().FirstOrDefault(p => p.name.Equals("NJ_Jugg_BIO_Helmet_BodyPartDef"));
             DamageMultiplierStatusDef panicImmunityStatus = Repo.GetAllDefs<DamageMultiplierStatusDef>().FirstOrDefault(p => p.name.Equals("PanicImmunity_StatusDef"));
 
@@ -229,6 +230,7 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
 
             pI.ViewElementDef.DisplayName1 = new LocalizedTextBind("PANIC IMMUNITY", doNotLocalize);
             pI.ViewElementDef.Description = new LocalizedTextBind("Immune to panic", doNotLocalize);
+            */
         }
         public static void Change_VenomTorso()
         {
