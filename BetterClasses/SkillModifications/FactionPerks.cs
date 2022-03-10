@@ -307,8 +307,6 @@ namespace PhoenixRising.BetterClasses.SkillModifications
         }
         private static void Create_SowerOfChange()
         {
-            //Logger.Debug("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
-
             string skillName = "SowerOfChange_AbilityDef";
             LocalizedTextBind name = new LocalizedTextBind("SOWER OF CHANGE", doNotLocalize);
             LocalizedTextBind description = new LocalizedTextBind("Returns 10% of damage as Viral to the attacker within 10 tiles", doNotLocalize);
@@ -333,48 +331,49 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                 source.StatusDef,
                 "1f5f7143-c6c3-440a-a7f5-0020f037d5cb",
                 $"E_Status [{skillName}]");
-            DamageEffectDef DamageEffect = Helper.CreateDefFromClone(
-                Repo.GetAllDefs<DamageEffectDef>().FirstOrDefault(de => de.name.Equals("Virus_DamageEffectDef")),
-                "",
-                $"E_DamageEffect [{skillName}]");
-            DamageEffect.MinimumDamage = 4.0f;
-            DamageEffect.MaximumDamage = 6.0f;
-            //DamageEffect.BodyPartMultiplier = 0.0f;
-            //DamageEffect.ArmourPiercing = 9999.0f;
-            //DamagePayloadEffectDef DamageEffect = Helper.CreateDefFromClone(
-            //    Repo.GetAllDefs<DamagePayloadEffectDef>().FirstOrDefault(dpe => dpe.name.Equals("BehemothMassStomp_Electroshock_DamagePayloadEffectDef")),
-            //    "",
-            //    "BC_Viral_DamagePayloadEffectDef");
-            //DamageEffect.DamagePayload.DamageKeywords = new List<DamageKeywordPair>()
-            //{
-            //    new DamageKeywordPair()
-            //    {
-            //        DamageKeywordDef = Shared.SharedDamageKeywords.ViralKeyword,
-            //        Value = 8
-            //    }
-            //};
-            //DamageEffect.DamagePayload.DamageType = Repo.GetAllDefs<DamageTypeBaseEffectDef>().FirstOrDefault(dtb => dtb.name.Equals("Virus_DamageOverTimeDamageTypeEffectDef"));
-            //StatusEffectDef DamageEffect = Helper.CreateDefFromClone(
-            //    Repo.GetAllDefs<StatusEffectDef>().FirstOrDefault(s => s.name.Equals("E_ApplyVanishStatusEffect [Vanish_AbilityDef]")),
-            //    "d9870608-797c-428a-8b56-17c1bdadbe27",
-            //    $"E_ApplyStatusEffect [{skillName}]");
-            //DamageEffect.StatusDef = Repo.GetAllDefs<StatusDef>().FirstOrDefault(sd => sd.name.Equals("Infected_StatusDef"));
+
+            SowerOfChange.ViewElementDef.DisplayName1.LocalizationKey = "PR_BC_SOWER_OF_CHANGE";
+            SowerOfChange.ViewElementDef.Description.LocalizationKey = "PR_BC_SOWER_OF_CHANGE_DESC";
+            //SowerOfChange.AnimType = -1;
+
+            DamagePayloadEffectDef DamageEffect = Helper.CreateDefFromClone(
+                Repo.GetAllDefs<DamagePayloadEffectDef>().FirstOrDefault(dpe => dpe.name.Equals("E_Element0 [SwarmerPoisonExplosion_Die_AbilityDef]")),
+                "d9870608-797c-428a-8b56-17c1bdadbe27",
+                $"E_DamagePayloadEffectDef {skillName}");
+            DamageEffect.DamagePayload = Repo.GetAllDefs<ApplyDamageEffectAbilityDef>().FirstOrDefault(ade => ade.name.Equals("Mutoid_ViralExplode_AbilityDef")).DamagePayload;
+            DamageEffect.DamagePayload.DamageKeywords = new List<DamageKeywordPair>()
+            {
+                new DamageKeywordPair()
+                {
+                    DamageKeywordDef = Shared.SharedDamageKeywords.BlastKeyword,
+                    Value = 3
+                },
+                new DamageKeywordPair()
+                {
+                    DamageKeywordDef = Shared.SharedDamageKeywords.PiercingKeyword,
+                    Value = 100
+                },
+                new DamageKeywordPair()
+                {
+                    DamageKeywordDef = Shared.SharedDamageKeywords.ViralKeyword,
+                    Value = 1
+                }
+            };
+            DamageEffect.DamagePayload.ArmourPiercing = 9999.0f;
+            DamageEffect.DamagePayload.Speed = 200.0f;
+            DamageEffect.DamagePayload.BodyPartMultiplier = 0.0f;
+            DamageEffect.DamagePayload.ObjectMultiplier = 0.0f;
+            DamageEffect.DamagePayload.AoeRadius = 0.4f;
+            DamageEffect.DamagePayload.ObjectToSpawnOnExplosion = null;
+            DamageEffect.EffectPositionOffset = new Vector3(0, 0.2f, 0); // prevent to explode in the ground
+            
             OnActorDamageReceivedStatusDef SocStatus = (OnActorDamageReceivedStatusDef)SowerOfChange.StatusDef;
             SocStatus.ApplicationConditions = new EffectConditionDef[0];
             SocStatus.DamageDeliveryTypeFilter = new List<DamageDeliveryType>();
             SocStatus.TargetApplicationConditions = new EffectConditionDef[0];
-            SocStatus.EffectForAttacker = DamageEffect; // Helper.CreateDefFromClone(
-            //    SocStatus.EffectForAttacker,
-            //    "d9870608-797c-428a-8b56-17c1bdadbe27",
-            //    $"E_Effect [{ skillName}]");
-            //(SocStatus.EffectForAttacker as TacStatusEffectDef).StatusDef = Repo.GetAllDefs<StatusDef>().FirstOrDefault(sd => sd.name.Equals("Infected_StatusDef"));
-
-            //foreach (DamagePayloadEffectDef temp in Repo.GetAllDefs<DamagePayloadEffectDef>())
-            //{
-            //    Logger.Always(temp.name);
-            //}
+            SocStatus.EffectForAttacker = DamageEffect;
         }
-        // Sower of Chage: Patching something
+        // Sower of Chage: Patching OnActorDamageReceivedStatus.OnActorDamageReceived() to handle the trigger effect preventing errors and to much slow motion
         [HarmonyPatch(typeof(OnActorDamageReceivedStatus), "OnActorDamageReceived")]
         internal static class SowerOfChange_OnActorDamageReceived_Patch
         {
@@ -386,39 +385,57 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                     object ___Source = AccessTools.Property(typeof(Status), "Source").GetValue(__instance, null);
                     TacticalActor ___TacticalActor = (TacticalActor)AccessTools.Property(typeof(TacStatus), "TacticalActor").GetValue(__instance, null);
                     TacticalAbility SowerOfChange = ___TacticalActor.GetAbilities<TacticalAbility>().FirstOrDefault(s => s.AbilityDef.name.Equals("SowerOfChange_AbilityDef"));
-                    Logger.Always("----------------------------------------------------------------------------------------------------", false);
-                    Logger.Always($"OnActorDamageReceivedStatus.OnActorDamageReceived() called ...");
-                    Logger.Always($"Actor: {___TacticalActor.DisplayName}");
-                    Logger.Always($"SowerOfChange detected: {SowerOfChange != null}");
-                    IDamageDealer damageDealer = damageResult.Source as IDamageDealer;
-                    if (damageDealer == null)
+                    if (SowerOfChange != null)
                     {
-                        Logger.Always($"damageResult.Source, type {damageResult.Source.GetType()}, is no IDamageDealer, exit without apply effect!");
-                        Logger.Always("----------------------------------------------------------------------------------------------------", false);
-                        return false;
-                    }
-                    if (!__instance.OnActorDamageReceivedStatusDef.DamageDeliveryTypeFilter.IsEmpty<DamageDeliveryType>() && !__instance.OnActorDamageReceivedStatusDef.DamageDeliveryTypeFilter.Contains(damageDealer.GetDamagePayload().DamageDeliveryType))
-                    {
-                        Logger.Always($"DamageDeliveryType {damageDealer.GetDamagePayload().DamageDeliveryType} does not fit preset, exit without apply effect!");
-                        Logger.Always("----------------------------------------------------------------------------------------------------", false);
-                        return false;
-                    }
-                    TacticalActorBase tacticalActorBase = damageDealer.GetTacticalActorBase();
-                    EffectConditionDef[] targetApplicationConditions = __instance.OnActorDamageReceivedStatusDef.TargetApplicationConditions;
-                    for (int i = 0; i < targetApplicationConditions.Length; i++)
-                    {
-                        if (!targetApplicationConditions[i].ConditionMet(tacticalActorBase))
+                        Logger.Debug("----------------------------------------------------------------------------------------------------", false);
+                        Logger.Debug($"OnActorDamageReceivedStatus.OnActorDamageReceived() called from '{SowerOfChange.AbilityDef.name}' ...");
+                        Logger.Debug($"Actor: {___TacticalActor.DisplayName}");
+                        Logger.Debug($"Recieved HealthDamage: {damageResult.HealthDamage}");
+                        if (!(damageResult.Source is IDamageDealer damageDealer))
                         {
-                            Logger.Always($"OnActorDamageReceivedStatusDef.TargetApplicationConditions not met, exit without apply effect!");
-                            Logger.Always("----------------------------------------------------------------------------------------------------", false);
+                            Logger.Debug($"damageResult.Source, type {damageResult.Source.GetType()}, is no IDamageDealer, exit without apply effect!");
+                            Logger.Debug("----------------------------------------------------------------------------------------------------", false);
                             return false;
                         }
+                        if (!__instance.OnActorDamageReceivedStatusDef.DamageDeliveryTypeFilter.IsEmpty()
+                            && !__instance.OnActorDamageReceivedStatusDef.DamageDeliveryTypeFilter.Contains(damageDealer.GetDamagePayload().DamageDeliveryType))
+                        {
+                            Logger.Debug($"DamageDeliveryType {damageDealer.GetDamagePayload().DamageDeliveryType} does not fit preset, exit without apply effect!");
+                            Logger.Debug("----------------------------------------------------------------------------------------------------", false);
+                            return false;
+                        }
+                        TacticalActorBase tacticalActorBase = damageDealer.GetTacticalActorBase();
+                        Logger.Debug($"TacticalActorBase of target: {tacticalActorBase.DisplayName}");
+                        EffectConditionDef[] targetApplicationConditions = __instance.OnActorDamageReceivedStatusDef.TargetApplicationConditions;
+                        for (int i = 0; i < targetApplicationConditions.Length; i++)
+                        {
+                            if (!targetApplicationConditions[i].ConditionMet(tacticalActorBase))
+                            {
+                                Logger.Debug($"OnActorDamageReceivedStatusDef.TargetApplicationConditions not met, exit without apply effect!");
+                                Logger.Debug("----------------------------------------------------------------------------------------------------", false);
+                                return false;
+                            }
+                        }
+                        EffectTarget actorEffectTarget = TacUtil.GetActorEffectTarget(tacticalActorBase, null);
+                        GameObject effectTargetObject = actorEffectTarget.GameObject;
+                        DamagePayloadEffectDef effectDef = (DamagePayloadEffectDef)__instance.OnActorDamageReceivedStatusDef.EffectForAttacker;
+                        float viralDamage = 1;
+                        float blastDamage = 0;
+                        float timingScale = 0.8f;
+                        blastDamage = effectDef.DamagePayload.DamageKeywords.Find(dk => dk.DamageKeywordDef == Shared.SharedDamageKeywords.BlastKeyword).Value;
+                        viralDamage = damageResult.HealthDamage >= 10 ? damageResult.HealthDamage / 10 : 1.0f;
+                        effectDef.DamagePayload.DamageKeywords.Find(dk => dk.DamageKeywordDef == Shared.SharedDamageKeywords.ViralKeyword).Value = viralDamage;
+                        ___TacticalActor.Timing.Scale = timingScale;
+                        tacticalActorBase.Timing.Scale = timingScale;
+                        Logger.Always($"'{___TacticalActor}' applies {blastDamage} blast and {viralDamage} viral damage on '{effectTargetObject}', position '{actorEffectTarget.Position + effectDef.EffectPositionOffset}'");
+                        Effect.Apply(__instance.Repo, effectDef, actorEffectTarget, ___TacticalActor);
+                        ___TacticalActor.Timing.Scale = timingScale;
+                        tacticalActorBase.Timing.Scale = timingScale;
+                        Logger.Always($"Effect applied on {tacticalActorBase}");
+                        Logger.Always("----------------------------------------------------------------------------------------------------", false);
+                        return false;
                     }
-                    EffectTarget actorEffectTarget = TacUtil.GetActorEffectTarget(tacticalActorBase, null);
-                    Effect.Apply(__instance.Repo, __instance.OnActorDamageReceivedStatusDef.EffectForAttacker, actorEffectTarget, ___Source ?? __instance);
-                    Logger.Always($"Effect applied on {tacticalActorBase}");
-                    Logger.Always("----------------------------------------------------------------------------------------------------", false);
-                    return false;
+                    return true;
                 }
                 catch (Exception e)
                 {

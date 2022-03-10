@@ -62,7 +62,7 @@ PR_BC_AR_TARGETTING_DESC,Text,,Target ally within 10 tiles gains +20% accuracy,,
 PR_BC_PHANTOM_PROTOCOL,Text,,PHANTOM PROTOCOL,,,,,,,,
 PR_BC_PHANTOM_PROTOCOL_DESC,Text,,You gain +25% accuracy and stealth until next turn,,,,,,,,
 PR_BC_SOWER_OF_CHANGE,Text,,SOWER OF CHANGE,,,,,,,,
-PR_BC_SOWER_OF_CHANGE_DESC,Text,,Deals 10 viral damage to any attacker within 10 tiles,,,,,,,,
+PR_BC_SOWER_OF_CHANGE_DESC,Text,,Returns 10% of damage as Viral to the attacker,,,,,,,,
 PR_BC_SURVIVOR,Text,,SURVIVOR,,,,,,,,
 PR_BC_SURVIVOR_DESC,Text,,"<b>WP +4, but -4 STR</b>
 <i>You have had it tougher than most, and that's saying a lot. Your body took a toll, but your mind grew stronger</i>",,,,,,,,

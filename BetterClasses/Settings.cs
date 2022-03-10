@@ -230,16 +230,6 @@ namespace PhoenixRising.BetterClasses
                         { ClassKeys.Berserker.Name, "BREATHE MIST" },
                         { ClassKeys.Priest.Name, "BREATHE MIST" },
                     } },
-                    //{ ClassKeys.AllClasses.Name, new Dictionary<string,string>
-                    //{
-                    //    { FactionKeys.PX, "OVERWATCH FOCUS" },
-                    //    { FactionKeys.Anu, "BREATHE MIST" },
-                    //    { FactionKeys.NJ, "TAKEDOWN" },
-                    //    { FactionKeys.Syn, "SHADOWSTEP" },
-                    //    { FactionKeys.IN, "OVERWATCH FOCUS" },
-                    //    { FactionKeys.PU, "ENDURANCE" },
-                    //    { FactionKeys.FS, "BREATHE MIST" }
-                    //} },
                 }),
             new PersonalPerksDef(
                 perkKey: PerkType.Faction_2,
