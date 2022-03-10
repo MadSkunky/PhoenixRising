@@ -139,7 +139,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             Survivor.CharacterProgressionData.RequiredStrength = 0;
             Survivor.CharacterProgressionData.RequiredWill = 0;
             Survivor.ViewElementDef.DisplayName1 = new LocalizedTextBind("SURVIVOR", doNotLocalize);
-            Survivor.ViewElementDef.Description = new LocalizedTextBind("<b>-4 Strength, +4 Willpower</b>\n<i>You have had it tougher than most, and that's saying a lot. Your body took a toll, but your mind grew stronger.</i>", doNotLocalize);
+            Survivor.ViewElementDef.Description.LocalizationKey = "PR_BC_SURVIVOR_DESC"; // = new LocalizedTextBind("<b>-4 Strength, +4 Willpower</b>\n<i>You have had it tougher than most, and that's saying a lot. Your body took a toll, but your mind grew stronger.</i>", doNotLocalize);
             Sprite SurvivorIcon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_PersonalTrack_Pacifist.png");
             Survivor.ViewElementDef.LargeIcon = SurvivorIcon;
             Survivor.ViewElementDef.SmallIcon = SurvivorIcon;

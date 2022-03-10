@@ -154,20 +154,20 @@ namespace PhoenixRising.BetterClasses
                                 return (perk: default, spCost: default);
                             }
                         case PerkType.Faction_1:
-                            if (faction != null
-                                && RelatedFixedPerks != null
-                                && RelatedFixedPerks.Count > 0
-                                && RelatedFixedPerks.ContainsKey(ClassKeys.AllClasses.Name)
-                                && RelatedFixedPerks[ClassKeys.AllClasses.Name] is Dictionary<string, string> factionDict
-                                && factionDict.ContainsKey(faction))
-                            {
-                                abilityName = factionDict[faction];
-                            }
-                            else
-                            {
-                                abilityName = RelatedFixedPerks[ClassKeys.AllClasses.Name][FactionKeys.PX];
-                            }
-                            return (perk: Helper.AbilityNameToDefMap[abilityName], spCost: SPcost);
+                            //if (faction != null
+                            //    && RelatedFixedPerks != null
+                            //    && RelatedFixedPerks.Count > 0
+                            //    && RelatedFixedPerks.ContainsKey(ClassKeys.AllClasses.Name)
+                            //    && RelatedFixedPerks[ClassKeys.AllClasses.Name] is Dictionary<string, string> factionDict
+                            //    && factionDict.ContainsKey(faction))
+                            //{
+                            //    abilityName = factionDict[faction];
+                            //}
+                            //else
+                            //{
+                            //    abilityName = RelatedFixedPerks[ClassKeys.AllClasses.Name][FactionKeys.PX];
+                            //}
+                            //return (perk: Helper.AbilityNameToDefMap[abilityName], spCost: SPcost);
                         case PerkType.Faction_2:
                             if (faction != null
                                 && className != null

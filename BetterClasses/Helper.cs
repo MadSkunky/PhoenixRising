@@ -62,20 +62,21 @@ namespace PhoenixRising.BetterClasses
             try
             {
                 string CSVstring = File.ReadAllText(Path.Combine(LocalizationDirectory, LocalizationFileName));
+                if (!CSVstring.EndsWith("\n"))
+                {
+                    CSVstring += "\n";
+                }
                 LanguageSourceData SourceToChange = Category == null ? // if category is not given
                     LocalizationManager.Sources[0] :                   // use fist language source
                     LocalizationManager.Sources.First(source => source.GetCategories().Contains(Category));
                 if (SourceToChange != null)
                 {
+                    int numBefore = SourceToChange.mTerms.Count;
                     _ = SourceToChange.Import_CSV(string.Empty, CSVstring, eSpreadsheetUpdateMode.AddNewTerms, ',');
                     LocalizationManager.LocalizeAll(true);    // Force localing all enabled labels/sprites with the new data
+                    int numAfter = SourceToChange.mTerms.Count;
                     Logger.Always("----------------------------------------------------------------------------------------------------", false);
-                    Logger.Always($"Added localization data from {LocalizationFileName} in localization source, category: {Category}");
-                    Logger.Debug("CSV Data:" + Environment.NewLine + CSVstring);
-                    foreach (LanguageSourceData source in LocalizationManager.Sources)
-                    {
-                        Logger.Debug($"Source owner {source.owner}{Environment.NewLine}Categories:{Environment.NewLine}{{source.GetCategories().Join()}}{Environment.NewLine}", false);
-                    }
+                    Logger.Always($"Added {numAfter - numBefore} terms from {LocalizationFileName} in localization source {SourceToChange}, category: {Category}");
                     Logger.Always("----------------------------------------------------------------------------------------------------", false);
                 }
                 else
@@ -84,6 +85,13 @@ namespace PhoenixRising.BetterClasses
                     Logger.Always($"No language source with category {Category} found!");
                     Logger.Always("----------------------------------------------------------------------------------------------------", false);
                 }
+                Logger.Debug("----------------------------------------------------------------------------------------------------", false);
+                Logger.Debug("CSV Data:" + Environment.NewLine + CSVstring);
+                foreach (LanguageSourceData source in LocalizationManager.Sources)
+                {
+                    Logger.Debug($"Source owner {source.owner}{Environment.NewLine}Categories:{Environment.NewLine}{{source.GetCategories().Join()}}{Environment.NewLine}", false);
+                }
+                Logger.Debug("----------------------------------------------------------------------------------------------------", false);
             }
             catch (Exception e)
             {
@@ -95,7 +103,7 @@ namespace PhoenixRising.BetterClasses
         {
             try
             {
-                T tmp = Repo.GetAllDefs<T>().FirstOrDefault(t => t.Guid.Equals(guid));
+                T tmp = (T)Repo.GetDef(guid);
                 if (tmp != null)
                 {
                     return tmp;
