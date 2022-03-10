@@ -48,6 +48,9 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             // Ignore Pain: Remove MC immunity
             Change_IgnorePain();
 
+            // Bloodlust: reduce buffs to max 25%
+            Change_Bloodlust();
+
             // Adrenaline Rush: 1 AP for one handed weapons and skills, no WP restriction
             Change_AdrenalineRush();
 
@@ -56,6 +59,15 @@ namespace PhoenixRising.BetterClasses.SkillModifications
 
             // Exertion: 0AP 2WP Recover 1AP. Next turn you have -1 AP. Limited to 1 use per turn.
             Create_Exertion();
+        }
+
+        private static void Change_Bloodlust()
+        {
+            float maxBoost = 0.25f;
+            ViewElementDef blView = Repo.GetAllDefs<ViewElementDef>().FirstOrDefault(ve => ve.name.Equals("E_ViewElement [BloodLust_AbilityDef]"));
+            BloodLustStatusDef blStatus = Repo.GetAllDefs<BloodLustStatusDef>().FirstOrDefault(bl => bl.name.Equals("E_Status [BloodLust_AbilityDef]"));
+            blStatus.MaxBoost = maxBoost;
+            blView.Description = new LocalizedTextBind($"Gain up to {maxBoost * 100}% Speed and Damage based on lost Health", doNotLocalize);
         }
 
         private static void Change_Dash()
@@ -76,6 +88,8 @@ namespace PhoenixRising.BetterClasses.SkillModifications
 
         private static void Change_IgnorePain()
         {
+            Logger.Debug("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' no changes implemented yet!");
+            Logger.Debug("----------------------------------------------------", false);
             //// Remove Ignore Pain from mind control application conditions
             //MindControlStatusDef mcStatus = Repo.GetAllDefs<MindControlStatusDef>().FirstOrDefault(mcs => mcs.name.Equals("MindControl_StatusDef"));
             //List<EffectConditionDef> mcApplicationConditions = mcStatus.ApplicationConditions.ToList();

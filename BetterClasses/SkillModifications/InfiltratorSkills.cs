@@ -127,6 +127,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
         private static void Create_HomingDrone()
         {
             Logger.Debug("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
+            Logger.Debug("----------------------------------------------------", false);
         }
 
         private static void Change_Cautious()

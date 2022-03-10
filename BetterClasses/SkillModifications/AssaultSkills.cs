@@ -99,6 +99,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                     {
                         Logger.Debug("  " + ad.name);
                     }
+                    Logger.Debug("----------------------------------------------------", false);
                 }
             }
         }
@@ -227,6 +228,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             //TacEffectStatusDef onslaughtStatus = Repo.GetAllDefs<TacEffectStatusDef>().FirstOrDefault(c => c.name.Contains("E_Status [DeterminedAdvance_AbilityDef]"));
             //onslaughtStatus.SingleInstance = true;
             Logger.Debug("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' no changes implemented yet!");
+            Logger.Debug("----------------------------------------------------", false);
         }
 
         private static void Change_RapidClearance()

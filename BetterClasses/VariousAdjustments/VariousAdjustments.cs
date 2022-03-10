@@ -44,6 +44,8 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
 
         public static void ApplyChanges()
         {
+            // Corruptive cloud should not affect pandoran enemies
+            Change_CorruptiveCloud();
             // Turrets: Shoot at 1/2 burst but cost 2AP to shoot , maybe reduce armor of all by 10?
             Change_Turrets();
             // Stomp: Gain 50 blast damage
@@ -92,6 +94,16 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
             Change_Destiny();
             // Technichian remove MindFragger - Increase range to 2
             Change_TechRemoveFaceHugger();
+        }
+        public static void Change_CorruptiveCloud()
+        {
+            ApplyDamageEffectAbilityDef acidCloud = Repo.GetAllDefs<ApplyDamageEffectAbilityDef>().FirstOrDefault(a => a.name.Equals("Acheron_CorrosiveCloud_AbilityDef"));
+
+            acidCloud.TargetingDataDef.Origin.TargetTags = new GameTagsList()
+            {
+                Repo.GetAllDefs<GameTagDef>().FirstOrDefault(a => a.name.Equals("Human_TagDef")),
+                acidCloud.TargetingDataDef.Origin.TargetTags[1],
+            };
         }
         public static void Change_Turrets()
         {

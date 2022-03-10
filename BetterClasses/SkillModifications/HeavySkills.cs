@@ -120,6 +120,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                     {
                         Logger.Debug("  " + ad.name);
                     }
+                    Logger.Debug("----------------------------------------------------", false);
                 }
             }
         }
@@ -301,6 +302,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                     {
                         Logger.Debug("  " + ad.name);
                     }
+                    Logger.Debug("----------------------------------------------------", false);
                 }
             }
         }

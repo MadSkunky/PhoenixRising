@@ -133,7 +133,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                         break;
                 }
             }
-            Logger.Debug("----------------------------------------------------------------------------------------------------", false);
+            Logger.Debug("----------------------------------------------------", false);
         }
 
         private static void Change_ProficiencyPerks()

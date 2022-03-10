@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Base.Core;
+using Base.UI.MessageBox;
+using PhoenixRising.BetterClasses;
+using System;
 using System.IO;
 
 namespace PhoenixRising
@@ -57,6 +60,7 @@ namespace PhoenixRising
                     writer.WriteLine("Message: " + ex.Message + "<br/>" + Environment.NewLine + "StackTrace: " + ex.StackTrace);
                     writer.WriteLine("----------------------------------------------------------------------------------------------------", false);
                 }
+                GameUtl.GetMessageBox().ShowSimplePrompt($"<b>An error has occurred in the BetterClasses mod!</b>\nPlease check {BetterClassesMain.LogPath} for further information.\n\n<b>CAUTION:</b>\nContinuing this run may result in unstable behavior or even cause the game to crash.", MessageBoxIcon.Warning, MessageBoxButtons.OK, null);
             }
         }
 

@@ -41,11 +41,13 @@ namespace PhoenixRising.BetterClasses.SkillModifications
         private static void Change_Biochemist()
         {
             Logger.Debug("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
+            Logger.Debug("----------------------------------------------------", false);
         }
 
         private static void Create_LayWaste()
         {
             Logger.Debug("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
+            Logger.Debug("----------------------------------------------------", false);
         }
     }
 }

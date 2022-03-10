@@ -466,6 +466,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
         private static void Create_Transhumanist()
         {
             Logger.Debug("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
+            Logger.Debug("----------------------------------------------------", false);
         }
         private static void Create_AHistoryOfViolence()
         {

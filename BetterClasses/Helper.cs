@@ -103,40 +103,53 @@ namespace PhoenixRising.BetterClasses
         {
             try
             {
-                T tmp = (T)Repo.GetDef(guid);
-                if (tmp != null)
+                Logger.Debug("CreateDefFromClone called ... ");
+                Logger.Debug($"CreateDefFromClone, check if GUID <{guid}> already exist in Repo ...");
+                if (Repo.GetDef(guid) != null)
                 {
-                    return tmp;
+                    if (!(Repo.GetDef(guid) is T tmp))
+                    {
+                        throw new TypeAccessException($"An item with the GUID <{guid}> has already been added to the Repo, but the type <{Repo.GetDef(guid).GetType().Name}> does not match <{typeof(T).Name}>!");
+                    }
+                    else
+                    {
+                        if (tmp != null)
+                        {
+                            Logger.Debug($"CreateDefFromClone, <{guid}> already in Repo, <{tmp}> returned as result.");
+                            return tmp;
+                        }
+                    }
                 }
+                Logger.Debug($"CreateDefFromClone, additional check if GUID <{guid}> already exist in Repo RuntimeDefs ...");
                 T tmp2 = Repo.GetRuntimeDefs<T>(true).FirstOrDefault(rt => rt.Guid.Equals(guid));
                 if (tmp2 != null)
                 {
+                    Logger.Debug($"CreateDefFromClone, <{guid}> already in Repo RunTimeDefs, <{tmp2}> returned as result.");
                     return tmp2;
                 }
+                Logger.Debug($"CreateDefFromClone, start name creation with parameter '{name}' ...");
                 Type type = null;
                 string resultName = "";
                 if (source != null)
                 {
-                    Logger.Debug("CreateDefFromClone with source type: " + source.GetType().Name);
-                    Logger.Debug("CreateDefFromClone with source name: " + source.name);
                     int start = source.name.IndexOf('[') + 1;
                     int end = source.name.IndexOf(']');
                     string toReplace = !name.Contains("[") && start > 0 && end > start ? source.name.Substring(start, end - start) : source.name;
                     resultName = source.name.Replace(toReplace, name);
+                    Logger.Debug($"CreateDefFromClone, name '{resultName}' created, start cloning from <{source.name}> with type <{source.GetType().Name}> ...");
                 }
                 else
                 {
-                    Logger.Debug("CreateDefFromClone only with type: " + typeof(T).Name);
                     type = typeof(T);
                     resultName = name;
+                    Logger.Debug($"CreateDefFromClone, name '{resultName}' created, start creating Def of type <{typeof(T).Name}> ...");
                 }
                 T result = (T)Repo.CreateRuntimeDef(
                     source,
                     type,
                     guid);
                 result.name = resultName;
-                Logger.Debug("CreateDefFromClone result type: " + result.GetType().Name);
-                Logger.Debug("CreateDefFromClone result name: " + result.name);
+                Logger.Debug($"CreateDefFromClone, <{result.name}> of type <{result.GetType().Name}> sucessful created.");
                 Logger.Debug("----------------------------------------------------", false);
                 return result;
             }

@@ -294,7 +294,7 @@ namespace PhoenixRising.BetterClasses
         {
             { "HANDGUN PROFICIENCY", new List<string> { ClassKeys.Sniper.Name, ClassKeys.Berserker.Name } },
             { "PDW PROFICIENCY", new List<string> { ClassKeys.Technician.Name } },
-            { "MELEE WEAPON PROFICIENCY+", new List<string> { ClassKeys.Berserker.Name } },
+            { "MELEE WEAPON PROFICIENCY", new List<string> { ClassKeys.Berserker.Name } },
             { "ASSAULT RIFLE PROFICIENCY", new List<string> { ClassKeys.Assault.Name } },
             { "SHOTGUN PROFICIENCY", new List<string> { ClassKeys.Assault.Name } },
             { "SNIPER RIFLE PROFICIENCY", new List<string> { ClassKeys.Sniper.Name } },

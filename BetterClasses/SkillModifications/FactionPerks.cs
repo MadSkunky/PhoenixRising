@@ -193,6 +193,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                     {
                         Logger.Debug("  " + ad.name);
                     }
+                    Logger.Debug("----------------------------------------------------", false);
                 }
             }
         }
@@ -200,6 +201,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
         private static void Change_Shadowstep()
         {
             Logger.Debug("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' no changes implemented yet!");
+            Logger.Debug("----------------------------------------------------", false);
         }
         //private static void Change_Rally()
         //{
@@ -304,6 +306,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
         private static void Change_PainChameloen()
         {
             Logger.Debug("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' no changes implemented yet!");
+            Logger.Debug("----------------------------------------------------", false);
         }
         private static void Create_SowerOfChange()
         {
@@ -336,6 +339,12 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             SowerOfChange.ViewElementDef.Description.LocalizationKey = "PR_BC_SOWER_OF_CHANGE_DESC";
             //SowerOfChange.AnimType = -1;
 
+            AddStatusDamageKeywordDataDef RawVirausDamageKeyword = Helper.CreateDefFromClone(
+                Shared.SharedDamageKeywords.ViralKeyword,
+                "c03aa65b-9ca2-4665-9370-67fa81144cf3",
+                $"RawViral_DamageKeywordDataDef");
+            RawVirausDamageKeyword.ApplyOnlyOnHealthDamage = false;
+
             DamagePayloadEffectDef DamageEffect = Helper.CreateDefFromClone(
                 Repo.GetAllDefs<DamagePayloadEffectDef>().FirstOrDefault(dpe => dpe.name.Equals("E_Element0 [SwarmerPoisonExplosion_Die_AbilityDef]")),
                 "d9870608-797c-428a-8b56-17c1bdadbe27",
@@ -343,26 +352,34 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             DamageEffect.DamagePayload = Repo.GetAllDefs<ApplyDamageEffectAbilityDef>().FirstOrDefault(ade => ade.name.Equals("Mutoid_ViralExplode_AbilityDef")).DamagePayload;
             DamageEffect.DamagePayload.DamageKeywords = new List<DamageKeywordPair>()
             {
+                //new DamageKeywordPair()
+                //{
+                //    DamageKeywordDef = Shared.SharedDamageKeywords.BlastKeyword,
+                //    Value = 5
+                //},
+                //new DamageKeywordPair()
+                //{
+                //    DamageKeywordDef = Shared.SharedDamageKeywords.PiercingKeyword,
+                //    Value = 100
+                //},
+                //new DamageKeywordPair()
+                //{
+                //    DamageKeywordDef = Shared.SharedDamageKeywords.ViralKeyword,
+                //    Value = 1
+                //}
                 new DamageKeywordPair()
                 {
-                    DamageKeywordDef = Shared.SharedDamageKeywords.BlastKeyword,
-                    Value = 3
-                },
-                new DamageKeywordPair()
-                {
-                    DamageKeywordDef = Shared.SharedDamageKeywords.PiercingKeyword,
-                    Value = 100
-                },
-                new DamageKeywordPair()
-                {
-                    DamageKeywordDef = Shared.SharedDamageKeywords.ViralKeyword,
+                    DamageKeywordDef = RawVirausDamageKeyword,
                     Value = 1
                 }
             };
-            DamageEffect.DamagePayload.ArmourPiercing = 9999.0f;
+            DamageEffect.DamagePayload.DamageType = Repo.GetAllDefs<DamageTypeBaseEffectDef>().FirstOrDefault(dt => dt.name.Equals("Virus_DamageOverTimeDamageTypeEffectDef"));
+            DamageEffect.DamagePayload.DamageValue = 2333.0f;
+            DamageEffect.DamagePayload.ArmourPiercing = 123.0f;
             DamageEffect.DamagePayload.Speed = 200.0f;
             DamageEffect.DamagePayload.BodyPartMultiplier = 0.0f;
             DamageEffect.DamagePayload.ObjectMultiplier = 0.0f;
+            DamageEffect.DamagePayload.DamageDeliveryType = DamageDeliveryType.DirectLine;
             DamageEffect.DamagePayload.AoeRadius = 0.4f;
             DamageEffect.DamagePayload.ObjectToSpawnOnExplosion = null;
             DamageEffect.EffectPositionOffset = new Vector3(0, 0.2f, 0); // prevent to explode in the ground
@@ -393,7 +410,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                         Logger.Debug($"Recieved HealthDamage: {damageResult.HealthDamage}");
                         if (!(damageResult.Source is IDamageDealer damageDealer))
                         {
-                            Logger.Debug($"damageResult.Source, type {damageResult.Source.GetType()}, is no IDamageDealer, exit without apply effect!");
+                            Logger.Debug($"damageResult.Source, type {damageResult.Source.GetType().Name}, is no IDamageDealer, exit without apply effect!");
                             Logger.Debug("----------------------------------------------------------------------------------------------------", false);
                             return false;
                         }
@@ -405,7 +422,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                             return false;
                         }
                         TacticalActorBase tacticalActorBase = damageDealer.GetTacticalActorBase();
-                        Logger.Debug($"TacticalActorBase of target: {tacticalActorBase.DisplayName}");
+                        Logger.Always($"TacticalActorBase of target: {tacticalActorBase.DisplayName}");
                         EffectConditionDef[] targetApplicationConditions = __instance.OnActorDamageReceivedStatusDef.TargetApplicationConditions;
                         for (int i = 0; i < targetApplicationConditions.Length; i++)
                         {
@@ -417,22 +434,25 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                             }
                         }
                         EffectTarget actorEffectTarget = TacUtil.GetActorEffectTarget(tacticalActorBase, null);
-                        GameObject effectTargetObject = actorEffectTarget.GameObject;
+                        //GameObject effectTargetObject = actorEffectTarget.GameObject;
                         DamagePayloadEffectDef effectDef = (DamagePayloadEffectDef)__instance.OnActorDamageReceivedStatusDef.EffectForAttacker;
                         float viralDamage = 1;
-                        float blastDamage = 0;
+                        //float blastDamage = 0;
                         float timingScale = 0.8f;
-                        blastDamage = effectDef.DamagePayload.DamageKeywords.Find(dk => dk.DamageKeywordDef == Shared.SharedDamageKeywords.BlastKeyword).Value;
+                        //blastDamage = effectDef.DamagePayload.DamageKeywords.Find(dk => dk.DamageKeywordDef == Shared.SharedDamageKeywords.BlastKeyword).Value;
                         viralDamage = damageResult.HealthDamage >= 10 ? damageResult.HealthDamage / 10 : 1.0f;
-                        effectDef.DamagePayload.DamageKeywords.Find(dk => dk.DamageKeywordDef == Shared.SharedDamageKeywords.ViralKeyword).Value = viralDamage;
+                        AddStatusDamageKeywordDataDef RawVirausDamageKeyword = Repo.GetAllDefs<AddStatusDamageKeywordDataDef>().FirstOrDefault(asd => asd.name.Equals("RawViral_DamageKeywordDataDef"));
+                        effectDef.DamagePayload.DamageKeywords.Find(dk => dk.DamageKeywordDef == RawVirausDamageKeyword).Value = viralDamage;
+                        //effectDef.DamagePayload.DamageKeywords.Find(dk => dk.DamageKeywordDef == Shared.SharedDamageKeywords.ViralKeyword).Value = viralDamage;
                         ___TacticalActor.Timing.Scale = timingScale;
                         tacticalActorBase.Timing.Scale = timingScale;
-                        Logger.Always($"'{___TacticalActor}' applies {blastDamage} blast and {viralDamage} viral damage on '{effectTargetObject}', position '{actorEffectTarget.Position + effectDef.EffectPositionOffset}'");
+                        Logger.Debug($"'{___TacticalActor}' applies {viralDamage} viral damage on '{actorEffectTarget}', position '{actorEffectTarget.Position + effectDef.EffectPositionOffset}'");
+                        //Logger.Always($"'{___TacticalActor}' applies {blastDamage} blast and {viralDamage} viral damage on '{effectTargetObject}', position '{actorEffectTarget.Position + effectDef.EffectPositionOffset}'");
                         Effect.Apply(__instance.Repo, effectDef, actorEffectTarget, ___TacticalActor);
                         ___TacticalActor.Timing.Scale = timingScale;
                         tacticalActorBase.Timing.Scale = timingScale;
-                        Logger.Always($"Effect applied on {tacticalActorBase}");
-                        Logger.Always("----------------------------------------------------------------------------------------------------", false);
+                        Logger.Debug($"Effect applied on {tacticalActorBase}");
+                        Logger.Debug("----------------------------------------------------------------------------------------------------", false);
                         return false;
                     }
                     return true;
@@ -519,6 +539,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                     {
                         Logger.Debug("  " + ad.name);
                     }
+                    Logger.Debug("----------------------------------------------------", false);
                 }
             }
         }
