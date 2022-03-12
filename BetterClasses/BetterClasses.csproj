@@ -90,6 +90,8 @@
     <Compile Include="PersonalSpecModification.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tactical\Entities\Statuses\ActionpointsRelatedStatus.cs" />
+    <Compile Include="Tactical\Entities\Statuses\ActionpointsRelatedStatusDef.cs" />
     <Compile Include="SkillModifications\AssaultSkills.cs" />
     <Compile Include="SkillModifications\BackgroundPerks.cs" />
     <Compile Include="SkillModifications\BerserkerSkills.cs" />
@@ -192,6 +194,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Textures\UI_AbilitiesIcon_PersonalTrack_Stimpack-2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Textures\UI_AbilitiesIcon_PersonalTrack_Strategist.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Textures\UI_AbilitiesIcon_PersonalTrack_Thief.png">

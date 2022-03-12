@@ -76,11 +76,11 @@ namespace PhoenixRising.BetterClasses
                 {
                     "",
                     "FAST USE",
-                    "REMOTE CONTROL",
+                    "ELECTRIC REINFORCEMENT",
                     "",
+                    "STABILITY",
                     "FIELD MEDIC",
-                    "REMOTE DEPLOYMENT",
-                    "ELECTRIC REINFORCEMENT"
+                    "REMOTE DEPLOYMENT"
                 }),
             new ClassSpecDef(
                 classDef: ClassKeys.Infiltrator,
@@ -158,7 +158,7 @@ namespace PhoenixRising.BetterClasses
                     { ClassKeys.Sniper.Name, "GUNSLINGER" },
                     { ClassKeys.Berserker.Name, "GUN KATA" },
                     { ClassKeys.Priest.Name, "DEVOTED" },
-                    { ClassKeys.Technician.Name, "SELF DEFENSE SPECIALIST" },
+                    { ClassKeys.Technician.Name, "REMOTE CONTROL" },
                     { ClassKeys.Infiltrator.Name, "STEALTH SPECIALIST" }
                 } } }),
             new PersonalPerksDef(
