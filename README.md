@@ -9,9 +9,10 @@ We are currently a small group looking to expand. If you like our mods and have 
 - Belial: The master mind and heart of the team, main designer and the brain behind almost anything.
 - MadSkunky: Main coder, design, balancing and testing.
 - Ikobot: Dataminer, master hacker, tester & coder, a lot of things he found in the game files are the base of this mod.
+- Dtony: Massive help with coding. His efforts sped up the release of the mod greatly.
 - Voland: Storytelling.
 - BFIG: Graphics design and editing.
-- dtony22, Linuslim: Coding and datamining.
+- Linuslim: Mutog Mod and more
 
 - Mikey C, Yokes, Conductiv, Torinus, Pantolomin, Dorante, mad2342 ...
 modding and design councilors and testers, always open to productive discussions and helping on all fronts.
@@ -19,6 +20,9 @@ modding and design councilors and testers, always open to productive discussions
 ## Subparts
 
 ### Better Classes
+
+DETAILS AND CHANGELOG: https://docs.google.com/spreadsheets/d/1dUarPgusALd3IxLgITWg69r6Ir1FrAN-GF5T4Tx2M6Y/edit?usp=sharing
+3rd Row explained: https://youtu.be/XcaObJJaHCw
 
 <b>EARLY ACCESS WARNING</b>
 This is a beta-version of the mod with a lot of features incomplete. Currently complete Classes: Assault, Heavy, Sniper, Berserker. It is recommended you DO NOT hire Elite Classes (Priest, Infiltrator, Technician). Please do not change or adjust config settings.
