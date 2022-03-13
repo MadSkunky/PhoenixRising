@@ -46,7 +46,7 @@ PR_BC_ELECTRIC_REINFORCEMENT_DESC,Text,,Give yourself and allies within 10 tiles
 PR_BC_STABILITY,Text,,STABILITY,,,,,,,,
 PR_BC_STABILITY_DESC,Text,,Gain 5% extra accuracy per remaining AP up to 20%,,,,,,,,
 PR_BC_AMPLIFY_PAIN,Text,,AMPLIFY PAIN,,,,,,,,
-PR_BC_AMPLIFY_PAIN_DESC,Text,,If your next attack deals special damage increase this damage by 200%,,,,,,,,
+PR_BC_AMPLIFY_PAIN_DESC,Text,,"Until End of Turn gain +100% to healing and special damage (Acid, Paralysis, Viral, Poison, Fire, EMP, Sonic, Shock)",,,,,,,,
 PR_BC_BIOCHEMIST,Text,,BIOCHEMIST,,,,,,,,
 PR_BC_BIOCHEMIST_DESC,Text,,"Paralysis, Poison, Acid and Virophage damage increased 25%",,,,,,,,
 PR_BC_LAY_WASTE,Text,,LAY WASTE,,,,,,,,

@@ -1,14 +1,21 @@
 ﻿using Base.Core;
 using Base.Defs;
+using Base.Entities.Abilities;
 using Base.Entities.Effects.ApplicationConditions;
+using Base.Entities.Statuses;
 using Base.UI;
 using PhoenixPoint.Common.Core;
 using PhoenixPoint.Common.Entities;
+using PhoenixPoint.Common.Entities.GameTags;
 using PhoenixPoint.Common.UI;
 using PhoenixPoint.Geoscape.Events;
 using PhoenixPoint.Geoscape.Events.Eventus;
 using PhoenixPoint.Geoscape.Levels.Factions;
+using PhoenixPoint.Tactical.Entities;
 using PhoenixPoint.Tactical.Entities.Abilities;
+using PhoenixPoint.Tactical.Entities.Animations;
+using PhoenixPoint.Tactical.Entities.Effects.DamageTypes;
+using PhoenixPoint.Tactical.Entities.Equipments;
 using PhoenixPoint.Tactical.Entities.Statuses;
 using PhoenixRising.BetterClasses.Tactical.Entities.Statuses;
 using System;
@@ -109,8 +116,104 @@ namespace PhoenixRising.BetterClasses.SkillModifications
 
         private static void Create_AmplifyPain()
         {
-            Logger.Debug("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
-            Logger.Debug("----------------------------------------------------", false);
+            string skillName = "AmplifyPain_AbilityDef";
+            float multiplier = 2f;
+            float wpCost = 4f;
+            ApplyStatusAbilityDef source = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(a => a.name.Equals("QuickAim_AbilityDef"));
+            Sprite icon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_CharacterAbility_AmplifyPain01.png");
+
+            ApplyStatusAbilityDef AmplifyPain = Helper.CreateDefFromClone(
+                source,
+                "463a6458-e45c-4310-abb6-c7cb904cb918",
+                skillName);
+            AmplifyPain.ViewElementDef = Helper.CreateDefFromClone(
+                source.ViewElementDef,
+                "a4812b9a-385d-4083-a494-3e169d08c39e",
+                skillName);
+            AmplifyPain.StatusDef = Helper.CreateDefFromClone(
+                source.StatusDef,
+                "d3ce1f20-3503-4dfb-a836-6bdc78064d4e",
+                skillName);
+            StanceStatusDef HealMod = Helper.CreateDefFromClone(
+                Repo.GetAllDefs<StanceStatusDef>().FirstOrDefault(sd => sd.name.Equals("E_Status [ImprovedMedkit_FactionEffectDef]")),
+                "66cf66aa-c0f5-4711-b8de-52a5a478b389",
+                $"E_HealMultiplier [{skillName}]");
+            DamageMultiplierStatusDef DamageMod = Helper.CreateDefFromClone(
+                Repo.GetAllDefs<DamageMultiplierStatusDef>().FirstOrDefault(sms => sms.name.Equals("E_Status [BonusAcidArmorShred_FactionEffectDef]")),
+                "247f3abb-420f-42ac-8af3-d3ca12fb5787",
+                $"E_DamageMultiplier [{skillName}]");
+            
+            AmplifyPain.ViewElementDef.DisplayName1.LocalizationKey = "PR_BC_AMPLIFY_PAIN";
+            AmplifyPain.ViewElementDef.Description.LocalizationKey = "PR_BC_AMPLIFY_PAIN_DESC";
+            AmplifyPain.ViewElementDef.LargeIcon = icon;
+            AmplifyPain.ViewElementDef.SmallIcon = icon;
+            AmplifyPain.UsesPerTurn = 1;
+            AmplifyPain.WillPointCost = wpCost;
+            AmplifyPain.DisablingStatuses = new StatusDef[] { AmplifyPain.StatusDef };
+
+            (AmplifyPain.StatusDef as AddAttackBoostStatusDef).DurationTurns = 1;
+            (AmplifyPain.StatusDef as AddAttackBoostStatusDef).ExpireOnEndOfTurn = true;
+            (AmplifyPain.StatusDef as AddAttackBoostStatusDef).Visuals = AmplifyPain.ViewElementDef;
+            (AmplifyPain.StatusDef as AddAttackBoostStatusDef).NumberOfAttacks = -1; // lasts as long as the status = end of turn
+            (AmplifyPain.StatusDef as AddAttackBoostStatusDef).AdditionalStatusesToApply = new TacStatusDef[] { HealMod, DamageMod };
+
+            HealMod.EquipmentsStatModifications = new EquipmentItemTagStatModification[]
+            {
+                new EquipmentItemTagStatModification()
+                {
+                    ItemTag = Repo.GetAllDefs<GameTagDef>().FirstOrDefault(gt1 => gt1.name.Equals("MedkitItem_TagDef")),
+                    EquipmentStatModification = new ItemStatModification()
+                    {
+                        TargetStat = StatModificationTarget.BonusHealValue,
+                        Modification = StatModificationType.Multiply,
+                        Value = multiplier
+                    }
+                },
+                new EquipmentItemTagStatModification()
+                {
+                    ItemTag = Repo.GetAllDefs<GameTagDef>().FirstOrDefault(gt2 => gt2.name.Equals("RoboticArmItem_TagDef")),
+                    EquipmentStatModification = new ItemStatModification()
+                    {
+                        TargetStat = StatModificationTarget.BonusHealValue,
+                        Modification = StatModificationType.Multiply,
+                        Value = multiplier
+                    }
+                }
+            };
+
+            DamageMod.EffectName = "AmplifyPain";
+            DamageMod.DurationTurns = 0;
+            DamageMod.ShowNotification = true;
+            DamageMod.VisibleOnHealthbar = TacStatusDef.HealthBarVisibility.VisibleWhenSelected;
+            DamageMod.VisibleOnStatusScreen = TacStatusDef.StatusScreenVisibility.VisibleOnStatusesList | TacStatusDef.StatusScreenVisibility.VisibleOnBodyPartStatusList;
+            DamageMod.Visuals = AmplifyPain.ViewElementDef;
+            DamageMod.DamageTypeDefs = new DamageTypeBaseEffectDef[]
+            {
+                Repo.GetAllDefs<DamageTypeBaseEffectDef>().FirstOrDefault(d1 => d1.name.Equals("Paralysis_DamageOverTimeDamageTypeEffectDef")),
+                Repo.GetAllDefs<DamageTypeBaseEffectDef>().FirstOrDefault(d2 => d2.name.Equals("Virus_DamageOverTimeDamageTypeEffectDef")),
+                Repo.GetAllDefs<DamageTypeBaseEffectDef>().FirstOrDefault(d3 => d3.name.Equals("Poison_DamageOverTimeDamageTypeEffectDef")),
+                Repo.GetAllDefs<DamageTypeBaseEffectDef>().FirstOrDefault(d4 => d4.name.Equals("Fire_StandardDamageTypeEffectDef")),
+                Repo.GetAllDefs<DamageTypeBaseEffectDef>().FirstOrDefault(d5 => d5.name.Equals("EMP_StandardDamageTypeEffectDef")),
+                Repo.GetAllDefs<DamageTypeBaseEffectDef>().FirstOrDefault(d6 => d6.name.Equals("Electroshock_AttenuatingDamageTypeEffectDef")),
+                Repo.GetAllDefs<DamageTypeBaseEffectDef>().FirstOrDefault(d7 => d7.name.Equals("Sonic_AttenuatingDamageTypeEffectDef")),
+                Repo.GetAllDefs<DamageTypeBaseEffectDef>().FirstOrDefault(d8 => d8.name.Equals("Acid_DamageOverTimeDamageTypeEffectDef")),
+            };
+            DamageMod.MultiplierType = DamageMultiplierType.Outgoing;
+            DamageMod.Multiplier = multiplier;
+            
+            foreach (TacActorSimpleAbilityAnimActionDef animActionDef in Repo.GetAllDefs<TacActorSimpleAbilityAnimActionDef>().Where(aad => aad.name.Contains("Soldier_Utka_AnimActionsDef")))
+            {
+                if (animActionDef.AbilityDefs != null && animActionDef.AbilityDefs.Contains(source) && !animActionDef.AbilityDefs.Contains(AmplifyPain))
+                {
+                    animActionDef.AbilityDefs = animActionDef.AbilityDefs.Append(AmplifyPain).ToArray();
+                    Logger.Debug("Anim Action '" + animActionDef.name + "' set for abilities:");
+                    foreach (AbilityDef ad in animActionDef.AbilityDefs)
+                    {
+                        Logger.Debug("  " + ad.name);
+                    }
+                    Logger.Debug("----------------------------------------------------", false);
+                }
+            }
         }
     }
 }

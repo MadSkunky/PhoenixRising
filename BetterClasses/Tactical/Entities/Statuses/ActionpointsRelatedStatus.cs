@@ -67,7 +67,7 @@ namespace PhoenixRising.BetterClasses.Tactical.Entities.Statuses
                 RequestUnapply(statusComponent);
                 return;
             }
-            ApplyModification(TacticalActor.CharacterStats.Health);
+            ApplyModification(TacticalActor.CharacterStats.ActionPoints);
             TacticalActor.CharacterStats.ActionPoints.StatChangeEvent += ActionpointsChangedHandler;
         }
 

@@ -80,7 +80,7 @@ namespace PhoenixRising.BetterClasses
                     "",
                     "STABILITY",
                     "FIELD MEDIC",
-                    "REMOTE DEPLOYMENT"
+                    "AMPLIFY PAIN"
                 }),
             new ClassSpecDef(
                 classDef: ClassKeys.Infiltrator,
@@ -172,7 +172,7 @@ namespace PhoenixRising.BetterClasses
                     { ClassKeys.Sniper.Name, "KILL ZONE" },
                     { ClassKeys.Berserker.Name, "EXERTION" },
                     { ClassKeys.Priest.Name, "BIOCHEMIST" },
-                    { ClassKeys.Technician.Name, "POISON RESISTANT" },
+                    { ClassKeys.Technician.Name, "REMOTE DEPLOYMENT" },
                     { ClassKeys.Infiltrator.Name, "CAUTIOUS" }
                 } } }),
             new PersonalPerksDef(

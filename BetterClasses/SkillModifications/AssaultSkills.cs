@@ -310,7 +310,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             Sprite aimedBurst_IconSprite = Repo.GetAllDefs<TacticalAbilityViewElementDef>().FirstOrDefault(t => t.name.Equals("E_View [DeadlyDuo_ShootAbilityDef]")).LargeIcon;
             viewElement.LargeIcon = aimedBurst_IconSprite;
             viewElement.SmallIcon = aimedBurst_IconSprite;
-            viewElement.MultiTargetSelectionButtonTexts = new string[0];
+            //viewElement.MultiTargetSelectionButtonTexts = new string[0];
         }
     }
 }

@@ -123,7 +123,6 @@ namespace PhoenixRising.BetterClasses
             //{
             //    Logger.Always(Guid.NewGuid().ToString(), false);
             //}
-            // Modnix logging
 
             try
             {

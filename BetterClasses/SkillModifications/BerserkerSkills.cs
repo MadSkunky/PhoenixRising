@@ -131,14 +131,14 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                         if (ability.TacticalAbilityDef.SkillTags.Contains(attackAbility_Tag))
                         {
                             Equipment source = ability.GetSource<Equipment>();
-                            if (source != null && source.HandsToUse == 1)
+                            if (source != null && source.HandsToUse != 1)
                             {
-                                __result = true;
+                                __result = false;
                                 return;
                             }
                             else
                             {
-                                __result = false;
+                                __result = true;
                                 return;
                             }
                         }

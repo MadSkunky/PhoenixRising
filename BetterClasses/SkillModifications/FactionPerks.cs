@@ -11,6 +11,7 @@ using Base.UI;
 using Base.Utils.Maths;
 using Harmony;
 using PhoenixPoint.Common.Core;
+using PhoenixPoint.Common.Entities;
 using PhoenixPoint.Common.Entities.GameTags;
 using PhoenixPoint.Common.Entities.GameTagsTypes;
 using PhoenixPoint.Common.UI;
@@ -256,6 +257,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
         //}
         private static void Create_PhantomProtocol()
         {
+            float mod = 0.25f;
             string skillName = "BC_PhantomProtocol_AbilityDef";
             ApplyStatusAbilityDef source = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(p => p.name.Equals("QuickAim_AbilityDef"));
             ApplyStatusAbilityDef phantomProtocol = Helper.CreateDefFromClone(
@@ -270,38 +272,54 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                 source.ViewElementDef,
                 "c312e7f4-3339-4ee8-9717-d1f9c8bd2b32",
                 skillName);
-
-            StatMultiplierStatusDef pPAM = Helper.CreateDefFromClone(
-                Repo.GetAllDefs<StatMultiplierStatusDef>().FirstOrDefault(sms => sms.name.Equals("Trembling_StatusDef")),
+            phantomProtocol.StatusDef = Helper.CreateDefFromClone(
+                Repo.GetAllDefs<StanceStatusDef>().FirstOrDefault(sms => sms.name.Equals("E_VanishedStatus [Vanish_AbilityDef]")),
                 "06ca77ea-223b-4ec0-a7e6-734e6b7fefe9",
-                "E AccuracyMultiplier [BC_PhantomProtocol_AbilityDef]");
+                "E_AccAnd StealthMultiplier [BC_PhantomProtocol_AbilityDef]");
 
-            pPAM.EffectName = "";
-            pPAM.StatsMultipliers = new StatMultiplier[]
-            {
-                new StatMultiplier()
-                {
-                    StatName = "Accuracy",
-                    Multiplier = 1.25f
-                },
-                new StatMultiplier()
-                {
-                    StatName = "Stealth",
-                    Multiplier = 1.25f
-                },
-            };
-
+            phantomProtocol.ViewElementDef.DisplayName1 = new LocalizedTextBind("PHANTOM PROTOCOL", doNotLocalize);
+            phantomProtocol.ViewElementDef.Description = new LocalizedTextBind("You gain +25% accuracy and stealth until next turn", doNotLocalize);
+            Sprite icon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_PersonalTrack_Thief.png");
+            phantomProtocol.ViewElementDef.LargeIcon = icon;
+            phantomProtocol.ViewElementDef.SmallIcon = icon;
             phantomProtocol.ActionPointCost = 0;
             phantomProtocol.WillPointCost = 3;
 
-            AddAttackBoostStatusDef phantomProtocolStatus = (AddAttackBoostStatusDef)phantomProtocol.StatusDef;
-            phantomProtocolStatus.AdditionalStatusesToApply = phantomProtocolStatus.AdditionalStatusesToApply.Append(pPAM).ToArray();
+            StanceStatusDef ppModStatus = (StanceStatusDef)phantomProtocol.StatusDef;
+            ppModStatus.Visuals = phantomProtocol.ViewElementDef;
+            ppModStatus.EventOnApply = null;
+            ppModStatus.EventOnUnapply = null;
+            ppModStatus.StatModifications = new ItemStatModification[]
+            {
+                new ItemStatModification()
+                {
+                    TargetStat = StatModificationTarget.Accuracy,
+                    Modification = StatModificationType.Add,
+                    Value = mod
+                },
+                new ItemStatModification()
+                {
+                    TargetStat = StatModificationTarget.Stealth,
+                    Modification = StatModificationType.Add,
+                    Value = mod
+                }
+            };
+            ppModStatus.EquipmentsStatModifications = new EquipmentItemTagStatModification[0];
+            ppModStatus.StanceShader = null;
 
-            phantomProtocol.CharacterProgressionData.RequiredSpeed = 0;
-            phantomProtocol.CharacterProgressionData.RequiredStrength = 0;
-            phantomProtocol.CharacterProgressionData.RequiredWill = 0;
-            phantomProtocol.ViewElementDef.DisplayName1 = new LocalizedTextBind("PHANTOM PROTOCOL", doNotLocalize);
-            phantomProtocol.ViewElementDef.Description = new LocalizedTextBind("You gain +25% accuracy and stealth until next turn", doNotLocalize);
+            foreach (TacActorSimpleAbilityAnimActionDef animActionDef in Repo.GetAllDefs<TacActorSimpleAbilityAnimActionDef>().Where(aad => aad.name.Contains("Soldier_Utka_AnimActionsDef")))
+            {
+                if (animActionDef.AbilityDefs != null && animActionDef.AbilityDefs.Contains(source) && !animActionDef.AbilityDefs.Contains(phantomProtocol))
+                {
+                    animActionDef.AbilityDefs = animActionDef.AbilityDefs.Append(phantomProtocol).ToArray();
+                    Logger.Debug("Anim Action '" + animActionDef.name + "' set for abilities:");
+                    foreach (AbilityDef ad in animActionDef.AbilityDefs)
+                    {
+                        Logger.Debug("  " + ad.name);
+                    }
+                    Logger.Debug("----------------------------------------------------", false);
+                }
+            }
         }
         private static void Change_PainChameloen()
         {
