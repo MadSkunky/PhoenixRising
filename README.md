@@ -9,9 +9,10 @@ We are currently a small group looking to expand. If you like our mods and have 
 - Belial: The master mind and heart of the team, main designer and the brain behind almost anything.
 - MadSkunky: Main coder, design, balancing and testing.
 - Ikobot: Dataminer, master hacker, tester & coder, a lot of things he found in the game files are the base of this mod.
+- Dtony: Massive help with coding. His efforts sped up the release of the mod greatly.
 - Voland: Storytelling.
 - BFIG: Graphics design and editing.
-- dtony22, Linuslim: Coding and datamining.
+- Linuslim: Mutog Mod and more
 
 - Mikey C, Yokes, Conductiv, Torinus, Pantolomin, Dorante, mad2342 ...
 modding and design councilors and testers, always open to productive discussions and helping on all fronts.
@@ -20,24 +21,14 @@ modding and design councilors and testers, always open to productive discussions
 
 ### Better Classes
 
+DETAILS AND CHANGELOG: https://docs.google.com/spreadsheets/d/1dUarPgusALd3IxLgITWg69r6Ir1FrAN-GF5T4Tx2M6Y/edit?usp=sharing
+3rd Row explained: https://youtu.be/XcaObJJaHCw
+
 <b>EARLY ACCESS WARNING</b>
 This is a beta-version of the mod with a lot of features incomplete. Currently complete Classes: Assault, Heavy, Sniper, Berserker. It is recommended you DO NOT hire Elite Classes (Priest, Infiltrator, Technician). Please do not change or adjust config settings.
 
 INTENDED TO BE USED WITH PANTOLOMIN RF MOD https://www.nexusmods.com/phoenixpoint/mods/40?tab=files
-Adjust its Config setting: "reactionAngle": 360.0,
-
-<b>Feedback Request:</b>
-1) How do core classes + berserker play at the moment compared to vanilla? 
-2) Multi classing options and combinations you find interesting(maybe use a lower diff for that)
-3) Your impressions about 3rd row skills and how it affects your gameplay and mood (things you like : backgrounds flavors, faction skills etc?)
-
-<b>Balance Concerns.</b> Some of the following combinations require testing and feedback:
-Gunslinger 	Used with Hera or Sneak Attack + Adrenaline + Nergal;    
-Kill Zone	Extreme Focus + Deceptor + OW focus + Jump Jet can lead to very high damage potential;    
-Dash + Kill'n'Run	Possible to achieve very high Mobility;    
-QCE + Hunker Down + True Grit	Possible to achieve very high Damage Reduction;    
-Skirmisher + Bloodlust	Possible to achieve very high Damage;    
-Berserker Multiclass	Combinations with Assault and Heavy seem particularly powerful
+Adjust its Config setting: "reactionAngle": 360.0
 
 <b>INSTALLATION:</b> 7z file must be selected via "Add Mod" button in Modnix
 
