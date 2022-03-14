@@ -1,6 +1,7 @@
 ﻿using Base.Core;
 using Base.Defs;
 using PhoenixPoint.Common.Core;
+using PhoenixPoint.Tactical.Entities.Abilities;
 using PhoenixPoint.Tactical.Entities.Statuses;
 using System;
 using System.Collections.Generic;
@@ -40,8 +41,36 @@ namespace PhoenixRising.BetterClasses.SkillModifications
 
         private static void Change_Biochemist()
         {
-            Logger.Debug("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
-            Logger.Debug("----------------------------------------------------", false);
+            float damageMod = 1.25f;
+            string skillName = "BC_Biochemist_AbilityDef";
+
+            ApplyStatusAbilityDef source = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(dma => dma.name.Equals("BodypartDamageMultiplier_AbilityDef"));
+
+            ApplyStatusAbilityDef Biochemist = Helper.CreateDefFromClone(
+                source,
+                "87d0f9a4-0d26-4c2a-badb-cef90ae746a5",
+                skillName);
+            Biochemist.CharacterProgressionData = Helper.CreateDefFromClone(
+                source.CharacterProgressionData,
+                "1845e667-c394-4248-bf21-10fa661aeb6f",
+                skillName);
+            Biochemist.ViewElementDef = Helper.CreateDefFromClone(
+                source.ViewElementDef,
+                "683abf9c-46ea-4406-a943-ae3864fd1ce4",
+                skillName);
+            Biochemist.StatusDef = Helper.CreateDefFromClone(
+                source.StatusDef,
+                "",
+                skillName);
+            (Biochemist.StatusDef as TacStatusDef).Visuals = Biochemist.ViewElementDef;
+
+            Biochemist.ViewElementDef.DisplayName1.LocalizationKey = "PR_BC_BIOCHEMIST";
+            Biochemist.ViewElementDef.Description.LocalizationKey = "PR_BC_BIOCHEMIST_DESC";
+            
+            //foreach (ApplyStatusAbilityDef temp in Repo.GetAllDefs<ApplyStatusAbilityDef>().Where(asa => asa.Active == false))
+            //{
+            //    Logger.Always(temp.name);
+            //}
         }
 
         private static void Create_LayWaste()

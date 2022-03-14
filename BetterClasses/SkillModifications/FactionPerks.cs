@@ -499,7 +499,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
         {
             ResurrectAbilityDef resurrect = Repo.GetAllDefs<ResurrectAbilityDef>().FirstOrDefault(a => a.name.Equals("Mutoid_ResurrectAbilityDef"));
             resurrect.ActionPointCost = 0.75f;
-            resurrect.WillPointCost = 6;
+            resurrect.WillPointCost = 10;
             resurrect.UsesPerTurn = 1;
         }
         private static void Change_PepperCloud()

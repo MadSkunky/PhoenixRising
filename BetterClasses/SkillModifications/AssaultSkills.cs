@@ -61,6 +61,10 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                 source,
                 "a92d0cab-60a8-4a42-aeed-b5415906b39d",
                 skillName);
+            quickAim.CharacterProgressionData = Helper.CreateDefFromClone(
+                source.CharacterProgressionData,
+                "00c31653-0935-43ed-9dc7-683ab2012e8c",
+                skillName);
             quickAim.ViewElementDef = Helper.CreateDefFromClone(
                 source.ViewElementDef,
                 "8cdddcfd-a93c-4efa-a5a5-5dc099cb7ea5",

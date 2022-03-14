@@ -182,7 +182,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             };
 
             DamageMod.EffectName = "AmplifyPain";
-            DamageMod.DurationTurns = 0;
+            DamageMod.DurationTurns = 1;
             DamageMod.ShowNotification = true;
             DamageMod.VisibleOnHealthbar = TacStatusDef.HealthBarVisibility.VisibleWhenSelected;
             DamageMod.VisibleOnStatusScreen = TacStatusDef.StatusScreenVisibility.VisibleOnStatusesList | TacStatusDef.StatusScreenVisibility.VisibleOnBodyPartStatusList;
