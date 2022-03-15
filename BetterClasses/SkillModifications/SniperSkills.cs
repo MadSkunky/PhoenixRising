@@ -51,7 +51,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
 
         private static void Change_ArmourBreak()
         {
-            ApplyStatusAbilityDef armourBreak = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(ad => ad.name.Contains("ArmourBreak_AbilityDef"));
+            ApplyStatusAbilityDef armourBreak = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(ad => ad.name.Equals("ArmourBreak_AbilityDef"));
             armourBreak.WillPointCost = 2.0f;
             armourBreak.ViewElementDef.Description = new LocalizedTextBind("Next shot has 15 shred but -25% damage", doNotLocalize);
             AddAttackBoostStatusDef armourBreakShredMod = armourBreak.StatusDef as AddAttackBoostStatusDef;

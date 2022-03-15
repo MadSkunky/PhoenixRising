@@ -231,7 +231,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
         private static void Change_Squatter()
         {
             PassiveModifierAbilityDef Squatter = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(p => p.name.Equals("Resourceful_AbilityDef"));
-            Squatter.StatModifications = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(p => p.name.Contains("Resourceful_AbilityDef")).StatModifications;
+            Squatter.StatModifications = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(p => p.name.Equals("Resourceful_AbilityDef")).StatModifications;
             Squatter.ViewElementDef.DisplayName1 = new LocalizedTextBind("SQUATTER", doNotLocalize);
             Squatter.ViewElementDef.Description = new LocalizedTextBind("<b>+2 Strength, +25% carry weight</b>\n<i>In the camps you carried everything on your person at all times. And sometimes you had to take things from other people.</i>", doNotLocalize);
             Sprite SquatterIcon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_PersonalTrack_GymRat-2.png");

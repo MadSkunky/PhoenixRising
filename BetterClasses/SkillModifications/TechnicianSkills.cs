@@ -196,7 +196,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                 Repo.GetAllDefs<DamageTypeBaseEffectDef>().FirstOrDefault(d5 => d5.name.Equals("EMP_StandardDamageTypeEffectDef")),
                 Repo.GetAllDefs<DamageTypeBaseEffectDef>().FirstOrDefault(d6 => d6.name.Equals("Electroshock_AttenuatingDamageTypeEffectDef")),
                 Repo.GetAllDefs<DamageTypeBaseEffectDef>().FirstOrDefault(d7 => d7.name.Equals("Sonic_AttenuatingDamageTypeEffectDef")),
-                Repo.GetAllDefs<DamageTypeBaseEffectDef>().FirstOrDefault(d8 => d8.name.Equals("Acid_DamageOverTimeDamageTypeEffectDef")),
+                Repo.GetAllDefs<DamageTypeBaseEffectDef>().FirstOrDefault(d8 => d8.name.Equals("Acid_DamageOverTimeDamageTypeEffectDef"))
             };
             DamageMod.MultiplierType = DamageMultiplierType.Outgoing;
             DamageMod.Multiplier = multiplier;

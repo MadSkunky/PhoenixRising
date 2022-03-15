@@ -145,7 +145,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                     // Assault rifle proficiency fix, was set to shotguns
                     if (pmad.name.Contains("Assault"))
                     {
-                        GameTagDef ARtagDef = Repo.GetAllDefs<GameTagDef>().FirstOrDefault(gtd => gtd.name.Contains("AssaultRifleItem_TagDef"));
+                        GameTagDef ARtagDef = Repo.GetAllDefs<GameTagDef>().FirstOrDefault(gtd => gtd.name.Equals("AssaultRifleItem_TagDef"));
                         pmad.ItemTagStatModifications[0].ItemTag = ARtagDef;
                     }
 

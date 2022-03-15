@@ -65,7 +65,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
 
         private static void Change_ReturnFire()
         {
-            TacticalAbilityDef returnFire = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Contains("ReturnFire_AbilityDef"));
+            TacticalAbilityDef returnFire = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("ReturnFire_AbilityDef"));
             returnFire.ActorTags = new GameTagDef[0]; // Deletes all given tags => no restriction for any class
         }
         private static void Create_HunkerDown()
@@ -204,7 +204,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                 TacticalActorBase base_TacticalActorBase = (TacticalActorBase)AccessTools.Property(typeof(TacStatus), "TacticalActorBase").GetValue(__instance, null);
                 // Don't execute original method (return false) when current instance is called from Skirmisher ability
                 // AND current turn is same turn of ability owner (e.g. self damaging in player turn, no cheese patch)
-                return !(__instance.TacStatusDef.name.Contains("Skirmisher_AbilityDef")
+                return !(__instance.TacStatusDef.name.Equals("Skirmisher_AbilityDef")
                     && base_TacticalActorBase.TacticalLevel.CurrentFaction == base_TacticalActorBase.TacticalFaction);
             }
         }
@@ -218,7 +218,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                 TacticalActorBase base_TacticalActorBase = (TacticalActorBase)AccessTools.Property(typeof(TacStatus), "TacticalActorBase").GetValue(__instance, null);
                 // Don't execute original method (return false) when current instance is called from Skirmisher ability
                 // AND current turn is same turn of ability owner (e.g. self damaging in player turn, no cheese patch)
-                return !(__instance.TacStatusDef.name.Contains("Skirmisher_AbilityDef")
+                return !(__instance.TacStatusDef.name.Equals("Skirmisher_AbilityDef")
                     && base_TacticalActorBase.TacticalLevel.CurrentFaction == base_TacticalActorBase.TacticalFaction);
             }
         }

@@ -157,7 +157,7 @@ namespace PhoenixRising.BetterClasses
                     { ClassKeys.Heavy.Name, "JETPACK CONTROL" },
                     { ClassKeys.Sniper.Name, "GUNSLINGER" },
                     { ClassKeys.Berserker.Name, "GUN KATA" },
-                    { ClassKeys.Priest.Name, "DEVOTED" },
+                    { ClassKeys.Priest.Name, "BIOCHEMIST" },
                     { ClassKeys.Technician.Name, "REMOTE CONTROL" },
                     { ClassKeys.Infiltrator.Name, "STEALTH SPECIALIST" }
                 } } }),
@@ -171,7 +171,7 @@ namespace PhoenixRising.BetterClasses
                     { ClassKeys.Heavy.Name, "BOOM BLAST" },
                     { ClassKeys.Sniper.Name, "KILL ZONE" },
                     { ClassKeys.Berserker.Name, "EXERTION" },
-                    { ClassKeys.Priest.Name, "BIOCHEMIST" },
+                    { ClassKeys.Priest.Name, "DEVOTED" },
                     { ClassKeys.Technician.Name, "REMOTE DEPLOYMENT" },
                     { ClassKeys.Infiltrator.Name, "CAUTIOUS" }
                 } } }),

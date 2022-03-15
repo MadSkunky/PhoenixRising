@@ -89,7 +89,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             float bashShock = 160f;
             //float meleeShockAddition = 100.0f;
             LocalizedTextBind displayName = new LocalizedTextBind("TAKEDOWN", doNotLocalize);
-            LocalizedTextBind description = new LocalizedTextBind($"Assault your enemy attempting to daze him, deals {(int)bashDamage} Damage and {(int)bashShock} Shock. Replaces Bash.", doNotLocalize);
+            LocalizedTextBind description = new LocalizedTextBind($"Deal {(int)bashDamage} damage and {(int)bashShock} shock damage to an adjacent target. Replaces Bash.", doNotLocalize);
             Sprite icon = Repo.GetAllDefs<TacticalAbilityViewElementDef>().FirstOrDefault(tave => tave.name.Equals("E_ViewElement [Brawler_AbilityDef]")).LargeIcon;
 
             ApplyStatusAbilityDef source = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(asa => asa.name.Equals("WeakSpot_AbilityDef"));
@@ -139,9 +139,10 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                 skillName);
             bashAbility.ViewElementDef.ShowInStatusScreen = false;
             bashAbility.ViewElementDef.DisplayName1 = displayName;
-            bashAbility.ViewElementDef.Description = new LocalizedTextBind("Assault your enemy attempting to daze him.", doNotLocalize);
+            bashAbility.ViewElementDef.Description = new LocalizedTextBind($"Deal {(int)bashDamage} damage and {(int)bashShock} shock damage to an adjacent target.", doNotLocalize);
             bashAbility.ViewElementDef.LargeIcon = icon;
             bashAbility.ViewElementDef.SmallIcon = icon;
+            bashAbility.BashWith = BashAbilityDef.BashingWith.SelectedEquipmentOrBareHands;
 
             // Create a status to apply the bash ability to the actor
             AddAbilityStatusDef addNewBashAbiltyStatus = Helper.CreateDefFromClone( // Borrow status from Deplay Beacon (final mission)
@@ -182,6 +183,12 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             multiStatus.Statuses = new StatusDef[] { addNewBashAbiltyStatus, applyRemoveAbilityEffectStatus };
 
             takedown.StatusDef = multiStatus;
+
+            //TacActorAimingAbilityAnimActionDef noWeaponBashAnim = Repo.GetAllDefs<TacActorAimingAbilityAnimActionDef>().FirstOrDefault(aa => aa.name.Equals("E_NoWeaponBash [Soldier_Utka_AnimActionsDef]"));
+            //if (!noWeaponBashAnim.AbilityDefs.Contains(bashAbility))
+            //{
+            //    noWeaponBashAnim.AbilityDefs = noWeaponBashAnim.AbilityDefs.Append(bashAbility).ToArray();
+            //}
 
             // Adding new bash ability to proper animations
             foreach (TacActorAimingAbilityAnimActionDef animActionDef in Repo.GetAllDefs<TacActorAimingAbilityAnimActionDef>().Where(aad => aad.name.Contains("Soldier_Utka_AnimActionsDef")))

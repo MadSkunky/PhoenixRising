@@ -1,7 +1,9 @@
 ﻿using Base.Core;
 using Base.Defs;
 using PhoenixPoint.Common.Core;
+using PhoenixPoint.Tactical.Entities;
 using PhoenixPoint.Tactical.Entities.Abilities;
+using PhoenixPoint.Tactical.Entities.Effects.DamageTypes;
 using PhoenixPoint.Tactical.Entities.Statuses;
 using System;
 using System.Collections.Generic;
@@ -9,6 +11,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace PhoenixRising.BetterClasses.SkillModifications
 {
@@ -45,6 +48,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             string skillName = "BC_Biochemist_AbilityDef";
 
             ApplyStatusAbilityDef source = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(dma => dma.name.Equals("BodypartDamageMultiplier_AbilityDef"));
+            Sprite icon = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(ta => ta.name.Equals("BioChemist_AbilityDef")).ViewElementDef.LargeIcon;
 
             ApplyStatusAbilityDef Biochemist = Helper.CreateDefFromClone(
                 source,
@@ -60,17 +64,25 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                 skillName);
             Biochemist.StatusDef = Helper.CreateDefFromClone(
                 source.StatusDef,
-                "",
+                "1bfd9c34-b5c5-4c6e-abaf-aefccaea2a3c",
                 skillName);
-            (Biochemist.StatusDef as TacStatusDef).Visuals = Biochemist.ViewElementDef;
 
             Biochemist.ViewElementDef.DisplayName1.LocalizationKey = "PR_BC_BIOCHEMIST";
             Biochemist.ViewElementDef.Description.LocalizationKey = "PR_BC_BIOCHEMIST_DESC";
-            
-            //foreach (ApplyStatusAbilityDef temp in Repo.GetAllDefs<ApplyStatusAbilityDef>().Where(asa => asa.Active == false))
-            //{
-            //    Logger.Always(temp.name);
-            //}
+            Biochemist.ViewElementDef.LargeIcon = icon;
+            Biochemist.ViewElementDef.SmallIcon = icon;
+
+            DamageMultiplierStatusDef bcStatus = (DamageMultiplierStatusDef)Biochemist.StatusDef;
+            bcStatus.Visuals = Biochemist.ViewElementDef;
+            bcStatus.DamageTypeDefs = new DamageTypeBaseEffectDef[]
+            {
+                Repo.GetAllDefs<DamageTypeBaseEffectDef>().FirstOrDefault(d2 => d2.name.Equals("Virus_DamageOverTimeDamageTypeEffectDef")),
+                Repo.GetAllDefs<DamageTypeBaseEffectDef>().FirstOrDefault(d8 => d8.name.Equals("Acid_DamageOverTimeDamageTypeEffectDef")),
+                Repo.GetAllDefs<DamageTypeBaseEffectDef>().FirstOrDefault(d3 => d3.name.Equals("Poison_DamageOverTimeDamageTypeEffectDef")),
+                Repo.GetAllDefs<DamageTypeBaseEffectDef>().FirstOrDefault(d1 => d1.name.Equals("Paralysis_DamageOverTimeDamageTypeEffectDef"))
+            };
+            bcStatus.MultiplierType = DamageMultiplierType.Outgoing;
+            bcStatus.Multiplier = damageMod;
         }
 
         private static void Create_LayWaste()

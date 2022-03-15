@@ -54,7 +54,7 @@ PR_BC_LAY_WASTE_DESC,Text,,If your current Willpower score is higher than target
 PR_BC_ENDURANCE,Text,,ENDURANCE,,,,,,,,
 PR_BC_ENDURANCE_DESC,Text,,Recover restores additional 25% Willpower,,,,,,,,
 PR_BC_TAKEDOWN,Text,,TAKEDOWN,,,,,,,,
-PR_BC_TAKEDOWN_DESC,Text,,Assault your enemy attempting to daze him. Deals 60 damage and 160 Shock. Replaces Bash.,,,,,,,,
+PR_BC_TAKEDOWN_DESC,Text,,Deal 60 damage and 160 shock damage to an adjacent target. Replaces Bash.,,,,,,,,
 PR_BC_PEPPER_CLOUD,Text,,PEPPER CLOUD,,,,,,,,
 PR_BC_PEPPER_CLOUD_DESC,Text,,Enemies in 8 tile radius suffer -50% accuracy,,,,,,,,
 PR_BC_AR_TARGETTING,Text,,AR TARGETTING,,,,,,,,

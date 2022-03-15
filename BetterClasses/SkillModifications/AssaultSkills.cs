@@ -229,7 +229,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             // This below works on the target but he can be targeted again from another Assault without any response => the Assault loses 2 AP and the target gets nothing
             // Looking for a solution, maybe MC fuctionality could be a solution (thx to Iko)
             // .... delayed ....
-            //TacEffectStatusDef onslaughtStatus = Repo.GetAllDefs<TacEffectStatusDef>().FirstOrDefault(c => c.name.Contains("E_Status [DeterminedAdvance_AbilityDef]"));
+            //TacEffectStatusDef onslaughtStatus = Repo.GetAllDefs<TacEffectStatusDef>().FirstOrDefault(c => c.name.Equals("E_Status [DeterminedAdvance_AbilityDef]"));
             //onslaughtStatus.SingleInstance = true;
             Logger.Debug("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' no changes implemented yet!");
             Logger.Debug("----------------------------------------------------", false);
