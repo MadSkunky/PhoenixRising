@@ -40,6 +40,6 @@ COMPATIBILITY: Naturally, this mod is not compatible with any other mod that adj
 
 BETTER CLASSES: Overhaul and rebalance of all 7 vanilla classes adding many new skills, combos and tactics
 Introduces entirely different 3rd row of skills that depend on soldier origin, background and class. Learn more: https://youtu.be/XcaObJJaHCw   
-BALANCE ADJUSTMENTS: Many skills and some items have been changed in the mod. See complete list of changes here: TBD    
+BALANCE ADJUSTMENTS: Many skills and some items have been changed in the mod. See complete list of changes in the link above  
 ENEMIES IMPROVED: Worms are made faster and Mindfraggers are more threatening.    
 HAVEN RECRUITS COME WITH WEAPONS AND ARMOR: Overrides Vanilla settings for Hero&Legend difficulty.   
