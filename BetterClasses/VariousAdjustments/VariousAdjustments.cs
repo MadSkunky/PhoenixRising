@@ -71,7 +71,7 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
             // Venom Torso: Add Weapon Tag to Poison Arm 
             Change_VenomTorso();
             // MindFragger: Gains Acid explosion (acid value = 10) when attached 
-            Change_MindFragger();
+            //Change_MindFragger();
             // Worms: All worms speed increased to 9 (from 6), worm explosion gets Shred 3
             Change_Worms();
             // Arthron Shield Bearer: Close Quarters Evade
