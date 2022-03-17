@@ -1,10 +1,16 @@
 ﻿using Base.Core;
 using Base.Defs;
+using Base.Entities.Effects.ApplicationConditions;
+using Harmony;
 using PhoenixPoint.Common.Core;
+using PhoenixPoint.Tactical;
 using PhoenixPoint.Tactical.Entities;
 using PhoenixPoint.Tactical.Entities.Abilities;
+using PhoenixPoint.Tactical.Entities.DamageKeywords;
 using PhoenixPoint.Tactical.Entities.Effects.DamageTypes;
 using PhoenixPoint.Tactical.Entities.Statuses;
+using PhoenixRising.BetterClasses.Tactical.Entities.Statuses;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,7 +36,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             Change_PsychicWard();
             
             // Biochemist: Paralysis, Poison and Viral damage increased 25%
-            Change_Biochemist();
+            Create_BC_Biochemist();
 
             // Lay Waste: 1 AP, 3 WP, If your current Willpower score is higher than target's deal 30 damage for each point of WP difference
             Create_LayWaste();
@@ -42,9 +48,9 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             pW.Multiplier = 0.001f;
         }
 
-        private static void Change_Biochemist()
+        private static void Create_BC_Biochemist()
         {
-            float damageMod = 1.25f;
+            float damageMod = 0.25f;
             string skillName = "BC_Biochemist_AbilityDef";
 
             ApplyStatusAbilityDef source = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(dma => dma.name.Equals("BodypartDamageMultiplier_AbilityDef"));
@@ -62,27 +68,42 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                 source.ViewElementDef,
                 "683abf9c-46ea-4406-a943-ae3864fd1ce4",
                 skillName);
-            Biochemist.StatusDef = Helper.CreateDefFromClone(
-                source.StatusDef,
+            Biochemist.StatusDef = Helper.CreateDefFromClone<AddDependentDamageKeywordsStatusDef>(
+                null,
                 "1bfd9c34-b5c5-4c6e-abaf-aefccaea2a3c",
-                skillName);
+                $"E_Status [{skillName}]");
 
             Biochemist.ViewElementDef.DisplayName1.LocalizationKey = "PR_BC_BIOCHEMIST";
             Biochemist.ViewElementDef.Description.LocalizationKey = "PR_BC_BIOCHEMIST_DESC";
             Biochemist.ViewElementDef.LargeIcon = icon;
             Biochemist.ViewElementDef.SmallIcon = icon;
 
-            DamageMultiplierStatusDef bcStatus = (DamageMultiplierStatusDef)Biochemist.StatusDef;
-            bcStatus.Visuals = Biochemist.ViewElementDef;
-            bcStatus.DamageTypeDefs = new DamageTypeBaseEffectDef[]
+            AddDependentDamageKeywordsStatusDef statusDef = (AddDependentDamageKeywordsStatusDef)Biochemist.StatusDef;
+            statusDef.EffectName = "BC_Biochemist";
+            statusDef.ApplicationConditions = new EffectConditionDef[0];
+            statusDef.DurationTurns = -1;
+            statusDef.DisablesActor = false;
+            statusDef.SingleInstance = true;
+            statusDef.ShowNotification = true;
+            statusDef.VisibleOnPassiveBar = false;
+            statusDef.VisibleOnHealthbar = TacStatusDef.HealthBarVisibility.AlwaysVisible;
+            statusDef.VisibleOnStatusScreen = TacStatusDef.StatusScreenVisibility.VisibleOnStatusesList | TacStatusDef.StatusScreenVisibility.VisibleOnBodyPartStatusList;
+            statusDef.HealthbarPriority = 0;
+            statusDef.StackMultipleStatusesAsSingleIcon = false;
+            statusDef.Visuals = Biochemist.ViewElementDef;
+            statusDef.ParticleEffectPrefab = null;
+            statusDef.DontRaiseOnApplyOnLoad = false;
+            statusDef.EventOnApply = null;
+            statusDef.EventOnUnapply = null;
+            statusDef.DamageKeywordDefs = new DamageKeywordDef[]
             {
-                Repo.GetAllDefs<DamageTypeBaseEffectDef>().FirstOrDefault(d2 => d2.name.Equals("Virus_DamageOverTimeDamageTypeEffectDef")),
-                Repo.GetAllDefs<DamageTypeBaseEffectDef>().FirstOrDefault(d8 => d8.name.Equals("Acid_DamageOverTimeDamageTypeEffectDef")),
-                Repo.GetAllDefs<DamageTypeBaseEffectDef>().FirstOrDefault(d3 => d3.name.Equals("Poison_DamageOverTimeDamageTypeEffectDef")),
-                Repo.GetAllDefs<DamageTypeBaseEffectDef>().FirstOrDefault(d1 => d1.name.Equals("Paralysis_DamageOverTimeDamageTypeEffectDef"))
+                Shared.SharedDamageKeywords.ViralKeyword,
+                Shared.SharedDamageKeywords.AcidKeyword,
+                Shared.SharedDamageKeywords.PoisonousKeyword,
+                Shared.SharedDamageKeywords.ParalysingKeyword
             };
-            bcStatus.MultiplierType = DamageMultiplierType.Outgoing;
-            bcStatus.Multiplier = damageMod;
+            statusDef.DamageMultiplierType = DamageMultiplierType.Outgoing;
+            statusDef.BonusDamagePerc = damageMod;
         }
 
         private static void Create_LayWaste()

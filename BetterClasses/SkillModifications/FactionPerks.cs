@@ -447,7 +447,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                             return false;
                         }
                         TacticalActorBase tacticalActorBase = damageDealer.GetTacticalActorBase();
-                        Logger.Always($"TacticalActorBase of target: {tacticalActorBase.DisplayName}");
+                        Logger.Debug($"TacticalActorBase of target: {tacticalActorBase.DisplayName}");
                         EffectConditionDef[] targetApplicationConditions = __instance.OnActorDamageReceivedStatusDef.TargetApplicationConditions;
                         for (int i = 0; i < targetApplicationConditions.Length; i++)
                         {

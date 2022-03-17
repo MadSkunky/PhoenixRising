@@ -214,33 +214,33 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
         }
         public static void Change_ClarityHead()
         {
-            TacticalItemDef clarityHead = Repo.GetAllDefs<TacticalItemDef>().FirstOrDefault(p => p.name.Equals("NJ_Jugg_BIO_Helmet_BodyPartDef"));
-            DamageMultiplierStatusDef panicImmunityStatus = Repo.GetAllDefs<DamageMultiplierStatusDef>().FirstOrDefault(p => p.name.Equals("PanicImmunity_StatusDef"));
-
-            string skillName = "BC_PanicImmunity_AbilityDef";
-            ApplyStatusAbilityDef source = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(p => p.name.Equals("MindControlImmunity_AbilityDef"));
-            ApplyStatusAbilityDef pI = Helper.CreateDefFromClone(
-                source,
-                "f2c51f91-fd5b-4f6f-bc19-cf6dfef831ba",
-                skillName);
-            pI.CharacterProgressionData = Helper.CreateDefFromClone(
-                source.CharacterProgressionData,
-                "528863c2-92ca-4690-84be-fb3600316439",
-                skillName);
-            pI.ViewElementDef = Helper.CreateDefFromClone(
-                source.ViewElementDef,
-                "59b36dfb-6b89-4771-8bdc-454bbe4e08e0",
-                skillName);
-
-            pI.StatusDef = panicImmunityStatus;
-            clarityHead.Abilities = new AbilityDef[]
-            {
-                Repo.GetAllDefs<AbilityDef>().FirstOrDefault(p => p.name.Equals("BC_PanicImmunity_AbilityDef")),
-                clarityHead.Abilities[1],
-            };
-
-            pI.ViewElementDef.DisplayName1 = new LocalizedTextBind("PANIC IMMUNITY", doNotLocalize);
-            pI.ViewElementDef.Description = new LocalizedTextBind("Immune to panic", doNotLocalize);
+            //TacticalItemDef clarityHead = Repo.GetAllDefs<TacticalItemDef>().FirstOrDefault(p => p.name.Equals("NJ_Jugg_BIO_Helmet_BodyPartDef"));
+            //DamageMultiplierStatusDef panicImmunityStatus = Repo.GetAllDefs<DamageMultiplierStatusDef>().FirstOrDefault(p => p.name.Equals("PanicImmunity_StatusDef"));
+            //
+            //string skillName = "BC_PanicImmunity_AbilityDef";
+            //ApplyStatusAbilityDef source = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(p => p.name.Equals("MindControlImmunity_AbilityDef"));
+            //ApplyStatusAbilityDef pI = Helper.CreateDefFromClone(
+            //    source,
+            //    "f2c51f91-fd5b-4f6f-bc19-cf6dfef831ba",
+            //    skillName);
+            //pI.CharacterProgressionData = Helper.CreateDefFromClone(
+            //    source.CharacterProgressionData,
+            //    "528863c2-92ca-4690-84be-fb3600316439",
+            //    skillName);
+            //pI.ViewElementDef = Helper.CreateDefFromClone(
+            //    source.ViewElementDef,
+            //    "59b36dfb-6b89-4771-8bdc-454bbe4e08e0",
+            //    skillName);
+            //
+            //pI.StatusDef = panicImmunityStatus;
+            //clarityHead.Abilities = new AbilityDef[]
+            //{
+            //    Repo.GetAllDefs<AbilityDef>().FirstOrDefault(p => p.name.Equals("BC_PanicImmunity_AbilityDef")),
+            //    clarityHead.Abilities[1],
+            //};
+            //
+            //pI.ViewElementDef.DisplayName1 = new LocalizedTextBind("PANIC IMMUNITY", doNotLocalize);
+            //pI.ViewElementDef.Description = new LocalizedTextBind("Immune to panic", doNotLocalize);
         }
         public static void Change_VenomTorso()
         {

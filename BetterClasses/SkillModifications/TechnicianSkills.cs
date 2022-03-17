@@ -200,7 +200,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             };
             DamageMod.MultiplierType = DamageMultiplierType.Outgoing;
             DamageMod.Multiplier = multiplier;
-            
+
             foreach (TacActorSimpleAbilityAnimActionDef animActionDef in Repo.GetAllDefs<TacActorSimpleAbilityAnimActionDef>().Where(aad => aad.name.Contains("Soldier_Utka_AnimActionsDef")))
             {
                 if (animActionDef.AbilityDefs != null && animActionDef.AbilityDefs.Contains(source) && !animActionDef.AbilityDefs.Contains(AmplifyPain))
