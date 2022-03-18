@@ -104,6 +104,11 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             };
             statusDef.DamageMultiplierType = DamageMultiplierType.Outgoing;
             statusDef.BonusDamagePerc = damageMod;
+
+            //foreach (DamageKeywordDef temp in Repo.GetAllDefs<DamageKeywordDef>().Where(dk => dk.SoloEffector))
+            //{
+            //    Logger.Always(temp.name);
+            //}
         }
 
         private static void Create_LayWaste()

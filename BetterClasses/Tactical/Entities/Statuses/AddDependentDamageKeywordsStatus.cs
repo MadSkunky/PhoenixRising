@@ -1,5 +1,4 @@
-﻿using Base.Defs;
-using Base.Entities.Statuses;
+﻿using Base.Entities.Statuses;
 using Base.Serialization.General;
 using com.ootii.Collections;
 using Harmony;
@@ -11,8 +10,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PhoenixRising.BetterClasses.Tactical.Entities.Statuses
 {
@@ -56,11 +53,6 @@ namespace PhoenixRising.BetterClasses.Tactical.Entities.Statuses
                     {
                         Logger.Always($"    {damageDealerDamageKeyword}");
 
-                        if (_dependentDamageKeywordPairs.Any(ddkp => ddkp.DamageKeywordDef == damageDealerDamageKeyword.DamageKeywordDef))
-                        {
-                            TacticalActor.AddDamageKeywordPair(_dependentDamageKeywordPairs.FirstOrDefault(d => d.DamageKeywordDef == damageDealerDamageKeyword.DamageKeywordDef));
-                        }
-
                         if (_dependentDamageKeywordDefs.Contains(damageDealerDamageKeyword.DamageKeywordDef))
                         {
                             Logger.Always($"      Damage keyword {damageDealerDamageKeyword.DamageKeywordDef} with {damageDealerDamageKeyword.Value} damage found in predefined array, adding another one of same type with {damageDealerDamageKeyword.Value * AddDependentDamageKeywordStatusDef.BonusDamagePerc} damage ...");
@@ -103,7 +95,6 @@ namespace PhoenixRising.BetterClasses.Tactical.Entities.Statuses
                 RequestUnapply(statusComponent);
                 return;
             }
-            _dependentDamageKeywordPairs = AddDependentDamageKeywordStatusDef.DamageKeywordPairs;
             _dependentDamageKeywordDefs = AddDependentDamageKeywordStatusDef.DamageKeywordDefs;
             _appliedDamageKeywordPairs = new List<DamageKeywordPair>();
             switch (AddDependentDamageKeywordStatusDef.DamageMultiplierType)
@@ -141,7 +132,6 @@ namespace PhoenixRising.BetterClasses.Tactical.Entities.Statuses
             Logger.Always("----------------------------------------------------", false);
         }
 
-        private DamageKeywordPair[] _dependentDamageKeywordPairs;
         private DamageKeywordDef[] _dependentDamageKeywordDefs;
         private List<DamageKeywordPair> _appliedDamageKeywordPairs;
     }

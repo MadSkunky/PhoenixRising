@@ -51,7 +51,7 @@ namespace PhoenixRising.BetterClasses
                 {
                     AddLocalizationFromCSV(SkillLocalizationFileName, null);
                 }
-                if (File.Exists(Path.Combine(LocalizationDirectory, FsStoryLocalizationFileName)))
+                if (File.Exists(Path.Combine(LocalizationDirectory, FsStoryLocalizationFileName)) && BetterClassesMain.Config.ActivateStoryRework)
                 {
                     AddLocalizationFromCSV(FsStoryLocalizationFileName, null);
                 }
