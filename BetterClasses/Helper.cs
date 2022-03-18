@@ -47,8 +47,14 @@ namespace PhoenixRising.BetterClasses
                 ManagedDirectory = BetterClassesMain.ManagedDirectory;
                 TexturesDirectory = BetterClassesMain.TexturesDirectory;
                 LocalizationDirectory = BetterClassesMain.LocalizationDirectory;
-                AddLocalizationFromCSV(SkillLocalizationFileName, null);
-                AddLocalizationFromCSV(FsStoryLocalizationFileName, null);
+                if (File.Exists(Path.Combine(LocalizationDirectory, SkillLocalizationFileName)))
+                {
+                    AddLocalizationFromCSV(SkillLocalizationFileName, null);
+                }
+                if (File.Exists(Path.Combine(LocalizationDirectory, FsStoryLocalizationFileName)))
+                {
+                    AddLocalizationFromCSV(FsStoryLocalizationFileName, null);
+                }
                 AbilityNameToDefMap = ReadJson<Dictionary<string, string>>(AbilitiesJsonFileName);
                 NotLocalizedTextMap = ReadJson<Dictionary<string, Dictionary<string, string>>>(TextMapFileName);
             }
