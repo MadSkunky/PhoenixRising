@@ -121,4 +121,5 @@ PR_BC_ROCKETEER,Text,,ROCKETEER,,,,,,,,
 PR_BC_ROCKETEER_DESC,Text,,"<b>Jetpack Proficiency</b>
 <i>Since you were a child you dreamt of flying rockets. Perhaps now you can!</i>",,,,,,,,
 PR_BC_FRENZY,Text,,FRENZY,,,,,,,,
-PR_BC_FRENZY_DESC,Text,,"Instils FRENZY in friendly characters within 20 tiles for 2 turns, increasing their Speed by 33% and making them immune to PANIC.",,,,,,,,
+PR_BC_FRENZY_DESC,Text,,"Instils Frenzy in friendly characters within 20 tiles for two turns, increasing their Speed by 33% and making them immune to panic",,,,,,,,
+PR_BC_FRENZY_STATUS_DESC,Text,,"Speed increased by 33% and immune to panic",,,,,,,,

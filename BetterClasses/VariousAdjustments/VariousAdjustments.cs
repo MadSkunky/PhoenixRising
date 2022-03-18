@@ -141,10 +141,15 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
         }
         public static void Change_Frenzy()
         {
-            float frenzySpeed = 0.35f;
+            float frenzySpeed = 0.33f;
 
             FrenzyStatusDef frenzy = Repo.GetAllDefs<FrenzyStatusDef>().FirstOrDefault(p => p.name.Equals("Frenzy_StatusDef"));
             frenzy.SpeedCoefficient = frenzySpeed;
+            LocalizedTextBind description = new LocalizedTextBind("", doNotLocalize);
+            foreach (ViewElementDef visuals in Repo.GetAllDefs<ViewElementDef>().Where(tav => tav.name.Contains("Frenzy_")))
+            {
+                visuals.Description.LocalizationKey = visuals.name.Contains("Status") ? "PR_BC_FRENZY_STATUS_DESC" : "PR_BC_FRENZY_DESC";
+            }
         }
         public static void Change_PsychicResistance()
         {

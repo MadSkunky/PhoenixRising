@@ -25,7 +25,8 @@ namespace PhoenixRising.BetterClasses
         internal static string TexturesDirectory;
         internal static string LocalizationDirectory;
 
-        public static readonly string LocalizationFileName = "PR_BC_Localization.csv";
+        public static readonly string SkillLocalizationFileName = "PR_BC_Localization.csv";
+        public static readonly string FsStoryLocalizationFileName = "PR_FS_Story_Localization.csv";
 
         // SP cost for main specialisation skills per level
         public static readonly int[] SPperLevel = new int[] { 0, 10, 15, 0, 20, 25, 30 };
@@ -46,7 +47,8 @@ namespace PhoenixRising.BetterClasses
                 ManagedDirectory = BetterClassesMain.ManagedDirectory;
                 TexturesDirectory = BetterClassesMain.TexturesDirectory;
                 LocalizationDirectory = BetterClassesMain.LocalizationDirectory;
-                AddLocalizationFromCSV(LocalizationFileName, null);
+                AddLocalizationFromCSV(SkillLocalizationFileName, null);
+                AddLocalizationFromCSV(FsStoryLocalizationFileName, null);
                 AbilityNameToDefMap = ReadJson<Dictionary<string, string>>(AbilitiesJsonFileName);
                 NotLocalizedTextMap = ReadJson<Dictionary<string, Dictionary<string, string>>>(TextMapFileName);
             }

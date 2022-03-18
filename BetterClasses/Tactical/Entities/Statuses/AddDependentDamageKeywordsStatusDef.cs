@@ -15,6 +15,7 @@ namespace PhoenixRising.BetterClasses.Tactical.Entities.Statuses
     [CreateAssetMenu(fileName = "ModifyDamageKeywordStatusDef", menuName = "Defs/Statuses/ModifyDamageKeywordStatus")]
     public class AddDependentDamageKeywordsStatusDef : TacStatusDef
     {
+        public DamageKeywordPair[] DamageKeywordPairs;
         public DamageKeywordDef[] DamageKeywordDefs;
         public float BonusDamagePerc = 0f;
         public DamageMultiplierType DamageMultiplierType = DamageMultiplierType.Outgoing;

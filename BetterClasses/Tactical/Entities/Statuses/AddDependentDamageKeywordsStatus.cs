@@ -19,7 +19,7 @@ namespace PhoenixRising.BetterClasses.Tactical.Entities.Statuses
     [SerializeType(InheritCustomCreateFrom = typeof(Status))]
     public class AddDependentDamageKeywordsStatus : TacStatus
     {
-        public AddDependentDamageKeywordsStatusDef ModifyDamageKeywordStatusDef => BaseDef as AddDependentDamageKeywordsStatusDef;
+        public AddDependentDamageKeywordsStatusDef AddDependentDamageKeywordStatusDef => BaseDef as AddDependentDamageKeywordsStatusDef;
 
         private void OnEquipmentChanged(Equipment selectedEquipment)
         {
@@ -33,11 +33,11 @@ namespace PhoenixRising.BetterClasses.Tactical.Entities.Statuses
                 {
                     Logger.Always($"  Already set bonus damage keywords on actor: {TacticalActor.GetBonusKeywords().Join()}");
                 }
-                if (_damageKeywordPairs != null && _damageKeywordPairs.Count > 0)
+                if (_appliedDamageKeywordPairs != null && _appliedDamageKeywordPairs.Count > 0)
                 {
                     if (TacticalActor.GetBonusKeywords().Count() > 0)
                     {
-                        foreach (DamageKeywordPair dkp in _damageKeywordPairs)
+                        foreach (DamageKeywordPair dkp in _appliedDamageKeywordPairs)
                         {
                             if (TacticalActor.GetBonusKeywords().Contains(dkp))
                             {
@@ -45,29 +45,33 @@ namespace PhoenixRising.BetterClasses.Tactical.Entities.Statuses
                             }
                         }
                     }
-                    _damageKeywordPairs.Clear();
+                    _appliedDamageKeywordPairs.Clear();
                 }
-                if (selectedEquipment is IDamageDealer damageDealer
-                    && damageDealer.GetDamagePayload().DamageKeywords.Any(dk => _dependentKeywords.Contains(dk.DamageKeywordDef)))
+                if (selectedEquipment is IDamageDealer damageDealer)
                 {
                     Logger.Always($"Equipment is IDamageDealer, entering next step ...");
                     Logger.Always($"  Damage keywords on equipment {selectedEquipment}:");
 
-                    foreach (DamageKeywordPair dkp in damageDealer.GetDamagePayload().DamageKeywords)
+                    foreach (DamageKeywordPair damageDealerDamageKeyword in damageDealer.GetDamagePayload().DamageKeywords)
                     {
-                        Logger.Always($"    {dkp}");
+                        Logger.Always($"    {damageDealerDamageKeyword}");
 
-                        if (_dependentKeywords.Contains(dkp.DamageKeywordDef))
+                        if (_dependentDamageKeywordPairs.Any(ddkp => ddkp.DamageKeywordDef == damageDealerDamageKeyword.DamageKeywordDef))
                         {
-                            Logger.Always($"      Damage keyword {dkp.DamageKeywordDef} with {dkp.Value} damage found in predefined array, adding another one of same type with {dkp.Value * ModifyDamageKeywordStatusDef.BonusDamagePerc} damage ...");
+                            TacticalActor.AddDamageKeywordPair(_dependentDamageKeywordPairs.FirstOrDefault(d => d.DamageKeywordDef == damageDealerDamageKeyword.DamageKeywordDef));
+                        }
+
+                        if (_dependentDamageKeywordDefs.Contains(damageDealerDamageKeyword.DamageKeywordDef))
+                        {
+                            Logger.Always($"      Damage keyword {damageDealerDamageKeyword.DamageKeywordDef} with {damageDealerDamageKeyword.Value} damage found in predefined array, adding another one of same type with {damageDealerDamageKeyword.Value * AddDependentDamageKeywordStatusDef.BonusDamagePerc} damage ...");
                             
                             DamageKeywordPair damageKeywordPair = new DamageKeywordPair()
                             {
-                                DamageKeywordDef = dkp.DamageKeywordDef,
-                                Value = dkp.Value * ModifyDamageKeywordStatusDef.BonusDamagePerc
+                                DamageKeywordDef = damageDealerDamageKeyword.DamageKeywordDef,
+                                Value = damageDealerDamageKeyword.Value * AddDependentDamageKeywordStatusDef.BonusDamagePerc
                             };
                             TacticalActor.AddDamageKeywordPair(damageKeywordPair);
-                            _damageKeywordPairs.Add(damageKeywordPair);
+                            _appliedDamageKeywordPairs.Add(damageKeywordPair);
                         }
                     }
                     if (TacticalActor.GetBonusKeywords().Count() > 0)
@@ -99,9 +103,10 @@ namespace PhoenixRising.BetterClasses.Tactical.Entities.Statuses
                 RequestUnapply(statusComponent);
                 return;
             }
-            _dependentKeywords = ModifyDamageKeywordStatusDef.DamageKeywordDefs;
-            _damageKeywordPairs = new List<DamageKeywordPair>();
-            switch (ModifyDamageKeywordStatusDef.DamageMultiplierType)
+            _dependentDamageKeywordPairs = AddDependentDamageKeywordStatusDef.DamageKeywordPairs;
+            _dependentDamageKeywordDefs = AddDependentDamageKeywordStatusDef.DamageKeywordDefs;
+            _appliedDamageKeywordPairs = new List<DamageKeywordPair>();
+            switch (AddDependentDamageKeywordStatusDef.DamageMultiplierType)
             {
                 case DamageMultiplierType.Outgoing:
                     TacticalActor.Equipments.EquipmentChangedEvent += OnEquipmentChanged;
@@ -122,7 +127,7 @@ namespace PhoenixRising.BetterClasses.Tactical.Entities.Statuses
             Logger.Always($"'{MethodBase.GetCurrentMethod().DeclaringType.Name}.{MethodBase.GetCurrentMethod().Name}()' called ...");
 
             base.OnUnapply();
-            switch (ModifyDamageKeywordStatusDef.DamageMultiplierType)
+            switch (AddDependentDamageKeywordStatusDef.DamageMultiplierType)
             {
                 case DamageMultiplierType.Outgoing:
                     TacticalActor.Equipments.EquipmentChangedEvent -= OnEquipmentChanged;
@@ -136,7 +141,8 @@ namespace PhoenixRising.BetterClasses.Tactical.Entities.Statuses
             Logger.Always("----------------------------------------------------", false);
         }
 
-        private DamageKeywordDef[] _dependentKeywords;
-        private List<DamageKeywordPair> _damageKeywordPairs;
+        private DamageKeywordPair[] _dependentDamageKeywordPairs;
+        private DamageKeywordDef[] _dependentDamageKeywordDefs;
+        private List<DamageKeywordPair> _appliedDamageKeywordPairs;
     }
 }
