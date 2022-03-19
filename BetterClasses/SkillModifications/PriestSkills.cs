@@ -105,19 +105,6 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                 SkillModsMain.sharedSoloDamageKeywords.SoloParalysingKeyword
             };
             statusDef.BonusDamagePerc = damageMod;
-            //statusDef.DamageMultiplierType = DamageMultiplierType.Outgoing;
-
-            Logger.Always(LocalizationManager.GetCategories().Join());
-
-            //foreach (ViewElementDef temp in Repo.GetAllDefs<ViewElementDef>())
-            //{
-            //    if (temp.DisplayName1.LocalizationKey.Equals("KEY_CORRUPTION_STATUS")
-            //        || temp.DisplayName2.LocalizationKey.Equals("KEY_CORRUPTION_STATUS")
-            //        || temp.Description.LocalizationKey.Equals("KEY_CORRUPTION_STATUS"))
-            //    {
-            //        Logger.Always(temp.name + " Category: " + temp.Category);
-            //    }
-            //}
         }
 
         private static void Create_LayWaste()

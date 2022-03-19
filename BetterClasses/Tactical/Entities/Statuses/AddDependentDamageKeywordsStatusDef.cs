@@ -12,6 +12,5 @@ namespace PhoenixRising.BetterClasses.Tactical.Entities.Statuses
     {
         public DamageKeywordDef[] DamageKeywordDefs;
         public float BonusDamagePerc = 0f;
-        //public DamageMultiplierType DamageMultiplierType = DamageMultiplierType.Outgoing;
     }
 }

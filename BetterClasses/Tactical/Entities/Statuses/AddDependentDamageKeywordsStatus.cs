@@ -27,13 +27,13 @@ namespace PhoenixRising.BetterClasses.Tactical.Entities.Statuses
         {
             try
             {
-                Logger.Always("----------------------------------------------------", false);
-                Logger.Always($"'{MethodBase.GetCurrentMethod().DeclaringType.Name}.{MethodBase.GetCurrentMethod().Name}()' called ...");
-                Logger.Always($"Selected equipment: {selectedEquipment}");
+                Logger.Debug("----------------------------------------------------", false);
+                Logger.Debug($"'{MethodBase.GetCurrentMethod().DeclaringType.Name}.{MethodBase.GetCurrentMethod().Name}()' called ...");
+                Logger.Debug($"Selected equipment: {selectedEquipment}");
 
                 if (TacticalActor.GetBonusKeywords().Count() > 0)
                 {
-                    Logger.Always($"  Already set bonus damage keywords on actor: {TacticalActor.GetBonusKeywords().Join()}");
+                    Logger.Debug($"  Already set bonus damage keywords on actor: {TacticalActor.GetBonusKeywords().Join()}");
                 }
                 if (_appliedDamageKeywordPairs != null && _appliedDamageKeywordPairs.Count > 0)
                 {
@@ -43,7 +43,7 @@ namespace PhoenixRising.BetterClasses.Tactical.Entities.Statuses
                         {
                             if (TacticalActor.GetBonusKeywords().Contains(dkp))
                             {
-                                Logger.Always($"  Removing damage keywords on actor: {dkp}");
+                                Logger.Debug($"  Removing damage keywords on actor: {dkp}");
                                 TacticalActor.RemoveDamageKeywordPair(dkp);
                             }
                         }
@@ -52,16 +52,16 @@ namespace PhoenixRising.BetterClasses.Tactical.Entities.Statuses
                 }
                 if (selectedEquipment is IDamageDealer damageDealer)
                 {
-                    Logger.Always($"Equipment is IDamageDealer, entering next step ...");
-                    Logger.Always($"  Damage keywords on equipment {selectedEquipment}:");
+                    Logger.Debug($"Equipment is IDamageDealer, entering next step ...");
+                    Logger.Debug($"  Damage keywords on equipment {selectedEquipment}:");
 
                     foreach (DamageKeywordPair damageDealerDamageKeyword in damageDealer.GetDamagePayload().DamageKeywords)
                     {
-                        Logger.Always($"    {damageDealerDamageKeyword}");
+                        Logger.Debug($"    {damageDealerDamageKeyword}");
 
                         if (_keywordMap.Keys.Contains(damageDealerDamageKeyword.DamageKeywordDef))
                         {
-                            Logger.Always($"      Damage keyword {damageDealerDamageKeyword} found in predefined array.");
+                            Logger.Debug($"      Damage keyword {damageDealerDamageKeyword} found in predefined array.");
 
                             float multiplier = AddDependentDamageKeywordStatusDef.BonusDamagePerc;
                             if (damageDealer.TryGetWeapon() is Weapon weapon)
@@ -79,20 +79,20 @@ namespace PhoenixRising.BetterClasses.Tactical.Entities.Statuses
                             TacticalActor.AddDamageKeywordPair(damageKeywordPair);
                             _appliedDamageKeywordPairs.Add(damageKeywordPair);
 
-                            Logger.Always($"      Added keyword {damageKeywordPair}.");
+                            Logger.Debug($"      Added keyword {damageKeywordPair}.");
                         }
                     }
                     if (TacticalActor.GetBonusKeywords().Count() > 0)
                     {
-                        Logger.Always($"  Resutling bonus damage keywords on actor: {TacticalActor.GetBonusKeywords().Join()}");
+                        Logger.Debug($"  Resutling bonus damage keywords on actor: {TacticalActor.GetBonusKeywords().Join()}");
                     }
                     else
                     {
-                        Logger.Always($"  No bonus damage keywords set and added, probably none found in predifened array.");
+                        Logger.Debug($"  No bonus damage keywords set and added, probably none found in predifened array.");
                     }
                 }
 
-                Logger.Always("----------------------------------------------------", false);
+                Logger.Debug("----------------------------------------------------", false);
             }
             catch (Exception e)
             {
@@ -102,8 +102,8 @@ namespace PhoenixRising.BetterClasses.Tactical.Entities.Statuses
 
         public override void OnApply(StatusComponent statusComponent)
         {
-            Logger.Always("----------------------------------------------------", false);
-            Logger.Always($"'{MethodBase.GetCurrentMethod().DeclaringType.Name}.{MethodBase.GetCurrentMethod().Name}()' called ...");
+            Logger.Debug("----------------------------------------------------", false);
+            Logger.Debug($"'{MethodBase.GetCurrentMethod().DeclaringType.Name}.{MethodBase.GetCurrentMethod().Name}()' called ...");
 
             base.OnApply(statusComponent);
             if (TacticalActor == null)
@@ -124,18 +124,18 @@ namespace PhoenixRising.BetterClasses.Tactical.Entities.Statuses
             TacticalActor.Equipments.EquipmentChangedEvent += OnEquipmentChanged;
             OnEquipmentChanged(TacticalActor.Equipments.SelectedEquipment);
 
-            Logger.Always("----------------------------------------------------", false);
+            Logger.Debug("----------------------------------------------------", false);
         }
 
         public override void OnUnapply()
         {
-            Logger.Always("----------------------------------------------------", false);
-            Logger.Always($"'{MethodBase.GetCurrentMethod().DeclaringType.Name}.{MethodBase.GetCurrentMethod().Name}()' called ...");
+            Logger.Debug("----------------------------------------------------", false);
+            Logger.Debug($"'{MethodBase.GetCurrentMethod().DeclaringType.Name}.{MethodBase.GetCurrentMethod().Name}()' called ...");
 
             base.OnUnapply();
             TacticalActor.Equipments.EquipmentChangedEvent -= OnEquipmentChanged;
 
-            Logger.Always("----------------------------------------------------", false);
+            Logger.Debug("----------------------------------------------------", false);
         }
 
         private DamageKeywordDef[] _dependentDamageKeywordDefs;
