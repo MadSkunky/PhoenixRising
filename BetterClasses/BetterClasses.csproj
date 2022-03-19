@@ -90,6 +90,7 @@
     <Compile Include="PersonalSpecModification.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tactical\Entities\DamageKeywords\SharedSoloEffectorDamageKeywordsDataDef.cs" />
     <Compile Include="Tactical\Entities\Statuses\ActionpointsRelatedStatus.cs" />
     <Compile Include="Tactical\Entities\Statuses\ActionpointsRelatedStatusDef.cs" />
     <Compile Include="SkillModifications\AssaultSkills.cs" />

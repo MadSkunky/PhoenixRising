@@ -426,7 +426,7 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
 
             vGL.DamagePayload.DamageKeywords = new List<DamageKeywordPair>
             {
-                new DamageKeywordPair{DamageKeywordDef = Shared.SharedDamageKeywords.DamageKeyword, Value = vGLNormal },
+                new DamageKeywordPair{DamageKeywordDef = Shared.SharedDamageKeywords.BlastKeyword, Value = vGLNormal },
                 new DamageKeywordPair{DamageKeywordDef = Shared.SharedDamageKeywords.ShreddingKeyword, Value = vGLShred },
                 new DamageKeywordPair{DamageKeywordDef = Shared.SharedDamageKeywords.AcidKeyword, Value = vGLAcid },
             };

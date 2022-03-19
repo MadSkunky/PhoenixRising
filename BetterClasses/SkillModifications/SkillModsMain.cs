@@ -10,6 +10,7 @@ using PhoenixPoint.Tactical.Entities;
 using PhoenixPoint.Tactical.Entities.Abilities;
 using PhoenixPoint.Tactical.Entities.Effects.ApplicationConditions;
 using PhoenixPoint.Tactical.Entities.Statuses;
+using PhoenixRising.BetterClasses.Tactical.Entities.DamageKeywords;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,10 +26,15 @@ namespace PhoenixRising.BetterClasses.SkillModifications
 
         private static readonly bool doNotLocalize = BetterClassesMain.doNotLocalize;
 
+        public static SharedSoloEffectorDamageKeywordsDataDef sharedSoloDamageKeywords;
+
         public static void ApplyChanges()
         {
             try
             {
+                // Create solo DamageKeywords
+                sharedSoloDamageKeywords = new SharedSoloEffectorDamageKeywordsDataDef();
+
                 // Assault skills ------------------------------------------------------
                 AssaultSkills.ApplyChanges();
 

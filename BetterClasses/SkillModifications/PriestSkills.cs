@@ -2,7 +2,9 @@
 using Base.Defs;
 using Base.Entities.Effects.ApplicationConditions;
 using Harmony;
+using I2.Loc;
 using PhoenixPoint.Common.Core;
+using PhoenixPoint.Common.UI;
 using PhoenixPoint.Tactical;
 using PhoenixPoint.Tactical.Entities;
 using PhoenixPoint.Tactical.Entities.Abilities;
@@ -72,12 +74,12 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                 null,
                 "1bfd9c34-b5c5-4c6e-abaf-aefccaea2a3c",
                 $"E_Status [{skillName}]");
-
+            
             Biochemist.ViewElementDef.DisplayName1.LocalizationKey = "PR_BC_BIOCHEMIST";
             Biochemist.ViewElementDef.Description.LocalizationKey = "PR_BC_BIOCHEMIST_DESC";
             Biochemist.ViewElementDef.LargeIcon = icon;
             Biochemist.ViewElementDef.SmallIcon = icon;
-
+            
             AddDependentDamageKeywordsStatusDef statusDef = (AddDependentDamageKeywordsStatusDef)Biochemist.StatusDef;
             statusDef.EffectName = "BC_Biochemist";
             statusDef.ApplicationConditions = new EffectConditionDef[0];
@@ -97,17 +99,24 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             statusDef.EventOnUnapply = null;
             statusDef.DamageKeywordDefs = new DamageKeywordDef[]
             {
-                Shared.SharedDamageKeywords.ViralKeyword,
-                Shared.SharedDamageKeywords.AcidKeyword,
-                Shared.SharedDamageKeywords.PoisonousKeyword,
-                Shared.SharedDamageKeywords.ParalysingKeyword
+                SkillModsMain.sharedSoloDamageKeywords.SoloViralKeyword,
+                SkillModsMain.sharedSoloDamageKeywords.SoloAcidKeyword,
+                SkillModsMain.sharedSoloDamageKeywords.SoloPoisonousKeyword,
+                SkillModsMain.sharedSoloDamageKeywords.SoloParalysingKeyword
             };
-            statusDef.DamageMultiplierType = DamageMultiplierType.Outgoing;
             statusDef.BonusDamagePerc = damageMod;
+            //statusDef.DamageMultiplierType = DamageMultiplierType.Outgoing;
 
-            //foreach (DamageKeywordDef temp in Repo.GetAllDefs<DamageKeywordDef>().Where(dk => dk.SoloEffector))
+            Logger.Always(LocalizationManager.GetCategories().Join());
+
+            //foreach (ViewElementDef temp in Repo.GetAllDefs<ViewElementDef>())
             //{
-            //    Logger.Always(temp.name);
+            //    if (temp.DisplayName1.LocalizationKey.Equals("KEY_CORRUPTION_STATUS")
+            //        || temp.DisplayName2.LocalizationKey.Equals("KEY_CORRUPTION_STATUS")
+            //        || temp.Description.LocalizationKey.Equals("KEY_CORRUPTION_STATUS"))
+            //    {
+            //        Logger.Always(temp.name + " Category: " + temp.Category);
+            //    }
             //}
         }
 
