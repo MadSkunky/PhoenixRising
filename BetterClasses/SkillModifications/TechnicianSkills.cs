@@ -14,6 +14,7 @@ using PhoenixPoint.Geoscape.Levels.Factions;
 using PhoenixPoint.Tactical.Entities;
 using PhoenixPoint.Tactical.Entities.Abilities;
 using PhoenixPoint.Tactical.Entities.Animations;
+using PhoenixPoint.Tactical.Entities.DamageKeywords;
 using PhoenixPoint.Tactical.Entities.Effects.DamageTypes;
 using PhoenixPoint.Tactical.Entities.Equipments;
 using PhoenixPoint.Tactical.Entities.Statuses;
@@ -138,8 +139,8 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                 Repo.GetAllDefs<StanceStatusDef>().FirstOrDefault(sd => sd.name.Equals("E_Status [ImprovedMedkit_FactionEffectDef]")),
                 "66cf66aa-c0f5-4711-b8de-52a5a478b389",
                 $"E_HealMultiplier [{skillName}]");
-            DamageMultiplierStatusDef DamageMod = Helper.CreateDefFromClone(
-                Repo.GetAllDefs<DamageMultiplierStatusDef>().FirstOrDefault(sms => sms.name.Equals("E_Status [BonusAcidArmorShred_FactionEffectDef]")),
+            AddDependentDamageKeywordsStatusDef DamageMod = Helper.CreateDefFromClone<AddDependentDamageKeywordsStatusDef>(
+                null,
                 "247f3abb-420f-42ac-8af3-d3ca12fb5787",
                 $"E_DamageMultiplier [{skillName}]");
             
@@ -182,24 +183,31 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             };
 
             DamageMod.EffectName = "AmplifyPain";
+            DamageMod.ApplicationConditions = new EffectConditionDef[0];
             DamageMod.DurationTurns = 1;
+            DamageMod.DisablesActor = false;
+            DamageMod.SingleInstance = true;
             DamageMod.ShowNotification = true;
-            DamageMod.VisibleOnHealthbar = TacStatusDef.HealthBarVisibility.VisibleWhenSelected;
+            DamageMod.VisibleOnPassiveBar = false;
+            DamageMod.VisibleOnHealthbar = TacStatusDef.HealthBarVisibility.AlwaysVisible;
             DamageMod.VisibleOnStatusScreen = TacStatusDef.StatusScreenVisibility.VisibleOnStatusesList | TacStatusDef.StatusScreenVisibility.VisibleOnBodyPartStatusList;
+            DamageMod.HealthbarPriority = 0;
+            DamageMod.StackMultipleStatusesAsSingleIcon = false;
             DamageMod.Visuals = AmplifyPain.ViewElementDef;
-            DamageMod.DamageTypeDefs = new DamageTypeBaseEffectDef[]
+            DamageMod.ParticleEffectPrefab = null;
+            DamageMod.DontRaiseOnApplyOnLoad = false;
+            DamageMod.EventOnApply = null;
+            DamageMod.EventOnUnapply = null;
+            DamageMod.DamageKeywordDefs = new DamageKeywordDef[]
             {
-                Repo.GetAllDefs<DamageTypeBaseEffectDef>().FirstOrDefault(d1 => d1.name.Equals("Paralysis_DamageOverTimeDamageTypeEffectDef")),
-                Repo.GetAllDefs<DamageTypeBaseEffectDef>().FirstOrDefault(d2 => d2.name.Equals("Virus_DamageOverTimeDamageTypeEffectDef")),
-                Repo.GetAllDefs<DamageTypeBaseEffectDef>().FirstOrDefault(d3 => d3.name.Equals("Poison_DamageOverTimeDamageTypeEffectDef")),
-                Repo.GetAllDefs<DamageTypeBaseEffectDef>().FirstOrDefault(d4 => d4.name.Equals("Fire_StandardDamageTypeEffectDef")),
-                Repo.GetAllDefs<DamageTypeBaseEffectDef>().FirstOrDefault(d5 => d5.name.Equals("EMP_StandardDamageTypeEffectDef")),
-                Repo.GetAllDefs<DamageTypeBaseEffectDef>().FirstOrDefault(d6 => d6.name.Equals("Electroshock_AttenuatingDamageTypeEffectDef")),
-                Repo.GetAllDefs<DamageTypeBaseEffectDef>().FirstOrDefault(d7 => d7.name.Equals("Sonic_AttenuatingDamageTypeEffectDef")),
-                Repo.GetAllDefs<DamageTypeBaseEffectDef>().FirstOrDefault(d8 => d8.name.Equals("Acid_DamageOverTimeDamageTypeEffectDef"))
+                SkillModsMain.sharedSoloDamageKeywords.SoloViralKeyword,
+                SkillModsMain.sharedSoloDamageKeywords.SoloAcidKeyword,
+                SkillModsMain.sharedSoloDamageKeywords.SoloPoisonousKeyword,
+                SkillModsMain.sharedSoloDamageKeywords.SoloParalysingKeyword,
+                SkillModsMain.sharedSoloDamageKeywords.SoloShockKeyword,
+                SkillModsMain.sharedSoloDamageKeywords.SoloSonicKeyword
             };
-            DamageMod.MultiplierType = DamageMultiplierType.Outgoing;
-            DamageMod.Multiplier = multiplier;
+            DamageMod.BonusDamagePerc = multiplier;
 
             foreach (TacActorSimpleAbilityAnimActionDef animActionDef in Repo.GetAllDefs<TacActorSimpleAbilityAnimActionDef>().Where(aad => aad.name.Contains("Soldier_Utka_AnimActionsDef")))
             {
