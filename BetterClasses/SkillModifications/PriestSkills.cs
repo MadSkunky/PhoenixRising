@@ -141,6 +141,10 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                 source.EffectDef,
                 "1160e6e7-8e03-4823-a986-58f0130f21a6",
                 skillName);
+            //(LayWaste.StatusDef as TacEffectStatusDef).EffectDef = Helper.CreateDefFromClone(
+            //    Repo.GetAllDefs<DamageEffectDef>().FirstOrDefault(de => de.name.Equals("E_Effect [MindCrush_AbilityDef]")),
+            //    "ea33c61e-2eb2-4b56-94c4-55aa4265ed05",
+            //    skillName);
 
             LayWaste.TargetingDataDef.Origin.LineOfSight = LineOfSightType.InSight;
             LayWaste.TargetingDataDef.Origin.FactionVisibility = LineOfSightType.InSight;
@@ -158,13 +162,26 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             LayWaste.ApplyToAllTargets = false;
             LayWaste.MultipleTargetSimulation = false;
 
+            //TacEffectStatusDef effectStatus = LayWaste.StatusDef as TacEffectStatusDef;
+            //effectStatus.DurationTurns = 0;
+            //effectStatus.SingleInstance = true;
+            //effectStatus.VisibleOnPassiveBar = false;
+            //effectStatus.VisibleOnHealthbar = 0;
+            //effectStatus.VisibleOnStatusScreen = 0;
+            //effectStatus.StackMultipleStatusesAsSingleIcon = false;
+            //effectStatus.Visuals = null;
+            //effectStatus.ParticleEffectPrefab = null;
+            //effectStatus.ApplyOnStatusApplication = true;
+            //effectStatus.ApplyOnTurnStart = false;
+
             DamageEffectDef damageEffect = LayWaste.EffectDef as DamageEffectDef;
             damageEffect.MinimumDamage = 60;
             damageEffect.MaximumDamage = 60;
 
+            TacticalAbilityDef animSource = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(ta => ta.name.Equals("InducePanic_AbilityDef"));
             foreach (TacActorSimpleAbilityAnimActionDef animActionDef in Repo.GetAllDefs<TacActorSimpleAbilityAnimActionDef>().Where(aad => aad.name.Contains("Soldier_Utka_AnimActionsDef")))
             {
-                if (animActionDef.AbilityDefs != null && animActionDef.AbilityDefs.Contains(source) && !animActionDef.AbilityDefs.Contains(LayWaste))
+                if (animActionDef.AbilityDefs != null && animActionDef.AbilityDefs.Contains(animSource) && !animActionDef.AbilityDefs.Contains(LayWaste))
                 {
                     animActionDef.AbilityDefs = animActionDef.AbilityDefs.Append(LayWaste).ToArray();
                     Logger.Debug("Anim Action '" + animActionDef.name + "' set for abilities:");
@@ -179,7 +196,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             //Logger.Debug("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
             //Logger.Debug("----------------------------------------------------", false);
 
-            //foreach (ApplyEffectAbilityDef temp in Repo.GetAllDefs<ApplyEffectAbilityDef>())
+            //foreach (TacEffectStatusDef temp in Repo.GetAllDefs<TacEffectStatusDef>())
             //{
             //    Logger.Always(temp.name);
             //}

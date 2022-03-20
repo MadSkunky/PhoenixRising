@@ -134,6 +134,21 @@ namespace PhoenixRising.BetterClasses.Tactical.Entities.Statuses
 
             base.OnUnapply();
             TacticalActor.Equipments.EquipmentChangedEvent -= OnEquipmentChanged;
+            if (_appliedDamageKeywordPairs != null && _appliedDamageKeywordPairs.Count > 0)
+            {
+                if (TacticalActor.GetBonusKeywords().Count() > 0)
+                {
+                    foreach (DamageKeywordPair dkp in _appliedDamageKeywordPairs)
+                    {
+                        if (TacticalActor.GetBonusKeywords().Contains(dkp))
+                        {
+                            Logger.Debug($"  Removing damage keywords on actor: {dkp}");
+                            TacticalActor.RemoveDamageKeywordPair(dkp);
+                        }
+                    }
+                }
+                _appliedDamageKeywordPairs.Clear();
+            }
 
             Logger.Debug("----------------------------------------------------", false);
         }

@@ -118,7 +118,8 @@ namespace PhoenixRising.BetterClasses.SkillModifications
         private static void Create_AmplifyPain()
         {
             string skillName = "AmplifyPain_AbilityDef";
-            float multiplier = 2f;
+            float healMultiplier = 2f;
+            float additionalDamageMultiplier = 1f;
             float wpCost = 4f;
             ApplyStatusAbilityDef source = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(a => a.name.Equals("QuickAim_AbilityDef"));
             Sprite icon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_CharacterAbility_AmplifyPain01.png");
@@ -167,7 +168,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                     {
                         TargetStat = StatModificationTarget.BonusHealValue,
                         Modification = StatModificationType.Multiply,
-                        Value = multiplier
+                        Value = healMultiplier
                     }
                 },
                 new EquipmentItemTagStatModification()
@@ -177,20 +178,20 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                     {
                         TargetStat = StatModificationTarget.BonusHealValue,
                         Modification = StatModificationType.Multiply,
-                        Value = multiplier
+                        Value = healMultiplier
                     }
                 }
             };
 
             DamageMod.EffectName = "AmplifyPain";
             DamageMod.ApplicationConditions = new EffectConditionDef[0];
-            DamageMod.DurationTurns = 1;
+            DamageMod.DurationTurns = 0;
             DamageMod.DisablesActor = false;
             DamageMod.SingleInstance = true;
             DamageMod.ShowNotification = true;
             DamageMod.VisibleOnPassiveBar = false;
-            DamageMod.VisibleOnHealthbar = TacStatusDef.HealthBarVisibility.AlwaysVisible;
-            DamageMod.VisibleOnStatusScreen = TacStatusDef.StatusScreenVisibility.VisibleOnStatusesList | TacStatusDef.StatusScreenVisibility.VisibleOnBodyPartStatusList;
+            DamageMod.VisibleOnHealthbar = 0;
+            DamageMod.VisibleOnStatusScreen = 0;
             DamageMod.HealthbarPriority = 0;
             DamageMod.StackMultipleStatusesAsSingleIcon = false;
             DamageMod.Visuals = AmplifyPain.ViewElementDef;
@@ -207,7 +208,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                 SkillModsMain.sharedSoloDamageKeywords.SoloShockKeyword,
                 SkillModsMain.sharedSoloDamageKeywords.SoloSonicKeyword
             };
-            DamageMod.BonusDamagePerc = multiplier;
+            DamageMod.BonusDamagePerc = additionalDamageMultiplier;
 
             foreach (TacActorSimpleAbilityAnimActionDef animActionDef in Repo.GetAllDefs<TacActorSimpleAbilityAnimActionDef>().Where(aad => aad.name.Contains("Soldier_Utka_AnimActionsDef")))
             {

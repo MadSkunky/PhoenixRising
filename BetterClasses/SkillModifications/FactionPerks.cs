@@ -412,7 +412,11 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             OnActorDamageReceivedStatusDef SocStatus = (OnActorDamageReceivedStatusDef)SowerOfChange.StatusDef;
             SocStatus.ApplicationConditions = new EffectConditionDef[0];
             SocStatus.DamageDeliveryTypeFilter = new List<DamageDeliveryType>();
-            SocStatus.TargetApplicationConditions = new EffectConditionDef[0];
+            SocStatus.TargetApplicationConditions = new EffectConditionDef[]
+            {
+                Repo.GetAllDefs<EffectConditionDef>().FirstOrDefault(ec1 => ec1.name.Equals("NotOfPhoenixFaction_ApplicationCondition"))
+            };
+
             SocStatus.EffectForAttacker = DamageEffect;
         }
         // Sower of Chage: Patching OnActorDamageReceivedStatus.OnActorDamageReceived() to handle the trigger effect preventing errors and to much slow motion
