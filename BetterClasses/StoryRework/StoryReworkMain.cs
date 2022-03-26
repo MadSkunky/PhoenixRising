@@ -89,6 +89,7 @@ namespace PhoenixRising.BetterClasses.StoryRework
                 geoEventFS9.GeoscapeEventData.Description[0].Voiceover = AugeryChant;
                 geoEventFS0.GeoscapeEventData.Description[0].Voiceover = null;
                 geoEventFS9.GeoscapeEventData.Flavour = "";
+                geoEventFS9.GeoscapeEventData.Choices[0].Outcome.OutcomeText.General.LocalizationKey = "PROG_FS9_OUTCOME";
                 //set event timer for meteor arrival (Mount Egg)
                 GeoTimePassedEventFilterDef timePassedFS9 = Repo.GetAllDefs<GeoTimePassedEventFilterDef>().FirstOrDefault(ged => ged.name.Equals("E_PROG_FS9_TimePassed [GeoTimePassedEventFilterDef]"));
                 timePassedFS9.TimePassedRaw = "2d0h";
@@ -97,12 +98,14 @@ namespace PhoenixRising.BetterClasses.StoryRework
                 GeoTimePassedEventFilterDef timePassedFS0 = Repo.GetAllDefs<GeoTimePassedEventFilterDef>().FirstOrDefault(ged => ged.name.Equals("E_PROG_FS0_TimePassed [GeoTimePassedEventFilterDef]"));
                 timePassedFS0.TimePassedRaw = "6d0h";
                 timePassedFS0.TimePassedHours = (float)144.0;
-                // set background and leader images for A Sleeping Beauty Awakens
-                geoEventFS0.GeoscapeEventData.Flavour = "ChineseSinkHole";
+                // set background and leader images for A Sleeping Beauty Awakens and break the panel in 2
+                geoEventFS0.GeoscapeEventData.Flavour = "";
                 geoEventFS0.GeoscapeEventData.Leader = "SY_Eileen";
+                geoEventFS0.GeoscapeEventData.Choices[0].Outcome.OutcomeText.General.LocalizationKey = "PROG_FS0_TEXT_OUTCOME_0";
                 // change leader image from Athena to Eileen for We Are Still Collating (former the Invitation)
                 GeoscapeEventDef geoEventFS1 = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_FS1_GeoscapeEventDef"));
                 geoEventFS1.GeoscapeEventData.Leader = "SY_Eileen";
+                geoEventFS1.GeoscapeEventData.Choices[0].Outcome.OutcomeText.General.LocalizationKey = "PROG_FS1_OUTCOME";
                 // Destroy Haven after mission
                 GeoscapeEventDef geoEventFS1WIN = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_FS1_WIN_GeoscapeEventDef"));
                 geoEventFS1WIN.GeoscapeEventData.Choices[0].Outcome.HavenPopulationChange = -20000;
@@ -112,7 +115,6 @@ namespace PhoenixRising.BetterClasses.StoryRework
                 // GeoTimePassedEventFilterDef timePassedFS1 = RepoGeoscapeEvent.GetAllDefs<GeoTimePassedEventFilterDef>().FirstOrDefault(ged => ged.name.Equals("E_PROG_FS1_TimePassed"));
                 // timePassedFS1.TimePassedRaw = "8d0h";
                 // timePassedFS1.TimePassedHours = 192;
-
             }
             catch (Exception e)
             {

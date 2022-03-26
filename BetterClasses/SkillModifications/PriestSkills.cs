@@ -2,10 +2,12 @@
 using Base.Defs;
 using Base.Entities.Abilities;
 using Base.Entities.Effects.ApplicationConditions;
+using Base.Utils.Maths;
 using Harmony;
 using I2.Loc;
 using PhoenixPoint.Common.Core;
 using PhoenixPoint.Common.Entities;
+using PhoenixPoint.Common.Entities.GameTags;
 using PhoenixPoint.Common.UI;
 using PhoenixPoint.Tactical;
 using PhoenixPoint.Tactical.Entities;
@@ -38,20 +40,11 @@ namespace PhoenixRising.BetterClasses.SkillModifications
 
         public static void ApplyChanges()
         {
-            // Psychic Ward: Fix psychic damage immunity or at least resistance, otherwise at least change description
-            Change_PsychicWard();
-            
             // Biochemist: Paralysis, Poison and Viral damage increased 25%
             Create_BC_Biochemist();
 
             // Lay Waste: 1 AP, 3 WP, If your current Willpower score is higher than target's deal 30 damage for each point of WP difference
             Create_LayWaste();
-        }
-
-        private static void Change_PsychicWard()
-        {
-            DamageMultiplierStatusDef pW = Repo.GetAllDefs<DamageMultiplierStatusDef>().FirstOrDefault(asa => asa.name.Equals("PsychicWard_StatusDef"));
-            pW.Multiplier = 0.001f;
         }
 
         private static void Create_BC_Biochemist()
@@ -78,12 +71,12 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                 null,
                 "1bfd9c34-b5c5-4c6e-abaf-aefccaea2a3c",
                 $"E_Status [{skillName}]");
-            
+
             Biochemist.ViewElementDef.DisplayName1.LocalizationKey = "PR_BC_BIOCHEMIST";
             Biochemist.ViewElementDef.Description.LocalizationKey = "PR_BC_BIOCHEMIST_DESC";
             Biochemist.ViewElementDef.LargeIcon = icon;
             Biochemist.ViewElementDef.SmallIcon = icon;
-            
+
             AddDependentDamageKeywordsStatusDef statusDef = (AddDependentDamageKeywordsStatusDef)Biochemist.StatusDef;
             statusDef.EffectName = "BC_Biochemist";
             statusDef.ApplicationConditions = new EffectConditionDef[0];

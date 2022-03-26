@@ -119,7 +119,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
         {
             string skillName = "AmplifyPain_AbilityDef";
             float healMultiplier = 2f;
-            float additionalDamageMultiplier = 1f;
+            float additionalDamageMultiplier = 0.5f;
             float wpCost = 4f;
             ApplyStatusAbilityDef source = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(a => a.name.Equals("QuickAim_AbilityDef"));
             Sprite icon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_CharacterAbility_AmplifyPain01.png");
@@ -153,12 +153,13 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             AmplifyPain.WillPointCost = wpCost;
             AmplifyPain.DisablingStatuses = new StatusDef[] { AmplifyPain.StatusDef };
 
-            (AmplifyPain.StatusDef as AddAttackBoostStatusDef).DurationTurns = 1;
+            (AmplifyPain.StatusDef as AddAttackBoostStatusDef).DurationTurns = 0;
             (AmplifyPain.StatusDef as AddAttackBoostStatusDef).ExpireOnEndOfTurn = true;
             (AmplifyPain.StatusDef as AddAttackBoostStatusDef).Visuals = AmplifyPain.ViewElementDef;
             (AmplifyPain.StatusDef as AddAttackBoostStatusDef).NumberOfAttacks = -1; // lasts as long as the status = end of turn
             (AmplifyPain.StatusDef as AddAttackBoostStatusDef).AdditionalStatusesToApply = new TacStatusDef[] { HealMod, DamageMod };
 
+            HealMod.DurationTurns = 0;
             HealMod.EquipmentsStatModifications = new EquipmentItemTagStatModification[]
             {
                 new EquipmentItemTagStatModification()
@@ -205,8 +206,8 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                 SkillModsMain.sharedSoloDamageKeywords.SoloAcidKeyword,
                 SkillModsMain.sharedSoloDamageKeywords.SoloPoisonousKeyword,
                 SkillModsMain.sharedSoloDamageKeywords.SoloParalysingKeyword,
-                SkillModsMain.sharedSoloDamageKeywords.SoloShockKeyword,
-                SkillModsMain.sharedSoloDamageKeywords.SoloSonicKeyword
+                //SkillModsMain.sharedSoloDamageKeywords.SoloShockKeyword,
+                //SkillModsMain.sharedSoloDamageKeywords.SoloSonicKeyword
             };
             DamageMod.BonusDamagePerc = additionalDamageMultiplier;
 

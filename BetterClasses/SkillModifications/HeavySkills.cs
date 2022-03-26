@@ -148,6 +148,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                 skillName);
             skirmisher.ViewElementDef.DisplayName1 = new LocalizedTextBind("SKIRMISHER", doNotLocalize);
             skirmisher.ViewElementDef.Description = new LocalizedTextBind($"If you take damage during enemy turn your attacks deal {(damageMod * 100) - 100}% more damage until end of turn.", doNotLocalize);
+            //skirmisher.ViewElementDef.Color = new Color(0, 0, 0, 0); // Color.yellow
             Sprite skirmisherIcon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_PersonalTrack_Gifted.png");
             skirmisher.ViewElementDef.LargeIcon = skirmisherIcon;
             skirmisher.ViewElementDef.SmallIcon = skirmisherIcon;
