@@ -159,7 +159,7 @@ namespace PhoenixRising.BetterClasses
                     { ClassKeys.Berserker.Name, "GUN KATA" },
                     { ClassKeys.Priest.Name, "BIOCHEMIST" },
                     { ClassKeys.Technician.Name, "REMOTE CONTROL" },
-                    { ClassKeys.Infiltrator.Name, "STEALTH SPECIALIST" }
+                    { ClassKeys.Infiltrator.Name, "SPIDER DRONE PACK" }
                 } } }),
             new PersonalPerksDef(
                 perkKey: PerkType.Class_2,
