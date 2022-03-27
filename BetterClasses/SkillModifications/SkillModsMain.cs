@@ -14,6 +14,7 @@ using PhoenixRising.BetterClasses.Tactical.Entities.DamageKeywords;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace PhoenixRising.BetterClasses.SkillModifications
 {
@@ -191,6 +192,8 @@ namespace PhoenixRising.BetterClasses.SkillModifications
         // New Battle Focus ability
         public static void Create_BattleFocus()
         {
+            float damageMod = 1.2f;
+            float range = 10.0f;
             string skillName = "BattleFocus_AbilityDef";
             bool doNotLocalize = Config.DoNotLocalizeChangedTexts;
 
@@ -210,7 +213,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                 masterMarksman.TargetingDataDef,
                 "fed0600a-14b3-4ef5-ac0c-31b3bf6f1e6c",
                 skillName);
-            TacticalAbilityViewElementDef vieElement = Helper.CreateDefFromClone(
+            TacticalAbilityViewElementDef viewElement = Helper.CreateDefFromClone(
                 masterMarksman.ViewElementDef,
                 "b498b9de-f10b-464c-a9f9-29a293568b04",
                 skillName);
@@ -226,20 +229,23 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             // Set fields
             battleFocusAbility.CharacterProgressionData = progression;
             battleFocusAbility.TargetingDataDef = targetingData;
-            battleFocusAbility.ViewElementDef = vieElement;
+            battleFocusAbility.ViewElementDef = viewElement;
             battleFocusAbility.StatusDef = stanceStatus;
             battleFocusAbility.TargetApplicationConditions = new EffectConditionDef[] { visibleActorsInRangeEffectCondition };
             progression.RequiredStrength = 0;
             progression.RequiredWill = 0;
             progression.RequiredSpeed = 0;
-            targetingData.Origin.Range = 10.0f;
-            vieElement.DisplayName1 = new LocalizedTextBind("BATTLE FOCUS", doNotLocalize);
-            vieElement.Description = new LocalizedTextBind("If there are enemies within 10 tiles your attacks gain +10% damage", doNotLocalize);
-            // TODO: Change to own Icon
+            targetingData.Origin.Range = range;
+            viewElement.DisplayName1.LocalizationKey = "PR_BC_BATTLE_FOCUS";
+            viewElement.Description.LocalizationKey = "PR_BC_BATTLE_FOCUS_DESC";
+            viewElement.ShowInInventoryItemTooltip = true;
+            Sprite icon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_PersonalTrack_TacticalAnalyst.png");
+            viewElement.LargeIcon = icon;
+            viewElement.SmallIcon = icon;
             stanceStatus.EffectName = skillName;
             stanceStatus.ShowNotification = true;
             stanceStatus.Visuals = battleFocusAbility.ViewElementDef;
-            stanceStatus.StatModifications[0].Value = 1.1f;
+            stanceStatus.StatModifications[0].Value = damageMod;
             visibleActorsInRangeEffectCondition.TargetingData = battleFocusAbility.TargetingDataDef;
             visibleActorsInRangeEffectCondition.ActorsInRange = true;
         }

@@ -1,6 +1,6 @@
 Key,Type,Desc,English,Chinese (Simplified),French,German,Italian,Polish,Russian,Spanish,UI_Tester
 PR_BC_BATTLE_FOCUS,Text,,BATTLE FOCUS,,,,,,,,
-PR_BC_BATTLE_FOCUS_DESC,Text,,If there are enemies within 10 tiles your attacks gain +10% damage,,,,,,,,
+PR_BC_BATTLE_FOCUS_DESC,Text,,If there are enemies within 10 tiles your attacks gain +20% damage,,,,,,,,
 PR_BC_QUICK_AIM,Text,,QUICK AIM,,,,,,,,
 PR_BC_QUICK_AIM_DESC,Text,,The action point cost of the next shot with proficient weapon is reduced by 1 with -30% accuracy. Limited to 2 uses per turn.,,,,,,,,
 PR_BC_KILL_N_RUN,Text,,KILL'N'RUN,,,,,,,,
@@ -66,9 +66,9 @@ PR_BC_SOWER_OF_CHANGE_DESC,Text,,Returns 10% of damage as Viral to the attacker,
 PR_BC_SURVIVOR,Text,,SURVIVOR,,,,,,,,
 PR_BC_SURVIVOR_DESC,Text,,"<b>WP +4, but -4 STR</b>
 <i>You have had it tougher than most, and that's saying a lot. Your body took a toll, but your mind grew stronger</i>",,,,,,,,
-PR_BC_EDUCATED,Text,,EDUCATED,,,,,,,,
-PR_BC_EDUCATED_DESC,Text,,"<b>WP +2. Healing +30%</b>
-<i>Medkits are not magic, you have to point the muzzle at the wound, not spray it from head to toes like pixie dust</i>",,,,,,,,
+PR_BC_NURSE,Text,,NURSE,,,,,,,,
+PR_BC_NURSE_DESC,Text,,"<b>WP +2. Healing +30%</b>
+<i>Yes, there is a gentler side to you. But people have to get hurt to experience it</i>",,,,,,,,
 PR_BC_SCAV,Text,,SCAV,,,,,,,,
 PR_BC_SCAV_DESC,Text,,"<b>WP +2, Perception +4</b>
 <i>The Old World left behind all sorts of interesting things. It takes patience and a keen eye to find them</i>",,,,,,,,
@@ -120,6 +120,16 @@ PR_BC_LAB_ASSISTANT_DESC,Text,,"<b>Acid Resistance</b>
 PR_BC_ROCKETEER,Text,,ROCKETEER,,,,,,,,
 PR_BC_ROCKETEER_DESC,Text,,"<b>Jetpack Proficiency</b>
 <i>Since you were a child you dreamt of flying rockets. Perhaps now you can!</i>",,,,,,,,
+PR_BC_PRIVILEGED,Text,,PRIVILEGED,,,,,,,,
+PR_BC_PRIVILEGED_DESC,Text,,"<b>Jetpack Proficiency</b>
+<i>Since you were a child you dreamt of flying rockets. Perhaps now you can!</i>",,,,,,,,
 PR_BC_FRENZY,Text,,FRENZY,,,,,,,,
 PR_BC_FRENZY_DESC,Text,,"Instils Frenzy in friendly characters within 20 tiles for two turns, increasing their Speed by 33% and making them immune to panic",,,,,,,,
 PR_BC_FRENZY_STATUS_DESC,Text,,"Speed increased by 33% and immune to panic",,,,,,,,
+PX_HAVENRECRUITS_RESEARCHDEF_UNLOCK,Text,,"We need recruits and there is no lack of candidates. However, very few of them fulfill the operational requirements. We should put in place a proper selection process.",,,,,,,,
+PX_HAVENRECRUITS_RESEARCHDEF_COMPLETE,Text,,"We have created a set of biometric and psych-eval tests in order to select potential recruits. We hope to pick at least one suitable individual every few days. On signing up with us the recruit or their dependents receive a single allotment of comestibles as compensation for their services. 
+
+We can also recruit in havens with leaders favorable to our cause. We expect that the candidates the havens will offer will not be exactly the pick of the litter; they will want to get rid of people they don't want to have. In addition, they will insist on us buying the equipment for the recruit with a mark-up. 
+
+On the upside, we can expect the recruits to be completely loyal to our cause. However, if necessary, a reliable indoctrination program can be implemented to supplement any deficiencies in that aspect.",,,,,,,,
+PX_HAVENRECRUITS_RESEARCHDEF_BENEFITS,Text,,"We can now recruit soldiers from havens and among candidates found elsewhere by our agents.",,,,,,,,

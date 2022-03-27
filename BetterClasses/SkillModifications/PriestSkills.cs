@@ -1,7 +1,11 @@
-﻿using Base.Core;
+﻿using Base.Cameras.ExecutionNodes;
+using Base.Core;
 using Base.Defs;
 using Base.Entities.Abilities;
+using Base.Entities.Effects;
 using Base.Entities.Effects.ApplicationConditions;
+using Base.Entities.Statuses;
+using Base.Levels;
 using Base.Utils.Maths;
 using Harmony;
 using I2.Loc;
@@ -10,13 +14,16 @@ using PhoenixPoint.Common.Entities;
 using PhoenixPoint.Common.Entities.GameTags;
 using PhoenixPoint.Common.UI;
 using PhoenixPoint.Tactical;
+using PhoenixPoint.Tactical.Cameras.Filters;
 using PhoenixPoint.Tactical.Entities;
 using PhoenixPoint.Tactical.Entities.Abilities;
 using PhoenixPoint.Tactical.Entities.Animations;
 using PhoenixPoint.Tactical.Entities.DamageKeywords;
 using PhoenixPoint.Tactical.Entities.Effects;
 using PhoenixPoint.Tactical.Entities.Effects.DamageTypes;
+using PhoenixPoint.Tactical.Entities.Equipments;
 using PhoenixPoint.Tactical.Entities.Statuses;
+using PhoenixPoint.Tactical.Levels;
 using PhoenixRising.BetterClasses.Tactical.Entities.Statuses;
 
 using System;
@@ -134,13 +141,10 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                 source.EffectDef,
                 "1160e6e7-8e03-4823-a986-58f0130f21a6",
                 skillName);
-            //(LayWaste.StatusDef as TacEffectStatusDef).EffectDef = Helper.CreateDefFromClone(
-            //    Repo.GetAllDefs<DamageEffectDef>().FirstOrDefault(de => de.name.Equals("E_Effect [MindCrush_AbilityDef]")),
-            //    "ea33c61e-2eb2-4b56-94c4-55aa4265ed05",
-            //    skillName);
 
             LayWaste.TargetingDataDef.Origin.LineOfSight = LineOfSightType.InSight;
             LayWaste.TargetingDataDef.Origin.FactionVisibility = LineOfSightType.InSight;
+            LayWaste.TargetingDataDef.Origin.CanPeekFromEdge = true;
             LayWaste.TargetingDataDef.Origin.Range = float.PositiveInfinity;
             LayWaste.TargetingDataDef.Target.TargetEnemies = true;
             LayWaste.TargetingDataDef.Target.TargetResult = TargetResult.Actor;
@@ -150,28 +154,29 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             LayWaste.ViewElementDef.LargeIcon = icon;
             LayWaste.ViewElementDef.SmallIcon = icon;
 
+            LayWaste.TrackWithCamera = true;
+            LayWaste.ShownModeToTrack = KnownState.Hidden;
             LayWaste.ActionPointCost = apCost;
             LayWaste.WillPointCost = wpCost;
             LayWaste.ApplyToAllTargets = false;
             LayWaste.MultipleTargetSimulation = false;
 
-            //TacEffectStatusDef effectStatus = LayWaste.StatusDef as TacEffectStatusDef;
-            //effectStatus.DurationTurns = 0;
-            //effectStatus.SingleInstance = true;
-            //effectStatus.VisibleOnPassiveBar = false;
-            //effectStatus.VisibleOnHealthbar = 0;
-            //effectStatus.VisibleOnStatusScreen = 0;
-            //effectStatus.StackMultipleStatusesAsSingleIcon = false;
-            //effectStatus.Visuals = null;
-            //effectStatus.ParticleEffectPrefab = null;
-            //effectStatus.ApplyOnStatusApplication = true;
-            //effectStatus.ApplyOnTurnStart = false;
-
             DamageEffectDef damageEffect = LayWaste.EffectDef as DamageEffectDef;
-            damageEffect.MinimumDamage = 60;
-            damageEffect.MaximumDamage = 60;
+            damageEffect.MinimumDamage = 30;
+            damageEffect.MaximumDamage = 30;
 
-            TacticalAbilityDef animSource = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(ta => ta.name.Equals("InducePanic_AbilityDef"));
+            // Animation related stuff
+            FirstMatchExecutionDef cameraAbility = Helper.CreateDefFromClone(
+                Repo.GetAllDefs<FirstMatchExecutionDef>().FirstOrDefault(bd => bd.name.Equals("E_MindControlAbility [NoDieCamerasTacticalCameraDirectorDef]")),
+                "51f0a0d0-7cab-4a6a-b511-51ba91e699fd",
+                "E_LayWaste_CameraAbility [NoDieCamerasTacticalCameraDirectorDef]");
+            cameraAbility.FilterDef = Helper.CreateDefFromClone(
+                Repo.GetAllDefs<TacCameraAbilityFilterDef>().FirstOrDefault(c => c.name.Equals("E_MindControlFilter [NoDieCamerasTacticalCameraDirectorDef]")),
+                "77f7e07a-a0b2-40b1-90c7-b8e86b70a5fd",
+                "E_LayWaste_CameraAbilityFilter [NoDieCamerasTacticalCameraDirectorDef]");
+            (cameraAbility.FilterDef as TacCameraAbilityFilterDef).TacticalAbilityDef = LayWaste;
+
+            TacticalAbilityDef animSource = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(ta => ta.name.Equals("Priest_MindControl_AbilityDef"));
             foreach (TacActorSimpleAbilityAnimActionDef animActionDef in Repo.GetAllDefs<TacActorSimpleAbilityAnimActionDef>().Where(aad => aad.name.Contains("Soldier_Utka_AnimActionsDef")))
             {
                 if (animActionDef.AbilityDefs != null && animActionDef.AbilityDefs.Contains(animSource) && !animActionDef.AbilityDefs.Contains(LayWaste))
@@ -185,14 +190,101 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                     Logger.Debug("----------------------------------------------------", false);
                 }
             }
+        }
+        // Harmony patch for LayWaste to inject check against willpower
+        [HarmonyPatch(typeof(ApplyEffectAbility), "TargetFilterPredicate")]
+        internal static class LayWaste_ApplyEffectAbility_TargetFilterPredicate_patch
+        {
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
+            private static void Postfix(ApplyEffectAbility __instance, ref bool __result, TacticalActorBase targetActor)
+            {
+                try
+                {
+                    if (__instance.AbilityDef.name.Equals("LayWaste_AbilityDef") && __result && targetActor != null)
+                    {
+                        Logger.Debug("----------------------------------------------------", false);
+                        Logger.Debug($"POSTFIX ApplyEffectAbility.TargetFilterPredicate(..) with 'LayWaste_AbilityDef' detected and __result is true ...");
+                        BaseStat targetWP = targetActor.Status.GetStat(StatModificationTarget.WillPoints.ToString(), null);
+                        StatusStat sourceWP = ((TacticalActor)AccessTools.Property(typeof(TacticalAbility), "TacticalActor").GetValue(__instance, null)).CharacterStats.WillPoints;
+                        __result = Utl.LesserThan(targetWP, sourceWP, 1E-05f);
+                        Logger.Debug($"Target actor WP {targetWP} vs source WP {sourceWP}, result after WP check: {__result}");
+                        Logger.Debug("----------------------------------------------------", false);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e);
+                }
+            }
+        }
+        // Harmony patch for LayWaste to inject check against willpower
+        [HarmonyPatch(typeof(DamageEffect), "OnApply")]
+        internal static class LayWaste_DamageEffect_OnApply_patch
+        {
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
+            private static bool Prefix(DamageEffect __instance, EffectTarget target)
+            {
+                try
+                {
+                    if (__instance.EffectDef.name.Equals("E_Effect [LayWaste_AbilityDef]"))
+                    {
+                        Logger.Always("----------------------------------------------------", false);
+                        Logger.Always($"POSTFIX DamageEffect.OnApply(..) from '{__instance.EffectDef.name}' detected with {target} as target");
 
-            //Logger.Debug("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
-            //Logger.Debug("----------------------------------------------------", false);
+                        object base_Source = AccessTools.Property(typeof(Effect), "Source").GetValue(__instance, null);
+                        object source = base_Source ?? __instance;
+                        IDamageReceiver damageReceiver = DamageEffect.GetDamageReceiver(target);
+                        DamageEffect.Params param = target.GetParam<DamageEffect.Params>();
+                        DamageAccumulation damageAccumulation = (param != null) ? param.DamageAccum : null;
+                        if (damageAccumulation == null)
+                        {
+                            damageAccumulation = new DamageAccumulation(__instance.DamageEffectDef, source, ((param != null) ? param.DamageTypeDef : null) ?? __instance.DamageEffectDef.DamageTypeDef);
+                            if (param != null)
+                            {
+                                param.DamageAccum = damageAccumulation;
+                            }
+                        }
+                        if (damageReceiver != null)
+                        {
+                            TacticalActorBase targetActor = damageReceiver.GetActor();
+                            TacticalActorBase sourceActor = TacUtil.GetSourceTacticalActorBase(source);
+                            float targetWP = targetActor.Status.GetStat(StatModificationTarget.WillPoints.ToString(), null).Value;
+                            float sourceWP = sourceActor.Status.GetStat(StatModificationTarget.WillPoints.ToString(), null).Value;
+                            float damageMult = sourceWP - targetWP;
+                            damageAccumulation.InitialAmount *= damageMult;
+                            damageAccumulation.Amount *= damageMult;
 
-            //foreach (TacEffectStatusDef temp in Repo.GetAllDefs<TacEffectStatusDef>())
-            //{
-            //    Logger.Always(temp.name);
-            //}
+                            Logger.Always($"  Target Actor: {targetActor} with {targetWP} WP");
+                            Logger.Always($"  Source Actor: {sourceActor} with {sourceWP} WP");
+                            Logger.Always($"  Damage multiplicator: {damageMult}");
+                            Logger.Always($"  DamageAccum initial amount: {damageAccumulation.InitialAmount}");
+                            Logger.Always($"                      amount: {damageAccumulation.Amount}");
+
+                            Vector3 damageOrigin = (param != null) ? param.DamageOrigin : Vector3.zero;
+                            Vector3 impactForce = (param != null) ? param.ImpactForce : Vector3.zero;
+                            CastHit impactHit = (param != null) ? param.ImpactHit : CastHit.Empty;
+                            __instance.AddTarget(target, damageAccumulation, damageReceiver, damageOrigin, impactForce, impactHit);
+                        }
+                        else
+                        {
+                            damageAccumulation.AddBlocker();
+                        }
+                        if (param == null || param.ApplyImmediately)
+                        {
+                            damageAccumulation.ApplyAddedDamage();
+                        }
+
+                        Logger.Always("----------------------------------------------------", false);
+                        return false;
+                    }
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e);
+                    return true;
+                }
+            }
         }
     }
 }

@@ -205,6 +205,9 @@
     <Content Include="Assets\Textures\UI_AbilitiesIcon_PersonalTrack_Strategist.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\Textures\UI_AbilitiesIcon_PersonalTrack_TacticalAnalyst.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\Textures\UI_AbilitiesIcon_PersonalTrack_Thief.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

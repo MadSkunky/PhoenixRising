@@ -83,7 +83,7 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
             // Mech Arms: 200 emp damage
             Change_MechArms();
             // Vengeance Torso: Attacks against enemies within 10 tiles deal 10% more damage
-            Create_VengeanceTorso();
+            Change_VengeanceTorso();
             // Shadow Legs: Electric Kick replace shock damage with Sonic damage (value 20)
             Change_ShadowLegs();
             // Psychic Ward - fix and description to : Allies within 10 tiles are immune to panic and psychic scream damage
@@ -99,11 +99,13 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
         {
             ApplyDamageEffectAbilityDef acidCloud = Repo.GetAllDefs<ApplyDamageEffectAbilityDef>().FirstOrDefault(a => a.name.Equals("Acheron_CorrosiveCloud_AbilityDef"));
 
-            acidCloud.TargetingDataDef.Origin.TargetTags = new GameTagsList()
-            {
-                Repo.GetAllDefs<GameTagDef>().FirstOrDefault(a => a.name.Equals("Human_TagDef")),
-                acidCloud.TargetingDataDef.Origin.TargetTags[1],
-            };
+            //acidCloud.TargetingDataDef.Origin.TargetTags = new GameTagsList()
+            //{
+            //    Repo.GetAllDefs<GameTagDef>().FirstOrDefault(a => a.name.Equals("Human_TagDef")),
+            //    acidCloud.TargetingDataDef.Origin.TargetTags[1],
+            //};
+
+            acidCloud.DamagePayload.AoeRadius = 2;
         }
         public static void Change_Turrets()
         {
@@ -395,7 +397,7 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
                 new DamageKeywordPair{DamageKeywordDef = emp, Value = mechArmsEMPDamage },
                 };
         }
-        public static void Create_VengeanceTorso()
+        public static void Change_VengeanceTorso()
         {
             TacticalItemDef vTorso = Repo.GetAllDefs<TacticalItemDef>().FirstOrDefault(p => p.name.Equals("SY_Shinobi_BIO_Torso_BodyPartDef"));
 
@@ -441,9 +443,9 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
         }
         public static void Change_TechRemoveFaceHugger()
         {
-            int tRFHRange = 2;
-            RemoveFacehuggerAbilityDef tRFH = Repo.GetAllDefs<RemoveFacehuggerAbilityDef>().FirstOrDefault(p => p.name.Equals("TechnicianRemoveFacehugger_AbilityDef"));
-            tRFH.TargetingDataDef.Origin.Range = tRFHRange;
+            //int tRFHRange = 2;
+            //RemoveFacehuggerAbilityDef tRFH = Repo.GetAllDefs<RemoveFacehuggerAbilityDef>().FirstOrDefault(p => p.name.Equals("TechnicianRemoveFacehugger_AbilityDef"));
+            //tRFH.TargetingDataDef.Origin.Range = tRFHRange;
         }
     }
 }

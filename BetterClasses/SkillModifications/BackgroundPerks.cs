@@ -35,8 +35,8 @@ namespace PhoenixRising.BetterClasses.SkillModifications
         {
             // Survivor, WP +4, but - 4 STR
             Create_Survivor();
-            // Educated, WP + 2, Healing + 30 %
-            Change_Educated();
+            // Nurse, WP + 2, Healing + 30 %, ex Healer
+            Change_Nurse();
             // Scav, WP + 2, Perception + 4
             Change_Scav();
             // CorpseDisposer, Fire Resistance, STR + 2
@@ -59,8 +59,8 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             Create_Paranoid();
             // TRUE GRIT, Melee Resistance 10 %
             Create_TrueGrit();
-            // Transhumanist, Can mutate all body parts
-            Create_Transhumanist();
+            // Privileged	SPD +2, Perception +4, Carry Weight -25%	You were riding out the Apocalypse in First Class and letting others carry your load for you. It didn't last, and the run for your life that followed gave you a new awareness.
+            Create_Privileged();
             // A HISTORY OF VIOLENCE, Damage + 10 %, Willpower - 3
             Create_AHistoryOfViolence();
             // DAREDEVIL, Damage +10 %, Accuracy - 10 %
@@ -144,23 +144,23 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             Survivor.ViewElementDef.LargeIcon = SurvivorIcon;
             Survivor.ViewElementDef.SmallIcon = SurvivorIcon;
         }
-        private static void Change_Educated()
+        private static void Change_Nurse()
         {
-            PassiveModifierAbilityDef Educated = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(p => p.name.Equals("Helpful_AbilityDef"));
-            for (int i = 0; i < Educated.StatModifications.Length; i++)
+            PassiveModifierAbilityDef Nurse = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(p => p.name.Equals("Helpful_AbilityDef"));
+            for (int i = 0; i < Nurse.StatModifications.Length; i++)
             {
-                if (Educated.StatModifications[i].TargetStat == StatModificationTarget.BonusHealValue)
+                if (Nurse.StatModifications[i].TargetStat == StatModificationTarget.BonusHealValue)
                 {
-                    Educated.StatModifications[i].Value = 1.3f;
+                    Nurse.StatModifications[i].Value = 1.3f;
                 }
-                if (Educated.StatModifications[i].TargetStat == StatModificationTarget.WillPoints
-                    || Educated.StatModifications[i].TargetStat == StatModificationTarget.Willpower)
+                if (Nurse.StatModifications[i].TargetStat == StatModificationTarget.WillPoints
+                    || Nurse.StatModifications[i].TargetStat == StatModificationTarget.Willpower)
                 {
-                    Educated.StatModifications[i].Value = 2.0f;
+                    Nurse.StatModifications[i].Value = 2.0f;
                 }
             }
-            Educated.ViewElementDef.DisplayName1 = new LocalizedTextBind("EDUCATED", doNotLocalize);
-            Educated.ViewElementDef.Description = new LocalizedTextBind("<b>+2 Willpower, +30% Healing</b>\n<i>Medkits are not magic, you have to point the muzzle at the wound, not spray it from head to toes like pixie dust.</i>", doNotLocalize);
+            Nurse.ViewElementDef.DisplayName1.LocalizationKey = "PR_BC_NURSE";
+            Nurse.ViewElementDef.Description.LocalizationKey = "PR_BC_NURSE_DESC";
         }
         private static void Change_Scav()
         {
@@ -463,10 +463,10 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             paranoid.ViewElementDef.LargeIcon = pIcon;
             paranoid.ViewElementDef.SmallIcon = pIcon;
         }
-        private static void Create_Transhumanist()
+        private static void Create_Privileged()
         {
-            Logger.Debug("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
-            Logger.Debug("----------------------------------------------------", false);
+            //Logger.Debug("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
+            //Logger.Debug("----------------------------------------------------", false);
         }
         private static void Create_AHistoryOfViolence()
         {

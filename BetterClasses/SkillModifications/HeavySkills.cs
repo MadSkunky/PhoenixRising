@@ -1,4 +1,5 @@
-﻿using Base.Core;
+﻿using Base.Cameras.ExecutionNodes;
+using Base.Core;
 using Base.Defs;
 using Base.Entities.Abilities;
 using Base.Entities.Effects;
@@ -12,6 +13,7 @@ using PhoenixPoint.Common.Entities;
 using PhoenixPoint.Common.Entities.GameTags;
 using PhoenixPoint.Common.UI;
 using PhoenixPoint.Tactical;
+using PhoenixPoint.Tactical.Cameras.Filters;
 using PhoenixPoint.Tactical.Entities;
 using PhoenixPoint.Tactical.Entities.Abilities;
 using PhoenixPoint.Tactical.Entities.Animations;
@@ -293,6 +295,30 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             jetpackControl.WillPointCost = jetpackControlWPCost;
             jetpackControl.AbilitiesRequired = new TacticalAbilityDef[] { source };
             jetpackControl.TargetingDataDef.Origin.Range = jetpackControlRange;
+
+            // Animation related stuff
+            TacCameraAbilityFilterDef tacCameraAbilityFilter1 = Repo.GetAllDefs<TacCameraAbilityFilterDef>().FirstOrDefault(c => c.name.Equals("E_JetJumpAbilityFilter"));
+            FirstMatchExecutionDef cameraAbility1 = Helper.CreateDefFromClone(
+                Repo.GetAllDefs<FirstMatchExecutionDef>().FirstOrDefault(fme => fme.FilterDef == tacCameraAbilityFilter1),
+                "1f6b1ee0-0e11-4985-ab69-4266f40c9117",
+                "E_JetpackControl_CameraAbility1 [NoDieCamerasTacticalCameraDirectorDef]");
+            cameraAbility1.FilterDef = Helper.CreateDefFromClone(
+                tacCameraAbilityFilter1,
+                "ce4947e2-527f-4815-bdfc-8973d8ef7802",
+                "E_JetpackControl_CameraAbilityFilter1 [NoDieCamerasTacticalCameraDirectorDef]");
+            (cameraAbility1.FilterDef as TacCameraAbilityFilterDef).TacticalAbilityDef = jetpackControl;
+
+            TacCameraAbilityFilterDef tacCameraAbilityFilter2 = Repo.GetAllDefs<TacCameraAbilityFilterDef>().FirstOrDefault(c => c.name.Equals("E_JetJumpAbilityFilter [NoDieCamerasTacticalCameraDirectorDef]"));
+            FirstMatchExecutionDef cameraAbility2 = Helper.CreateDefFromClone(
+                Repo.GetAllDefs<FirstMatchExecutionDef>().FirstOrDefault(fme => fme.FilterDef == tacCameraAbilityFilter2),
+                "34095bd0-ccf5-48cb-ba73-7689a5d45e7e",
+                "E_JetpackControl_CameraAbility2 [NoDieCamerasTacticalCameraDirectorDef]");
+            cameraAbility2.FilterDef = Helper.CreateDefFromClone(
+                tacCameraAbilityFilter2,
+                "5fa204df-5048-428f-b701-722ea9e15cc7",
+                "E_JetpackControl_CameraAbilityFilter2 [NoDieCamerasTacticalCameraDirectorDef]");
+            (cameraAbility2.FilterDef as TacCameraAbilityFilterDef).TacticalAbilityDef = jetpackControl;
+
             foreach (TacActorSimpleAbilityAnimActionDef animActionDef in Repo.GetAllDefs<TacActorSimpleAbilityAnimActionDef>().Where(aad => aad.name.Contains("Soldier_Utka_AnimActionsDef")))
             {
                 if (animActionDef.AbilityDefs != null && animActionDef.AbilityDefs.Contains(source) && !animActionDef.AbilityDefs.Contains(jetpackControl))
@@ -309,11 +335,13 @@ namespace PhoenixRising.BetterClasses.SkillModifications
         }
         private static void Change_BoomBlast()
         {
+            float wpCost = 4.0f;
             bool setNewStats = false;
             ApplyStatusAbilityDef boomBlast = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(asa => asa.name.Equals("BigBooms_AbilityDef"));
             boomBlast.ViewElementDef.Description = new LocalizedTextBind(
-                $"Until end of turn your explosives gain +50% range. Grenade Launcher AP cost reduce by 1.",
+                $"Until end of turn your explosives gain +50% range, in addtion Rocket and Grenade Launchers cost - 1AP.",
                 doNotLocalize);
+            boomBlast.WillPointCost = wpCost;
 
             // Convert additional statuses to a List for easier access
             List<TacStatusDef> bbAdditionalStatusesToApply = (boomBlast.StatusDef as AddAttackBoostStatusDef).AdditionalStatusesToApply.ToList();
@@ -322,7 +350,10 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             GameTagDef glTag = Repo.GetAllDefs<GameTagDef>().FirstOrDefault(gt => gt.name.Equals("GrenadeLauncherItem_TagDef"));
             foreach (WeaponDef wd in Repo.GetAllDefs<WeaponDef>())
             {
-                if ((wd.name.Equals("PX_GrenadeLauncher_WeaponDef") || wd.name.Equals("AC_Rebuke_WeaponDef"))
+                if ((wd.name.Equals("PX_GrenadeLauncher_WeaponDef")
+                    || wd.name.Equals("AC_Rebuke_WeaponDef")
+                    || wd.name.Equals("FS_AssaultGrenadeLauncher_WeaponDef")
+                    || wd.name.Equals("NJ_HeavyRocketLauncher_WeaponDef"))
                     && !wd.Tags.Contains(glTag))
                 {
                     wd.Tags.Add(glTag);
