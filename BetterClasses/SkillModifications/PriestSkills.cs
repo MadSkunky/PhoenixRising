@@ -111,10 +111,11 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             statusDef.BonusDamagePerc = damageMod;
         }
 
+        internal static float wpCost = 3.0f;
         private static void Create_LayWaste()
         {
             float apCost = 0.25f;
-            float wpCost = 3.0f;
+            //float wpCost = 3.0f;
             
             string skillName = "LayWaste_AbilityDef";
             Sprite icon = Repo.GetAllDefs<TacticalAbilityViewElementDef>().FirstOrDefault(tav => tav.name.Equals("E_ViewElement [Mutoid_PoisonExplosion_ApplyStatusAbilityDef]")).LargeIcon;
@@ -228,8 +229,8 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                 {
                     if (__instance.EffectDef.name.Equals("E_Effect [LayWaste_AbilityDef]"))
                     {
-                        Logger.Always("----------------------------------------------------", false);
-                        Logger.Always($"POSTFIX DamageEffect.OnApply(..) from '{__instance.EffectDef.name}' detected with {target} as target");
+                        Logger.Debug("----------------------------------------------------", false);
+                        Logger.Debug($"POSTFIX DamageEffect.OnApply(..) from '{__instance.EffectDef.name}' detected with {target} as target");
 
                         object base_Source = AccessTools.Property(typeof(Effect), "Source").GetValue(__instance, null);
                         object source = base_Source ?? __instance;
@@ -249,16 +250,19 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                             TacticalActorBase targetActor = damageReceiver.GetActor();
                             TacticalActorBase sourceActor = TacUtil.GetSourceTacticalActorBase(source);
                             float targetWP = targetActor.Status.GetStat(StatModificationTarget.WillPoints.ToString(), null).Value;
-                            float sourceWP = sourceActor.Status.GetStat(StatModificationTarget.WillPoints.ToString(), null).Value;
-                            float damageMult = sourceWP - targetWP;
+                            float sourceWP = __instance.IsSimulation(target)
+                                ? sourceActor.Status.GetStat(StatModificationTarget.WillPoints.ToString(), null).Value
+                                : sourceActor.Status.GetStat(StatModificationTarget.WillPoints.ToString(), null).Value + wpCost;
+                            int damageMult = (int)(sourceWP - targetWP);
                             damageAccumulation.InitialAmount *= damageMult;
                             damageAccumulation.Amount *= damageMult;
 
-                            Logger.Always($"  Target Actor: {targetActor} with {targetWP} WP");
-                            Logger.Always($"  Source Actor: {sourceActor} with {sourceWP} WP");
-                            Logger.Always($"  Damage multiplicator: {damageMult}");
-                            Logger.Always($"  DamageAccum initial amount: {damageAccumulation.InitialAmount}");
-                            Logger.Always($"                      amount: {damageAccumulation.Amount}");
+                            Logger.Debug($"  Target Actor: {targetActor} with {targetWP} WP");
+                            Logger.Debug($"  Source Actor: {sourceActor} with {sourceWP} WP");
+                            Logger.Debug($"  Damage multiplicator: {damageMult}");
+                            Logger.Debug($"  DamageAccum initial amount: {damageAccumulation.InitialAmount}");
+                            Logger.Debug($"                      amount: {damageAccumulation.Amount}");
+                            Logger.Debug($"  Is simulation: {__instance.IsSimulation(target)}");
 
                             Vector3 damageOrigin = (param != null) ? param.DamageOrigin : Vector3.zero;
                             Vector3 impactForce = (param != null) ? param.ImpactForce : Vector3.zero;
@@ -274,7 +278,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                             damageAccumulation.ApplyAddedDamage();
                         }
 
-                        Logger.Always("----------------------------------------------------", false);
+                        Logger.Debug("----------------------------------------------------", false);
                         return false;
                     }
                     return true;
