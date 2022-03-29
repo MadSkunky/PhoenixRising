@@ -202,25 +202,28 @@ namespace PhoenixRising.BetterClasses
         //internal static class BC_GeoAlienFaction_OnLevelStart_patch
         //{
         //    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
-        //    private static void Postfix(List<GeoSite> ____inactiveMistGenerators, List<GeoSite> ____activeMistGenerators)
+        //    private static void Postfix(GeoAlienFaction __instance, List<GeoSite> ____inactiveMistGenerators, List<GeoSite> ____activeMistGenerators, int ____evolutionProgress)
         //    {
-        //        Logger.Always("POSTFIX GeoAlienFaction.OnLevelStart() called ...", false);
         //        try
         //        {
+        //            Logger.Always("---------------------------------------------------------------", false);
+        //            Logger.Always("POSTFIX GeoAlienFaction.OnLevelStart() called ...", false);
+        //
         //            activeMGs = ____activeMistGenerators.Count;
         //            int sumMG = activeMGs + ____inactiveMistGenerators.Count;
         //            int percActiveMG = Mathf.RoundToInt((float)activeMGs * 100 / sumMG);
-        //            string message = string.Concat("----------------------------------------------------------\n",
-        //                                           $"                 Active mist generators: {activeMGs}\n",
-        //                                           $"                    All mist generators: {sumMG}\n",
-        //                                           $"Percentage of mist generators activated: {percActiveMG}%\n",
-        //                                           "----------------------------------------------------------");
+        //            string message = string.Concat($"{activeMGs} of {sumMG} mist generators ({percActiveMG}%) active.\n",
+        //                                           $"Alien evolution progress: {____evolutionProgress}");
         //            Logger.Always(message, false);
-        //            //GameUtl.GetMessageBox().ShowSimplePrompt(message, MessageBoxIcon.Information, MessageBoxButtons.OK, null);
+        //            __instance.GeoLevel.View.RequestGamePause();
+        //            GameUtl.GetMessageBox().ShowSimplePrompt(message, MessageBoxIcon.Information, MessageBoxButtons.OK, null);
+        //
+        //            Logger.Always("---------------------------------------------------------------", false);
         //        }
         //        catch (Exception e)
         //        {
         //            Logger.Error(e);
+        //            Logger.Always("---------------------------------------------------------------", false);
         //        }
         //    }
         //}
@@ -228,28 +231,28 @@ namespace PhoenixRising.BetterClasses
         //internal static class BC_GeoAlienFaction_UpdateFactionDaily_patch
         //{
         //    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
-        //    private static void Postfix(List<GeoSite> ____inactiveMistGenerators, List<GeoSite> ____activeMistGenerators)
+        //    private static void Postfix(GeoAlienFaction __instance, List<GeoSite> ____inactiveMistGenerators, List<GeoSite> ____activeMistGenerators, int ____evolutionProgress)
         //    {
-        //        Logger.Always("POSTFIX GeoAlienFaction.UpdateFactionDaily() called ...", false);
         //        try
         //        {
-        //            if (____activeMistGenerators?.Count > 0 && ____inactiveMistGenerators?.Count > 0 && ____activeMistGenerators.Count != activeMGs)
-        //            {
-        //                activeMGs = ____activeMistGenerators.Count;
-        //                int sumMG = activeMGs + ____inactiveMistGenerators.Count;
-        //                int percActiveMG = Mathf.RoundToInt((float)activeMGs * 100 / sumMG);
-        //                string message = string.Concat("----------------------------------------------------------\n",
-        //                                               $"                 Active mist generators: {activeMGs}\n",
-        //                                               $"                    All mist generators: {sumMG}\n",
-        //                                               $"Percentage of mist generators activated: {percActiveMG}%\n",
-        //                                               "----------------------------------------------------------");
-        //                Logger.Always(message, false);
-        //                //GameUtl.GetMessageBox().ShowSimplePrompt(message, MessageBoxIcon.Information, MessageBoxButtons.OK, null);
-        //            }
+        //            Logger.Always("---------------------------------------------------------------", false);
+        //            Logger.Always("POSTFIX GeoAlienFaction.UpdateFactionDaily() called ...", false);
+        //
+        //            activeMGs = ____activeMistGenerators.Count;
+        //            int sumMG = activeMGs + ____inactiveMistGenerators.Count;
+        //            int percActiveMG = Mathf.RoundToInt((float)activeMGs * 100 / sumMG);
+        //            string message = string.Concat($"{activeMGs} of {sumMG} mist generators ({percActiveMG}%) active.\n",
+        //                                           $"Alien evolution progress: {____evolutionProgress}");
+        //            Logger.Always(message, false);
+        //            __instance.GeoLevel.View.RequestGamePause();
+        //            GameUtl.GetMessageBox().ShowSimplePrompt(message, MessageBoxIcon.Information, MessageBoxButtons.OK, null);
+        //
+        //            Logger.Always("---------------------------------------------------------------", false);
         //        }
         //        catch (Exception e)
         //        {
         //            Logger.Error(e);
+        //            Logger.Always("---------------------------------------------------------------", false);
         //        }
         //    }
         //}

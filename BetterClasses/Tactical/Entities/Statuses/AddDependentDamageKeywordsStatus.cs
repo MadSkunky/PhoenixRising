@@ -106,7 +106,8 @@ namespace PhoenixRising.BetterClasses.Tactical.Entities.Statuses
         {
             try
             {
-                if (ability!=null
+                if (ability is IAttackAbility
+                    && ability.TacticalActor is TacticalActor
                     && ability.TacticalActor == TacticalActor
                     && ability != TacticalActor.Equipments.SelectedWeapon?.DefaultShootAbility
                     && ability is IDamageDealer damageDealer)
@@ -137,15 +138,15 @@ namespace PhoenixRising.BetterClasses.Tactical.Entities.Statuses
         {
             try
             {
-                if (ability != null
+                if (ability is IAttackAbility
+                    && ability.TacticalActor is TacticalActor
                     && ability.TacticalActor == TacticalActor
                     && ability != TacticalActor.Equipments.SelectedWeapon?.DefaultShootAbility
                     && ability == _trackedAbility)
                 {
                     Logger.Debug("----------------------------------------------------", false);
-                    Logger.Debug($"'{MethodBase.GetCurrentMethod().DeclaringType.Name}.{MethodBase.GetCurrentMethod().Name}()' called ...");
-                    Logger.Debug($"Actor: {TacticalActor}");
-                    Logger.Debug($"Executed ability: {ability}");
+                    Logger.Debug($"'{MethodBase.GetCurrentMethod().DeclaringType.Name}.{MethodBase.GetCurrentMethod().Name}()' on {TacticalActor} called ...");
+                    Logger.Debug($"Ability {ability} executed by {ability.TacticalActor}");
 
                     if (TacticalActor.GetBonusKeywords().Count() > 0)
                     {
