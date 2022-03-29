@@ -18,6 +18,10 @@ using PhoenixPoint.Tactical.Entities;
 using PhoenixPoint.Common.Entities;
 using PhoenixPoint.Geoscape.Levels;
 using PhoenixPoint.Common.Entities.Items;
+using PhoenixPoint.Geoscape.Levels.Factions;
+using PhoenixPoint.Geoscape.Entities;
+using UnityEngine;
+using Base.UI.MessageBox;
 
 namespace PhoenixRising.BetterClasses
 {
@@ -191,5 +195,63 @@ namespace PhoenixRising.BetterClasses
             // Apply various adjustments
             VariousAdjustmentsMain.ApplyChanges();
         }
+
+        //internal static int activeMGs = 0;
+        //// Harmony patches checking mist generator states
+        //[HarmonyPatch(typeof(GeoAlienFaction), "OnLevelStart")]
+        //internal static class BC_GeoAlienFaction_OnLevelStart_patch
+        //{
+        //    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
+        //    private static void Postfix(List<GeoSite> ____inactiveMistGenerators, List<GeoSite> ____activeMistGenerators)
+        //    {
+        //        Logger.Always("POSTFIX GeoAlienFaction.OnLevelStart() called ...", false);
+        //        try
+        //        {
+        //            activeMGs = ____activeMistGenerators.Count;
+        //            int sumMG = activeMGs + ____inactiveMistGenerators.Count;
+        //            int percActiveMG = Mathf.RoundToInt((float)activeMGs * 100 / sumMG);
+        //            string message = string.Concat("----------------------------------------------------------\n",
+        //                                           $"                 Active mist generators: {activeMGs}\n",
+        //                                           $"                    All mist generators: {sumMG}\n",
+        //                                           $"Percentage of mist generators activated: {percActiveMG}%\n",
+        //                                           "----------------------------------------------------------");
+        //            Logger.Always(message, false);
+        //            //GameUtl.GetMessageBox().ShowSimplePrompt(message, MessageBoxIcon.Information, MessageBoxButtons.OK, null);
+        //        }
+        //        catch (Exception e)
+        //        {
+        //            Logger.Error(e);
+        //        }
+        //    }
+        //}
+        //[HarmonyPatch(typeof(GeoAlienFaction), "UpdateFactionDaily")]
+        //internal static class BC_GeoAlienFaction_UpdateFactionDaily_patch
+        //{
+        //    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
+        //    private static void Postfix(List<GeoSite> ____inactiveMistGenerators, List<GeoSite> ____activeMistGenerators)
+        //    {
+        //        Logger.Always("POSTFIX GeoAlienFaction.UpdateFactionDaily() called ...", false);
+        //        try
+        //        {
+        //            if (____activeMistGenerators?.Count > 0 && ____inactiveMistGenerators?.Count > 0 && ____activeMistGenerators.Count != activeMGs)
+        //            {
+        //                activeMGs = ____activeMistGenerators.Count;
+        //                int sumMG = activeMGs + ____inactiveMistGenerators.Count;
+        //                int percActiveMG = Mathf.RoundToInt((float)activeMGs * 100 / sumMG);
+        //                string message = string.Concat("----------------------------------------------------------\n",
+        //                                               $"                 Active mist generators: {activeMGs}\n",
+        //                                               $"                    All mist generators: {sumMG}\n",
+        //                                               $"Percentage of mist generators activated: {percActiveMG}%\n",
+        //                                               "----------------------------------------------------------");
+        //                Logger.Always(message, false);
+        //                //GameUtl.GetMessageBox().ShowSimplePrompt(message, MessageBoxIcon.Information, MessageBoxButtons.OK, null);
+        //            }
+        //        }
+        //        catch (Exception e)
+        //        {
+        //            Logger.Error(e);
+        //        }
+        //    }
+        //}
     }
 }

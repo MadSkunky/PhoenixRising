@@ -106,7 +106,8 @@ namespace PhoenixRising.BetterClasses.Tactical.Entities.Statuses
         {
             try
             {
-                if (ability.TacticalActor == TacticalActor
+                if (ability!=null
+                    && ability.TacticalActor == TacticalActor
                     && ability != TacticalActor.Equipments.SelectedWeapon?.DefaultShootAbility
                     && ability is IDamageDealer damageDealer)
                 {
@@ -136,7 +137,8 @@ namespace PhoenixRising.BetterClasses.Tactical.Entities.Statuses
         {
             try
             {
-                if (ability.TacticalActor == TacticalActor
+                if (ability != null
+                    && ability.TacticalActor == TacticalActor
                     && ability != TacticalActor.Equipments.SelectedWeapon?.DefaultShootAbility
                     && ability == _trackedAbility)
                 {

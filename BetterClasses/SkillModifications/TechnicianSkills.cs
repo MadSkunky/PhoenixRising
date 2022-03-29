@@ -128,6 +128,10 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                 source,
                 "463a6458-e45c-4310-abb6-c7cb904cb918",
                 skillName);
+            AmplifyPain.CharacterProgressionData = Helper.CreateDefFromClone(
+                source.CharacterProgressionData,
+                "5938a019-b798-4076-98a8-a58d100411f3",
+                skillName);
             AmplifyPain.ViewElementDef = Helper.CreateDefFromClone(
                 source.ViewElementDef,
                 "a4812b9a-385d-4083-a494-3e169d08c39e",
