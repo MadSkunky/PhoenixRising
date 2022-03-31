@@ -21,11 +21,8 @@ modding and design councilors and testers, always open to productive discussions
 
 ### Better Classes
 
-DETAILS AND CHANGELOG: https://docs.google.com/spreadsheets/d/1dUarPgusALd3IxLgITWg69r6Ir1FrAN-GF5T4Tx2M6Y/edit?usp=sharing
+DETAILS AND CHANGELOG: TBD
 3rd Row explained: https://youtu.be/XcaObJJaHCw
-
-<b>EARLY ACCESS WARNING</b>
-This is a beta-version of the mod with a lot of features incomplete. Currently complete Classes: Assault, Heavy, Sniper, Berserker. It is recommended you DO NOT hire Elite Classes (Priest, Infiltrator, Technician). Please do not change or adjust config settings.
 
 INTENDED TO BE USED WITH PANTOLOMIN RF MOD https://www.nexusmods.com/phoenixpoint/mods/40?tab=files
 Adjust its Config setting: "reactionAngle": 360.0
@@ -40,6 +37,5 @@ COMPATIBILITY: Naturally, this mod is not compatible with any other mod that adj
 
 BETTER CLASSES: Overhaul and rebalance of all 7 vanilla classes adding many new skills, combos and tactics
 Introduces entirely different 3rd row of skills that depend on soldier origin, background and class.   
-BALANCE ADJUSTMENTS: Many skills and some items have been changed in the mod.    
-ENEMIES IMPROVED: Worms are made faster and Mindfraggers are more threatening.    
+BALANCE ADJUSTMENTS: Many skills and some items have been changed in the mod.     
 HAVEN RECRUITS COME WITH WEAPONS AND ARMOR: Overrides Vanilla settings for Hero&Legend difficulty.   
