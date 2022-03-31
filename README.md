@@ -24,9 +24,6 @@ modding and design councilors and testers, always open to productive discussions
 DETAILS AND CHANGELOG: https://docs.google.com/spreadsheets/d/1dUarPgusALd3IxLgITWg69r6Ir1FrAN-GF5T4Tx2M6Y/edit?usp=sharing
 3rd Row explained: https://youtu.be/XcaObJJaHCw
 
-<b>EARLY ACCESS WARNING</b>
-This is a beta-version of the mod with a lot of features incomplete. Currently complete Classes: Assault, Heavy, Sniper, Berserker. It is recommended you DO NOT hire Elite Classes (Priest, Infiltrator, Technician). Please do not change or adjust config settings.
-
 INTENDED TO BE USED WITH PANTOLOMIN RF MOD https://www.nexusmods.com/phoenixpoint/mods/40?tab=files
 Adjust its Config setting: "reactionAngle": 360.0
 
