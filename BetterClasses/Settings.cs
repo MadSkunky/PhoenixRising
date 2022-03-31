@@ -312,6 +312,10 @@ namespace PhoenixRising.BetterClasses
         // Activate story rework
         public bool ActivateStoryRework = false;
 
+        // Infiltrator Crossbow Ammo changes
+        public int BaseCrossbow_Ammo = 6;
+        public int VenomCrossbow_Ammo = 4;
+
         // Flag if UI texts should be changed to default (Enlish) text or set by localization
         public bool DoNotLocalizeChangedTexts = true;
         // Create new ability dictionary as json file in mod directory

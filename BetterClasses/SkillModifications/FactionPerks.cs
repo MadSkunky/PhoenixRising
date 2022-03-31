@@ -414,7 +414,8 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             SocStatus.DamageDeliveryTypeFilter = new List<DamageDeliveryType>();
             SocStatus.TargetApplicationConditions = new EffectConditionDef[]
             {
-                Repo.GetAllDefs<EffectConditionDef>().FirstOrDefault(ec1 => ec1.name.Equals("NotOfPhoenixFaction_ApplicationCondition"))
+                Repo.GetAllDefs<EffectConditionDef>().FirstOrDefault(ec1 => ec1.name.Equals("NotOfPhoenixFaction_ApplicationCondition")),
+                Repo.GetAllDefs<EffectConditionDef>().FirstOrDefault(ec1 => ec1.name.Equals("HasCombatantTag_ApplicationCondition"))
             };
 
             SocStatus.EffectForAttacker = DamageEffect;
@@ -451,7 +452,13 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                             return false;
                         }
                         TacticalActorBase tacticalActorBase = damageDealer.GetTacticalActorBase();
-                        Logger.Debug($"TacticalActorBase of target: {tacticalActorBase.DisplayName}");
+                        if (tacticalActorBase == null)
+                        {
+                            Logger.Debug($"damageDealer.GetTacticalActorBase() returned 'null', exit without apply effect!");
+                            Logger.Debug("----------------------------------------------------------------------------------------------------", false);
+                            return false;
+                        }
+                        Logger.Debug($"TacticalActorBase of target: {tacticalActorBase}");
                         EffectConditionDef[] targetApplicationConditions = __instance.OnActorDamageReceivedStatusDef.TargetApplicationConditions;
                         for (int i = 0; i < targetApplicationConditions.Length; i++)
                         {
@@ -463,6 +470,12 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                             }
                         }
                         EffectTarget actorEffectTarget = TacUtil.GetActorEffectTarget(tacticalActorBase, null);
+                        if (actorEffectTarget == null)
+                        {
+                            Logger.Debug($"tacticalActorBase.GetActorEffectTarget() of target returned 'null', exit without apply effect!");
+                            Logger.Debug("----------------------------------------------------------------------------------------------------", false);
+                            return false;
+                        }
                         //GameObject effectTargetObject = actorEffectTarget.GameObject;
                         DamagePayloadEffectDef effectDef = (DamagePayloadEffectDef)__instance.OnActorDamageReceivedStatusDef.EffectForAttacker;
                         float viralDamage = 1;

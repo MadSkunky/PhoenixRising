@@ -115,6 +115,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
         private static void Create_LayWaste()
         {
             float apCost = 0.25f;
+            float baseDamage = 10;
             //float wpCost = 3.0f;
             
             string skillName = "LayWaste_AbilityDef";
@@ -163,8 +164,8 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             LayWaste.MultipleTargetSimulation = false;
 
             DamageEffectDef damageEffect = LayWaste.EffectDef as DamageEffectDef;
-            damageEffect.MinimumDamage = 30;
-            damageEffect.MaximumDamage = 30;
+            damageEffect.MinimumDamage = baseDamage;
+            damageEffect.MaximumDamage = baseDamage;
 
             // Animation related stuff
             FirstMatchExecutionDef cameraAbility = Helper.CreateDefFromClone(
@@ -218,7 +219,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                 }
             }
         }
-        // Harmony patch for LayWaste to inject check against willpower
+        // Harmony patch for LayWaste to inject the calculation for damage by WP difference
         [HarmonyPatch(typeof(DamageEffect), "OnApply")]
         internal static class LayWaste_DamageEffect_OnApply_patch
         {

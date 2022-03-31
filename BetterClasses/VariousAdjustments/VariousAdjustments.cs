@@ -87,7 +87,7 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
             // Shadow Legs: Electric Kick replace shock damage with Sonic damage (value 20)
             Change_ShadowLegs();
             // Psychic Ward - fix and description to : Allies within 10 tiles are immune to panic and psychic scream damage
-            Change_PsychicImmunity();
+            Change_PsychicWard();
             // Vidar GL - Increase Shred to 20 (from 10), Add Acid 10. Increase AP cost to 2 (from 1)
             Change_VidarGL();
             // Destiny III - Give chance to fumble when non-proficient
@@ -164,14 +164,18 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
         public static void Change_MutoidWorms()
         {
             int mutoidWormCharges = 5;
+            float range = 25.0f;
 
             WeaponDef mAWorm = Repo.GetAllDefs<WeaponDef>().FirstOrDefault(p => p.name.Equals("Mutoid_Arm_AcidWorm_WeaponDef"));
             WeaponDef mFWorm = Repo.GetAllDefs<WeaponDef>().FirstOrDefault(p => p.name.Equals("Mutoid_Arm_FireWorm_WeaponDef"));
             WeaponDef mPWorm = Repo.GetAllDefs<WeaponDef>().FirstOrDefault(p => p.name.Equals("Mutoid_Arm_PoisonWorm_WeaponDef"));
 
             mAWorm.ChargesMax = mutoidWormCharges;
+            mAWorm.DamagePayload.Range = range;
             mFWorm.ChargesMax = mutoidWormCharges;
+            mFWorm.DamagePayload.Range = range;
             mPWorm.ChargesMax = mutoidWormCharges;
+            mPWorm.DamagePayload.Range = range;
         }
         public static void Change_ScreamingHead()
         {
@@ -386,16 +390,19 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
         }
         public static void Change_MechArms()
         {
-            int mechArmsShockDamage = 0;
+            int mechArmsShockDamage = 180;
             int mechArmsEMPDamage = 200;
+            int usesPerTurn = 1;
 
             WeaponDef mechArms = Repo.GetAllDefs<WeaponDef>().FirstOrDefault(p => p.name.Equals("NJ_Technician_MechArms_WeaponDef"));
             DamageKeywordDef emp = Repo.GetAllDefs<DamageKeywordDef>().FirstOrDefault(p => p.name.Equals("EMP_DamageKeywordDataDef")); 
             mechArms.DamagePayload.DamageKeywords = new List<DamageKeywordPair>()
-                {
+            {
                 new DamageKeywordPair{DamageKeywordDef = Shared.SharedDamageKeywords.ShockKeyword, Value = mechArmsShockDamage },
-                new DamageKeywordPair{DamageKeywordDef = emp, Value = mechArmsEMPDamage },
-                };
+                new DamageKeywordPair{DamageKeywordDef = emp, Value = mechArmsEMPDamage }
+            };
+            ShootAbilityDef techArmStrike = Repo.GetAllDefs<ShootAbilityDef>().FirstOrDefault(s => s.name.Equals("TechnicianStrike_ShootAbilityDef"));
+            techArmStrike.UsesPerTurn = usesPerTurn;
         }
         public static void Change_VengeanceTorso()
         {
@@ -412,7 +419,7 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
             shadowLegs.DamagePayload.DamageKeywords[0].DamageKeywordDef = Shared.SharedDamageKeywords.SonicKeyword;
             shadowLegs.DamagePayload.DamageKeywords[0].Value = shadowLegsSonicDamage;
         }
-        public static void Change_PsychicImmunity()
+        public static void Change_PsychicWard()
         {
             ApplyStatusAbilityDef psychicWard = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(p => p.name.Equals("PsychicWard_AbilityDef"));
             psychicWard.ViewElementDef.Description = new LocalizedTextBind("Allies within 10 tiles are immune to panic and psychic scream damage", doNotLocalize);
