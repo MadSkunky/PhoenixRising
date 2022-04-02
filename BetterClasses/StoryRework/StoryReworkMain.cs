@@ -1,11 +1,16 @@
 ﻿using AK.Wwise;
+using Assets.Code.PhoenixPoint.Geoscape.Entities.Sites.TheMarketplace;
 using Base.Defs;
 using Base.Eventus.Filters;
+using Harmony;
 using PhoenixPoint.Common.Core;
+using PhoenixPoint.Geoscape.Entities;
 using PhoenixPoint.Geoscape.Entities.Research;
 using PhoenixPoint.Geoscape.Events.Conditions;
 using PhoenixPoint.Geoscape.Events.Eventus;
 using PhoenixPoint.Geoscape.Events.Eventus.Filters;
+using PhoenixPoint.Geoscape.Levels;
+using PhoenixPoint.Geoscape.Levels.Factions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -115,11 +120,157 @@ namespace PhoenixRising.BetterClasses.StoryRework
                 // GeoTimePassedEventFilterDef timePassedFS1 = RepoGeoscapeEvent.GetAllDefs<GeoTimePassedEventFilterDef>().FirstOrDefault(ged => ged.name.Equals("E_PROG_FS1_TimePassed"));
                 // timePassedFS1.TimePassedRaw = "8d0h";
                 // timePassedFS1.TimePassedHours = 192;
+
             }
             catch (Exception e)
             {
                 Logger.Error(e);
             }
         }
+
+        //// Harmony patch to change the reveal of alien bases when in scanner range, so increases the reveal chance instead of revealing it right away
+        //[HarmonyPatch(typeof(GeoAlienFaction), "TryRevealAlienBase")]
+        //internal static class BC_GeoAlienFaction_OnLevelStart_patch
+        //{
+        //    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
+        //    private static bool Prefix(ref bool __result, GeoSite site, GeoFaction revealToFaction, GeoLevelController ____level)
+        //    {
+        //        if (!site.GetVisible(revealToFaction))
+        //        {
+        //            GeoAlienBase component = site.GetComponent<GeoAlienBase>();
+        //            if (revealToFaction is GeoPhoenixFaction && ((GeoPhoenixFaction)revealToFaction).IsSiteInBaseScannerRange(site, true))
+        //            {
+        //                component.IncrementBaseAttacksRevealCounter();
+        //                // original code:
+        //                //site.RevealSite(____level.PhoenixFaction);
+        //                //__result = true;
+        //                //return false;
+        //            }
+        //            if (component.CheckForBaseReveal())
+        //            {
+        //                site.RevealSite(____level.PhoenixFaction);
+        //                __result = true;
+        //                return false;
+        //            }
+        //            component.IncrementBaseAttacksRevealCounter();
+        //        }
+        //        __result = false;
+        //        return false; // Return without calling the original method
+        //    }
+        //}
+        //
+        //// Harmony patch to change the result of AllMissionsCompleted.get() to always true
+        //[HarmonyPatch(typeof(GeoMarketplace), "get_AllMissionsCompleted")]
+        //internal static class BC_GeoMarketplace_get_AllMissionsCompleted_patch
+        //{
+        //    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
+        //    private static bool Prefix(ref bool __result)
+        //    {
+        //        __result = true;
+        //        return false; // Return without calling the original method
+        //    }
+        //}
+
+        //// Current and last ODI level
+        //public static int CurrentODI_Level = 0;
+        //public static int LastODI_Level = -1; // -1 to let index 0 trigger
+        //// All SDI (ODI) event IDs, levels as array, index 0 - 19
+        //public static readonly string[] ODI_EventIDs = new string[]
+        //{
+        //    "SDI_01",
+        //    "SDI_02",
+        //    "SDI_03",
+        //    "SDI_04",
+        //    "SDI_05",
+        //    "SDI_06",
+        //    "SDI_07",
+        //    "SDI_08",
+        //    "SDI_09",
+        //    "SDI_10",
+        //    "SDI_11",
+        //    "SDI_12",
+        //    "SDI_13",
+        //    "SDI_14",
+        //    "SDI_15",
+        //    "SDI_16",
+        //    "SDI_17",
+        //    "SDI_18",
+        //    "SDI_19",
+        //    "SDI_20"
+        //};
+        //// Harmony patch to gather some game stats from the alien faction (pandorans) when geo level starts (campaign start, game loaded, after tactical missions)
+        //[HarmonyPatch(typeof(GeoAlienFaction), "OnLevelStart")]
+        //internal static class BC_GeoAlienFaction_OnLevelStart_patch
+        //{
+        //    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
+        //    private static void Postfix(GeoAlienFaction __instance, int ____evolutionProgress)
+        //    {
+        //        Calculate_ODI_Level(__instance, ____evolutionProgress, true);
+        //    }
+        //}
+        //// Harmony patch to gather some game stats from the alien faction (pandorans) each day in game
+        //[HarmonyPatch(typeof(GeoAlienFaction), "UpdateFactionDaily")]
+        //internal static class BC_GeoAlienFaction_UpdateFactionDaily_patch
+        //{
+        //    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
+        //    private static void Postfix(GeoAlienFaction __instance, int ____evolutionProgress)
+        //    {
+        //        Calculate_ODI_Level(__instance, ____evolutionProgress);
+        //    }
+        //}
+        //internal static void Calculate_ODI_Level(GeoAlienFaction geoAlienFaction, int evolutionProgress, bool onLevelStart = false)
+        //{
+        //    try
+        //    {
+        //        // Lost population to accelerate the ODI progress, value increasing from 0 to 1, 0 means no loss = start of campaign, 1 = no population left
+        //        // A player that keeps the havens alive can prolong the ODI progress
+        //        //float lostPopulation = (float)(geoAlienFaction.GeoLevel.StartingPopulation - geoAlienFaction.GeoLevel.CurrentPopulation) / geoAlienFaction.GeoLevel.StartingPopulation;
+        //        // Calculate the current ODI progress value with the given variables, here basically evolutionProgress (and maybe accelerated by lost population)
+        //        int currentODI_Progress = evolutionProgress; // * (1 + lostPopulation));
+        //        // Index of last element of the ODI event ID array is Length - 1
+        //        int ODI_EventIDs_LastIndex = ODI_EventIDs.Length - 1;
+        //        // Set a maximum number to determine the upper limit from when the maximum ODI level is reached
+        //        int maxODI_Progress = 470 * ODI_EventIDs_LastIndex;
+        //        // Calculate the current ODI level = index for the ODI event ID array
+        //        CurrentODI_Level = currentODI_Progress * ODI_EventIDs_LastIndex / maxODI_Progress;
+        //        // Cap the lavel at max index, after that the index will not longer get increased wiht higher progress
+        //        CurrentODI_Level = Mathf.Min(ODI_EventIDs_LastIndex, CurrentODI_Level);
+        //        // If current calculated level is diferent to last one then new ODI level is reached, show the new ODI event
+        //        if (CurrentODI_Level != LastODI_Level)
+        //        {
+        //            // Get the Event ID from array dependent on calculated level index
+        //            string eventID = ODI_EventIDs[CurrentODI_Level];
+        //            GeoLevelController geoLevelController = geoAlienFaction.GeoLevel;
+        //            GeoscapeEventContext geoscapeEventContext = new GeoscapeEventContext(geoAlienFaction, geoLevelController.ViewerFaction);
+        //            geoLevelController.EventSystem.TriggerGeoscapeEvent("SDI_01", geoscapeEventContext);
+        //            LastODI_Level = CurrentODI_Level;
+        //        }
+        //
+        //        //// Trigger SDI event the hacky way by executing a console command
+        //        //IConsole console = UnityEngine.Object.FindObjectOfType<GameConsoleWindow>();
+        //        //if (evolutionProgress > 100 && evolutionProgress < 200)
+        //        //{
+        //        //    console.ExecuteCommandLine($"geo_event_trigger {eventID}");
+        //        //}
+        //
+        //        // Logging some gathered in-game values
+        //        DateTime currentGameTime = geoAlienFaction.GeoLevel.GameController.CurrentGameTime;
+        //        int percPopulation = Mathf.RoundToInt((float)geoAlienFaction.GeoLevel.CurrentPopulation * 100 / geoAlienFaction.GeoLevel.StartingPopulation);
+        //        string message = string.Concat($" Gathered ingame values by GeoAlienFaction.OnLevelStart() and .UpdateFactionDaily():\n",
+        //                                       $"Game time: {currentGameTime}\n",
+        //                                       $"Alien evolution progress: {evolutionProgress}\n",
+        //                                       $"Current population: {percPopulation}%\n",
+        //                                       $"------------------------------------------------------------------------------------------------------");
+        //        Logger.Debug(message);
+        //
+        //        // Show a message box with gathered values
+        //        //geoAlienFaction.GeoLevel.View.RequestGamePause();
+        //        //GameUtl.GetMessageBox().ShowSimplePrompt(message, MessageBoxIcon.Information, MessageBoxButtons.OK, null);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Logger.Error(e);
+        //    }
+        //}
     }
 }

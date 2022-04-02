@@ -121,8 +121,8 @@ PR_BC_ROCKETEER,Text,,ROCKETEER,,,,,,,,
 PR_BC_ROCKETEER_DESC,Text,,"<b>Jetpack Proficiency</b>
 <i>Since you were a child you dreamt of flying rockets. Perhaps now you can!</i>",,,,,,,,
 PR_BC_PRIVILEGED,Text,,PRIVILEGED,,,,,,,,
-PR_BC_PRIVILEGED_DESC,Text,,"<b>Jetpack Proficiency</b>
-<i>Since you were a child you dreamt of flying rockets. Perhaps now you can!</i>",,,,,,,,
+PR_BC_PRIVILEGED_DESC,Text,,"<b>Speed +2, Perception +4, Carry Weight -25%</b>
+<i>You were riding out the Apocalypse in First Class and letting others carry your load for you. It didn't last, and the run for your life that followed gave you a new awareness.</i>",,,,,,,,
 PR_BC_FRENZY,Text,,FRENZY,,,,,,,,
 PR_BC_FRENZY_DESC,Text,,"Instils Frenzy in friendly characters within 20 tiles for two turns, increasing their Speed by 33% and making them immune to panic",,,,,,,,
 PR_BC_FRENZY_STATUS_DESC,Text,,"Speed increased by 33% and immune to panic",,,,,,,,

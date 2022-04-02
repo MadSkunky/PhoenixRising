@@ -113,17 +113,18 @@ namespace PhoenixRising.BetterClasses
                 rngList: new List<string>
                 {
                     "SURVIVOR",
-                    "EDUCATED",
+                    "NURSE",
                     "SCAV",
+                    "CORPSE DISPOSER",
                     "HARD LABOR",
                     "SQUATTER",
-                    "CORPSE DISPOSER",
                     "VOLUNTEERED",
                     "CONDO RAIDER",
                     "TUNNEL RAT",
                     "HUNTER",
                     "TROUBLEMAKER",
                     "PARANOID",
+                    "PRIVILEGED",
                     "A HISTORY OF VIOLENCE",
                     "DAREDEVIL",
                     "DAMAGED AMYGDALA",
@@ -153,13 +154,13 @@ namespace PhoenixRising.BetterClasses
                 spCost: 20,
                 relList: new Dictionary<string, Dictionary<string, string>>
                 {{ FactionKeys.All, new Dictionary<string,string> {
-                    { ClassKeys.Assault.Name, "AIMED BURST" },
+                    { ClassKeys.Assault.Name, "QUARTERBACK" },
                     { ClassKeys.Heavy.Name, "JETPACK CONTROL" },
                     { ClassKeys.Sniper.Name, "GUNSLINGER" },
                     { ClassKeys.Berserker.Name, "GUN KATA" },
                     { ClassKeys.Priest.Name, "BIOCHEMIST" },
                     { ClassKeys.Technician.Name, "REMOTE CONTROL" },
-                    { ClassKeys.Infiltrator.Name, "SPIDER DRONE PACK" }
+                    { ClassKeys.Infiltrator.Name, "CAUTIOUS" }
                 } } }),
             new PersonalPerksDef(
                 perkKey: PerkType.Class_2,
@@ -167,13 +168,13 @@ namespace PhoenixRising.BetterClasses
                 spCost: 20,
                 relList: new Dictionary<string, Dictionary<string, string>>
                 {{ FactionKeys.All, new Dictionary<string,string> {
-                    { ClassKeys.Assault.Name, "QUARTERBACK" },
+                    { ClassKeys.Assault.Name, "AIMED BURST" },
                     { ClassKeys.Heavy.Name, "BOOM BLAST" },
                     { ClassKeys.Sniper.Name, "KILL ZONE" },
                     { ClassKeys.Berserker.Name, "EXERTION" },
                     { ClassKeys.Priest.Name, "LAY WASTE" },
                     { ClassKeys.Technician.Name, "REMOTE DEPLOYMENT" },
-                    { ClassKeys.Infiltrator.Name, "CAUTIOUS" }
+                    { ClassKeys.Infiltrator.Name, "SPIDER DRONE PACK" }
                 } } }),
             new PersonalPerksDef(
                 perkKey: PerkType.Faction_1,
@@ -303,6 +304,7 @@ namespace PhoenixRising.BetterClasses
             { Proficiency.VW, new List<string> { ClassKeys.Priest.Name } },
             { Proficiency.SW, new List<string> { ClassKeys.Infiltrator.Name } },
             { "ROCKETEER", new List<string> { ClassKeys.Heavy.Name } },
+            { "DAMAGED AMYGDALA", new List<string> { ClassKeys.Priest.Name } },
             { "STEALTH SPECIALIST", new List<string> { ClassKeys.Infiltrator.Name } }
         };
 

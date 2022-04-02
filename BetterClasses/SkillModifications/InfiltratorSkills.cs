@@ -37,6 +37,9 @@ namespace PhoenixRising.BetterClasses.SkillModifications
 
         public static void ApplyChanges()
         {
+            // Spider Drone Pack: 3 AP 3 WP, rest vanilla
+            Change_DeployDronePack();
+
             // Sneak Attack: Direct fire and melee +60 damage while not spotted
             Change_SneakAttack();
 
@@ -45,6 +48,16 @@ namespace PhoenixRising.BetterClasses.SkillModifications
 
             // Cautious: +10% stealth
             Change_Cautious();
+        }
+
+        private static void Change_DeployDronePack()
+        {
+            float apCost = 0.75f;
+            float wpCost = 3.0f;
+
+            ShootAbilityDef DeployDronePack = Repo.GetAllDefs<ShootAbilityDef>().FirstOrDefault(s => s.name.Equals("DeployDronePack_ShootAbilityDef"));
+            DeployDronePack.ActionPointCost = apCost;
+            DeployDronePack.WillPointCost = wpCost;
         }
 
         private static void Change_SneakAttack()
@@ -193,18 +206,18 @@ namespace PhoenixRising.BetterClasses.SkillModifications
 
         private static void Change_Cautious()
         {
-            float damageMod = 0.9f;
+            //float damageMod = 0.9f;
             float accuracyMod = 0.2f;
             float stealthMod = 0.1f;
             PassiveModifierAbilityDef cautious = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(asa => asa.name.Equals("Cautious_AbilityDef"));
             cautious.StatModifications = new ItemStatModification[]
             {
-                new ItemStatModification()
-                {
-                   TargetStat = StatModificationTarget.BonusAttackDamage,
-                   Modification = StatModificationType.Multiply,
-                   Value = damageMod
-                },
+                //new ItemStatModification()
+                //{
+                //   TargetStat = StatModificationTarget.BonusAttackDamage,
+                //   Modification = StatModificationType.Multiply,
+                //   Value = damageMod
+                //},
                 new ItemStatModification()
                 {
                    TargetStat = StatModificationTarget.Accuracy,
@@ -218,7 +231,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                    Value = stealthMod
                 }
             };
-            cautious.ViewElementDef.Description = new LocalizedTextBind($"Gain {accuracyMod * 100}% accuracy and {stealthMod * 100}% stealth but {(damageMod * 100) - 100}% damage", doNotLocalize);
+            cautious.ViewElementDef.Description = new LocalizedTextBind($"Gain {accuracyMod * 100}% accuracy and {stealthMod * 100}% stealth.", doNotLocalize);
         }
     }
 }

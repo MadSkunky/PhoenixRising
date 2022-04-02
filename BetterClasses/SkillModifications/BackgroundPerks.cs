@@ -140,7 +140,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             Survivor.CharacterProgressionData.RequiredWill = 0;
             Survivor.ViewElementDef.DisplayName1 = new LocalizedTextBind("SURVIVOR", doNotLocalize);
             Survivor.ViewElementDef.Description.LocalizationKey = "PR_BC_SURVIVOR_DESC"; // = new LocalizedTextBind("<b>-4 Strength, +4 Willpower</b>\n<i>You have had it tougher than most, and that's saying a lot. Your body took a toll, but your mind grew stronger.</i>", doNotLocalize);
-            Sprite SurvivorIcon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_PersonalTrack_Pacifist.png");
+            Sprite SurvivorIcon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_PersonalTrack_Survivor_3-1.png");
             Survivor.ViewElementDef.LargeIcon = SurvivorIcon;
             Survivor.ViewElementDef.SmallIcon = SurvivorIcon;
         }
@@ -161,19 +161,22 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             }
             Nurse.ViewElementDef.DisplayName1.LocalizationKey = "PR_BC_NURSE";
             Nurse.ViewElementDef.Description.LocalizationKey = "PR_BC_NURSE_DESC";
+            Sprite icon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_PersonalTrack_ExpertHealer-2.png");
+            Nurse.ViewElementDef.LargeIcon = icon;
+            Nurse.ViewElementDef.SmallIcon = icon;
         }
         private static void Change_Scav()
         {
-            PassiveModifierAbilityDef brainiac = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(p => p.name.Equals("Brainiac_AbilityDef"));
-            for (int i = 0; i < brainiac.StatModifications.Length; i++)
+            PassiveModifierAbilityDef scav = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(p => p.name.Equals("Brainiac_AbilityDef"));
+            for (int i = 0; i < scav.StatModifications.Length; i++)
             {
-                if (brainiac.StatModifications[i].TargetStat == StatModificationTarget.Perception)
+                if (scav.StatModifications[i].TargetStat == StatModificationTarget.Perception)
                 {
-                    brainiac.StatModifications[i].Value = 4.0f;
+                    scav.StatModifications[i].Value = 4.0f;
                 }
             }
-            brainiac.ViewElementDef.DisplayName1 = new LocalizedTextBind("SCAV", doNotLocalize);
-            brainiac.ViewElementDef.Description = new LocalizedTextBind("<b>+2 Willpower, +4 Perception</b>\n<i>The Old World left behind all sorts of interesting things. It takes patience and a keen eye to find them.</i>", doNotLocalize);
+            scav.ViewElementDef.DisplayName1 = new LocalizedTextBind("SCAV", doNotLocalize);
+            scav.ViewElementDef.Description = new LocalizedTextBind("<b>+2 Willpower, +4 Perception</b>\n<i>The Old World left behind all sorts of interesting things. It takes patience and a keen eye to find them.</i>", doNotLocalize);
         }
         private static void Create_CorpseDisposer()
         {
@@ -234,7 +237,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             Squatter.StatModifications = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(p => p.name.Equals("Resourceful_AbilityDef")).StatModifications;
             Squatter.ViewElementDef.DisplayName1 = new LocalizedTextBind("SQUATTER", doNotLocalize);
             Squatter.ViewElementDef.Description = new LocalizedTextBind("<b>+2 Strength, +25% carry weight</b>\n<i>In the camps you carried everything on your person at all times. And sometimes you had to take things from other people.</i>", doNotLocalize);
-            Sprite SquatterIcon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_PersonalTrack_GymRat-2.png");
+            Sprite SquatterIcon = Repo.GetAllDefs<TacticalAbilityViewElementDef>().FirstOrDefault(tav => tav.name.Equals("E_ViewElement [ExpertPacker_AbilityDef]")).LargeIcon;
             Squatter.ViewElementDef.LargeIcon = SquatterIcon;
             Squatter.ViewElementDef.SmallIcon = SquatterIcon;
         }
@@ -304,7 +307,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             Volunteered.CharacterProgressionData.RequiredWill = 0;
             Volunteered.ViewElementDef.DisplayName1 = new LocalizedTextBind("VOLUNTEERED", doNotLocalize);
             Volunteered.ViewElementDef.Description = new LocalizedTextBind("<b>Night vision, +2 Speed, -2 Willpower</b>\n<i>They gave you cat eyes and reflex enhancers, and nothing for the headaches that came after.</i>", doNotLocalize);
-            Sprite VolunteeredIcon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_PersonalTrack_NightOwl.png");
+            Sprite VolunteeredIcon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_PersonalTrack_Volunteered_1-1.png");
             Volunteered.ViewElementDef.LargeIcon = VolunteeredIcon;
             Volunteered.ViewElementDef.SmallIcon = VolunteeredIcon;
         }
@@ -342,9 +345,9 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             CondoRaider.CharacterProgressionData.RequiredWill = 0;
             CondoRaider.ViewElementDef.DisplayName1 = new LocalizedTextBind("CONDO RAIDER", doNotLocalize);
             CondoRaider.ViewElementDef.Description = new LocalizedTextBind("<b>Jump</b>\n<i>The world is full of broken elevators and collapsed staircases, and the pros in this business don't use ladders.</i>", doNotLocalize);
-            Sprite CondoRaiderIcon = Repo.GetAllDefs<TacticalAbilityViewElementDef>().FirstOrDefault(t => t.name.Equals("E_ViewElement [ExpertRunner_AbilityDef]")).LargeIcon;
-            CondoRaider.ViewElementDef.LargeIcon = CondoRaiderIcon;
-            CondoRaider.ViewElementDef.SmallIcon = CondoRaiderIcon;
+            //Sprite CondoRaiderIcon = Repo.GetAllDefs<TacticalAbilityViewElementDef>().FirstOrDefault(t => t.name.Equals("E_ViewElement [ExpertRunner_AbilityDef]")).LargeIcon;
+            //CondoRaider.ViewElementDef.LargeIcon = CondoRaiderIcon;
+            //CondoRaider.ViewElementDef.SmallIcon = CondoRaiderIcon;
         }
         private static void Change_TunnelRat()
         {
@@ -363,35 +366,35 @@ namespace PhoenixRising.BetterClasses.SkillModifications
         {
             string skillName = "Hunter_AbilityDef";
             PassiveModifierAbilityDef source = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(p => p.name.Equals("EagleEyed_AbilityDef"));
-            PassiveModifierAbilityDef DeskJockey = Helper.CreateDefFromClone(
+            PassiveModifierAbilityDef Hunter = Helper.CreateDefFromClone(
                 source,
                 "15150fb6-0088-4124-bf7c-31146a2006ed",
                 skillName);
-            DeskJockey.CharacterProgressionData = Helper.CreateDefFromClone(
+            Hunter.CharacterProgressionData = Helper.CreateDefFromClone(
                 source.CharacterProgressionData,
                 "ebc8f83b-b4a1-42e9-8bdb-03d34abca012",
                 skillName);
-            DeskJockey.ViewElementDef = Helper.CreateDefFromClone(
+            Hunter.ViewElementDef = Helper.CreateDefFromClone(
                 source.ViewElementDef,
                 "001c6300-51f6-44a4-890d-b9f1a6587f53",
                 skillName);
 
             // Set necessary fields
-            for (int i = 0; i < DeskJockey.StatModifications.Length; i++)
+            for (int i = 0; i < Hunter.StatModifications.Length; i++)
             {
-                if (DeskJockey.StatModifications[i].TargetStat == StatModificationTarget.Accuracy)
+                if (Hunter.StatModifications[i].TargetStat == StatModificationTarget.Accuracy)
                 {
-                    DeskJockey.StatModifications[i].Value = 0.1f;
+                    Hunter.StatModifications[i].Value = 0.1f;
                 }
             }
-            DeskJockey.CharacterProgressionData.RequiredSpeed = 0;
-            DeskJockey.CharacterProgressionData.RequiredStrength = 0;
-            DeskJockey.CharacterProgressionData.RequiredWill = 0;
-            DeskJockey.ViewElementDef.DisplayName1 = new LocalizedTextBind("HUNTER", doNotLocalize);
-            DeskJockey.ViewElementDef.Description = new LocalizedTextBind("<b>+10% Accuracy</b>\n<i>There used to be game and hunger around these parts.</i>", doNotLocalize);
-            Sprite DeskJockeyIcon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_PersonalTrack_SpecOp-3.png");
-            DeskJockey.ViewElementDef.LargeIcon = DeskJockeyIcon;
-            DeskJockey.ViewElementDef.SmallIcon = DeskJockeyIcon;
+            Hunter.CharacterProgressionData.RequiredSpeed = 0;
+            Hunter.CharacterProgressionData.RequiredStrength = 0;
+            Hunter.CharacterProgressionData.RequiredWill = 0;
+            Hunter.ViewElementDef.DisplayName1 = new LocalizedTextBind("HUNTER", doNotLocalize);
+            Hunter.ViewElementDef.Description = new LocalizedTextBind("<b>+10% Accuracy</b>\n<i>There used to be game and hunger around these parts.</i>", doNotLocalize);
+            Sprite DeskJockeyIcon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_PersonalTrack_Hunter_2-3.png");
+            Hunter.ViewElementDef.LargeIcon = DeskJockeyIcon;
+            Hunter.ViewElementDef.SmallIcon = DeskJockeyIcon;
         }
         private static void Create_Troublemaker()
         {
@@ -459,14 +462,53 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             paranoid.ItemTagStatModifications = new EquipmentItemTagStatModification[0];
             paranoid.ViewElementDef.DisplayName1 = new LocalizedTextBind("PARANOID", doNotLocalize);
             paranoid.ViewElementDef.Description = new LocalizedTextBind("<b>+4 Perception, +10 Hearing Range</b>\n<i>But you are not, because the monsters are real!</i>", doNotLocalize);
-            Sprite pIcon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_PersonalTrack_FastLearner.png");
-            paranoid.ViewElementDef.LargeIcon = pIcon;
-            paranoid.ViewElementDef.SmallIcon = pIcon;
+            Sprite icon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_PersonalTrack_Paranoid_1-1.png");
+            paranoid.ViewElementDef.LargeIcon = icon;
+            paranoid.ViewElementDef.SmallIcon = icon;
         }
         private static void Create_Privileged()
         {
-            //Logger.Debug("'" + MethodBase.GetCurrentMethod().DeclaringType.Name + "." + MethodBase.GetCurrentMethod().Name + "()' not implemented yet!");
-            //Logger.Debug("----------------------------------------------------", false);
+            string skillName = "Privileged_AbilityDef";
+            PassiveModifierAbilityDef source = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(p => p.name.Equals("SelfDefenseSpecialist_AbilityDef"));
+            PassiveModifierAbilityDef Privileged = Helper.CreateDefFromClone(
+                source,
+                "d2c9867d-faea-4b69-a503-3a00928d1ba7",
+                skillName);
+            Privileged.CharacterProgressionData = Helper.CreateDefFromClone(
+                source.CharacterProgressionData,
+                "7bff46bc-f344-4078-9ee7-dd3fd6df14f9",
+                skillName);
+            Privileged.ViewElementDef = Helper.CreateDefFromClone(
+                source.ViewElementDef,
+                "53085210-555a-4dda-bcee-bd8a361aa244",
+                skillName);
+            Privileged.StatModifications = new ItemStatModification[]
+              {
+                new ItemStatModification()
+                {
+                    TargetStat = StatModificationTarget.Speed,
+                    Modification = StatModificationType.Add,
+                    Value = 2
+                },
+                new ItemStatModification()
+                {
+                    TargetStat = StatModificationTarget.Perception,
+                    Modification = StatModificationType.Add,
+                    Value = 4
+                },
+                new ItemStatModification()
+                {
+                    TargetStat = StatModificationTarget.CarryWeight,
+                    Modification = StatModificationType.MultiplyMax,
+                    Value = 0.75f
+                },
+              };
+            Privileged.ItemTagStatModifications = new EquipmentItemTagStatModification[0];
+            Privileged.ViewElementDef.DisplayName1.LocalizationKey = "PR_BC_PRIVILEGED";
+            Privileged.ViewElementDef.Description.LocalizationKey = "PR_BC_PRIVILEGED_DESC";
+            Sprite pIcon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_PersonalTrack_Privileged_2-2.png");
+            Privileged.ViewElementDef.LargeIcon = pIcon;
+            Privileged.ViewElementDef.SmallIcon = pIcon;
         }
         private static void Create_AHistoryOfViolence()
         {

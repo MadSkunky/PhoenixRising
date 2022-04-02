@@ -286,7 +286,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
 
             phantomProtocol.ViewElementDef.DisplayName1 = new LocalizedTextBind("PHANTOM PROTOCOL", doNotLocalize);
             phantomProtocol.ViewElementDef.Description = new LocalizedTextBind("You gain +25% accuracy and stealth until next turn", doNotLocalize);
-            Sprite icon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_PersonalTrack_Thief.png");
+            Sprite icon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_PersonalTrack_Phantom_Protocol_2-2.png");
             phantomProtocol.ViewElementDef.LargeIcon = icon;
             phantomProtocol.ViewElementDef.SmallIcon = icon;
             phantomProtocol.ActionPointCost = 0;
@@ -338,6 +338,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             string skillName = "SowerOfChange_AbilityDef";
             LocalizedTextBind name = new LocalizedTextBind("SOWER OF CHANGE", doNotLocalize);
             LocalizedTextBind description = new LocalizedTextBind("Returns 10% of damage as Viral to the attacker within 10 tiles", doNotLocalize);
+            Sprite icon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_PersonalTrack_Sower_Of_Change_1-1.png");
             ApplyStatusAbilityDef source = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(oad => oad.name.Equals("Acheron_ContactCorruption_ApplyStatusAbilityDef"));
             ApplyStatusAbilityDef SowerOfChange = Helper.CreateDefFromClone(
                 source,
@@ -362,6 +363,8 @@ namespace PhoenixRising.BetterClasses.SkillModifications
 
             SowerOfChange.ViewElementDef.DisplayName1.LocalizationKey = "PR_BC_SOWER_OF_CHANGE";
             SowerOfChange.ViewElementDef.Description.LocalizationKey = "PR_BC_SOWER_OF_CHANGE_DESC";
+            SowerOfChange.ViewElementDef.LargeIcon = icon;
+            SowerOfChange.ViewElementDef.SmallIcon = icon;
             //SowerOfChange.AnimType = -1;
 
             AddStatusDamageKeywordDataDef RawVirausDamageKeyword = Helper.CreateDefFromClone(
@@ -567,7 +570,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             arTargeting.CharacterProgressionData.RequiredWill = 0;
             arTargeting.ViewElementDef.DisplayName1 = new LocalizedTextBind("AR TARGETING", doNotLocalize);
             arTargeting.ViewElementDef.Description = new LocalizedTextBind("Target ally gains +20% accuracy", doNotLocalize);
-            Sprite artIcon = Repo.GetAllDefs<TacticalAbilityViewElementDef>().FirstOrDefault(ve => ve.name.Equals("E_ViewElement [EagleEye_AbilityDef]")).LargeIcon;
+            Sprite artIcon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_PersonalTrack_AR_Targeting_2-2.png");
             arTargeting.ViewElementDef.LargeIcon = artIcon;
             arTargeting.ViewElementDef.SmallIcon = artIcon;
 

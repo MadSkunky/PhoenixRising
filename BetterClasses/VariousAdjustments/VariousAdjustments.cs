@@ -70,8 +70,6 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
             Change_ClarityHead();
             // Venom Torso: Add Weapon Tag to Poison Arm 
             Change_VenomTorso();
-            // MindFragger: Gains Acid explosion (acid value = 10) when attached 
-            //Change_MindFragger();
             // Worms: All worms speed increased to 9 (from 6), worm explosion gets Shred 3
             Change_Worms();
             // Arthron Shield Bearer: Close Quarters Evade
@@ -265,43 +263,6 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
                 Repo.GetAllDefs<GameTagDef>().FirstOrDefault(p => p.name.Equals("GunWeapon_TagDef"))
             };
         }
-        public static void Change_MindFragger()
-        {
-            int faceHuggerBlastDamage = 1;
-            int faceHuggerAcidDamage = 5;
-            int faceHuggerAOERadius = 2;
-
-            TacticalItemDef faceHugger = Repo.GetAllDefs<TacticalItemDef>().FirstOrDefault(p => p.name.Equals("Facehugger_Head_BodyPartDef"));
-
-            string skillName = "BC_SwarmerAcidExplosion_Die_AbilityDef";
-            RagdollDieAbilityDef source = Repo.GetAllDefs<RagdollDieAbilityDef>().FirstOrDefault(p => p.name.Equals("SwarmerAcidExplosion_Die_AbilityDef"));
-            RagdollDieAbilityDef sAE = Helper.CreateDefFromClone(
-                source,
-                "1137345a-a18d-4800-b52e-b15d49f4dabf",
-                skillName);
-            sAE.ViewElementDef = Helper.CreateDefFromClone(
-                source.ViewElementDef,
-                "10729876-f764-41b5-9b4e-c8cb98dca771",
-                skillName);
-            DamagePayloadEffectDef sAEEffect = Helper.CreateDefFromClone(
-                Repo.GetAllDefs<DamagePayloadEffectDef>().FirstOrDefault(p => p.name.Equals("E_Element0 [SwarmerAcidExplosion_Die_AbilityDef]")),
-                "ac9cd527-72d4-42d2-af32-5efbdf32812e",
-                "E_Element0 [BC_SwarmerAcidExplosion_Die_AbilityDef]");
-
-            sAE.DeathEffect = sAEEffect;
-            sAEEffect.DamagePayload.DamageKeywords[0].Value = faceHuggerBlastDamage;
-            sAEEffect.DamagePayload.DamageKeywords[1].Value = faceHuggerAcidDamage;
-            sAEEffect.DamagePayload.AoeRadius = faceHuggerAOERadius;
-
-            sAE.ViewElementDef.DisplayName1 = new LocalizedTextBind("ACID EXPLOSION", doNotLocalize);
-            sAE.ViewElementDef.Description = new LocalizedTextBind("Upon death, the mind fragger bursts in an acid explosion damaging nearby targets", doNotLocalize);
-
-            faceHugger.Abilities = new AbilityDef[]
-            {
-                faceHugger.Abilities[0],
-                sAE,
-            };
-        }
         public static void Change_Worms()
         {
             int wormSpeed = 9;
@@ -345,13 +306,6 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
         }
         public static void Change_ArthronShieldBearer()
         {
-            /*
-            TacticalItemDef shieldBearer = Repo.GetAllDefs<TacticalItemDef>().FirstOrDefault(a => a.name.Equals("Crabman_LeftArm_Shield_BodyPartDef"));
-            shieldBearer.Abilities = new AbilityDef[]
-            {
-                Repo.GetAllDefs<AbilityDef>().FirstOrDefault(a => a.name.Equals("CloseQuarters_AbilityDef")),
-            };
-            */
         }
         public static void Change_HavenRecruits()
         {

@@ -160,7 +160,13 @@
     <Content Include="Assets\Textures\UI_AbilitiesIcon_Fishman_SenseLocate-2.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\Textures\UI_AbilitiesIcon_HunkerDown_1-2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\Textures\UI_AbilitiesIcon_KillNRun.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Textures\UI_AbilitiesIcon_PersonalTrack_AR_Targeting_2-2.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Textures\UI_AbilitiesIcon_PersonalTrack_ExpertHealer-2.png">
@@ -181,13 +187,28 @@
     <Content Include="Assets\Textures\UI_AbilitiesIcon_PersonalTrack_Heartless.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\Textures\UI_AbilitiesIcon_PersonalTrack_Hunter_2-3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\Textures\UI_AbilitiesIcon_PersonalTrack_NightOwl.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Textures\UI_AbilitiesIcon_PersonalTrack_Pacifist.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\Textures\UI_AbilitiesIcon_PersonalTrack_Paranoid_1-1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Textures\UI_AbilitiesIcon_PersonalTrack_Phantom_Protocol_2-2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\Textures\UI_AbilitiesIcon_PersonalTrack_Plumber.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Textures\UI_AbilitiesIcon_PersonalTrack_Privileged_2-2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Textures\UI_AbilitiesIcon_PersonalTrack_Sower_Of_Change_1-1.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Textures\UI_AbilitiesIcon_PersonalTrack_SpecOp-1.png">
@@ -205,6 +226,9 @@
     <Content Include="Assets\Textures\UI_AbilitiesIcon_PersonalTrack_Strategist.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\Textures\UI_AbilitiesIcon_PersonalTrack_Survivor_3-1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\Textures\UI_AbilitiesIcon_PersonalTrack_TacticalAnalyst.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -212,6 +236,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Textures\UI_AbilitiesIcon_PersonalTrack_Vampire.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Textures\UI_AbilitiesIcon_PersonalTrack_Volunteered_1-1.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Textures\UI_AbilitiesIcon_TentacularBody_MeleeAttackRetaliation-2.png">
