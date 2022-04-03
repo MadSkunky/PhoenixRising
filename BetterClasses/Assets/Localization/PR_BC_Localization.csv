@@ -1,4 +1,9 @@
 Key,Type,Desc,English,Chinese (Simplified),French,German,Italian,Polish,Russian,Spanish,UI_Tester
+PR_BC_HIDDEN,Text,,UNREVEALED,,,,,,,,
+PR_BC_HIDDEN_DESC,Text,,The Actor is not spotted.,,,,,,,,
+PR_BC_INFILTRATOR_HIDDEN,Text,,HIDDEN: Gain +25% Stealth bonus.,,,,,,,,
+PR_BC_INFILTRATOR_LOCATED,Text,,LOCATED: Gain +25% Stealth bonus.,,,,,,,,
+PR_BC_INFILTRATOR_REVEALED,Text,,REVEALED: No Stealth bonus!,,,,,,,,
 PR_BC_BATTLE_FOCUS,Text,,BATTLE FOCUS,,,,,,,,
 PR_BC_BATTLE_FOCUS_DESC,Text,,If there are enemies within 10 tiles your attacks gain +20% damage,,,,,,,,
 PR_BC_QUICK_AIM,Text,,QUICK AIM,,,,,,,,
@@ -50,7 +55,7 @@ PR_BC_AMPLIFY_PAIN_DESC,Text,,"Until End of Turn gain +100% to healing and +50% 
 PR_BC_BIOCHEMIST,Text,,BIOCHEMIST,,,,,,,,
 PR_BC_BIOCHEMIST_DESC,Text,,"Viral, Paralysis, Poison and Acid damage increased by 25% for direct damage and 5% for poison grenades on each hit body part",,,,,,,,
 PR_BC_LAY_WASTE,Text,,LAY WASTE,,,,,,,,
-PR_BC_LAY_WASTE_DESC,Text,,If your current Willpower score is higher than target's deal 30 damage for each point of WP difference,,,,,,,,
+PR_BC_LAY_WASTE_DESC,Text,,If your current Willpower score is higher than target's deal 10 damage for each point of WP difference,,,,,,,,
 PR_BC_ENDURANCE,Text,,ENDURANCE,,,,,,,,
 PR_BC_ENDURANCE_DESC,Text,,Recover restores additional 25% Willpower,,,,,,,,
 PR_BC_TAKEDOWN,Text,,TAKEDOWN,,,,,,,,

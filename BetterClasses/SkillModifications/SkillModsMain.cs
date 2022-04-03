@@ -2,13 +2,16 @@
 using Base.Defs;
 using Base.Entities.Abilities;
 using Base.Entities.Effects.ApplicationConditions;
+using Base.Entities.Statuses;
 using Base.UI;
 using PhoenixPoint.Common.Core;
+using PhoenixPoint.Common.Entities;
 using PhoenixPoint.Common.Entities.GameTags;
 using PhoenixPoint.Common.UI;
 using PhoenixPoint.Tactical.Entities;
 using PhoenixPoint.Tactical.Entities.Abilities;
 using PhoenixPoint.Tactical.Entities.Effects.ApplicationConditions;
+using PhoenixPoint.Tactical.Entities.Equipments;
 using PhoenixPoint.Tactical.Entities.Statuses;
 using PhoenixRising.BetterClasses.Tactical.Entities.DamageKeywords;
 using System;
@@ -35,6 +38,9 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             {
                 // Create solo DamageKeywords
                 sharedSoloDamageKeywords = new SharedSoloEffectorDamageKeywordsDataDef();
+
+                // Change stealth ability and indicator skill and apply on all base class proficiency skills
+                Apply_StealthIndicator_AllClasses();
 
                 // Assault skills ------------------------------------------------------
                 AssaultSkills.ApplyChanges();
@@ -75,6 +81,99 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             catch (Exception e)
             {
                 Logger.Error(e);
+            }
+        }
+
+        private static void Apply_StealthIndicator_AllClasses()
+        {
+            // Get stealth indicator ability
+            ApplyStatusAbilityDef baseForAll = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(asa => asa.name.Equals("Stealth_AbilityDef"));
+
+            // Clone base skill for special Infiltrator skill to keep the stealth bonus on Infiltrator
+            string skillName = "StealthInfiltrator_";
+            ApplyStatusAbilityDef stealthInfiltrator = Helper.CreateDefFromClone(
+                baseForAll,
+                "842d9c62-34f7-474c-942c-2676fef2f7e6",
+                skillName + "AbilityDef");
+            stealthInfiltrator.ViewElementDef = Helper.CreateDefFromClone(
+                baseForAll.ViewElementDef,
+                "6dfeca1f-1434-44d1-8f40-1843ce204044",
+                skillName + "ViewElementDef");
+            FactionVisibilityConditionStatusDef visibilityConditionStatus = Helper.CreateDefFromClone(
+                baseForAll.StatusDef as FactionVisibilityConditionStatusDef,
+                "3bae4197-6f49-4ee2-984b-9779321aa9a5",
+                skillName + "VisibiltyConditionStatusDef");
+            stealthInfiltrator.StatusDef = visibilityConditionStatus;
+
+            StanceStatusDef hiddenStatus = Helper.CreateDefFromClone(
+                visibilityConditionStatus.HiddenStateStatusDef as StanceStatusDef,
+                "a51977b0-be83-4249-8bef-30fe04fff4b3",
+                skillName + "HiddenStatusDef");
+            hiddenStatus.Visuals = Helper.CreateDefFromClone(
+                baseForAll.ViewElementDef,
+                "31859328-2bf7-4ee5-b59a-2600da67a1e8",
+                $"E_View [{hiddenStatus.name}]");
+            hiddenStatus.Visuals.Color = Color.green;
+            hiddenStatus.Visuals.Description.LocalizationKey = "PR_BC_INFILTRATOR_HIDDEN";
+            visibilityConditionStatus.HiddenStateStatusDef = hiddenStatus;
+
+            StanceStatusDef locatedStatus = Helper.CreateDefFromClone(
+                visibilityConditionStatus.LocatedStateStatusDef as StanceStatusDef,
+                "4d827076-1447-4d81-b398-9f42a29fb645",
+                skillName + "LocatedStateStatusDef");
+            locatedStatus.Visuals = Helper.CreateDefFromClone(
+                baseForAll.ViewElementDef,
+                "4dfe23e9-e1d8-4233-bf56-fdaae41b5c54",
+                $"E_View [{locatedStatus.name}]");
+            locatedStatus.Visuals.Color = Color.yellow;
+            locatedStatus.Visuals.Description.LocalizationKey = "PR_BC_INFILTRATOR_LOCATED";
+            visibilityConditionStatus.LocatedStateStatusDef = locatedStatus;
+
+            StanceStatusDef revealedStatus = Helper.CreateDefFromClone(
+                visibilityConditionStatus.RevealedStateStatusDef as StanceStatusDef,
+                "ed5e20f8-5324-49fe-b202-aa927df3e3f4",
+                skillName + "RevealedStateStatusDef");
+            revealedStatus.Visuals = Helper.CreateDefFromClone(
+                baseForAll.ViewElementDef,
+                "42f16776-e30e-4435-90a6-3977df8ba154",
+                $"E_View [{revealedStatus.name}]");
+            revealedStatus.Visuals.Color = Color.red;
+            revealedStatus.Visuals.Description.LocalizationKey = "PR_BC_INFILTRATOR_REVEALED";
+            visibilityConditionStatus.RevealedStateStatusDef = revealedStatus;
+
+            //Delete stealth bonus from base skill
+            ((baseForAll.StatusDef as FactionVisibilityConditionStatusDef).HiddenStateStatusDef as StanceStatusDef).StatModifications = new ItemStatModification[0];
+            // New Icon and texts for base skill
+            Sprite icon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_SneakerLegs_Stealth.png");
+            baseForAll.ViewElementDef.LargeIcon = icon;
+            baseForAll.ViewElementDef.SmallIcon = icon;
+            baseForAll.ViewElementDef.DisplayName1.LocalizationKey = "PR_BC_HIDDEN";
+            baseForAll.ViewElementDef.Description.LocalizationKey = "PR_BC_HIDDEN_DESC";
+
+            // List of all class proficiency ability def names
+            List<string> ClassProficiencies = new List<string>()
+            {
+                "Assault_ClassProficiency_AbilityDef",
+                "Heavy_ClassProficiency_AbilityDef",
+                "Sniper_ClassProficiency_AbilityDef",
+                "Berserker_ClassProficiency_AbilityDef",
+                "Infiltrator_ClassProficiency_AbilityDef",
+                "Priest_ClassProficiency_AbilityDef",
+                "Technician_ClassProficiency_AbilityDef",
+                "Mutoid_ClassProficiency_AbilityDef"
+            };
+
+            // Add stealth indicator ability to each class proficiency ability that is in the above list and does not already have it added
+            foreach (ClassProficiencyAbilityDef classProficiencyAbilityDef in Repo.GetAllDefs<ClassProficiencyAbilityDef>().Where(cpa => ClassProficiencies.Contains(cpa.name)))
+            {
+                if (!classProficiencyAbilityDef.AbilityDefs.Contains(baseForAll))
+                {
+                    classProficiencyAbilityDef.AbilityDefs = classProficiencyAbilityDef.AbilityDefs.Append(baseForAll).ToArray();
+                }
+                if (classProficiencyAbilityDef.name.Equals("Infiltrator_ClassProficiency_AbilityDef") && !classProficiencyAbilityDef.AbilityDefs.Contains(stealthInfiltrator))
+                {
+                    classProficiencyAbilityDef.AbilityDefs = classProficiencyAbilityDef.AbilityDefs.Append(stealthInfiltrator).ToArray();
+                }
             }
         }
 

@@ -104,7 +104,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             hunkerDown.CharacterProgressionData.RequiredSpeed = 0;
             hunkerDown.ViewElementDef.DisplayName1 = new LocalizedTextBind("HUNKER DOWN", doNotLocalize);
             hunkerDown.ViewElementDef.Description = new LocalizedTextBind("Gain 25% damage resistance until your next turn.", doNotLocalize);
-            Sprite hunkerDownIcon = Repo.GetAllDefs<TacticalAbilityViewElementDef>().FirstOrDefault(ve => ve.name.Equals("E_ViewElement [Chiron_EnterStabilityStance_AbilityDef]")).SmallIcon;
+            Sprite hunkerDownIcon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_HunkerDown_1-2.png");
             hunkerDown.ViewElementDef.LargeIcon = hunkerDownIcon;
             hunkerDown.ViewElementDef.SmallIcon = hunkerDownIcon;
             (hunkerDown.StatusDef as DamageMultiplierStatusDef).DurationTurns = 1;
