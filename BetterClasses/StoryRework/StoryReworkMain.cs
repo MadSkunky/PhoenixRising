@@ -6,6 +6,7 @@ using Harmony;
 using PhoenixPoint.Common.Core;
 using PhoenixPoint.Geoscape.Entities;
 using PhoenixPoint.Geoscape.Entities.Research;
+using PhoenixPoint.Geoscape.Events;
 using PhoenixPoint.Geoscape.Events.Conditions;
 using PhoenixPoint.Geoscape.Events.Eventus;
 using PhoenixPoint.Geoscape.Events.Eventus.Filters;
@@ -16,6 +17,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace PhoenixRising.BetterClasses.StoryRework
 {
@@ -158,22 +160,21 @@ namespace PhoenixRising.BetterClasses.StoryRework
         //        return false; // Return without calling the original method
         //    }
         //}
-        //
+        
         //// Harmony patch to change the result of AllMissionsCompleted.get() to always true
         //[HarmonyPatch(typeof(GeoMarketplace), "get_AllMissionsCompleted")]
         //internal static class BC_GeoMarketplace_get_AllMissionsCompleted_patch
         //{
         //    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
-        //    private static bool Prefix(ref bool __result)
+        //    private static bool Prefix(ref bool __result, GeoLevelController ____level, TheMarketplaceSettingsDef ____settings)
         //    {
-        //        __result = true;
+        //        __result = ____level.EventSystem.GetVariable(____settings.NumberOfDLC5MissionsCompletedVariable) > 0;
         //        return false; // Return without calling the original method
         //    }
         //}
-
+        //
         //// Current and last ODI level
         //public static int CurrentODI_Level = 0;
-        //public static int LastODI_Level = -1; // -1 to let index 0 trigger
         //// All SDI (ODI) event IDs, levels as array, index 0 - 19
         //public static readonly string[] ODI_EventIDs = new string[]
         //{
@@ -199,13 +200,13 @@ namespace PhoenixRising.BetterClasses.StoryRework
         //    "SDI_20"
         //};
         //// Harmony patch to gather some game stats from the alien faction (pandorans) when geo level starts (campaign start, game loaded, after tactical missions)
-        //[HarmonyPatch(typeof(GeoAlienFaction), "OnLevelStart")]
-        //internal static class BC_GeoAlienFaction_OnLevelStart_patch
+        //[HarmonyPatch(typeof(GeoAlienFaction), "OnAfterFactionsLevelStart")]
+        //internal static class BC_GeoAlienFaction_OnAfterFactionsLevelStart_patch
         //{
         //    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
         //    private static void Postfix(GeoAlienFaction __instance, int ____evolutionProgress)
         //    {
-        //        Calculate_ODI_Level(__instance, ____evolutionProgress, true);
+        //        Calculate_ODI_Level(__instance, ____evolutionProgress);
         //    }
         //}
         //// Harmony patch to gather some game stats from the alien faction (pandorans) each day in game
@@ -218,54 +219,28 @@ namespace PhoenixRising.BetterClasses.StoryRework
         //        Calculate_ODI_Level(__instance, ____evolutionProgress);
         //    }
         //}
-        //internal static void Calculate_ODI_Level(GeoAlienFaction geoAlienFaction, int evolutionProgress, bool onLevelStart = false)
+        //internal static void Calculate_ODI_Level(GeoAlienFaction geoAlienFaction, int evolutionProgress)
         //{
         //    try
         //    {
-        //        // Lost population to accelerate the ODI progress, value increasing from 0 to 1, 0 means no loss = start of campaign, 1 = no population left
-        //        // A player that keeps the havens alive can prolong the ODI progress
-        //        //float lostPopulation = (float)(geoAlienFaction.GeoLevel.StartingPopulation - geoAlienFaction.GeoLevel.CurrentPopulation) / geoAlienFaction.GeoLevel.StartingPopulation;
-        //        // Calculate the current ODI progress value with the given variables, here basically evolutionProgress (and maybe accelerated by lost population)
-        //        int currentODI_Progress = evolutionProgress; // * (1 + lostPopulation));
         //        // Index of last element of the ODI event ID array is Length - 1
         //        int ODI_EventIDs_LastIndex = ODI_EventIDs.Length - 1;
         //        // Set a maximum number to determine the upper limit from when the maximum ODI level is reached
         //        int maxODI_Progress = 470 * ODI_EventIDs_LastIndex;
         //        // Calculate the current ODI level = index for the ODI event ID array
-        //        CurrentODI_Level = currentODI_Progress * ODI_EventIDs_LastIndex / maxODI_Progress;
-        //        // Cap the lavel at max index, after that the index will not longer get increased wiht higher progress
-        //        CurrentODI_Level = Mathf.Min(ODI_EventIDs_LastIndex, CurrentODI_Level);
-        //        // If current calculated level is diferent to last one then new ODI level is reached, show the new ODI event
-        //        if (CurrentODI_Level != LastODI_Level)
+        //        // Mathf.Min = cap the lavel at max index, after that the index will not longer get increased wiht higher progress
+        //        CurrentODI_Level = Mathf.Min(ODI_EventIDs_LastIndex, evolutionProgress * ODI_EventIDs_LastIndex / maxODI_Progress);
+        //        // Get the GeoLevelController to get access to the event system and the variable
+        //        GeoLevelController geoLevelController = geoAlienFaction.GeoLevel;
+        //        // If current calculated level is different to last saved one then new ODI level is reached, show the new ODI event
+        //        if (CurrentODI_Level != geoLevelController.EventSystem.GetVariable("BC_SDI", -1))
         //        {
         //            // Get the Event ID from array dependent on calculated level index
         //            string eventID = ODI_EventIDs[CurrentODI_Level];
-        //            GeoLevelController geoLevelController = geoAlienFaction.GeoLevel;
         //            GeoscapeEventContext geoscapeEventContext = new GeoscapeEventContext(geoAlienFaction, geoLevelController.ViewerFaction);
-        //            geoLevelController.EventSystem.TriggerGeoscapeEvent("SDI_01", geoscapeEventContext);
-        //            LastODI_Level = CurrentODI_Level;
+        //            geoLevelController.EventSystem.TriggerGeoscapeEvent(ODI_EventIDs[CurrentODI_Level], geoscapeEventContext);
+        //            geoLevelController.EventSystem.SetVariable("BC_SDI", CurrentODI_Level);
         //        }
-        //
-        //        //// Trigger SDI event the hacky way by executing a console command
-        //        //IConsole console = UnityEngine.Object.FindObjectOfType<GameConsoleWindow>();
-        //        //if (evolutionProgress > 100 && evolutionProgress < 200)
-        //        //{
-        //        //    console.ExecuteCommandLine($"geo_event_trigger {eventID}");
-        //        //}
-        //
-        //        // Logging some gathered in-game values
-        //        DateTime currentGameTime = geoAlienFaction.GeoLevel.GameController.CurrentGameTime;
-        //        int percPopulation = Mathf.RoundToInt((float)geoAlienFaction.GeoLevel.CurrentPopulation * 100 / geoAlienFaction.GeoLevel.StartingPopulation);
-        //        string message = string.Concat($" Gathered ingame values by GeoAlienFaction.OnLevelStart() and .UpdateFactionDaily():\n",
-        //                                       $"Game time: {currentGameTime}\n",
-        //                                       $"Alien evolution progress: {evolutionProgress}\n",
-        //                                       $"Current population: {percPopulation}%\n",
-        //                                       $"------------------------------------------------------------------------------------------------------");
-        //        Logger.Debug(message);
-        //
-        //        // Show a message box with gathered values
-        //        //geoAlienFaction.GeoLevel.View.RequestGamePause();
-        //        //GameUtl.GetMessageBox().ShowSimplePrompt(message, MessageBoxIcon.Information, MessageBoxButtons.OK, null);
         //    }
         //    catch (Exception e)
         //    {

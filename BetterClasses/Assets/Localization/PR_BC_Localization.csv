@@ -1,8 +1,8 @@
 Key,Type,Desc,English,Chinese (Simplified),French,German,Italian,Polish,Russian,Spanish,UI_Tester
 PR_BC_HIDDEN,Text,,UNREVEALED,,,,,,,,
 PR_BC_HIDDEN_DESC,Text,,The Actor is not spotted.,,,,,,,,
-PR_BC_INFILTRATOR_HIDDEN,Text,,HIDDEN: Gain +25% Stealth bonus.,,,,,,,,
-PR_BC_INFILTRATOR_LOCATED,Text,,LOCATED: Gain +25% Stealth bonus.,,,,,,,,
+PR_BC_INFILTRATOR_HIDDEN,Text,,HIDDEN: +25% stealth and completely undetected.,,,,,,,,
+PR_BC_INFILTRATOR_LOCATED,Text,,"LOCATED: +25% stealth and still invisible, but enemies know the characters position and can target him.",,,,,,,,
 PR_BC_INFILTRATOR_REVEALED,Text,,REVEALED: No Stealth bonus!,,,,,,,,
 PR_BC_BATTLE_FOCUS,Text,,BATTLE FOCUS,,,,,,,,
 PR_BC_BATTLE_FOCUS_DESC,Text,,If there are enemies within 10 tiles your attacks gain +20% damage,,,,,,,,
