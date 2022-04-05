@@ -1,15 +1,19 @@
 ﻿using Base.Core;
 using Base.Defs;
 using Base.Entities.Abilities;
+using Base.Entities.Effects;
 using Base.Entities.Effects.ApplicationConditions;
 using Base.Entities.Statuses;
 using Base.UI;
+using Harmony;
 using PhoenixPoint.Common.Core;
 using PhoenixPoint.Common.Entities;
 using PhoenixPoint.Common.Entities.GameTags;
 using PhoenixPoint.Common.UI;
+using PhoenixPoint.Tactical;
 using PhoenixPoint.Tactical.Entities;
 using PhoenixPoint.Tactical.Entities.Abilities;
+using PhoenixPoint.Tactical.Entities.Effects;
 using PhoenixPoint.Tactical.Entities.Effects.ApplicationConditions;
 using PhoenixPoint.Tactical.Entities.Equipments;
 using PhoenixPoint.Tactical.Entities.Statuses;
@@ -38,6 +42,9 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             {
                 // Create solo DamageKeywords
                 sharedSoloDamageKeywords = new SharedSoloEffectorDamageKeywordsDataDef();
+
+                // Change Recover to reduce viral by half
+                Change_RecoverToReduceViral();
 
                 // Change stealth ability and indicator skill and apply on all base class proficiency skills
                 Apply_StealthIndicator_AllClasses();
@@ -84,6 +91,33 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             }
         }
 
+        // Make ViralValueChange_EffectDef accessible to Harmony patch for Revover ability (see below)
+        internal static ChangeStatusValueEffectDef ViralValueChange_EffectDef;
+        private static void Change_RecoverToReduceViral()
+        {
+            // Change description of Recover ability to reflect that it reduces Virus by half
+            RecoverWillAbilityDef recover = Repo.GetAllDefs<RecoverWillAbilityDef>().FirstOrDefault(rw => rw.name.Equals("RecoverWill_AbilityDef"));
+            recover.ViewElementDef.Description.LocalizationKey = "PR_BC_RECOVER_DESC";
+            // Create a new effect to change the virus value, cloned from 'ParalysisValueChange_0.5_EffectDef'
+            ViralValueChange_EffectDef = Helper.CreateDefFromClone(
+                Repo.GetAllDefs<ChangeStatusValueEffectDef>().FirstOrDefault(csv => csv.name.Equals("ParalysisValueChange_0.5_EffectDef")),
+                "1bb3b06f-55d5-44a0-8cf7-e5382577c4df",
+                "ViralValueChange_0.5_EffectDef");
+            ViralValueChange_EffectDef.StatusDef = Repo.GetAllDefs<TacStatusDef>().FirstOrDefault(ts => ts.name.Equals("Infected_StatusDef")); // Infected_StatusDef = virus applied
+        }
+        // Recover ability: Patching GetWillpowerRecover when character uses Recover to also reduce viral value by half
+        [HarmonyPatch(typeof(RecoverWillAbility), "GetStatusSource")]
+        internal static class RecoverWillAbility_GetStatusSource_Patch
+        {
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
+            private static void Postfix(RecoverWillAbility __instance)
+            {
+                TacticalActorBase Base_TacticalActorBase = (TacticalActor)AccessTools.Property(typeof(TacticalAbility), "TacticalActorBase").GetValue(__instance, null);
+                Effect.Apply(Repo, ViralValueChange_EffectDef, TacUtil.GetActorEffectTarget(Base_TacticalActorBase, null));
+            }
+        }
+
+        // Static variables to save icon and localization keys that otherwise would get lost in subsequent calls
         internal static Sprite InfiltratorStealthIcon = null;
         internal static string InfiltratorStealthDisplayName1LocKey = string.Empty;
         internal static string InfiltratorStealthDescriptionLocKey = string.Empty;
@@ -175,32 +209,49 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             baseForAll.ViewElementDef.DisplayName1.LocalizationKey = "PR_BC_HIDDEN";
             baseForAll.ViewElementDef.Description.LocalizationKey = "PR_BC_HIDDEN_DESC";
 
-            // List of all class proficiency ability def names
-            List<string> ClassProficiencies = new List<string>()
+            // Add stealth indicator ability to Soldier_ActorDef.Abilities if it does not already contains it (set it for all characters)
+            TacticalActorDef soldierActorDef = Repo.GetAllDefs<TacticalActorDef>().FirstOrDefault(ta => ta.name.Equals("Soldier_ActorDef"));
+            if (!soldierActorDef.Abilities.Contains(baseForAll))
             {
-                "Assault_ClassProficiency_AbilityDef",
-                "Heavy_ClassProficiency_AbilityDef",
-                "Sniper_ClassProficiency_AbilityDef",
-                "Berserker_ClassProficiency_AbilityDef",
-                "Infiltrator_ClassProficiency_AbilityDef",
-                "Priest_ClassProficiency_AbilityDef",
-                "Technician_ClassProficiency_AbilityDef",
-                "Mutoid_ClassProficiency_AbilityDef"
-            };
-
-            foreach (ClassProficiencyAbilityDef classProficiencyAbilityDef in Repo.GetAllDefs<ClassProficiencyAbilityDef>().Where(cpa => ClassProficiencies.Contains(cpa.name)))
-            {
-                // Add stealth indicator ability to each class proficiency ability that is in the above list and does not already have it added
-                if (!classProficiencyAbilityDef.AbilityDefs.Contains(baseForAll))
-                {
-                    classProficiencyAbilityDef.AbilityDefs = classProficiencyAbilityDef.AbilityDefs.Append(baseForAll).ToArray();
-                }
-                // Add stealth buff ability to Infiltrator proficiency ability if it does not already have it added
-                if (classProficiencyAbilityDef.name.Equals("Infiltrator_ClassProficiency_AbilityDef") && !classProficiencyAbilityDef.AbilityDefs.Contains(stealthInfiltrator))
-                {
-                    classProficiencyAbilityDef.AbilityDefs = classProficiencyAbilityDef.AbilityDefs.Append(stealthInfiltrator).ToArray();
-                }
+                soldierActorDef.Abilities = soldierActorDef.Abilities.Append(baseForAll).ToArray();
             }
+
+            // Replace base stealth inidcator ability on Infiltrator_ClassProficiency_AbilityDef with new ctreated stealth buff ability
+            ClassProficiencyAbilityDef infiltratorCPAD = Repo.GetAllDefs<ClassProficiencyAbilityDef>().FirstOrDefault(cp => cp.name.Equals("Infiltrator_ClassProficiency_AbilityDef"));
+            if (!infiltratorCPAD.AbilityDefs.Contains(stealthInfiltrator))
+            {
+                List<AbilityDef> abilityDefs = infiltratorCPAD.AbilityDefs.ToList();
+                _ = abilityDefs.Remove(baseForAll);
+                abilityDefs.Add(stealthInfiltrator);
+                infiltratorCPAD.AbilityDefs = abilityDefs.ToArray();
+            }
+
+            //// List of all class proficiency ability def names
+            //List<string> ClassProficiencies = new List<string>()
+            //{
+            //    "Assault_ClassProficiency_AbilityDef",
+            //    "Heavy_ClassProficiency_AbilityDef",
+            //    "Sniper_ClassProficiency_AbilityDef",
+            //    "Berserker_ClassProficiency_AbilityDef",
+            //    "Infiltrator_ClassProficiency_AbilityDef",
+            //    "Priest_ClassProficiency_AbilityDef",
+            //    "Technician_ClassProficiency_AbilityDef",
+            //    "Mutoid_ClassProficiency_AbilityDef"
+            //};
+            //
+            //foreach (ClassProficiencyAbilityDef classProficiencyAbilityDef in Repo.GetAllDefs<ClassProficiencyAbilityDef>().Where(cpa => ClassProficiencies.Contains(cpa.name)))
+            //{
+            //    // Add stealth indicator ability to each class proficiency ability that is in the above list and does not already have it added
+            //    if (!classProficiencyAbilityDef.AbilityDefs.Contains(baseForAll))
+            //    {
+            //        classProficiencyAbilityDef.AbilityDefs = classProficiencyAbilityDef.AbilityDefs.Append(baseForAll).ToArray();
+            //    }
+            //    // Add stealth buff ability to Infiltrator proficiency ability if it does not already have it added
+            //    if (classProficiencyAbilityDef.name.Equals("Infiltrator_ClassProficiency_AbilityDef") && !classProficiencyAbilityDef.AbilityDefs.Contains(stealthInfiltrator))
+            //    {
+            //        classProficiencyAbilityDef.AbilityDefs = classProficiencyAbilityDef.AbilityDefs.Append(stealthInfiltrator).ToArray();
+            //    }
+            //}
         }
 
         private static void Set_SPcost()

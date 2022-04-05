@@ -1,6 +1,7 @@
 Key,Type,Desc,English,Chinese (Simplified),French,German,Italian,Polish,Russian,Spanish,UI_Tester
+PR_BC_RECOVER_DESC,Text,,"Recover Will Points equal to half Willpower, reduces Virus by half and become immune to Panic for one turn. End the character's current turn.",,,,,,,,
 PR_BC_HIDDEN,Text,,UNREVEALED,,,,,,,,
-PR_BC_HIDDEN_DESC,Text,,The Actor is not spotted.,,,,,,,,
+PR_BC_HIDDEN_DESC,Text,,Indicates when the character is unrevealed and not spotted.,,,,,,,,
 PR_BC_INFILTRATOR_HIDDEN,Text,,HIDDEN: +25% stealth and completely undetected.,,,,,,,,
 PR_BC_INFILTRATOR_LOCATED,Text,,"LOCATED: +25% stealth and still invisible, but enemies know the characters position and can target him.",,,,,,,,
 PR_BC_INFILTRATOR_REVEALED,Text,,REVEALED: No Stealth bonus!,,,,,,,,
