@@ -21,7 +21,7 @@ modding and design councilors and testers, always open to productive discussions
 
 ### Better Classes
 
-DETAILS AND CHANGELOG: TBD
+DETAILS AND CHANGELOG: TBD  
 3rd Row explained: https://youtu.be/XcaObJJaHCw
 
 INTENDED TO BE USED WITH PANTOLOMIN RF MOD https://www.nexusmods.com/phoenixpoint/mods/40?tab=files
