@@ -1,4 +1,5 @@
 Key,Type,Desc,English,Chinese (Simplified),French,German,Italian,Polish,Russian,Spanish,UI_Tester
+PR_BC_POISON_STATUS_DESC,Text,,"At start of turn poison is subtracted from Hit Points and Willpoints reduced by 3, then poison value is reduced by 10. Poison causes trembling (-50% Accuracy).",,,,,,,,
 PR_BC_RECOVER_DESC,Text,,"Recover Will Points equal to half Willpower. Divide any Viral damage by 2 and become immune to Panic for 1 turn. End the actor's current turn.",,,,,,,,
 PR_BC_HIDDEN,Text,,UNREVEALED,,,,,,,,
 PR_BC_HIDDEN_DESC,Text,,Indicates when the character is unrevealed and not spotted.,,,,,,,,

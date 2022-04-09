@@ -44,6 +44,10 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
 
         public static void ApplyChanges()
         {
+            // Change Poison: -50% accuracy and -3 WP per turn
+            Change_Poison();
+            // Change various bionics
+            Change_VariousBionics();
             // Corruptive cloud should not affect pandoran enemies
             Change_CorruptiveCloud();
             // Turrets: Shoot at 1/2 burst but cost 2AP to shoot , maybe reduce armor of all by 10?
@@ -93,6 +97,65 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
             // Technichian remove MindFragger - Increase range to 2
             Change_TechRemoveFaceHugger();
         }
+
+        private static void Change_Poison()
+        {
+            DamageOverTimeStatusDef poisonDOT = Repo.GetAllDefs<DamageOverTimeStatusDef>().FirstOrDefault(dot => dot.name.Equals("Poison_DamageOverTimeStatusDef"));
+            poisonDOT.Visuals.Description.LocalizationKey = "PR_BC_POISON_STATUS_DESC";
+        }
+        // Harmony patch for Poison DOT to additionally apply -50% accuracy (Trembling status) and -3 WP per turn
+        [HarmonyPatch(typeof(DamageOverTimeStatus), "ApplyEffect")]
+        internal static class BC_DamageOverTimeStatus_ApplyEffect_Patch
+        {
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
+            private static void Postfix(DamageOverTimeStatus __instance)
+            {
+                if (__instance.DamageOverTimeStatusDef.name.Equals("Poison_DamageOverTimeStatusDef"))
+                {
+                    TacticalActor base_TacticalActor = (TacticalActor)AccessTools.Property(typeof(TacStatus), "TacticalActor").GetValue(__instance, null);
+                    StatusComponent statusComponent = (StatusComponent)AccessTools.Property(typeof(TacStatus), "StatusComponent").GetValue(__instance, null);
+                    StatMultiplierStatusDef trembling = Repo.GetAllDefs<StatMultiplierStatusDef>().FirstOrDefault(sms => sms.name.Equals("Trembling_StatusDef"));
+
+                    if (__instance.IntValue <= 0 && base_TacticalActor.Status.HasStatus(trembling))
+                    {
+                        StatMultiplierStatus status = base_TacticalActor.Status.GetStatus<StatMultiplierStatus>(trembling);
+                        status.RequestUnapply(status.StatusComponent);
+                        return;
+                    }
+
+                    if (!base_TacticalActor.Status.HasStatus(trembling))
+                    {
+                        _ = base_TacticalActor.Status.ApplyStatus(trembling);
+                    }
+
+                    float newWP = Mathf.Max(base_TacticalActor.CharacterStats.WillPoints.Min, base_TacticalActor.CharacterStats.WillPoints - 3.0f);
+                    base_TacticalActor.CharacterStats.WillPoints.Set(newWP);
+                }
+            }
+        }
+
+        private static void Change_VariousBionics()
+        {
+            // Juggernaut Torso & Armadillo Legs: Speed -1 -> 0
+            BodyPartAspectDef juggernautTorso = Repo.GetAllDefs<BodyPartAspectDef>().FirstOrDefault(p => p.name.Equals("E_BodyPartAspect [NJ_Jugg_BIO_Torso_BodyPartDef]"));
+            BodyPartAspectDef juggernautLegs = Repo.GetAllDefs<BodyPartAspectDef>().FirstOrDefault(p => p.name.Equals("E_BodyPartAspect [NJ_Jugg_BIO_Legs_ItemDef]"));
+            juggernautTorso.Speed = juggernautLegs.Speed = 0;
+
+            // Neural Torso: Grants Mounted Weapons and Tech Arms Proficiencies (RoboticArmItem_TagDef)
+            TacticalItemDef neuralTorso = Repo.GetAllDefs<TacticalItemDef>().FirstOrDefault(p => p.name.Equals("NJ_Exo_BIO_Torso_BodyPartDef"));
+            AbilityDef mountedWeaponProficiency = Repo.GetAllDefs<AbilityDef>().FirstOrDefault(a1 => a1.name.Equals("MountedWeaponTalent_AbilityDef"));
+            if (!neuralTorso.Abilities.Contains(mountedWeaponProficiency))
+            {
+                neuralTorso.Abilities = neuralTorso.Abilities.AddToArray(mountedWeaponProficiency);
+            }
+
+            GameTagDef roboticArmTag = Repo.GetAllDefs<GameTagDef>().FirstOrDefault(gt => gt.name.Equals("RoboticArmItem_TagDef"));
+            if (!neuralTorso.Tags.Contains(roboticArmTag))
+            {
+                neuralTorso.Tags.Add(roboticArmTag);
+            }
+        }
+
         public static void Change_CorruptiveCloud()
         {
             ApplyDamageEffectAbilityDef acidCloud = Repo.GetAllDefs<ApplyDamageEffectAbilityDef>().FirstOrDefault(a => a.name.Equals("Acheron_CorrosiveCloud_AbilityDef"));
@@ -130,9 +193,16 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
         {
             int StompShockValue = 200;
             int StompBlastValue = 50;
+            //float range = 5.0f;
 
             ApplyDamageEffectAbilityDef stomp = Repo.GetAllDefs<ApplyDamageEffectAbilityDef>().FirstOrDefault(p => p.name.Equals("StomperLegs_Stomp_AbilityDef"));
-
+            //ApplyDamageEffectAbilityDef chironStomp = Repo.GetAllDefs<ApplyDamageEffectAbilityDef>().FirstOrDefault(p => p.name.Equals("AreaStun_AbilityDef"));
+            //stomp.TargetingDataDef = chironStomp.TargetingDataDef;
+            //stomp.TargetingDataDef.Origin.Range = range;
+            //stomp.DamagePayload = chironStomp.DamagePayload;
+            //stomp.DamagePayload.DamageKeywords.FirstOrDefault(dkp => dkp.DamageKeywordDef == Shared.SharedDamageKeywords.BlastKeyword).Value = StompBlastValue;
+            //stomp.DamagePayload.DamageKeywords.FirstOrDefault(dkp => dkp.DamageKeywordDef == Shared.SharedDamageKeywords.ShockKeyword).Value = StompShockValue;
+            //stomp.DamagePayload.Range = range;
             stomp.DamagePayload.DamageKeywords = new List<DamageKeywordPair>()
                 {
                 new DamageKeywordPair{DamageKeywordDef = Shared.SharedDamageKeywords.ShockKeyword, Value = StompShockValue },
