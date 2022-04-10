@@ -24,10 +24,41 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
 
         public static void ApplyChanges()
         {
+            Change_Ragnarok();
             Change_Iconoclast();
             Change_NergalsWrath();
             Change_Crossbows();
             Change_PriestWeapons();
+        }
+
+        private static void Change_Ragnarok()
+        {
+            WeaponDef Ragnarok = Repo.GetAllDefs<WeaponDef>().FirstOrDefault(ec => ec.name.Equals("PX_ShredingMissileLauncherPack_WeaponDef"));
+            Ragnarok.DamagePayload.Range = 35.0f;
+            Ragnarok.DamagePayload.AoeRadius = 5.5f;
+
+            // Easter egg for all testes :-)
+            Ragnarok.DamagePayload.DamageKeywords = new List<DamageKeywordPair>()
+            {
+                new DamageKeywordPair()
+                {
+                    DamageKeywordDef = Shared.SharedDamageKeywords.BlastKeyword,
+                    Value = 40
+                },
+                new DamageKeywordPair()
+                {
+                    DamageKeywordDef = Shared.SharedDamageKeywords.ShreddingKeyword,
+                    Value = 20
+                }
+            };
+            Ragnarok.DamagePayload.ProjectilesPerShot = 4;
+            Ragnarok.SpreadRadius = 5.5f;
+            Ragnarok.ChargesMax = 8;
+
+            ItemDef RagnarokAmmo = Repo.GetAllDefs<ItemDef>().FirstOrDefault(i => i.name.Equals("PX_ShredingMissileLauncher_AmmoClip_ItemDef"));
+            RagnarokAmmo.ChargesMax = 8;
+            RagnarokAmmo.ManufactureMaterials *= 1.5f;
+            RagnarokAmmo.ManufactureTech *= 1.5f;
         }
 
         private static void Change_Iconoclast()
