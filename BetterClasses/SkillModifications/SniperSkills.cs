@@ -17,7 +17,7 @@ using UnityEngine;
 
 namespace PhoenixRising.BetterClasses.SkillModifications
 {
-    class SniperSkills
+    internal class SniperSkills
     {
         // Get config, definition repository and shared data
         private static readonly Settings Config = BetterClassesMain.Config;

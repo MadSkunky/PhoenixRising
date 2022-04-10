@@ -25,7 +25,7 @@ using UnityEngine;
 
 namespace PhoenixRising.BetterClasses.SkillModifications
 {
-    class SkillModsMain
+    internal class SkillModsMain
     {
         // Get config, definition repository and shared data
         private static readonly Settings Config = BetterClassesMain.Config;

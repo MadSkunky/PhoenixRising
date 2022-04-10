@@ -26,7 +26,7 @@ using UnityEngine;
 
 namespace PhoenixRising.BetterClasses.SkillModifications
 {
-    class InfiltratorSkills
+    internal class InfiltratorSkills
     {
         // Get config, definition repository and shared data
         private static readonly Settings Config = BetterClassesMain.Config;

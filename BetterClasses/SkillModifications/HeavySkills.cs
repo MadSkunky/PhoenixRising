@@ -29,7 +29,7 @@ using UnityEngine;
 
 namespace PhoenixRising.BetterClasses.SkillModifications
 {
-    class HeavySkills
+    internal class HeavySkills
     {
         // Get config, definition repository and shared data
         private static readonly Settings Config = BetterClassesMain.Config;

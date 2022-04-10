@@ -22,7 +22,7 @@ using UnityEngine;
 
 namespace PhoenixRising.BetterClasses.SkillModifications
 {
-    class BackgroundPerks
+    internal class BackgroundPerks
     {
         // Get config, definition repository and shared data
         private static readonly Settings Config = BetterClassesMain.Config;
@@ -550,18 +550,6 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                     Modification = StatModificationType.Multiply,
                     Value = bonusDamage
                 },
-                //new ItemStatModification()
-                //{
-                //    TargetStat = StatModificationTarget.WillPoints,
-                //    Modification = StatModificationType.Add,
-                //    Value = willpower
-                //},
-                //new ItemStatModification()
-                //{
-                //    TargetStat = StatModificationTarget.WillPoints,
-                //    Modification = StatModificationType.AddMax,
-                //    Value = willpower
-                //}
             };
             aHistoryOfViolence.ItemTagStatModifications = new EquipmentItemTagStatModification[0];
             aHistoryOfViolence.DamageKeywordPairs = new DamageKeywordPair[0];
@@ -602,6 +590,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
         {
             string skillName = "DamagedAmygdala_AbilityDef";
             DamageMultiplierAbilityDef source = Repo.GetAllDefs<DamageMultiplierAbilityDef>().FirstOrDefault(p => p.name.Equals("PsychicResistant_DamageMultiplierAbilityDef"));
+            source.Multiplier = 0.0f; // Set to 0.0 because 0.5 = resistance did not work.
             DamageMultiplierAbilityDef damagedAmygdala = Helper.CreateDefFromClone(
                 source,
                 "5fe50c69-3081-4502-98bf-1ba9d6911c99",
@@ -619,8 +608,8 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             damagedAmygdala.CharacterProgressionData.RequiredSpeed = 0;
             damagedAmygdala.CharacterProgressionData.RequiredStrength = 0;
             damagedAmygdala.CharacterProgressionData.RequiredWill = 0;
-            damagedAmygdala.ViewElementDef.DisplayName1 = new LocalizedTextBind("DAMAGED AMYGDALA", doNotLocalize);
-            damagedAmygdala.ViewElementDef.Description = new LocalizedTextBind("<b>Psychic Resistance</b>\n<i>All brains are different, and yours couldn't take seeing your family return as sea monsters.</i>", doNotLocalize);
+            damagedAmygdala.ViewElementDef.DisplayName1.LocalizationKey = "PR_BC_DAMAGED_AMYGDALA";
+            damagedAmygdala.ViewElementDef.Description.LocalizationKey = "PR_BC_DAMAGED_AMYGDALA_DESC";
         }
         private static void Create_SanitationExpert()
         {

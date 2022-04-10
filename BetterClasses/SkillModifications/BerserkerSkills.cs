@@ -31,7 +31,7 @@ using UnityEngine;
 
 namespace PhoenixRising.BetterClasses.SkillModifications
 {
-    class BerserkerSkills
+    internal class BerserkerSkills
     {
         // Get config, definition repository and shared data
         private static readonly Settings Config = BetterClassesMain.Config;

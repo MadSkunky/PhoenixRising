@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PhoenixRising.BetterClasses.VariousAdjustments
 {
-    class VariousAdjustmentsMain
+    internal class VariousAdjustmentsMain
     {
         // Get config, definition repository and shared data
         private static readonly Settings Config = BetterClassesMain.Config;

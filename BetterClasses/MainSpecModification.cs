@@ -9,7 +9,7 @@ using PhoenixPoint.Tactical.Entities.Abilities;
 
 namespace PhoenixRising.BetterClasses
 {
-    class MainSpecModification
+    internal class MainSpecModification
     {
         // Get config, definition repository and shared data
         private static readonly Settings Config = BetterClassesMain.Config;

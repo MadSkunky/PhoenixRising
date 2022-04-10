@@ -13,7 +13,7 @@ using System.Linq;
 
 namespace PhoenixRising.BetterClasses.VariousAdjustments
 {
-    class WeaponModifications
+    internal class WeaponModifications
     {
         // Get config, definition repository and shared data
         private static readonly Settings Config = BetterClassesMain.Config;

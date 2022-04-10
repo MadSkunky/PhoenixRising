@@ -38,7 +38,7 @@ using static PhoenixPoint.Tactical.Entities.Statuses.StatMultiplierStatusDef;
 
 namespace PhoenixRising.BetterClasses.SkillModifications
 {
-    class FactionPerks
+    internal class FactionPerks
     {
         // Get config, definition repository and shared data
         private static readonly Settings Config = BetterClassesMain.Config;
@@ -562,6 +562,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
 
             arTargeting.StatusDef = artStatus;
 
+            arTargeting.ActionPointCost = 0;
             arTargeting.WillPointCost = 2;
             arTargeting.UsesPerTurn = 8;
 

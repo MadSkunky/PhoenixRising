@@ -27,7 +27,7 @@ using UnityEngine;
 
 namespace PhoenixRising.BetterClasses.StoryRework
 {
-    class StoryReworkMain
+    internal class StoryReworkMain
     {
         // Get config, definition repository and shared data
         private static readonly Settings Config = BetterClassesMain.Config;

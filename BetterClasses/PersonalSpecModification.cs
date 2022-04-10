@@ -20,7 +20,7 @@ using PhoenixPoint.Common.Core;
 
 namespace PhoenixRising.BetterClasses
 {
-    class PersonalSpecModification
+    internal class PersonalSpecModification
     {
         // Get config, definition repository and shared data
         private static readonly Settings Config = BetterClassesMain.Config;

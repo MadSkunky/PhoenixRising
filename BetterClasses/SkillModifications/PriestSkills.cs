@@ -36,7 +36,7 @@ using UnityEngine;
 
 namespace PhoenixRising.BetterClasses.SkillModifications
 {
-    class PriestSkills
+    internal class PriestSkills
     {
         // Get config, definition repository and shared data
         private static readonly Settings Config = BetterClassesMain.Config;
@@ -47,11 +47,20 @@ namespace PhoenixRising.BetterClasses.SkillModifications
 
         public static void ApplyChanges()
         {
+            // Psychic Ward - fix and description to : Allies within 10 tiles are immune to panic and psychic scream damage
+            Change_PsychicWard();
+
             // Biochemist: Paralysis, Poison and Viral damage increased 25%
             Create_BC_Biochemist();
 
             // Lay Waste: 1 AP, 3 WP, If your current Willpower score is higher than target's deal 30 damage for each point of WP difference
             Create_LayWaste();
+        }
+
+        public static void Change_PsychicWard()
+        {
+            ApplyStatusAbilityDef psychicWard = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(p => p.name.Equals("PsychicWard_AbilityDef"));
+            psychicWard.ViewElementDef.Description.LocalizationKey = "PR_BC_PSYCHIC_WARD_DESC";
         }
 
         private static void Create_BC_Biochemist()
@@ -116,7 +125,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
         {
             float apCost = 0.25f;
             float baseDamage = 10;
-            //float wpCost = 3.0f;
+            float range = 25.0f;
             
             string skillName = "LayWaste_AbilityDef";
             Sprite icon = Repo.GetAllDefs<TacticalAbilityViewElementDef>().FirstOrDefault(tav => tav.name.Equals("E_ViewElement [Mutoid_PoisonExplosion_ApplyStatusAbilityDef]")).LargeIcon;
@@ -147,7 +156,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             LayWaste.TargetingDataDef.Origin.LineOfSight = LineOfSightType.InSight;
             LayWaste.TargetingDataDef.Origin.FactionVisibility = LineOfSightType.InSight;
             LayWaste.TargetingDataDef.Origin.CanPeekFromEdge = true;
-            LayWaste.TargetingDataDef.Origin.Range = float.PositiveInfinity;
+            LayWaste.TargetingDataDef.Origin.Range = range;
             LayWaste.TargetingDataDef.Target.TargetEnemies = true;
             LayWaste.TargetingDataDef.Target.TargetResult = TargetResult.Actor;
 

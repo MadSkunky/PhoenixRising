@@ -34,7 +34,7 @@ using UnityEngine;
 
 namespace PhoenixRising.BetterClasses.VariousAdjustments
 {
-    class VariousAdjustments
+    internal class VariousAdjustments
     {
         private static readonly Settings Config = BetterClassesMain.Config;
         private static readonly DefRepository Repo = BetterClassesMain.Repo;
@@ -44,12 +44,12 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
 
         public static void ApplyChanges()
         {
+            // Change Stimpack: Restores 2AP, Heal 1HP to every body part. Disabled Body Parts are restored.
+            Change_Stimpack();
             // Change Poison: -50% accuracy and -3 WP per turn
             Change_Poison();
             // Change various bionics
             Change_VariousBionics();
-            // Corruptive cloud should not affect pandoran enemies
-            Change_CorruptiveCloud();
             // Turrets: Shoot at 1/2 burst but cost 2AP to shoot , maybe reduce armor of all by 10?
             Change_Turrets();
             // Stomp: Gain 50 blast damage
@@ -58,8 +58,6 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
             Change_Frenzy();
             // Psychici resistance: fix effect and description to: Psychic Scream damage values are halved
             Change_PsychicResistance();
-            // Enraged:
-            Change_Enraged();
             // Mutoid Worms: limit each worm ability to 5 ammo (worms)
             Change_MutoidWorms();
             // Screaming Head: Mind Control Immunity
@@ -70,32 +68,33 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
             Change_SpiderDrones();
             // Danchev MG: ER buff to 14 (up from 9)
             Change_DanchevMG();
-            // Clarity Head: Replace Mind Control Immunity with Panic Immunity
-            Change_ClarityHead();
             // Venom Torso: Add Weapon Tag to Poison Arm 
             Change_VenomTorso();
             // Worms: All worms speed increased to 9 (from 6), worm explosion gets Shred 3
             Change_Worms();
-            // Arthron Shield Bearer: Close Quarters Evade
-            Change_ArthronShieldBearer();
             // Haven Recruits: Come with Armour and Weapons on all difficulties
             Change_HavenRecruits();
-            // Legendary difficulty: Increase deployment numbers as per "More Enemies Mod", settings: 1 / 1.1 / 1.3 / 1.75
-            Change_LegendaryDifficulty();
             // Mech Arms: 200 emp damage
             Change_MechArms();
             // Vengeance Torso: Attacks against enemies within 10 tiles deal 10% more damage
             Change_VengeanceTorso();
             // Shadow Legs: Electric Kick replace shock damage with Sonic damage (value 20)
             Change_ShadowLegs();
-            // Psychic Ward - fix and description to : Allies within 10 tiles are immune to panic and psychic scream damage
-            Change_PsychicWard();
             // Vidar GL - Increase Shred to 20 (from 10), Add Acid 10. Increase AP cost to 2 (from 1)
             Change_VidarGL();
             // Destiny III - Give chance to fumble when non-proficient
             Change_Destiny();
-            // Technichian remove MindFragger - Increase range to 2
-            Change_TechRemoveFaceHugger();
+        }
+
+        private static void Change_Stimpack()
+        {
+            HealAbilityDef stimpackAbility = Repo.GetAllDefs<HealAbilityDef>().FirstOrDefault(ha => ha.name.Equals("Stimpack_AbilityDef"));
+            stimpackAbility.ActionPointCost = 0.25f;
+            stimpackAbility.HealBodyParts = true;
+            ViewElementDef stimpackItemView = Repo.GetAllDefs<ViewElementDef>().FirstOrDefault(v1 => v1.name.Equals("E_View [Stimpack_EquipmentDef]"));
+            ViewElementDef stimpackAbilityView = Repo.GetAllDefs<ViewElementDef>().FirstOrDefault(v2 => v2.name.Equals("E_View [Stimpack_AbilityDef]"));
+            stimpackItemView.Description.LocalizationKey = "PR_BC_STIMPACK_ITEM_DESC";
+            stimpackAbilityView.Description.LocalizationKey = "PR_BC_STIMPACK_ABILITY_DESC";
         }
 
         private static void Change_Poison()
@@ -155,19 +154,6 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
                 neuralTorso.Tags.Add(roboticArmTag);
             }
         }
-
-        public static void Change_CorruptiveCloud()
-        {
-            ApplyDamageEffectAbilityDef acidCloud = Repo.GetAllDefs<ApplyDamageEffectAbilityDef>().FirstOrDefault(a => a.name.Equals("Acheron_CorrosiveCloud_AbilityDef"));
-
-            //acidCloud.TargetingDataDef.Origin.TargetTags = new GameTagsList()
-            //{
-            //    Repo.GetAllDefs<GameTagDef>().FirstOrDefault(a => a.name.Equals("Human_TagDef")),
-            //    acidCloud.TargetingDataDef.Origin.TargetTags[1],
-            //};
-
-            acidCloud.DamagePayload.AoeRadius = 2;
-        }
         public static void Change_Turrets()
         {
             int turretAPToUsePerc = 50;
@@ -193,16 +179,8 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
         {
             int StompShockValue = 200;
             int StompBlastValue = 50;
-            //float range = 5.0f;
 
             ApplyDamageEffectAbilityDef stomp = Repo.GetAllDefs<ApplyDamageEffectAbilityDef>().FirstOrDefault(p => p.name.Equals("StomperLegs_Stomp_AbilityDef"));
-            //ApplyDamageEffectAbilityDef chironStomp = Repo.GetAllDefs<ApplyDamageEffectAbilityDef>().FirstOrDefault(p => p.name.Equals("AreaStun_AbilityDef"));
-            //stomp.TargetingDataDef = chironStomp.TargetingDataDef;
-            //stomp.TargetingDataDef.Origin.Range = range;
-            //stomp.DamagePayload = chironStomp.DamagePayload;
-            //stomp.DamagePayload.DamageKeywords.FirstOrDefault(dkp => dkp.DamageKeywordDef == Shared.SharedDamageKeywords.BlastKeyword).Value = StompBlastValue;
-            //stomp.DamagePayload.DamageKeywords.FirstOrDefault(dkp => dkp.DamageKeywordDef == Shared.SharedDamageKeywords.ShockKeyword).Value = StompShockValue;
-            //stomp.DamagePayload.Range = range;
             stomp.DamagePayload.DamageKeywords = new List<DamageKeywordPair>()
                 {
                 new DamageKeywordPair{DamageKeywordDef = Shared.SharedDamageKeywords.ShockKeyword, Value = StompShockValue },
@@ -222,10 +200,6 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
             }
         }
         public static void Change_PsychicResistance()
-        {
-
-        }
-        public static void Change_Enraged()
         {
 
         }
@@ -291,36 +265,6 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
             WeaponDef danchevMG = Repo.GetAllDefs<WeaponDef>().FirstOrDefault(p => p.name.Equals("PX_PoisonMachineGun_WeaponDef"));
             danchevMG.SpreadDegrees = danchevMGSpreadDegrees;
         }
-        public static void Change_ClarityHead()
-        {
-            //TacticalItemDef clarityHead = Repo.GetAllDefs<TacticalItemDef>().FirstOrDefault(p => p.name.Equals("NJ_Jugg_BIO_Helmet_BodyPartDef"));
-            //DamageMultiplierStatusDef panicImmunityStatus = Repo.GetAllDefs<DamageMultiplierStatusDef>().FirstOrDefault(p => p.name.Equals("PanicImmunity_StatusDef"));
-            //
-            //string skillName = "BC_PanicImmunity_AbilityDef";
-            //ApplyStatusAbilityDef source = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(p => p.name.Equals("MindControlImmunity_AbilityDef"));
-            //ApplyStatusAbilityDef pI = Helper.CreateDefFromClone(
-            //    source,
-            //    "f2c51f91-fd5b-4f6f-bc19-cf6dfef831ba",
-            //    skillName);
-            //pI.CharacterProgressionData = Helper.CreateDefFromClone(
-            //    source.CharacterProgressionData,
-            //    "528863c2-92ca-4690-84be-fb3600316439",
-            //    skillName);
-            //pI.ViewElementDef = Helper.CreateDefFromClone(
-            //    source.ViewElementDef,
-            //    "59b36dfb-6b89-4771-8bdc-454bbe4e08e0",
-            //    skillName);
-            //
-            //pI.StatusDef = panicImmunityStatus;
-            //clarityHead.Abilities = new AbilityDef[]
-            //{
-            //    Repo.GetAllDefs<AbilityDef>().FirstOrDefault(p => p.name.Equals("BC_PanicImmunity_AbilityDef")),
-            //    clarityHead.Abilities[1],
-            //};
-            //
-            //pI.ViewElementDef.DisplayName1 = new LocalizedTextBind("PANIC IMMUNITY", doNotLocalize);
-            //pI.ViewElementDef.Description = new LocalizedTextBind("Immune to panic", doNotLocalize);
-        }
         public static void Change_VenomTorso()
         {
             WeaponDef venomTorso = Repo.GetAllDefs<WeaponDef>().FirstOrDefault(p => p.name.Equals("AN_Berserker_Shooter_LeftArm_WeaponDef"));
@@ -374,9 +318,6 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
                 new DamageKeywordPair{DamageKeywordDef = Shared.SharedDamageKeywords.ShreddingKeyword, Value = wormShredDamage },
                 };
         }
-        public static void Change_ArthronShieldBearer()
-        {
-        }
         public static void Change_HavenRecruits()
         {
             bool hasArmor = true;
@@ -395,22 +336,6 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
             hard.RecruitsGenerationParams.HasWeapons= hasWeapon;
             veryhard.RecruitsGenerationParams.HasArmor = hasArmor;
             veryhard.RecruitsGenerationParams.HasWeapons = hasWeapon;
-        }
-        public static void Change_LegendaryDifficulty()
-        {
-            /*
-            float low = 1.1f;
-            float medium = 1.3f;
-            float high = 1.6f;
-            float extreme = 2;
-
-            DynamicDifficultySettingsDef dDSettings = Repo.GetAllDefs<DynamicDifficultySettingsDef>().FirstOrDefault(a => a.name.Equals("DynamicDifficultySettingsDef"));
-
-            dDSettings.ThreatLevels[0].ThreatLevelModifier = low;
-            dDSettings.ThreatLevels[1].ThreatLevelModifier= medium;
-            dDSettings.ThreatLevels[2].ThreatLevelModifier= high;
-            dDSettings.ThreatLevels[3].ThreatLevelModifier= extreme;
-            */
         }
         public static void Change_MechArms()
         {
@@ -443,11 +368,6 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
             shadowLegs.DamagePayload.DamageKeywords[0].DamageKeywordDef = Shared.SharedDamageKeywords.SonicKeyword;
             shadowLegs.DamagePayload.DamageKeywords[0].Value = shadowLegsSonicDamage;
         }
-        public static void Change_PsychicWard()
-        {
-            ApplyStatusAbilityDef psychicWard = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(p => p.name.Equals("PsychicWard_AbilityDef"));
-            psychicWard.ViewElementDef.Description = new LocalizedTextBind("Allies within 10 tiles are immune to panic and psychic scream damage", doNotLocalize);
-        }
         public static void Change_VidarGL()
         {
             int vGLNormal = 50;
@@ -471,12 +391,6 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
         {
             WeaponDef destiny3 = Repo.GetAllDefs<WeaponDef>().FirstOrDefault(p => p.name.Equals("PX_LaserArrayPack_WeaponDef"));
             destiny3.FumblePerc = 50;          
-        }
-        public static void Change_TechRemoveFaceHugger()
-        {
-            //int tRFHRange = 2;
-            //RemoveFacehuggerAbilityDef tRFH = Repo.GetAllDefs<RemoveFacehuggerAbilityDef>().FirstOrDefault(p => p.name.Equals("TechnicianRemoveFacehugger_AbilityDef"));
-            //tRFH.TargetingDataDef.Origin.Range = tRFHRange;
         }
     }
 }

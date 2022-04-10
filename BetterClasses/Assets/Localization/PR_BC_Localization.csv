@@ -1,4 +1,7 @@
 Key,Type,Desc,English,Chinese (Simplified),French,German,Italian,Polish,Russian,Spanish,UI_Tester
+PR_BC_STIMPACK_ITEM_DESC,Text,,"A potent stimulant that regnerate body parts and instils Frenzy.",,,,,,,,
+PR_BC_STIMPACK_ABILITY_DESC,Text,,"Re-enables and restores 20 Hit Points on Body Parts, also instills Frenzy on target, increasing movement by 33% for 2 turns, with panic immunity.",,,,,,,,
+PR_BC_PSYCHIC_WARD_DESC,Text,,"Allies within 10 tiles are immune to panic and psychic scream damage.",,,,,,,,
 PR_BC_POISON_STATUS_DESC,Text,,"At start of turn poison is subtracted from Hit Points and Willpoints reduced by 3, then poison value is reduced by 10. Poison causes trembling (-50% Accuracy).",,,,,,,,
 PR_BC_RECOVER_DESC,Text,,"Recover Will Points equal to half Willpower. Divide any Viral damage by 2 and become immune to Panic for 1 turn. End the actor's current turn.",,,,,,,,
 PR_BC_HIDDEN,Text,,UNREVEALED,,,,,,,,
