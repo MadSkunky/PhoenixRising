@@ -123,7 +123,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
         internal static float wpCost = 3.0f;
         private static void Create_LayWaste()
         {
-            float apCost = 0.25f;
+            float apCost = 0.5f;
             float baseDamage = 10;
             float range = 25.0f;
             
