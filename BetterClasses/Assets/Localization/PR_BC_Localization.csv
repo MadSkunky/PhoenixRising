@@ -1,4 +1,6 @@
 Key,Type,Desc,English,Chinese (Simplified),French,German,Italian,Polish,Russian,Spanish,UI_Tester
+PR_BC_MOUNTED_ITEMS_PROF,Text,,MOUNTED ITEM PROFICIENCY,,,,,,,,
+PR_BC_MOUNTED_ITEMS_PROF_DESC,Text,,Proficiency with Robotic Arms and Mounted Weapons.,,,,,,,,
 PR_BC_STIMPACK_ITEM_DESC,Text,,"A potent stimulant that regnerate body parts and instils Frenzy.",,,,,,,,
 PR_BC_STIMPACK_ABILITY_DESC,Text,,"Re-enables and restores 20 Hit Points on Body Parts, also instills Frenzy on target, increasing movement by 33% for 2 turns, with panic immunity.",,,,,,,,
 PR_BC_PSYCHIC_WARD_DESC,Text,,"Allies within 10 tiles are immune to panic and psychic scream damage.",,,,,,,,

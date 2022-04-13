@@ -88,7 +88,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             qaAccMod.Visuals = null;
             qaAccMod.StatsMultipliers[0].StatName = "Accuracy";
             qaAccMod.StatsMultipliers[0].Multiplier = qaAccMultiplier;
-            (quickAim.StatusDef as AddAttackBoostStatusDef).DurationTurns = -1; // same as Master Marksman, not sure if neccessary, it worked this way ;-)
+            //(quickAim.StatusDef as AddAttackBoostStatusDef).DurationTurns = -1; // same as Master Marksman, not sure if neccessary, it worked this way ;-)
             (quickAim.StatusDef as AddAttackBoostStatusDef).Visuals = quickAim.ViewElementDef;
             TacStatusDef[] qaAddStatusesToApply = (quickAim.StatusDef as AddAttackBoostStatusDef).AdditionalStatusesToApply.Append(qaAccMod).ToArray();
             (quickAim.StatusDef as AddAttackBoostStatusDef).AdditionalStatusesToApply = qaAddStatusesToApply;

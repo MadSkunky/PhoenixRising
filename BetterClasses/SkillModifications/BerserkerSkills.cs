@@ -122,11 +122,11 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             internal static ChangeAbilitiesCostStatusDef arStatus = Repo.GetAllDefs<ChangeAbilitiesCostStatusDef>().FirstOrDefault(sd => sd.name.Equals("E_SetAbilitiesTo1AP [AdrenalineRush_AbilityDef]"));
 
             [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
-            private static void Postfix(ref bool __result, TacticalAbility ability)
+            private static void Postfix(TacticalAbilityCostModification __instance, ref bool __result, TacticalAbility ability)
             {
                 try
                 {
-                    if (ability.TacticalActor.Status.HasStatus(arStatus))
+                    if (ability.TacticalActor.Status.HasStatus(arStatus) && __instance == arStatus.AbilityCostModification)
                     {
                         if (ability.TacticalAbilityDef.SkillTags.Contains(attackAbility_Tag))
                         {

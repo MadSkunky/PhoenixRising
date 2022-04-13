@@ -311,6 +311,9 @@ namespace PhoenixRising.BetterClasses
         // Learn the first personal ability = is set rigth from the start
         public bool LearnFirstPersonalSkill = true;
 
+        // Deactivate auto standy in tactical missions
+        public bool DeactivateTacticalAutoStandby = false;
+
         // Activate story rework
         public bool ActivateStoryRework = false;
 

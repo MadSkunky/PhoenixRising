@@ -8,6 +8,7 @@ using Base.UI;
 using Base.Utils.Maths;
 using Harmony;
 using PhoenixPoint.Common.Core;
+using PhoenixPoint.Common.Entities;
 using PhoenixPoint.Common.Entities.GameTags;
 using PhoenixPoint.Common.Entities.GameTagsTypes;
 using PhoenixPoint.Common.UI;
@@ -136,24 +137,27 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
         private static void Change_VariousBionics()
         {
             // Juggernaut Torso & Armadillo Legs: Speed -1 -> 0
-            BodyPartAspectDef juggernautTorso = Repo.GetAllDefs<BodyPartAspectDef>().FirstOrDefault(p => p.name.Equals("E_BodyPartAspect [NJ_Jugg_BIO_Torso_BodyPartDef]"));
-            BodyPartAspectDef juggernautLegs = Repo.GetAllDefs<BodyPartAspectDef>().FirstOrDefault(p => p.name.Equals("E_BodyPartAspect [NJ_Jugg_BIO_Legs_ItemDef]"));
+            BodyPartAspectDef juggernautTorso = Repo.GetAllDefs<BodyPartAspectDef>().FirstOrDefault(bpa1 => bpa1.name.Equals("E_BodyPartAspect [NJ_Jugg_BIO_Torso_BodyPartDef]"));
+            BodyPartAspectDef juggernautLegs = Repo.GetAllDefs<BodyPartAspectDef>().FirstOrDefault(bpa2 => bpa2.name.Equals("E_BodyPartAspect [NJ_Jugg_BIO_Legs_ItemDef]"));
             juggernautTorso.Speed = juggernautLegs.Speed = 0;
 
-            // Neural Torso: Grants Mounted Weapons and Tech Arms Proficiencies (RoboticArmItem_TagDef)
-            TacticalItemDef neuralTorso = Repo.GetAllDefs<TacticalItemDef>().FirstOrDefault(p => p.name.Equals("NJ_Exo_BIO_Torso_BodyPartDef"));
-            AbilityDef mountedWeaponProficiency = Repo.GetAllDefs<AbilityDef>().FirstOrDefault(a1 => a1.name.Equals("MountedWeaponTalent_AbilityDef"));
-            if (!neuralTorso.Abilities.Contains(mountedWeaponProficiency))
+            // Neural Torso: Grants Mounted Weapons and Tech Arms Proficiency (MountedWeaponTalent_AbilityDef = MountedItem_TagDef = proficiency with all mounted equipment)
+            // First fix name and description of given mounted weapon talent that in fact gives mounted item proficiency also for robotic arms
+            PassiveModifierAbilityDef mountedItemsProficiency = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(pma => pma.name.Equals("MountedWeaponTalent_AbilityDef"));
+            mountedItemsProficiency.ViewElementDef.DisplayName1.LocalizationKey = "PR_BC_MOUNTED_ITEMS_PROF";
+            mountedItemsProficiency.ViewElementDef.Description = new LocalizedTextBind("PR_BC_MOUNTED_ITEMS_PROF_DESC");
+            //Sprite icon = Repo.GetAllDefs<ViewElementDef>().FirstOrDefault(ve => ve.name.Equals("E_View [NJ_Technician_MechArms_WeaponDef]")).LargeIcon;
+            //mountedItemsProficiency.ViewElementDef.LargeIcon = icon;
+            //mountedItemsProficiency.ViewElementDef.SmallIcon = icon;
+            mountedItemsProficiency.ViewElementDef.ShowInInventoryItemTooltip = true;
+            // Add proficiency ability to Neural Torso
+            TacticalItemDef neuralTorso = Repo.GetAllDefs<TacticalItemDef>().FirstOrDefault(ti => ti.name.Equals("NJ_Exo_BIO_Torso_BodyPartDef"));
+            if (!neuralTorso.Abilities.Contains(mountedItemsProficiency))
             {
-                neuralTorso.Abilities = neuralTorso.Abilities.AddToArray(mountedWeaponProficiency);
-            }
-
-            GameTagDef roboticArmTag = Repo.GetAllDefs<GameTagDef>().FirstOrDefault(gt => gt.name.Equals("RoboticArmItem_TagDef"));
-            if (!neuralTorso.Tags.Contains(roboticArmTag))
-            {
-                neuralTorso.Tags.Add(roboticArmTag);
+                neuralTorso.Abilities = neuralTorso.Abilities.AddToArray(mountedItemsProficiency);
             }
         }
+
         public static void Change_Turrets()
         {
             int turretAPToUsePerc = 50;
