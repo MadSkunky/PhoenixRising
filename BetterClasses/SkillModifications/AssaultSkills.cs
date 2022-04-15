@@ -5,7 +5,9 @@ using Base.Entities.Abilities;
 using Base.Entities.Effects;
 using Base.Entities.Statuses;
 using Base.UI;
+using Harmony;
 using PhoenixPoint.Common.Core;
+using PhoenixPoint.Common.Entities;
 using PhoenixPoint.Common.Entities.GameTags;
 using PhoenixPoint.Common.Entities.GameTagsTypes;
 using PhoenixPoint.Common.UI;
@@ -200,6 +202,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             dashAbility.ViewElementDef.SmallIcon = knR_IconSprite;
             dashAbility.ViewElementDef.ShowInStatusScreen = false;
             dashAbility.ViewElementDef.HideFromPassives = true;
+            dashAbility.ViewElementDef.ShouldFlash = true;
 
             dashAbility.SuppressAutoStandBy = true;
             dashAbility.DisablingStatuses = new StatusDef[] { onActorDeathEffectStatus };
@@ -222,6 +225,21 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             addAbiltyStatus.DurationTurns = 0;
             addAbiltyStatus.SingleInstance = true;
             addAbiltyStatus.AbilityDef = dashAbility;
+        }
+        // Harmony Patch to diplay the KnR Dash ability after kill has been achieved
+        [HarmonyPatch(typeof(TacticalAbility), "get_ShouldDisplay")]
+        internal static class BC_TacticalAbility_get_ShouldDisplay_Patch
+        {
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
+            private static void Postfix(TacticalAbility __instance, ref bool __result)
+            {
+                // Check if instance is KnR ability
+                if (__instance.TacticalAbilityDef.name.Equals("KillAndRun_Dash_AbilityDef"))
+                {
+                    //  Set return value __result = true when ability is not disabled => show
+                    __result = __instance.GetDisabledState() == AbilityDisabledState.NotDisabled;
+                }
+            }
         }
 
         private static void Change_Onslaught()

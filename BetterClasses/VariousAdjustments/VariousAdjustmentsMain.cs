@@ -33,7 +33,7 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
                 Logger.Error(e);
             }
         }
-        // Harmony patch to deactivate autmatic standby in tactical missions
+        // Harmony patches to deactivate autmatic standby in tactical missions
         [HarmonyPatch(typeof(TacticalActor), "TrySetStandBy")]
         internal static class BC_TacticalActor_TryGetStandBy_Patch
         {
@@ -47,6 +47,24 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
             {
                 __result = false;
                 return false;
+            }
+        }
+        [HarmonyPatch(typeof(TacticalActorBase), "CanAct", new Type[0])]
+        internal static class BC_TacticalActorBase_CanAct_Patch
+        {
+            public static bool Prepare()
+            {
+                return Config.DeactivateTacticalAutoStandby;
+            }
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
+            private static void Postfix(TacticalActorBase __instance, ref bool __result)
+            {
+                // Check if actor is from viewer faction (= player)
+                if (__instance.IsFromViewerFaction)
+                {
+                    //  Set return value __result = true => no auto switch to other character after any action
+                    __result = true;
+                }
             }
         }
     }

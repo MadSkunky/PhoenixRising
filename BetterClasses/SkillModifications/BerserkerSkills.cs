@@ -128,26 +128,9 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                 {
                     if (ability.TacticalActor.Status.HasStatus(arStatus) && __instance == arStatus.AbilityCostModification)
                     {
-                        if (ability.TacticalAbilityDef.SkillTags.Contains(attackAbility_Tag))
-                        {
-                            Equipment source = ability.GetSource<Equipment>();
-                            if (source != null && source.HandsToUse != 1)
-                            {
-                                __result = false;
-                                return;
-                            }
-                            else
-                            {
-                                __result = true;
-                                return;
-                            }
-                        }
-                        if (arExcludeList.Contains(ability.TacticalAbilityDef.name))
-                        {
-                            __result = false;
-                            return;
-                        }
-                        __result = true;
+                        __result = ability.TacticalAbilityDef.SkillTags.Contains(attackAbility_Tag)
+                            ? ability.Equipment == null || ability.Equipment.HandsToUse == 1
+                            : !arExcludeList.Contains(ability.TacticalAbilityDef.name);
                     }
                 }
                 catch (Exception e)

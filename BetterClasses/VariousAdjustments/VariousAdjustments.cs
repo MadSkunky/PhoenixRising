@@ -92,6 +92,7 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
             HealAbilityDef stimpackAbility = Repo.GetAllDefs<HealAbilityDef>().FirstOrDefault(ha => ha.name.Equals("Stimpack_AbilityDef"));
             stimpackAbility.ActionPointCost = 0.25f;
             stimpackAbility.HealBodyParts = true;
+            stimpackAbility.BodyPartHealAmount = 20.0f;
             ViewElementDef stimpackItemView = Repo.GetAllDefs<ViewElementDef>().FirstOrDefault(v1 => v1.name.Equals("E_View [Stimpack_EquipmentDef]"));
             ViewElementDef stimpackAbilityView = Repo.GetAllDefs<ViewElementDef>().FirstOrDefault(v2 => v2.name.Equals("E_View [Stimpack_AbilityDef]"));
             stimpackItemView.Description.LocalizationKey = "PR_BC_STIMPACK_ITEM_DESC";
