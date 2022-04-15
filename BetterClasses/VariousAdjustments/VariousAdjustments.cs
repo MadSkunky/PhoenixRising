@@ -1,6 +1,7 @@
 ﻿using Base.Core;
 using Base.Defs;
 using Base.Entities.Abilities;
+using Base.Entities.Animations;
 using Base.Entities.Effects;
 using Base.Entities.Statuses;
 using Base.Levels;
@@ -89,14 +90,19 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
 
         private static void Change_Stimpack()
         {
-            HealAbilityDef stimpackAbility = Repo.GetAllDefs<HealAbilityDef>().FirstOrDefault(ha => ha.name.Equals("Stimpack_AbilityDef"));
+            EquipmentDef stimpack = Repo.GetAllDefs<EquipmentDef>().FirstOrDefault(ed => ed.name.Equals("Stimpack_EquipmentDef"));
+            stimpack.ViewElementDef.Description.LocalizationKey = "PR_BC_STIMPACK_ITEM_DESC";
+
+            HealAbilityDef stimpackAbility = stimpack.GetAbilityDef<HealAbilityDef>();
+            stimpackAbility.ViewElementDef.Description.LocalizationKey = "PR_BC_STIMPACK_ABILITY_DESC";
             stimpackAbility.ActionPointCost = 0.25f;
             stimpackAbility.HealBodyParts = true;
-            stimpackAbility.BodyPartHealAmount = 20.0f;
-            ViewElementDef stimpackItemView = Repo.GetAllDefs<ViewElementDef>().FirstOrDefault(v1 => v1.name.Equals("E_View [Stimpack_EquipmentDef]"));
-            ViewElementDef stimpackAbilityView = Repo.GetAllDefs<ViewElementDef>().FirstOrDefault(v2 => v2.name.Equals("E_View [Stimpack_AbilityDef]"));
-            stimpackItemView.Description.LocalizationKey = "PR_BC_STIMPACK_ITEM_DESC";
-            stimpackAbilityView.Description.LocalizationKey = "PR_BC_STIMPACK_ABILITY_DESC";
+            stimpackAbility.BodyPartHealAmount = 10.0f;
+            //stimpackAbility.HealEffects.Add(Repo.GetAllDefs<HealAbilityDef>().FirstOrDefault(has => has.name.Equals("FieldMedic_AbilityDef")).HealEffects[0]);
+
+            TacActorSimpleInteractionAnimActionDef healAnimActionDef =
+                Repo.GetAllDefs<TacActorSimpleInteractionAnimActionDef>().FirstOrDefault(aa => aa.name.Equals("E_MedkitHeal [Soldier_Utka_AnimActionsDef]"));
+            healAnimActionDef.Items = healAnimActionDef.Items.AddToArray(stimpack);
         }
 
         private static void Change_Poison()
