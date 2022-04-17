@@ -19,7 +19,7 @@ namespace PhoenixRising.BetterClasses
         {
             try
             {
-                LevelProgressionDef levelProgressionDef = Repo.GetAllDefs<LevelProgressionDef>().FirstOrDefault(lpd => lpd.name.Contains("LevelProgressionDef"));
+                LevelProgressionDef levelProgressionDef = Repo.GetAllDefs<LevelProgressionDef>().FirstOrDefault(lpd => lpd.name.Equals("LevelProgressionDef"));
                 int secondaryClassLevel = levelProgressionDef.SecondSpecializationLevel;
                 int secondaryClassCost = levelProgressionDef.SecondSpecializationSpCost;
                 string ability;

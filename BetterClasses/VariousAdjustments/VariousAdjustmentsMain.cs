@@ -1,4 +1,5 @@
 ﻿using Base.Defs;
+using Base.Entities.Statuses;
 using Base.Utils.Maths;
 using Harmony;
 using PhoenixPoint.Common.Core;
@@ -39,12 +40,18 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
         }
 
         // -------------------------------------------------------------------------
-        // Harmony patch to fix double reduction when resistances are present
+        // Harmony patch(es) to fix that Project Hekate deletes the viral resistance ability of Mutoids
+        // Cause is that both use the same ability and so Hekate faction status deletes the one from Mutoids
+        // AddAbilityStatusDef.OnApply() ff
+        // or create (clone) a new virus resistance ability for Hekate or Mutoids
+        // -------------------------------------------------------------------------
+
+        // -------------------------------------------------------------------------
+        // Harmony patch to fix double reduction when resistances are present (mainly Nanotech)
         [HarmonyPatch(typeof(DamageOverTimeStatus), "LowerDamageOverTimeLevel")]
         internal static class BC_DamageOverTimeStatus_LowerDamageOverTimeLevel_Patch
         {
             [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
-            // Using a radical way by overwriting the original method and always return (__result) false = never automatically activate standby
             private static bool Prefix(DamageOverTimeStatus __instance, float amount = 1f)
             {
                 // This part doubles the reduction if any resistance is given (damage multiplier < 1)
@@ -62,9 +69,10 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
                 return false;
             }
         }
+        // -------------------------------------------------------------------------
 
         // -------------------------------------------------------------------------
-        // Harmony patches to deactivate autmatic standby in tactical missions
+        // Harmony patches to deactivate automatic standby and switch to another character in tactical missions
         [HarmonyPatch(typeof(TacticalActor), "TrySetStandBy")]
         internal static class BC_TacticalActor_TryGetStandBy_Patch
         {
@@ -73,11 +81,10 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
                 return Config.DeactivateTacticalAutoStandby;
             }
             [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
-            // Using a radical way by overwriting the original method and always return (__result) false = never automatically activate standby
-            private static bool Prefix(ref bool __result)
+            // If actor NOT has ended turn (manually, OW, HD) set result to false and don't excecute original method TrySetStandBy() (return false)
+            private static bool Prefix(TacticalActor __instance, ref bool __result)
             {
-                __result = false;
-                return false;
+                return __instance.HasEndedTurn || (__result = false);
             }
         }
         [HarmonyPatch(typeof(TacticalActorBase), "CanAct", new Type[0])]
@@ -90,8 +97,11 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
             [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
             private static void Postfix(TacticalActorBase __instance, ref bool __result)
             {
-                // Check if actor is from viewer faction (= player)
-                if (__instance.IsFromViewerFaction)
+                StatusDef overWatch = Repo.GetAllDefs<StatusDef>().FirstOrDefault(sd1 => sd1.name.Equals("Overwatch_StatusDef"));
+                StatusDef hunkerDown = Repo.GetAllDefs<StatusDef>().FirstOrDefault(sd2 => sd2.name.Equals("E_CloseQuatersStatus [HunkerDown_AbilityDef]"));
+                bool flag = __instance.Status.HasStatus(overWatch) || __instance.Status.HasStatus(hunkerDown);
+                // Check if actor is from viewer faction (= player) and don't used overwatch or hunker down
+                if (__instance.IsFromViewerFaction && !flag)
                 {
                     //  Set return value __result = true => no auto switch to other character after any action
                     __result = true;

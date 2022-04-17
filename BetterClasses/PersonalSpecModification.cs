@@ -17,6 +17,7 @@ using PhoenixPoint.Common.UI;
 using PhoenixPoint.Geoscape.View.DataObjects;
 using UnityEngine;
 using PhoenixPoint.Common.Core;
+using Base.UI;
 
 namespace PhoenixRising.BetterClasses
 {
@@ -124,7 +125,7 @@ namespace PhoenixRising.BetterClasses
                             Logger.Debug("----------------------------------------------------", false);
                         }
 
-                        // Soome debug outputs in logging file
+                        // Some debug outputs in logging file
                         if (Config.Debug >= 2)
                         {
                             AbilityTrackSlot[] ats = __result.Progression.MainSpecDef.AbilityTrack.AbilitiesByLevel;
@@ -189,71 +190,68 @@ namespace PhoenixRising.BetterClasses
         }
 
         // Expand ability icon list in PX base recruit screen (vanilla fixed 3, we need 7)
-        // Problem: The 7th skill overlappes with the recruit button.
-        // TODO: Rearrange this UI so it can show 7 skills without overlapping
         [HarmonyPatch(typeof(RecruitsListElementController), "SetRecruitElement")]
         public static class RecruitsListElementController_SetRecruitElement_Patch
         {
-            public static void Prefix(RecruitsListElementController __instance, RecruitsListEntryData entryData) // , List<RowIconTextController> ____abilityIcons
+            public static bool Prefix(RecruitsListElementController __instance, RecruitsListEntryData entryData, List<RowIconTextController> ____abilityIcons)
             {
                 try
                 {
-                    // TODO: Configuarable vs settings?
-                    int newLength = 7;
-                    int vanillaLength = 3;
-                    RowIconTextController[] componentsInChildren = __instance.PersonalTrackRoot.transform.GetComponentsInChildren<RowIconTextController>(true);
-                    if (componentsInChildren.Length < newLength)
+                    if (____abilityIcons == null)
                     {
-                        UnityEngine.Object x = componentsInChildren.FirstOrDefault<RowIconTextController>();
-                        if (x == null)
+                        ____abilityIcons = new List<RowIconTextController>();
+                        if (__instance.PersonalTrackRoot.transform.childCount < entryData.PersonalTrackAbilities.Count())
                         {
-                            throw new NullReferenceException("Object to clone is null");
+                            RectTransform parent = __instance.PersonalTrackRoot.GetComponent<RectTransform>();
+                            RowIconTextController source = parent.GetComponentInChildren<RowIconTextController>();
+                            parent.DetachChildren();
+                            source.Icon.GetComponent<RectTransform>().sizeDelta = new Vector2(95f, 95f);
+                            for (int i = 0; i < entryData.PersonalTrackAbilities.Count(); i++)
+                            {
+                                RowIconTextController entry = UnityEngine.Object.Instantiate(source, parent, true);
+                            }
                         }
-                        int num = newLength - vanillaLength;
-                        for (int i = 0; i < num; i++)
-                        {
-                            UnityEngine.Object.Instantiate<RowIconTextController>(componentsInChildren.FirstOrDefault<RowIconTextController>(), __instance.PersonalTrackRoot.transform, true);
-                        }
+                        UIUtil.GetComponentsFromContainer(__instance.PersonalTrackRoot.transform, ____abilityIcons);
                     }
-                    componentsInChildren = __instance.PersonalTrackRoot.transform.GetComponentsInChildren<RowIconTextController>(true);
-                    if (entryData.PersonalTrackAbilities.Count<TacticalAbilityViewElementDef>() > vanillaLength)
+                    __instance.RecruitData = entryData;
+                    __instance.RecruitName.SetSoldierData(entryData.Recruit);
+                    BC_SetAbilityIcons(entryData.PersonalTrackAbilities.ToList(), ____abilityIcons);
+                    if (entryData.SuppliesCost != null && __instance.CostText != null && __instance.CostColorController != null)
                     {
-                        foreach (RowIconTextController rowIconTextController in componentsInChildren)
-                        {
-                            rowIconTextController.DisplayText.gameObject.SetActive(false);
-                            RectTransform component = rowIconTextController.GetComponent<RectTransform>();
-                            rowIconTextController.DisplayText.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 0f);
-                            component.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 100f);
-                        }
+                        __instance.CostText.text = entryData.SuppliesCost.ByResourceType(ResourceType.Supplies).RoundedValue.ToString();
+                        __instance.CostColorController.SetWarningActive(!entryData.IsAffordable, true);
                     }
-                }
-                catch (Exception e)
-                {
-                    Logger.Error(e);
-                }
-            }
-        }
-        // Overwrite preview of new recruits for PX, original crashed with more than 3 abilities
-        [HarmonyPatch(typeof(RecruitsListElementController), "SetAbilityIcons")]
-        internal static class SetAbilityIcons_Patches
-        {
-            [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
-            private static bool Prefix(List<TacticalAbilityViewElementDef> abilities, ref List<RowIconTextController> ____abilityIcons)
-            {
-                try
-                {
-                    foreach (RowIconTextController rowIconTextController in ____abilityIcons)
-                    {
-                        rowIconTextController.gameObject.SetActive(false);
-                    }
-                    // inserted _abilityIcons.Count to prevent softlock if there are more abilities than icon slots
-                    for (int i = 0; i < abilities.Count && i < ____abilityIcons.Count; i++)
-                    {
-                        ____abilityIcons[i].gameObject.SetActive(true);
-                        TacticalAbilityViewElementDef tacticalAbilityViewElementDef = abilities[i];
-                        ____abilityIcons[i].SetController(tacticalAbilityViewElementDef.LargeIcon, tacticalAbilityViewElementDef.DisplayName1, tacticalAbilityViewElementDef.Description);
-                    }
+                    __instance.NavHolder.RefreshNavigation();
                     return false;
+
+                    //// TODO: Configuarable vs settings?
+                    //int newLength = 7;
+                    //int vanillaLength = 3;
+                    //RowIconTextController[] componentsInChildren = __instance.PersonalTrackRoot.transform.GetComponentsInChildren<RowIconTextController>(true);
+                    //if (componentsInChildren.Length < newLength)
+                    //{
+                    //    if (componentsInChildren.FirstOrDefault() == null)
+                    //    {
+                    //        throw new NullReferenceException("Object to clone is null");
+                    //    }
+                    //    int num = newLength - vanillaLength;
+                    //    for (int i = 0; i < num; i++)
+                    //    {
+                    //        _ = UnityEngine.Object.Instantiate(componentsInChildren.FirstOrDefault(), __instance.PersonalTrackRoot.transform, true);
+                    //    }
+                    //}
+                    //componentsInChildren = __instance.PersonalTrackRoot.transform.GetComponentsInChildren<RowIconTextController>(true);
+                    //if (entryData.PersonalTrackAbilities.Count() > vanillaLength)
+                    //{
+                    //    foreach (RowIconTextController rowIconTextController in componentsInChildren)
+                    //    {
+                    //        //rowIconTextController.DisplayText.gameObject.SetActive(false);
+                    //        //rowIconTextController.DisplayText.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 70f);
+                    //        rowIconTextController.DisplayText.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 100f);
+                    //        rowIconTextController.Icon.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 100f);
+                    //        rowIconTextController.Icon.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 100f);
+                    //    }
+                    //}
                 }
                 catch (Exception e)
                 {
@@ -261,6 +259,48 @@ namespace PhoenixRising.BetterClasses
                     return true;
                 }
             }
+
+            private static void BC_SetAbilityIcons(List<TacticalAbilityViewElementDef> abilities, List<RowIconTextController> abilityIcons)
+            {
+                foreach (RowIconTextController rowIconTextController in abilityIcons)
+                {
+                    rowIconTextController.gameObject.SetActive(false);
+                }
+                for (int i = 0; i < abilities.Count; i++)
+                {
+                    abilityIcons[i].gameObject.SetActive(true);
+                    abilityIcons[i].SetController(abilities[i].LargeIcon, abilities[i].DisplayName1, abilities[i].Description);
+                }
+            }
         }
+
+        //// Overwrite preview of new recruits for PX, original crashed with more than 3 abilities
+        //[HarmonyPatch(typeof(RecruitsListElementController), "SetAbilityIcons")]
+        //internal static class SetAbilityIcons_Patches
+        //{
+        //    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
+        //    private static bool Prefix(List<TacticalAbilityViewElementDef> abilities, ref List<RowIconTextController> ____abilityIcons)
+        //    {
+        //        try
+        //        {
+        //            foreach (RowIconTextController rowIconTextController in ____abilityIcons)
+        //            {
+        //                rowIconTextController.gameObject.SetActive(false);
+        //            }
+        //            // inserted _abilityIcons.Count to prevent softlock if there are more abilities than icon slots
+        //            for (int i = 0; i < abilities.Count && i < ____abilityIcons.Count; i++)
+        //            {
+        //                ____abilityIcons[i].gameObject.SetActive(true);
+        //                ____abilityIcons[i].SetController(abilities[i].LargeIcon, abilities[i].DisplayName1, abilities[i].Description);
+        //            }
+        //            return false;
+        //        }
+        //        catch (Exception e)
+        //        {
+        //            Logger.Error(e);
+        //            return true;
+        //        }
+        //    }
+        //}
     }
 }
