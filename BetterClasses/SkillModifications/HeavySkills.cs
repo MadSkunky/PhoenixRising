@@ -17,6 +17,7 @@ using PhoenixPoint.Tactical.Cameras.Filters;
 using PhoenixPoint.Tactical.Entities;
 using PhoenixPoint.Tactical.Entities.Abilities;
 using PhoenixPoint.Tactical.Entities.Animations;
+using PhoenixPoint.Tactical.Entities.DamageKeywords;
 using PhoenixPoint.Tactical.Entities.Effects.DamageTypes;
 using PhoenixPoint.Tactical.Entities.Equipments;
 using PhoenixPoint.Tactical.Entities.Statuses;
@@ -252,6 +253,21 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                 shredRes.ViewElementDef.SmallIcon = pr_ViewElement.LargeIcon;
             }
         }
+        // Harmony Patch to calcualte shred resistance, vanilla has no implementation for this
+        [HarmonyPatch(typeof(ShreddingDamageKeywordData), "ProcessKeywordDataInternal")]
+        internal static class BC_ShreddingDamageKeywordData_ProcessKeywordDataInternal_ShredResistant_patch
+        {
+            public static void Postfix(ShreddingDamageKeywordData __instance, ref DamageAccumulation.TargetData data)
+            {
+                TacticalActorBase actor = data.Target.GetActor();
+                DamageMultiplierAbilityDef shredResistanceAbilityDef = Repo.GetAllDefs<DamageMultiplierAbilityDef>().FirstOrDefault(dma => dma.name.Equals("ShredResistant_DamageMultiplierAbilityDef"));
+                if (actor != null && actor.GetAbilityWithDef<DamageMultiplierAbility>(shredResistanceAbilityDef) != null)
+                {
+                    data.DamageResult.ArmorDamage = Mathf.Round(data.DamageResult.ArmorDamage * shredResistanceAbilityDef.Multiplier);
+                }
+            }
+        }
+
         private static void Change_RageBurst()
         {
             RageBurstInConeAbilityDef rageBurst = Repo.GetAllDefs<RageBurstInConeAbilityDef>().FirstOrDefault(p => p.name.Equals("RageBurst_RageBurstInConeAbilityDef"));
