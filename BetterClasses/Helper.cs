@@ -97,7 +97,7 @@ namespace PhoenixRising.BetterClasses
                 Logger.Debug("CSV Data:" + Environment.NewLine + CSVstring);
                 foreach (LanguageSourceData source in LocalizationManager.Sources)
                 {
-                    Logger.Debug($"Source owner {source.owner}{Environment.NewLine}Categories:{Environment.NewLine}{{source.GetCategories().Join()}}{Environment.NewLine}", false);
+                    Logger.Debug($"Source owner {source.owner}{Environment.NewLine}Categories:{Environment.NewLine}{source.GetCategories().Join()}{Environment.NewLine}", false);
                 }
                 Logger.Debug("----------------------------------------------------------------------------------------------------", false);
             }

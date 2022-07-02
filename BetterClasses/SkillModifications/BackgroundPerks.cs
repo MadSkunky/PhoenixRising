@@ -220,11 +220,11 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             {
                 if (HardLabor.StatModifications[i].TargetStat == StatModificationTarget.Perception)
                 {
-                    HardLabor.StatModifications[i].Value = -10.0f;
+                    HardLabor.StatModifications[i].Value = -5.0f;
                 }
                 if (HardLabor.StatModifications[i].TargetStat == StatModificationTarget.Endurance)
                 {
-                    HardLabor.StatModifications[i].Value = 4.0f;
+                    HardLabor.StatModifications[i].Value = 2.0f;
                 }
             }
             HardLabor.ItemTagStatModifications = new EquipmentItemTagStatModification[0]; // delete weapon buff and proficiency

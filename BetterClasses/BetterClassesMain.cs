@@ -24,6 +24,7 @@ using UnityEngine;
 using Base.UI.MessageBox;
 using Base.Utils.GameConsole;
 using PhoenixPoint.Geoscape.Events;
+using PhoenixPoint.Geoscape.Entities.Research.Requirement;
 
 namespace PhoenixRising.BetterClasses
 {
@@ -111,6 +112,12 @@ namespace PhoenixRising.BetterClasses
 
             // Patch all Harmony patches
             HarmonyInstance.Create("BetterClasses.PhoenixRising").PatchAll();
+
+            // Print out requirement fo some researches
+            //foreach (ExistingResearchRequirementDef errDef in Repo.GetAllDefs<ExistingResearchRequirementDef>().Where(g => g.name.Contains("ALN_") && !g.ResearchID.Contains("ALN_")))
+            //{
+            //    Logger.Always($"{errDef.ResearchID} -> {errDef.name.Split('_')[1]}", false);
+            //}
 
             // Print out ODI titles and texts
             //foreach (GeoscapeEventDef ged in Repo.GetAllDefs<GeoscapeEventDef>().Where(g => g.name.Contains("SDI_")))

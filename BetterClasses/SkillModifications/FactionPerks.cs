@@ -535,6 +535,23 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             ApplyStatusAbilityDef pepperCloud = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(p => p.name.Equals("Mutoid_PepperCloud_ApplyStatusAbilityDef"));
             pepperCloud.TargetingDataDef.Origin.Range = pcRange;
             pepperCloud.ViewElementDef.Description = new LocalizedTextBind($"Reduces Accuracy by 50% of all organic enemies within {pcRange} tiles for 1 turn.", doNotLocalize);
+            // change Pepper Cloud to reduce accuracy and perception to 25%
+            // DEACTIVATED: Pepper Cloud uses the Trembling status that is used by a couple of other abilities, needs to be cloned, also for Acherons PC
+            //StatMultiplierStatusDef pepperCloudStatus = (StatMultiplierStatusDef)pepperCloud.StatusDef;
+            //pepperCloudStatus.StatsMultipliers = new StatMultiplier[]
+            //{
+            //    new StatMultiplier()
+            //    {
+            //        StatName = "Accuracy",
+            //        Multiplier = 0.25f,
+            //    },
+            //
+            //    new StatMultiplier()
+            //    {
+            //        StatName = "Perception",
+            //        Multiplier = 0.25f,
+            //    },
+            //};
         }
         private static void Create_AR_Targeting()
         {

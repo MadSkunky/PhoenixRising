@@ -159,7 +159,7 @@ namespace PhoenixRising.BetterClasses
                     { ClassKeys.Sniper.Name, "GUNSLINGER" },
                     { ClassKeys.Berserker.Name, "GUN KATA" },
                     { ClassKeys.Priest.Name, "BIOCHEMIST" },
-                    { ClassKeys.Technician.Name, "REMOTE CONTROL" },
+                    { ClassKeys.Technician.Name, "REMOTE DEPLOYMENT" },
                     { ClassKeys.Infiltrator.Name, "CAUTIOUS" }
                 } } }),
             new PersonalPerksDef(
@@ -173,7 +173,7 @@ namespace PhoenixRising.BetterClasses
                     { ClassKeys.Sniper.Name, "KILL ZONE" },
                     { ClassKeys.Berserker.Name, "EXERTION" },
                     { ClassKeys.Priest.Name, "LAY WASTE" },
-                    { ClassKeys.Technician.Name, "REMOTE DEPLOYMENT" },
+                    { ClassKeys.Technician.Name, "REMOTE CONTROL" },
                     { ClassKeys.Infiltrator.Name, "SPIDER DRONE PACK" }
                 } } }),
             new PersonalPerksDef(

@@ -12,6 +12,8 @@ using I2.Loc;
 using PhoenixPoint.Common.Core;
 using PhoenixPoint.Common.Entities;
 using PhoenixPoint.Common.Entities.GameTags;
+using PhoenixPoint.Common.Entities.GameTagsTypes;
+using PhoenixPoint.Common.Entities.Items;
 using PhoenixPoint.Common.UI;
 using PhoenixPoint.Tactical;
 using PhoenixPoint.Tactical.Cameras.Filters;
@@ -159,6 +161,10 @@ namespace PhoenixRising.BetterClasses.SkillModifications
             LayWaste.TargetingDataDef.Origin.Range = range;
             LayWaste.TargetingDataDef.Target.TargetEnemies = true;
             LayWaste.TargetingDataDef.Target.TargetResult = TargetResult.Actor;
+            LayWaste.TargetingDataDef.Target.TargetTags = new GameTagsList
+            {
+                Repo.GetAllDefs<SubstanceTypeTagDef>().FirstOrDefault(tav => tav.name.Equals("Organic_SubstanceTypeTagDef")),
+            };
 
             LayWaste.ViewElementDef.DisplayName1.LocalizationKey = "PR_BC_LAY_WASTE";
             LayWaste.ViewElementDef.Description.LocalizationKey = "PR_BC_LAY_WASTE_DESC";

@@ -140,13 +140,39 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
                 }
             }
         }
+        // Harmony patch to unapply trembling when poison status is unapplied
+        [HarmonyPatch(typeof(TacEffectStatus), "OnUnapply")]
+        internal static class BC_TacEffectStatus_OnUnapply_Patch
+        {
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
+            private static void Postfix(TacEffectStatus __instance)
+            {
+                if (__instance.TacEffectStatusDef.name.Equals("Poison_DamageOverTimeStatusDef"))
+                {
+                    TacticalActor base_TacticalActor = (TacticalActor)AccessTools.Property(typeof(TacStatus), "TacticalActor").GetValue(__instance, null);
+                    StatMultiplierStatusDef trembling = Repo.GetAllDefs<StatMultiplierStatusDef>().FirstOrDefault(sms => sms.name.Equals("Trembling_StatusDef"));
+                    if (base_TacticalActor.Status.HasStatus(trembling))
+                    {
+                        StatMultiplierStatus status = base_TacticalActor.Status.GetStatus<StatMultiplierStatus>(trembling);
+                        status.RequestUnapply(status.StatusComponent);
+                        return;
+                    }
+                }
+            }
+        }
 
         private static void Change_VariousBionics()
         {
             // Juggernaut Torso & Armadillo Legs: Speed -1 -> 0
-            BodyPartAspectDef juggernautTorso = Repo.GetAllDefs<BodyPartAspectDef>().FirstOrDefault(bpa1 => bpa1.name.Equals("E_BodyPartAspect [NJ_Jugg_BIO_Torso_BodyPartDef]"));
-            BodyPartAspectDef juggernautLegs = Repo.GetAllDefs<BodyPartAspectDef>().FirstOrDefault(bpa2 => bpa2.name.Equals("E_BodyPartAspect [NJ_Jugg_BIO_Legs_ItemDef]"));
-            juggernautTorso.Speed = juggernautLegs.Speed = 0;
+            BodyPartAspectDef juggTorsoAspect = Repo.GetAllDefs<BodyPartAspectDef>().FirstOrDefault(bpa1 => bpa1.name.Equals("E_BodyPartAspect [NJ_Jugg_BIO_Torso_BodyPartDef]"));
+            BodyPartAspectDef juggLegsAspect = Repo.GetAllDefs<BodyPartAspectDef>().FirstOrDefault(bpa2 => bpa2.name.Equals("E_BodyPartAspect [NJ_Jugg_BIO_Legs_ItemDef]"));
+            juggTorsoAspect.Speed = juggLegsAspect.Speed = 0;
+
+            // 
+            TacticalItemDef juggTorso = Repo.GetAllDefs<TacticalItemDef>().FirstOrDefault(ti1 => ti1.name.Equals("NJ_Jugg_BIO_Torso_BodyPartDef"));
+            TacticalItemDef exoTorso = Repo.GetAllDefs<TacticalItemDef>().FirstOrDefault(ti2 => ti2.name.Equals("NJ_Exo_BIO_Torso_BodyPartDef"));
+            juggTorso.ProvidedSlots = exoTorso.ProvidedSlots;
+
 
             // Neural Torso: Grants Mounted Weapons and Tech Arms Proficiency (MountedWeaponTalent_AbilityDef = MountedItem_TagDef = proficiency with all mounted equipment)
             // First fix name and description of given mounted weapon talent that in fact gives mounted item proficiency also for robotic arms
@@ -363,6 +389,10 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
             };
             ShootAbilityDef techArmStrike = Repo.GetAllDefs<ShootAbilityDef>().FirstOrDefault(s => s.name.Equals("TechnicianStrike_ShootAbilityDef"));
             techArmStrike.UsesPerTurn = usesPerTurn;
+            // Change ammo cost for MechArms
+            TacticalItemDef mechArmsAmmo = Repo.GetAllDefs<TacticalItemDef>().FirstOrDefault(a => a.name.Equals("MechArms_AmmoClip_ItemDef"));
+            mechArmsAmmo.ManufactureMaterials = 55;
+            mechArmsAmmo.ManufactureTech = 25;
         }
         public static void Change_VengeanceTorso()
         {

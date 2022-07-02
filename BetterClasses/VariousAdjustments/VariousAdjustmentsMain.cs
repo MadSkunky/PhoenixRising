@@ -1,8 +1,11 @@
 ﻿using Base.Defs;
 using Base.Entities.Statuses;
+using Base.Utils;
 using Base.Utils.Maths;
 using Harmony;
 using PhoenixPoint.Common.Core;
+using PhoenixPoint.Geoscape.Entities;
+using PhoenixPoint.Geoscape.Levels;
 using PhoenixPoint.Tactical.Entities;
 using PhoenixPoint.Tactical.Entities.Statuses;
 using System;
@@ -40,8 +43,8 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
         }
 
         // -------------------------------------------------------------------------
-        // Harmony patch(es) to fix that Project Hekate deletes the viral resistance ability of Mutoids
-        // Cause is that both use the same ability and so Hekate faction status deletes the one from Mutoids
+        // Harmony patch(es) to fix that Project Hekate deletes the viral resistance ability of Mutoids and Resistor head mutation
+        // Cause is that all use the same ability and so Hekate faction status deletes the one from Mutoids and Resistor head
         // AddAbilityStatusDef.OnApply() ff
         // or create (clone) a new virus resistance ability for Hekate or Mutoids
         // -------------------------------------------------------------------------
@@ -97,17 +100,53 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
             [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
             private static void Postfix(TacticalActorBase __instance, ref bool __result)
             {
+                StatusDef panicked = Repo.GetAllDefs<StatusDef>().FirstOrDefault(sd2 => sd2.name.Equals("Panic_StatusDef"));
                 StatusDef overWatch = Repo.GetAllDefs<StatusDef>().FirstOrDefault(sd1 => sd1.name.Equals("Overwatch_StatusDef"));
                 StatusDef hunkerDown = Repo.GetAllDefs<StatusDef>().FirstOrDefault(sd2 => sd2.name.Equals("E_CloseQuatersStatus [HunkerDown_AbilityDef]"));
-                bool flag = __instance.Status.HasStatus(overWatch) || __instance.Status.HasStatus(hunkerDown);
-                // Check if actor is from viewer faction (= player) and don't used overwatch or hunker down
-                if (__instance.IsFromViewerFaction && !flag)
+                // Check if actor is from viewer faction (= player) and several conditions are not met
+                if (__instance.IsFromViewerFaction && !(__instance.IsDead
+                                                        || __instance.Status.HasStatus(Shared.SharedGameTags.StandByStatusDef)
+                                                        || __instance.Status.HasStatus(Shared.SharedGameTags.ParalyzedStatus)
+                                                        || __instance.Status.HasStatus(panicked)
+                                                        || __instance.Status.HasStatus(overWatch)
+                                                        || __instance.Status.HasStatus(hunkerDown)
+                                                        || __instance.Status.HasStatus<EvacuatedStatus>()))
                 {
                     //  Set return value __result = true => no auto switch to other character after any action
                     __result = true;
                 }
             }
         }
+        // -------------------------------------------------------------------------
+
+        // -------------------------------------------------------------------------
+        // Harmony patch before Geoscape world is created
+        //[HarmonyPatch(typeof(GeoInitialWorldSetup), "SimulateFactions")]
+        //internal static class BC_GeoInitialWorldSetup_SimulateFactions_Patch
+        //{
+        //    public static void Prefix(GeoInitialWorldSetup __instance, GeoLevelController level, IList<GeoSiteSceneDef.SiteInfo> worldSites, TimeSlice timeSlice)
+        //    {
+        //        // __instance holds all variables of GeoInitialWorldSetup, here the initial amount of all scavenging sites
+        //        __instance.InitialScavengingSiteCount = 4; // default 16
+        //
+        //        // ScavengingSitesDistribution is an array with the weights for scav, rescue soldier and vehicle
+        //        foreach (GeoInitialWorldSetup.ScavengingSiteConfiguration scavSiteConf in __instance.ScavengingSitesDistribution)
+        //        {
+        //            if (scavSiteConf.MissionTags.Any(mt => mt.name.Equals("Contains_ResourceCrates_MissionTagDef")))
+        //            {
+        //                scavSiteConf.Weight = 2; // deafault 4
+        //            }
+        //            if (scavSiteConf.MissionTags.Any(mt => mt.name.Equals("Contains_RescueSoldier_MissionTagDef")))
+        //            {
+        //                scavSiteConf.Weight = 1;
+        //            }
+        //            if (scavSiteConf.MissionTags.Any(mt => mt.name.Equals("Contains_RescueVehicle_MissionTagDef")))
+        //            {
+        //                scavSiteConf.Weight = 1;
+        //            }
+        //        }
+        //    }
+        //}
         // -------------------------------------------------------------------------
     }
 }
