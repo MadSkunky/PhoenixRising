@@ -57,8 +57,8 @@ namespace PhoenixRising.BetterClasses.VariousAdjustments
 
             ItemDef RagnarokAmmo = Repo.GetAllDefs<ItemDef>().FirstOrDefault(i => i.name.Equals("PX_ShredingMissileLauncher_AmmoClip_ItemDef"));
             RagnarokAmmo.ChargesMax = 8;
-            RagnarokAmmo.ManufactureMaterials *= 24;
-            RagnarokAmmo.ManufactureTech *= 62;
+            RagnarokAmmo.ManufactureMaterials = 24;
+            RagnarokAmmo.ManufactureTech = 62;
         }
 
         private static void Change_Iconoclast()

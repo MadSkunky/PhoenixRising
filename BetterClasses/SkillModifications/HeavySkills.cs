@@ -263,7 +263,7 @@ namespace PhoenixRising.BetterClasses.SkillModifications
                 DamageMultiplierAbilityDef shredResistanceAbilityDef = Repo.GetAllDefs<DamageMultiplierAbilityDef>().FirstOrDefault(dma => dma.name.Equals("ShredResistant_DamageMultiplierAbilityDef"));
                 if (actor != null && actor.GetAbilityWithDef<DamageMultiplierAbility>(shredResistanceAbilityDef) != null)
                 {
-                    data.DamageResult.ArmorDamage = Mathf.Round(data.DamageResult.ArmorDamage * shredResistanceAbilityDef.Multiplier);
+                    data.DamageResult.ArmorDamage = Mathf.Floor(data.DamageResult.ArmorDamage * shredResistanceAbilityDef.Multiplier);
                 }
             }
         }

@@ -9,22 +9,9 @@ using PhoenixPoint.Common.Core;
 using PhoenixPoint.Tactical.Entities.Abilities;
 using Harmony;
 using PhoenixRising.BetterClasses.SkillModifications;
-using PhoenixPoint.Geoscape.Events.Eventus;
 using Base.Assets;
 using PhoenixRising.BetterClasses.StoryRework;
 using PhoenixRising.BetterClasses.VariousAdjustments;
-using PhoenixPoint.Common.UI;
-using PhoenixPoint.Tactical.Entities;
-using PhoenixPoint.Common.Entities;
-using PhoenixPoint.Geoscape.Levels;
-using PhoenixPoint.Common.Entities.Items;
-using PhoenixPoint.Geoscape.Levels.Factions;
-using PhoenixPoint.Geoscape.Entities;
-using UnityEngine;
-using Base.UI.MessageBox;
-using Base.Utils.GameConsole;
-using PhoenixPoint.Geoscape.Events;
-using PhoenixPoint.Geoscape.Entities.Research.Requirement;
 
 namespace PhoenixRising.BetterClasses
 {
